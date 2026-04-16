@@ -7,6 +7,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <style>
+        /* Password overlay */
+        #authOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 99999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #authOverlay.hidden { display: none; }
+        .auth-box {
+            text-align: center; padding: 40px; border: 1px solid #DFE1E6;
+            border-radius: 8px; background: #FAFBFC; max-width: 360px; width: 100%;
+        }
+        .auth-box h2 { font-size: 18px; color: #0052CC; margin-bottom: 16px; }
+        .auth-box input {
+            width: 100%; padding: 10px 14px; font-size: 14px; border: 1px solid #DFE1E6;
+            border-radius: 4px; margin-bottom: 12px; text-align: center;
+        }
+        .auth-box input:focus { outline: none; border-color: #0052CC; }
+        .auth-box button {
+            width: 100%; padding: 10px; font-size: 14px; font-weight: 600;
+            background: #0052CC; color: #fff; border: none; border-radius: 4px; cursor: pointer;
+        }
+        .auth-box button:hover { background: #0747A6; }
+        .auth-box .auth-error { color: #BF2600; font-size: 12px; margin-top: 8px; display: none; }
+        body.locked > *:not(#authOverlay) { display: none !important; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
@@ -1687,6 +1711,42 @@
         updateChart('andrii');
         renderWorkloadDynamics();
         if (bundled) setNotesStatus('✓ Loaded shared notes from comments.json', 'success');
+    })();
+    </script>
+    <!-- Password protection -->
+    <div id="authOverlay">
+        <div class="auth-box">
+            <h2>PLAT Report</h2>
+            <p style="font-size:13px;color:#505F79;margin-bottom:16px;">Enter password to view the report</p>
+            <input type="password" id="authPassword" placeholder="Password" autofocus>
+            <button onclick="checkAuth()">Enter</button>
+            <div class="auth-error" id="authError">Wrong password</div>
+        </div>
+    </div>
+    <script>
+    (function(){
+        const HASH = 'd6b0c6e419229d111dc0babf2911a44ce3e7dc2212246a570607f95ade49bf05';
+        const SESSION_KEY = 'plat_report_auth';
+        async function sha256(str) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+        }
+        async function unlock() {
+            document.body.classList.remove('locked');
+            document.getElementById('authOverlay').classList.add('hidden');
+            sessionStorage.setItem(SESSION_KEY, '1');
+        }
+        window.checkAuth = async function() {
+            const pwd = document.getElementById('authPassword').value;
+            const hash = await sha256(pwd);
+            if (hash === HASH) { unlock(); }
+            else { document.getElementById('authError').style.display = 'block'; }
+        };
+        document.getElementById('authPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') checkAuth();
+        });
+        if (sessionStorage.getItem(SESSION_KEY) === '1') { unlock(); }
+        else { document.body.classList.add('locked'); }
     })();
     </script>
 </body>
