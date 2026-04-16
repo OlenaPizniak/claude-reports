@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolved SP by Dev Team / All sprints</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #fff;
+            color: #172B4D;
+            padding: 24px 32px;
+        }
+        .header { margin-bottom: 16px; }
+        .header h1 { font-size: 20px; font-weight: 600; color: #0052CC; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .header h1::before { content: ""; display: inline-block; width: 4px; height: 20px; background: #0052CC; border-radius: 2px; }
+        .description {
+            font-size: 14px; color: #505F79; line-height: 1.5; max-width: 900px;
+            background: #DEEBFF; border-radius: 4px; padding: 10px 14px; margin-bottom: 16px;
+        }
+        .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .controls select {
+            padding: 8px 36px 8px 14px; font-size: 14px; font-weight: 500;
+            border: 1px solid #DFE1E6; border-radius: 4px; background: #FAFBFC; color: #172B4D;
+            cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%23505F79' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+        }
+        .controls select:hover { background-color: #F4F5F7; }
+        .notes-btn {
+            padding: 8px 14px; font-size: 13px; font-weight: 500;
+            border: 1px solid #DFE1E6; border-radius: 4px; background: #FAFBFC; color: #172B4D;
+            cursor: pointer;
+        }
+        .notes-btn:hover { background-color: #F4F5F7; border-color: #B3BAC5; }
+        .notes-status { font-size: 12px; color: #505F79; }
+        .notes-status.success { color: #006644; }
+        .notes-status.error { color: #BF2600; }
+        .mixed-legend {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; color: #505F79;
+            margin-left: 4px;
+        }
+        .mixed-legend-dot {
+            width: 11px; height: 11px; background: #FFAB00;
+            border: 2px solid #172B4D;
+            transform: rotate(45deg);
+            display: inline-block;
+        }
+        .chart-container {
+            position: relative; width: 100%; height: 520px;
+            background: #fff; border: 1px solid #DFE1E6; border-radius: 8px; padding: 16px;
+        }
+        /* legend-info removed */
+        /* AI Summary */
+        .ai-summary-section {
+            margin-top: 24px; border-top: 2px solid #DFE1E6; padding-top: 20px;
+        }
+        .ai-summary-header {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+        }
+        .ai-summary-header h2 {
+            font-size: 16px; font-weight: 600; color: #172B4D;
+        }
+        .ai-summary-badge {
+            display: inline-block; background: linear-gradient(135deg, #6554C0, #0052CC);
+            color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .ai-summary-card {
+            background: #FAFBFC; border: 1px solid #DFE1E6; border-radius: 8px;
+            padding: 20px 24px; border-left: 4px solid #6554C0;
+        }
+        .ai-summary-card .summary-overview {
+            font-size: 14px; color: #172B4D; line-height: 1.6; margin-bottom: 16px;
+        }
+        .ai-summary-card .summary-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        }
+        .summary-block h4 {
+            font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        }
+        .summary-block.strengths h4 { color: #006644; }
+        .summary-block.areas h4 { color: #BF2600; }
+        .summary-block ul {
+            list-style: none; padding: 0; margin: 0;
+        }
+        .summary-block ul li {
+            font-size: 13px; color: #505F79; line-height: 1.5; padding: 3px 0 3px 16px;
+            position: relative;
+        }
+        .summary-block.strengths ul li::before {
+            content: "▲"; position: absolute; left: 0; color: #36B37E; font-size: 10px; top: 5px;
+        }
+        .summary-block.areas ul li::before {
+            content: "▼"; position: absolute; left: 0; color: #FF5630; font-size: 10px; top: 5px;
+        }
+        .summary-context {
+            margin-top: 14px; padding-top: 12px; border-top: 1px solid #EBECF0;
+            font-size: 12px; color: #6B778C; line-height: 1.5; font-style: italic;
+        }
+        .sp-adjustments {
+            margin-top: 14px; padding: 12px 14px; background: #E3FCEF; border-left: 3px solid #36B37E;
+            border-radius: 4px; font-size: 13px; color: #172B4D;
+        }
+        .sp-adjustments h4 {
+            margin: 0 0 8px 0; font-size: 13px; font-weight: 600; color: #006644;
+        }
+        .sp-adjustments .adj-row {
+            padding: 8px 10px; background: #fff; border: 1px solid #ABF5D1; border-radius: 4px;
+            margin-bottom: 6px; line-height: 1.5;
+        }
+        .sp-adjustments .adj-row:last-child { margin-bottom: 0; }
+        .sp-adjustments .adj-badge {
+            display: inline-block; font-weight: 700; color: #006644;
+            background: #ABF5D1; padding: 1px 8px; border-radius: 10px; font-size: 11px; margin-right: 6px;
+        }
+        .sp-adjustments .adj-badge.neg { color: #BF2600; background: #FFEBE6; }
+        .sp-adjustments .adj-sprint { font-weight: 600; color: #172B4D; }
+        .sp-adjustments .adj-note {
+            margin-top: 4px; padding-left: 10px; border-left: 2px solid #DFE1E6;
+            color: #505F79; font-size: 12px; white-space: pre-wrap; font-style: italic;
+        }
+        .sp-adjustments .adj-total {
+            margin-top: 8px; padding-top: 8px; border-top: 1px dashed #79F2C0;
+            font-size: 12px; color: #006644; font-weight: 600;
+        }
+        /* AI Hypothesis & Recommended Action blocks */
+        .ai-extra-blocks {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;
+            padding-top: 14px; border-top: 1px solid #EBECF0;
+        }
+        .ai-extra-block {
+            background: #fff; border: 1px solid #DFE1E6; border-radius: 6px; padding: 14px 16px;
+        }
+        .ai-extra-block h4 {
+            font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        }
+        .ai-extra-block.hypothesis { border-left: 3px solid #FF8B00; }
+        .ai-extra-block.hypothesis h4 { color: #FF8B00; }
+        .ai-extra-block.action { border-left: 3px solid #0052CC; }
+        .ai-extra-block.action h4 { color: #0052CC; }
+        .ai-extra-block ul { list-style: none; padding: 0; margin: 0; }
+        .ai-extra-block ul li {
+            font-size: 13px; color: #505F79; line-height: 1.5; padding: 3px 0 3px 16px; position: relative;
+        }
+        .ai-extra-block.hypothesis ul li::before {
+            content: "💡"; position: absolute; left: -2px; font-size: 10px; top: 3px;
+        }
+        .ai-extra-block.action ul li::before {
+            content: "→"; position: absolute; left: 2px; color: #0052CC; font-size: 12px; top: 3px; font-weight: 700;
+        }
+        .data-date { font-size: 12px; color: #97A0AF; margin-top: 8px; text-align: right; }
+
+        /* Workload Dynamics Section */
+        .workload-section {
+            margin-top: 28px; border-top: 2px solid #DFE1E6; padding-top: 20px;
+        }
+        .workload-header {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+        }
+        .workload-header h2 { font-size: 16px; font-weight: 600; color: #172B4D; }
+        .workload-badge {
+            display: inline-block; background: linear-gradient(135deg, #FF5630, #FF8B00);
+            color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        /* Burnout risk cards */
+        .burnout-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;
+        }
+        .burnout-card {
+            background: #FAFBFC; border: 1px solid #DFE1E6; border-radius: 8px;
+            padding: 16px; border-left: 4px solid #DFE1E6;
+        }
+        .burnout-card.risk-low { border-left-color: #36B37E; }
+        .burnout-card.risk-medium { border-left-color: #FF8B00; }
+        .burnout-card.risk-high { border-left-color: #FF5630; }
+        .burnout-card-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
+        .burnout-card-name { font-size: 14px; font-weight: 600; color: #172B4D; }
+        .burnout-risk-badge {
+            font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .burnout-risk-badge.low { background: #E3FCEF; color: #006644; }
+        .burnout-risk-badge.medium { background: #FFF0B3; color: #FF8B00; }
+        .burnout-risk-badge.high { background: #FFEBE6; color: #BF2600; }
+        .burnout-signals { list-style: none; padding: 0; margin: 0; }
+        .burnout-signals li {
+            font-size: 12px; color: #505F79; line-height: 1.6; padding: 2px 0 2px 18px; position: relative;
+        }
+        .burnout-signals li::before { position: absolute; left: 0; font-size: 11px; top: 3px; }
+        .burnout-signals li.signal-warn::before { content: "⚠"; color: #FF8B00; }
+        .burnout-signals li.signal-ok::before { content: "✓"; color: #36B37E; }
+        .burnout-signals li.signal-danger::before { content: "🔴"; font-size: 9px; }
+        .burnout-charts { margin-top: 8px; }
+        .burnout-chart-row {
+            display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+        }
+        .burnout-chart-label {
+            font-size: 10px; font-weight: 600; color: #6B778C; width: 28px; text-align: right;
+            flex-shrink: 0;
+        }
+        .burnout-mini-chart {
+            display: flex; gap: 2px; align-items: flex-end; height: 32px; flex: 1;
+        }
+        .burnout-mini-bar {
+            flex: 1; border-radius: 2px 2px 0 0; min-width: 6px; max-width: 16px;
+            transition: height 0.2s;
+        }
+        .burnout-sprint-labels {
+            display: flex; gap: 2px; flex: 1; margin-left: 34px;
+        }
+        .burnout-sprint-labels span {
+            flex: 1; text-align: center; font-size: 8px; color: #97A0AF; min-width: 6px; max-width: 16px;
+        }
+
+        /* Workload AI Summary */
+        .workload-ai-summary {
+            background: #FAFBFC; border: 1px solid #DFE1E6; border-radius: 8px;
+            padding: 14px 18px; margin-bottom: 16px; border-left: 4px solid #FF8B00;
+            font-size: 13px; color: #172B4D; line-height: 1.6;
+        }
+        .workload-ai-summary .wai-title {
+            font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+            color: #FF8B00; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        }
+        .workload-ai-summary .wai-badge {
+            display: inline-block; background: linear-gradient(135deg, #FF8B00, #FF5630);
+            color: #fff; font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 8px;
+        }
+        .workload-ai-summary .wai-points { margin: 6px 0 0 0; padding: 0; list-style: none; }
+        .workload-ai-summary .wai-points li {
+            padding: 3px 0 3px 18px; position: relative; font-size: 12px; color: #505F79;
+        }
+        .workload-ai-summary .wai-points li::before {
+            position: absolute; left: 0; font-size: 11px; top: 4px;
+        }
+        .workload-ai-summary .wai-points li.warn::before { content: "⚠"; color: #FF8B00; }
+        .workload-ai-summary .wai-points li.ok::before { content: "✓"; color: #36B37E; }
+        .workload-ai-summary .wai-points li.info::before { content: "→"; color: #0052CC; font-weight: 700; }
+        .workload-ai-summary .wai-points li.danger::before { content: "●"; color: #FF5630; }
+
+        /* Sprint Detail Modal */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(9, 30, 66, 0.54); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: #fff; border-radius: 8px; width: 560px; max-width: 90vw; max-height: 80vh;
+            box-shadow: 0 8px 32px rgba(9,30,66,0.25); overflow: hidden; display: flex; flex-direction: column;
+        }
+        .modal-header {
+            padding: 20px 24px 16px; border-bottom: 1px solid #DFE1E6; display: flex; justify-content: space-between; align-items: flex-start;
+        }
+        .modal-header-left { flex: 1; }
+        .modal-header h3 { font-size: 16px; font-weight: 600; color: #172B4D; margin-bottom: 6px; }
+        .modal-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .modal-meta .sp-badge {
+            display: inline-block; background: #0052CC; color: #fff; font-size: 12px;
+            font-weight: 600; padding: 3px 10px; border-radius: 10px;
+        }
+        .modal-meta .days-badge {
+            display: inline-block; background: #F4F5F7; color: #505F79; font-size: 12px;
+            font-weight: 500; padding: 3px 10px; border-radius: 10px; border: 1px solid #DFE1E6;
+        }
+        .modal-meta .spday-badge {
+            display: inline-block; background: #E3FCEF; color: #006644; font-size: 12px;
+            font-weight: 500; padding: 3px 10px; border-radius: 10px;
+        }
+        .modal-close {
+            background: none; border: none; font-size: 20px; color: #6B778C; cursor: pointer;
+            padding: 4px 8px; border-radius: 4px; line-height: 1;
+        }
+        .modal-close:hover { background: #F4F5F7; color: #172B4D; }
+        .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+        .modal-body label { font-size: 12px; font-weight: 600; color: #6B778C; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+        .modal-notes {
+            width: 100%; min-height: 80px; padding: 10px 12px; font-size: 14px; color: #172B4D;
+            border: 1px solid #DFE1E6; border-radius: 4px; resize: vertical; font-family: inherit; line-height: 1.5;
+        }
+        .modal-notes:focus { outline: none; border-color: #0052CC; box-shadow: 0 0 0 2px rgba(0,82,204,0.2); }
+        .modal-notes::placeholder { color: #97A0AF; }
+        .modal-footer {
+            padding: 16px 24px; border-top: 1px solid #DFE1E6; display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-jira-link {
+            display: inline-flex; align-items: center; gap: 6px; color: #0052CC; font-size: 13px;
+            font-weight: 500; text-decoration: none; padding: 6px 12px; border-radius: 4px; border: 1px solid #0052CC;
+        }
+        .modal-jira-link:hover { background: #DEEBFF; }
+        .modal-save-btn {
+            background: #0052CC; color: #fff; border: none; padding: 8px 16px; border-radius: 4px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+        }
+        .modal-save-btn:hover { background: #0747A6; }
+        .modal-saved-msg { font-size: 12px; color: #36B37E; font-weight: 500; margin-right: 8px; opacity: 0; transition: opacity 0.3s; }
+        .modal-saved-msg.visible { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Resolved SP by Dev Team / All sprints</h1>
+    </div>
+    <div class="description">
+        This report shows the number of closed story points per sprint for each developer from the start of their work on the project.
+        Click on any data point to view the resolved issues for that sprint in Jira.
+    </div>
+
+    <div class="controls">
+        <select id="developerSelect">
+            <optgroup label="Frontend">
+                <option value="andrii">Andrii Marusiak</option>
+                <option value="yehor">Yehor Kaliuzhnyi</option>
+                <option value="oleksandr">Oleksandr Menchynskyi</option>
+            </optgroup>
+            <optgroup label="Quiz (FE)">
+                <option value="yelyzaveta">Yelyzaveta Klymova</option>
+                <option value="antonenko">Artem Antonenko</option>
+            </optgroup>
+            <optgroup label="Backend">
+                <option value="kuchma">Artem Kuchma</option>
+                <option value="emiliia">Emiliia Voronova</option>
+                <option value="mariia">Mariia Khmilovska</option>
+            </optgroup>
+        </select>
+        <button type="button" id="exportNotesBtn" class="notes-btn" title="Download all sprint notes as comments.json">⬇ Export notes</button>
+        <button type="button" id="importNotesBtn" class="notes-btn" title="Upload comments.json to load sprint notes">⬆ Import notes</button>
+        <input type="file" id="importNotesFile" accept="application/json,.json" style="display:none;">
+        <span class="mixed-legend" title="Sprints containing both Quiz (BTMA) and Platform (PLAT) issues are highlighted">
+            <span class="mixed-legend-dot"></span> Mixed Quiz + Platform sprint
+        </span>
+        <span id="notesStatus" class="notes-status"></span>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="spChart"></canvas>
+    </div>
+    <div class="data-date">Data as of: 2026-04-14</div>
+
+    <div class="ai-summary-section">
+        <div class="ai-summary-header">
+            <h2>Developer Performance Summary</h2>
+            <span class="ai-summary-badge">AI Analysis</span>
+        </div>
+        <div class="ai-summary-card" id="aiSummaryCard">
+            <div class="summary-overview" id="summaryOverview"></div>
+            <div class="summary-grid">
+                <div class="summary-block strengths">
+                    <h4>&#9650; Strengths</h4>
+                    <ul id="summaryStrengths"></ul>
+                </div>
+                <div class="summary-block areas">
+                    <h4>&#9660; Areas to watch</h4>
+                    <ul id="summaryAreas"></ul>
+                </div>
+            </div>
+            <div class="summary-context" id="summaryContext"></div>
+            <div class="sp-adjustments" id="summaryAdjustments" style="display:none;"></div>
+            <div class="ai-extra-blocks">
+                <div class="ai-extra-block hypothesis">
+                    <h4>🔍 Ймовірна причина (AI hypothesis)</h4>
+                    <ul id="summaryHypothesis"></ul>
+                </div>
+                <div class="ai-extra-block action">
+                    <h4>🎯 Рекомендована дія (must-have)</h4>
+                    <ul id="summaryAction"></ul>
+                </div>
+            </div>
+            <details style="margin-top:16px;padding:12px 14px;background:#F4F5F7;border-radius:6px;border-left:3px solid #6554C0;font-size:12px;color:#505F79;line-height:1.6;">
+                <summary style="cursor:pointer;font-weight:600;color:#172B4D;font-size:13px;">📊 Що таке CV (Coefficient of Variation)?</summary>
+                <div style="margin-top:10px;">
+                    <p><strong>CV (коефіцієнт варіації)</strong> = (Standard Deviation / Mean) × 100% — показує наскільки сильно розкид Story Points варіюється відносно середнього значення.</p>
+                    <p style="margin-top:8px;"><strong>Формула:</strong> CV = (σ / μ) × 100%, де σ — стандартне відхилення SP по спринтах, μ — середнє значення SP.</p>
+                    <p style="margin-top:8px;"><strong>Інтерпретація діапазонів:</strong></p>
+                    <ul style="margin-top:6px;padding-left:20px;">
+                        <li><strong style="color:#006644;">CV &lt; 20%</strong> — дуже стабільно, низький розкид. Висока передбачуваність velocity.</li>
+                        <li><strong style="color:#006644;">CV 20–40%</strong> — стабільно, типова норма для dev-команди. Можна довіряти прогнозам.</li>
+                        <li><strong style="color:#FF8B00;">CV 40–60%</strong> — помірна варіативність. Планування вимагає буферів.</li>
+                        <li><strong style="color:#BF2600;">CV 60–80%</strong> — значна варіативність. Важко прогнозувати, потрібен root-cause аналіз.</li>
+                        <li><strong style="color:#BF2600;">CV &gt; 80%</strong> — дуже висока варіативність. Velocity нестабільна, планування на основі середнього ризиковане.</li>
+                    </ul>
+                    <p style="margin-top:8px;font-style:italic;">Приклад: якщо середнє 50 SP, а CV = 92%, це означає стандартне відхилення ≈ 46 SP — результати коливаються від ~4 до ~96 SP між спринтами.</p>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- Workload Dynamics -->
+    <div class="workload-section" id="workloadSection">
+        <div class="workload-header">
+            <h2>Динаміка навантаження команди</h2>
+            <span class="workload-badge">Burnout Watch</span>
+        </div>
+        <div class="workload-ai-summary" id="burnoutSummary"></div>
+        <div class="burnout-grid" id="burnoutGrid"></div>
+    </div>
+
+    <!-- Sprint Detail Modal -->
+    <div class="modal-overlay" id="sprintModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <h3 id="modalTitle"></h3>
+                    <div class="modal-meta">
+                        <span class="sp-badge" id="modalSP"></span>
+                        <span class="days-badge" id="modalDays"></span>
+                        <span class="spday-badge" id="modalSPDay"></span>
+                        <span style="font-size:12px;color:#6B778C;" id="modalIssueCount"></span>
+                    </div>
+                    <div class="modal-breakdown" id="modalBreakdown" style="display:none;margin-top:6px;font-size:12px;color:#505F79;"></div>
+                </div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Sprint Notes</label>
+                <textarea class="modal-notes" id="modalNotes" placeholder="Add sprint notes..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <a class="modal-jira-link" id="modalJiraLink" href="#" target="_blank">View issues in Jira &rarr;</a>
+                    <a class="modal-jira-link" id="modalJiraLinkPlatform" href="#" target="_blank" style="display:none;">Platform issues &rarr;</a>
+                </div>
+                <div style="display:flex;align-items:center;">
+                    <span class="modal-saved-msg" id="modalSavedMsg">Saved!</span>
+                    <button class="modal-save-btn" id="modalSaveBtn">Save Notes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const JIRA_BASE = 'https://newsiteam.atlassian.net/issues/?jql=key%20in%20(';
+
+    const rawData = {
+        andrii: {
+            name: 'Andrii Marusiak',
+            color: '#00875A',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S22",full:"Platform S22 - чат гепете",sp:14,days:6,keys:["PLAT-975","PLAT-992","PLAT-1622","PLAT-1765"]},
+                {name:"S23",full:"Platform S23 -спринт ім. Єгора",sp:55,days:10,keys:["PLAT-1192","PLAT-1758","PLAT-1791","PLAT-1810","PLAT-1847","PLAT-1848","PLAT-1852","PLAT-1890","PLAT-1891","PLAT-1892"]},
+                {name:"S24",full:"Platform S24 – безіменний",sp:67,days:10,keys:["PLAT-1494","PLAT-1495","PLAT-1496","PLAT-1499","PLAT-1500","PLAT-2101","PLAT-2121","PLAT-2180"]},
+                {name:"S25",full:"Platform S25",sp:10,days:9,keys:["PLAT-2047","PLAT-2064"]},
+                {name:"S26",full:"Platform S26_міжорний спринт",sp:70,days:10,keys:["PLAT-1928","PLAT-2050","PLAT-2069","PLAT-2070","PLAT-2073","PLAT-2096","PLAT-2097","PLAT-2126","PLAT-2211","PLAT-2247","PLAT-2285","PLAT-2291","PLAT-2294","PLAT-2297"]},
+                {name:"S27",full:"Platform S27 Спринт ім. Андрія",sp:21,days:10,keys:["PLAT-2056","PLAT-2399"]},
+                {name:"S28",full:"Platform S28 кохфє ток",sp:120,days:10,keys:["PLAT-750","PLAT-1910","PLAT-2006","PLAT-2146","PLAT-2220","PLAT-2403","PLAT-2452","PLAT-2459","PLAT-2465","PLAT-2466","PLAT-2471","PLAT-2481","PLAT-2504","PLAT-2508","PLAT-2511","PLAT-2514","PLAT-2518","PLAT-2562","PLAT-2739","PLAT-2784","PLAT-3178"]},
+                {name:"S29",full:"Platform S29 finita la comedia",sp:43,days:9,keys:["PLAT-1824","PLAT-1844","PLAT-1918","PLAT-2336","PLAT-2484","PLAT-2587","PLAT-2595","PLAT-2605","PLAT-2638","PLAT-2644"]},
+                {name:"S30",full:"Platform S30",sp:87,days:10,keys:["PLAT-853","PLAT-2278","PLAT-2411","PLAT-2582","PLAT-2602","PLAT-2646","PLAT-2680","PLAT-2693","PLAT-2713","PLAT-2732","PLAT-2741","PLAT-2763","PLAT-2767","PLAT-2863"]},
+                {name:"S31",full:"Platform S31 Впливові люди",sp:20,days:9,keys:["PLAT-2721","PLAT-2783","PLAT-2869","PLAT-2955"]},
+                {name:"S32",full:"Platform S32 Качка в польоті",sp:38,days:8,keys:["PLAT-1325","PLAT-1691","PLAT-2302","PLAT-2900","PLAT-2921","PLAT-2986","PLAT-3005","PLAT-3013"]},
+                {name:"S33",full:"Platform S33 UnderTheInfluence",sp:9,days:9,keys:["PLAT-3129","PLAT-3222","PLAT-3432"]},
+                {name:"S34",full:"PlatformS34_МейкЖираГрейтЕген",sp:50,days:8,keys:["PLAT-3057","PLAT-3091","PLAT-3221","PLAT-3256","PLAT-3305","PLAT-3341","PLAT-3357","PLAT-3413","PLAT-3415","PLAT-3433"]},
+                {name:"S35",full:"Platform S35. Саші привіт",sp:48,days:10,keys:["PLAT-3115","PLAT-3116","PLAT-3287","PLAT-3373","PLAT-3377","PLAT-3431","PLAT-3484","PLAT-3497"]},
+                {name:"S36",full:"Platform S36 на кіпіші",sp:53,days:9,keys:["PLAT-3284","PLAT-3289","PLAT-3417","PLAT-3481","PLAT-3508","PLAT-3544","PLAT-3574","PLAT-3595"]},
+                {name:"S37",full:"Platform S37 суші сет хоккайдо",sp:46,days:9,keys:["PLAT-3399","PLAT-3441","PLAT-3479","PLAT-3480","PLAT-3566","PLAT-3580","PLAT-3615","PLAT-3620","PLAT-3629","PLAT-3647","PLAT-3652"]},
+                {name:"S38",full:"Platform S38",sp:25,days:4,keys:["PLAT-3282","PLAT-3648","PLAT-3824"]},
+                {name:"S39",full:"Platform S39 Чайний-пуерний",sp:59,days:10,keys:["PLAT-3674","PLAT-3836","PLAT-3865","PLAT-3872","PLAT-3883","PLAT-3886","PLAT-3906","PLAT-3912","PLAT-3924","PLAT-3927"]},
+                {name:"S40",full:"Platform S40_AfterparTEA",sp:96,days:10,keys:["PLAT-3533","PLAT-3662","PLAT-3809","PLAT-3845","PLAT-3873","PLAT-3932","PLAT-3938","PLAT-3939","PLAT-3952","PLAT-3998","PLAT-4013","PLAT-4045","PLAT-4107"]},
+                {name:"S41",full:"Platform S41 _ 9 кіт пекла",sp:102,days:10,keys:["PLAT-2633","PLAT-3941","PLAT-3944","PLAT-3945","PLAT-3949","PLAT-3951","PLAT-3989","PLAT-4022","PLAT-4037","PLAT-4038","PLAT-4039","PLAT-4040","PLAT-4086","PLAT-4124","PLAT-4130","PLAT-4173"]},
+                {name:"S42",full:"Platform S42_Посттравматичний",sp:37,days:8,keys:["PLAT-3942","PLAT-3961","PLAT-3986","PLAT-3992","PLAT-4025","PLAT-4036","PLAT-4126"]},
+                {name:"S43",full:"PlatformS43_DeliverBeforeSanta",sp:26,days:9,keys:["PLAT-4208","PLAT-4243","PLAT-4318","PLAT-4324"]},
+                {name:"S44",full:"Platform S44 Палаюча коняка",sp:22,days:9,keys:["PLAT-3421","PLAT-4315","PLAT-4356","PLAT-4375"]},
+                {name:"S45",full:"Platform_S45 Офшорні сторіки",sp:57,days:9,keys:["PLAT-4209","PLAT-4236","PLAT-4237","PLAT-4383","PLAT-4416","PLAT-4433","PLAT-4442","PLAT-4455","PLAT-4519","PLAT-4522"]},
+                {name:"S46",full:"Platform_S46 orange cat sprint",sp:6,days:9,keys:["PLAT-4368","PLAT-4499"]},
+                {name:"S47",full:"Platform_S47 TRACKZILLA",sp:41,days:5,keys:["PLAT-3241","PLAT-3314","PLAT-3527","PLAT-4446","PLAT-4453","PLAT-4752","PLAT-4753"]},
+                {name:"S48",full:"Platform_S48 пузирик із носу",sp:56,days:9,keys:["PLAT-4171","PLAT-4757","PLAT-4771","PLAT-4789","PLAT-4797","PLAT-4809","PLAT-4831","PLAT-4832","PLAT-4851","PLAT-4870","PLAT-4872","PLAT-4874","PLAT-4879"]},
+                {name:"S49",full:"Platform_S49 спринт ім.Єгора 2",sp:20,days:9,keys:["PLAT-4561","PLAT-4615","PLAT-4637"]},
+                {name:"S50",full:"Platform_S50 На два фронти",sp:56,days:10,keys:["PLAT-2740","PLAT-4144","PLAT-4235","PLAT-4959","PLAT-4984","PLAT-4985","PLAT-4986","PLAT-5083","PLAT-5111","PLAT-5143","PLAT-5152","PLAT-5162","PLAT-5169"]}
+            ],
+            comments: {
+                "S50": "Feedback flow before cancel (Platform), Academy OneTrust. Commit 150 SP, Done 217 SP.",
+                "S49": "Unsubscribe for consumers, Content moderation flow. Commit 134 SP, Done 110 SP.",
+            }
+        },
+        yehor: {
+            name: 'Yehor Kaliuzhnyi',
+            color: '#FF5630',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S2",full:"Platform S2",sp:5,days:null,keys:["PLAT-248","PLAT-534","PLAT-617","PLAT-618","PLAT-624"]},
+                {name:"S5",full:"Platform S5 - Абабалагама",sp:8,days:null,keys:["PLAT-198","PLAT-223","PLAT-382","PLAT-449","PLAT-488","PLAT-521"]},
+                {name:"S6",full:"Platform S6 - A tout prix",sp:23,days:10,keys:["PLAT-388","PLAT-460","PLAT-481","PLAT-482","PLAT-483","PLAT-492","PLAT-511","PLAT-512","PLAT-513","PLAT-515","PLAT-517","PLAT-519","PLAT-520","PLAT-523"]},
+                {name:"S7",full:"Platform S7 - Де Дарина?",sp:26,days:9,keys:["PLAT-366","PLAT-462","PLAT-493","PLAT-531","PLAT-532","PLAT-536","PLAT-537","PLAT-539","PLAT-545","PLAT-546","PLAT-547","PLAT-548","PLAT-550","PLAT-554","PLAT-567"]},
+                {name:"S8",full:"Platform S8 - На природу б",sp:2,days:7,keys:["PLAT-586"]},
+                {name:"S9",full:"Platform S9",sp:71,days:10,keys:["PLAT-478","PLAT-494","PLAT-522","PLAT-556","PLAT-568","PLAT-569","PLAT-570","PLAT-571","PLAT-572","PLAT-577","PLAT-583","PLAT-590","PLAT-593","PLAT-600","PLAT-601","PLAT-602","PLAT-603","PLAT-604","PLAT-605","PLAT-606","PLAT-607","PLAT-611","PLAT-614","PLAT-615","PLAT-626","PLAT-632","PLAT-647","PLAT-648","PLAT-651","PLAT-662","PLAT-677"]},
+                {name:"S10",full:"Platform S10 - де креди?",sp:27,days:5,keys:["PLAT-432","PLAT-636","PLAT-666","PLAT-668","PLAT-674","PLAT-706","PLAT-712","PLAT-727","PLAT-729","PLAT-735","PLAT-751","PLAT-763"]},
+                {name:"S11",full:"Platform S11 - квізи пока",sp:19,days:10,keys:["PLAT-525","PLAT-715","PLAT-738","PLAT-741","PLAT-742","PLAT-746","PLAT-747","PLAT-752","PLAT-753","PLAT-760","PLAT-765","PLAT-767","PLAT-768","PLAT-771","PLAT-775"]},
+                {name:"S12",full:"Platform S12",sp:32,days:9,keys:["PLAT-266","PLAT-637","PLAT-761","PLAT-780","PLAT-789"]},
+                {name:"S16",full:"Platform S16 - бджолиний",sp:0,days:9,keys:["PLAT-1239"]},
+                {name:"S17",full:"Platform S17 - повний дб",sp:18,days:9,keys:["PLAT-1253","PLAT-1254","PLAT-1255","PLAT-1271","PLAT-1276","PLAT-1288","PLAT-1305","PLAT-1308","PLAT-1312","PLAT-1321"]},
+                {name:"S18",full:"Platform S18 Buenos días",sp:20,days:6,keys:["PLAT-1275","PLAT-1283","PLAT-1329","PLAT-1335","PLAT-1338","PLAT-1366","PLAT-1368","PLAT-1372"]},
+                {name:"S19",full:"Platform S19 - перед бурею",sp:22,days:10,keys:["PLAT-1291","PLAT-1322","PLAT-1323","PLAT-1340","PLAT-1360"]},
+                {name:"S20",full:"Platform S20 Рєвалюція.",sp:18,days:9,keys:["PLAT-1585","PLAT-1590","PLAT-1591","PLAT-1594","PLAT-1610","PLAT-1616","PLAT-1638","PLAT-1653"]},
+                {name:"S21",full:"Platform S21",sp:41,days:9,keys:["PLAT-1300","PLAT-1330","PLAT-1639","PLAT-1644","PLAT-1657","PLAT-1659","PLAT-1662","PLAT-1705","PLAT-1735","PLAT-1739","PLAT-1740"]},
+                {name:"S22",full:"Platform S22 - чат гепете",sp:21,days:10,keys:["PLAT-1731","PLAT-1750","PLAT-1782","PLAT-1825"]},
+                {name:"S23",full:"Platform S23 -спринт ім. Єгора",sp:72,days:10,keys:["PLAT-1712","PLAT-1788","PLAT-1793","PLAT-1809","PLAT-1811","PLAT-1812","PLAT-1815","PLAT-1842","PLAT-1843","PLAT-1845","PLAT-1911","PLAT-1914","PLAT-1923","PLAT-1945","PLAT-1949","PLAT-1951","PLAT-1953","PLAT-1968"]},
+                {name:"S24",full:"Platform S24 – безіменний",sp:59,days:5,keys:["PLAT-1318","PLAT-1754","PLAT-1830","PLAT-1831","PLAT-1880","PLAT-1885","PLAT-1942","PLAT-1960","PLAT-1964","PLAT-2021","PLAT-2048"]},
+                {name:"S25",full:"Platform S25",sp:30,days:9,keys:["PLAT-1994","PLAT-1997","PLAT-2072","PLAT-2137","PLAT-2138","PLAT-2143","PLAT-2182"]},
+                {name:"S26",full:"Platform S26_міжорний спринт",sp:57,days:10,keys:["PLAT-2004","PLAT-2124","PLAT-2185","PLAT-2186","PLAT-2187","PLAT-2212","PLAT-2214","PLAT-2228","PLAT-2231","PLAT-2258","PLAT-2275","PLAT-2280","PLAT-2289","PLAT-2295","PLAT-2300","PLAT-2324","PLAT-2345","PLAT-2395","PLAT-2420"]},
+                {name:"S27",full:"Platform S27 Спринт ім. Андрія",sp:55,days:9,keys:["PLAT-2049","PLAT-2188","PLAT-2222","PLAT-2227","PLAT-2261","PLAT-2279","PLAT-2283","PLAT-2284","PLAT-2351","PLAT-2390"]},
+                {name:"S28",full:"Platform S28 кохфє ток",sp:56,days:10,keys:["PLAT-1895","PLAT-2053","PLAT-2079","PLAT-2135","PLAT-2152","PLAT-2282","PLAT-2415","PLAT-2557","PLAT-2708","PLAT-2737","PLAT-2749"]},
+                {name:"S29",full:"Platform S29 finita la comedia",sp:51,days:9,keys:["PLAT-2248","PLAT-2408","PLAT-2585","PLAT-2596","PLAT-2604","PLAT-2678","PLAT-2684","PLAT-2706"]},
+                {name:"S30",full:"Platform S30",sp:56,days:9,keys:["PLAT-1395","PLAT-1957","PLAT-2658","PLAT-2659","PLAT-2705","PLAT-2710","PLAT-2711","PLAT-2731","PLAT-2764","PLAT-2765","PLAT-2793","PLAT-2806"]},
+                {name:"S31",full:"Platform S31 Впливові люди",sp:42,days:8,keys:["PLAT-2830","PLAT-2831","PLAT-2834","PLAT-2867","PLAT-2901","PLAT-2910","PLAT-2918","PLAT-2922","PLAT-2926"]},
+                {name:"S32",full:"Platform S32 Качка в польоті",sp:37,days:3,keys:["PLAT-1884","PLAT-2724","PLAT-2801","PLAT-3154"]},
+                {name:"S33",full:"Platform S33 UnderTheInfluence",sp:16,days:10,keys:["PLAT-1934","PLAT-3132","PLAT-3234","PLAT-3236"]},
+                {name:"S34",full:"PlatformS34_МейкЖираГрейтЕген",sp:88,days:10,keys:["PLAT-3030","PLAT-3055","PLAT-3072","PLAT-3177","PLAT-3197","PLAT-3253","PLAT-3308","PLAT-3345","PLAT-3346","PLAT-3354","PLAT-3436","PLAT-3442","PLAT-3450","PLAT-3517"]},
+                {name:"S35",full:"Platform S35. Саші привіт",sp:39,days:10,keys:["PLAT-3058","PLAT-3179","PLAT-3181","PLAT-3247","PLAT-3446","PLAT-3478","PLAT-3496"]},
+                {name:"S36",full:"Platform S36 на кіпіші",sp:80,days:9,keys:["PLAT-3180","PLAT-3288","PLAT-3307","PLAT-3451","PLAT-3460","PLAT-3507","PLAT-3528","PLAT-3532","PLAT-3534","PLAT-3537","PLAT-3541","PLAT-3586","PLAT-3617"]},
+                {name:"S37",full:"Platform S37 суші сет хоккайдо",sp:94,days:9,keys:["PLAT-3306","PLAT-3426","PLAT-3427","PLAT-3498","PLAT-3540","PLAT-3543","PLAT-3587","PLAT-3590","PLAT-3597","PLAT-3602","PLAT-3630","PLAT-3635","PLAT-3639","PLAT-3640","PLAT-3651","PLAT-3658","PLAT-3683"]},
+                {name:"S38",full:"Platform S38",sp:28,days:9,keys:["PLAT-3491","PLAT-3538","PLAT-3634","PLAT-3685"]},
+                {name:"S39",full:"Platform S39 Чайний-пуерний",sp:31,days:9,keys:["PLAT-3169","PLAT-3611","PLAT-3918","PLAT-3936","PLAT-3981","PLAT-3984","PLAT-3987","PLAT-3991","PLAT-3995"]},
+                {name:"S40",full:"Platform S40_AfterparTEA",sp:55,days:9,keys:["PLAT-2075","PLAT-2077","PLAT-2305","PLAT-2934","PLAT-3170","PLAT-3440","PLAT-3622","PLAT-3993","PLAT-3996","PLAT-4014","PLAT-4076","PLAT-4128","PLAT-4133","PLAT-4134"]},
+                {name:"S41",full:"Platform S41 _ 9 кіт пекла",sp:33,days:9,keys:["PLAT-3378","PLAT-3943","PLAT-4129","PLAT-4189","PLAT-4190","PLAT-4215","PLAT-4216","PLAT-4217","PLAT-4233"]},
+                {name:"S42",full:"Platform S42_Посттравматичний",sp:11,days:7,keys:["PLAT-4046","PLAT-4179","PLAT-4188"]},
+                {name:"S43",full:"PlatformS43_DeliverBeforeSanta",sp:68,days:8,quizSp:47,platformSp:21,keys:["BTMA-3199","BTMA-3203","BTMA-3206","BTMA-3207","BTMA-3210","BTMA-3226","BTMA-3227","BTMA-3231","BTMA-3232","BTMA-3236","BTMA-3237","BTMA-3242","BTMA-3244","BTMA-3254","BTMA-3257","PLAT-4032","PLAT-4258","PLAT-4259","PLAT-4273"]},
+                {name:"S44",full:"Platform S44 Палаюча коняка",sp:25,days:9,keys:["PLAT-4162","PLAT-4340","PLAT-4377","PLAT-4380","PLAT-4407","PLAT-4413"]},
+                {name:"S45",full:"Platform_S45 Офшорні сторіки",sp:84,days:10,quizSp:47,platformSp:37,keys:["BTMA-3241","BTMA-3263","BTMA-3268","BTMA-3314","BTMA-3315","BTMA-3352","BTMA-3382","PLAT-3097","PLAT-4307","PLAT-4341","PLAT-4405","PLAT-4431","PLAT-4438","PLAT-4452"]},
+                {name:"S46",full:"Platform_S46 orange cat sprint",sp:55,days:10,quizSp:10,platformSp:45,keys:["BTMA-2671","BTMA-3370","PLAT-4309","PLAT-4521","PLAT-4619","PLAT-4631"]},
+                {name:"S47",full:"Platform_S47 TRACKZILLA",sp:87,days:9,keys:["PLAT-4444","PLAT-4527","PLAT-4552","PLAT-4553","PLAT-4587","PLAT-4634","PLAT-4636","PLAT-4642","PLAT-4649","PLAT-4684","PLAT-4719","PLAT-4725","PLAT-4734","PLAT-4736","PLAT-4738","PLAT-4796"]},
+                {name:"S48",full:"Platform_S48 пузирик із носу",sp:43,days:9,keys:["PLAT-3382","PLAT-4331","PLAT-4447","PLAT-4554","PLAT-4758","PLAT-4772","PLAT-4882","PLAT-4902","PLAT-4903","PLAT-4917"]},
+                {name:"S49",full:"Platform_S49 спринт ім.Єгора 2",sp:44,days:10,keys:["PLAT-3315","PLAT-4132","PLAT-4886","PLAT-4887","PLAT-4890","PLAT-4980","PLAT-4990","PLAT-5005"]},
+                {name:"S50",full:"Platform_S50 На два фронти",sp:107,days:10,keys:["PLAT-3915","PLAT-4672","PLAT-4924","PLAT-4935","PLAT-4936","PLAT-4937","PLAT-4961","PLAT-5001","PLAT-5006","PLAT-5009","PLAT-5010","PLAT-5023","PLAT-5054","PLAT-5058","PLAT-5119","PLAT-5121","PLAT-5127","PLAT-5128","PLAT-5130","PLAT-5150","PLAT-5151","PLAT-5161","PLAT-5170"]}
+            ],
+            comments: {
+                "S50": "Feedback flow before cancel (Platform), Academy OneTrust. Done 217 SP.",
+            }
+        },
+        oleksandr: {
+            name: 'Oleksandr Menchynskyi',
+            color: '#6554C0',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S16",full:"Platform S16 - бджолиний",sp:12,days:null,keys:["PLAT-1167","PLAT-1197","PLAT-1217","PLAT-1221","PLAT-1248"]},
+                {name:"S17",full:"Platform S17 - повний дб",sp:6,days:9,keys:["PLAT-1270","PLAT-1286","PLAT-1301"]},
+                {name:"S18",full:"Platform S18 Buenos días",sp:50,days:10,keys:["PLAT-1084","PLAT-1086","PLAT-1088","PLAT-1260","PLAT-1285","PLAT-1351","PLAT-1369"]},
+                {name:"S19",full:"Platform S19 - перед бурею",sp:22,days:9,keys:["PLAT-1397","PLAT-1475"]},
+                {name:"S20",full:"Platform S20 Рєвалюція.",sp:14,days:10,keys:["PLAT-1470","PLAT-1486","PLAT-1605"]},
+                {name:"S21",full:"Platform S21",sp:31,days:9,keys:["PLAT-1453","PLAT-1489","PLAT-1589","PLAT-1617","PLAT-1640","PLAT-1642"]},
+                {name:"S22",full:"Platform S22 - чат гепете",sp:26,days:10,keys:["PLAT-1631","PLAT-1701","PLAT-1709","PLAT-1787","PLAT-1789","PLAT-1805"]},
+                {name:"S23",full:"Platform S23 -спринт ім. Єгора",sp:63,days:9,keys:["PLAT-1490","PLAT-1700","PLAT-1783","PLAT-1796","PLAT-1798","PLAT-1808","PLAT-1814","PLAT-1818","PLAT-1828","PLAT-1875"]},
+                {name:"S24",full:"Platform S24 – безіменний",sp:47,days:10,keys:["PLAT-1411","PLAT-1492","PLAT-1493","PLAT-1856","PLAT-1872","PLAT-2025","PLAT-2107"]},
+                {name:"S25",full:"Platform S25",sp:13,days:4,keys:["PLAT-1987"]},
+                {name:"S26",full:"Platform S26_міжорний спринт",sp:42,days:10,keys:["PLAT-1930","PLAT-2001","PLAT-2106","PLAT-2170","PLAT-2201","PLAT-2203","PLAT-2229","PLAT-2262","PLAT-2274","PLAT-2290","PLAT-2298","PLAT-2301","PLAT-2303","PLAT-2327","PLAT-2338","PLAT-2348","PLAT-2354"]},
+                {name:"S27",full:"Platform S27 Спринт ім. Андрія",sp:35,days:10,keys:["PLAT-1511","PLAT-2192","PLAT-2241","PLAT-2253","PLAT-2254","PLAT-2326","PLAT-2339","PLAT-2341","PLAT-2342","PLAT-2378","PLAT-2402"]},
+                {name:"S28",full:"Platform S28 кохфє ток",sp:63,days:6,keys:["PLAT-2054","PLAT-2131","PLAT-2314","PLAT-2405","PLAT-2413","PLAT-2414","PLAT-2433","PLAT-2434","PLAT-2451","PLAT-2458","PLAT-2463","PLAT-2492","PLAT-2493","PLAT-2499","PLAT-2538","PLAT-2546","PLAT-2590","PLAT-2701","PLAT-2702","PLAT-2715"]},
+                {name:"S29",full:"Platform S29 finita la comedia",sp:19,days:9,keys:["PLAT-1800","PLAT-1870","PLAT-1919","PLAT-1952","PLAT-2150","PLAT-2194","PLAT-2232","PLAT-2392","PLAT-2551","PLAT-2606","PLAT-2627","PLAT-2628","PLAT-2639","PLAT-2645","PLAT-2679","PLAT-2683"]},
+                {name:"S30",full:"Platform S30",sp:76,days:9,keys:["PLAT-1635","PLAT-2183","PLAT-2422","PLAT-2430","PLAT-2431","PLAT-2435","PLAT-2618","PLAT-2648","PLAT-2664","PLAT-2666","PLAT-2671","PLAT-2672","PLAT-2675","PLAT-2692","PLAT-2697","PLAT-2704","PLAT-2712","PLAT-2725","PLAT-2726","PLAT-2727","PLAT-2728","PLAT-2730","PLAT-2759","PLAT-2761","PLAT-2782","PLAT-2785","PLAT-2786","PLAT-2787","PLAT-2795","PLAT-2796","PLAT-2800","PLAT-2807","PLAT-2819","PLAT-2864"]},
+                {name:"S31",full:"Platform S31 Впливові люди",sp:23,days:8,keys:["PLAT-1967","PLAT-1993","PLAT-2442","PLAT-2568","PLAT-2653","PLAT-2663","PLAT-2667","PLAT-2849","PLAT-2852","PLAT-2853","PLAT-2866","PLAT-2870","PLAT-2915","PLAT-2919","PLAT-3038"]},
+                {name:"S32",full:"Platform S32 Качка в польоті",sp:45,days:9,keys:["PLAT-2198","PLAT-2912","PLAT-2917","PLAT-2925","PLAT-2985","PLAT-3001","PLAT-3002","PLAT-3003","PLAT-3006","PLAT-3007","PLAT-3010","PLAT-3044","PLAT-3051","PLAT-3052","PLAT-3078","PLAT-3079","PLAT-3155"]},
+                {name:"S33",full:"Platform S33 UnderTheInfluence",sp:60,days:10,keys:["PLAT-2013","PLAT-2956","PLAT-3101","PLAT-3130","PLAT-3168","PLAT-3174","PLAT-3201","PLAT-3223","PLAT-3235","PLAT-3237","PLAT-3248","PLAT-3255","PLAT-3260","PLAT-3274"]},
+                {name:"S34",full:"PlatformS34_МейкЖираГрейтЕген",sp:47,days:8,keys:["PLAT-3073","PLAT-3092","PLAT-3140","PLAT-3141","PLAT-3151","PLAT-3152","PLAT-3161","PLAT-3166","PLAT-3190","PLAT-3203","PLAT-3228","PLAT-3230","PLAT-3240","PLAT-3254","PLAT-3257","PLAT-3269","PLAT-3270","PLAT-3286","PLAT-3320","PLAT-3323","PLAT-3324","PLAT-3327","PLAT-3328","PLAT-3344","PLAT-3370","PLAT-3392","PLAT-3396","PLAT-3437"]},
+                {name:"S35",full:"Platform S35. Саші привіт",sp:21,days:8,keys:["PLAT-3113","PLAT-3114","PLAT-3117","PLAT-3118","PLAT-3136","PLAT-3153","PLAT-3290","PLAT-3375","PLAT-3447","PLAT-3459","PLAT-3470","PLAT-3472","PLAT-3482","PLAT-3499","PLAT-3505"]},
+                {name:"S36",full:"Platform S36 на кіпіші",sp:31,days:9,keys:["PLAT-3295","PLAT-3296","PLAT-3360","PLAT-3404","PLAT-3405","PLAT-3416","PLAT-3418","PLAT-3420","PLAT-3462","PLAT-3485","PLAT-3516","PLAT-3525","PLAT-3535","PLAT-3601","PLAT-3603","PLAT-3618"]},
+                {name:"S37",full:"Platform S37 суші сет хоккайдо",sp:52,days:8,keys:["PLAT-2751","PLAT-3318","PLAT-3325","PLAT-3358","PLAT-3428","PLAT-3518","PLAT-3548","PLAT-3556","PLAT-3581","PLAT-3605","PLAT-3608","PLAT-3624","PLAT-3632","PLAT-3646","PLAT-3649","PLAT-3682","PLAT-3714"]},
+                {name:"S38",full:"Platform S38",sp:32,days:10,keys:["PLAT-3489","PLAT-3490","PLAT-3572","PLAT-3710","PLAT-3733","PLAT-3746","PLAT-3748","PLAT-3761","PLAT-3773","PLAT-3778","PLAT-3817","PLAT-3825","PLAT-3826","PLAT-3838","PLAT-3880"]},
+                {name:"S39",full:"Platform S39 Чайний-пуерний",sp:50,days:4,keys:["PLAT-3251","PLAT-3661","PLAT-3712","PLAT-3723","PLAT-3724","PLAT-3725","PLAT-3767","PLAT-3833","PLAT-3837","PLAT-3868","PLAT-3885","PLAT-3926","PLAT-3982","PLAT-3985","PLAT-3988"]},
+                {name:"S40",full:"Platform S40_AfterparTEA",sp:87,days:10,keys:["PLAT-1944","PLAT-2265","PLAT-2267","PLAT-3069","PLAT-3252","PLAT-3456","PLAT-3492","PLAT-3495","PLAT-3501","PLAT-3684","PLAT-3706","PLAT-3734","PLAT-3793","PLAT-3795","PLAT-3797","PLAT-3852","PLAT-3935","PLAT-3956","PLAT-4003","PLAT-4017","PLAT-4055","PLAT-4085","PLAT-4119"]},
+                {name:"S41",full:"Platform S41 _ 9 кіт пекла",sp:42,days:8,keys:["PLAT-3423","PLAT-3736","PLAT-4008","PLAT-4051","PLAT-4068","PLAT-4072","PLAT-4111","PLAT-4125","PLAT-4159","PLAT-4174"]},
+                {name:"S42",full:"Platform S42_Посттравматичний",sp:35,days:9,keys:["PLAT-3940","PLAT-3948","PLAT-3950","PLAT-4048","PLAT-4083","PLAT-4084","PLAT-4131","PLAT-4176","PLAT-4177","PLAT-4194","PLAT-4230","PLAT-4231"]},
+                {name:"S43",full:"PlatformS43_DeliverBeforeSanta",sp:37,days:9,keys:["PLAT-4052","PLAT-4185","PLAT-4186","PLAT-4211","PLAT-4251","PLAT-4257","PLAT-4262","PLAT-4263"]},
+                {name:"S44",full:"Platform S44 Палаюча коняка",sp:27,days:8,keys:["PLAT-4336","PLAT-4345","PLAT-4346","PLAT-4349","PLAT-4350","PLAT-4352","PLAT-4376","PLAT-4414"]},
+                {name:"S45",full:"Platform_S45 Офшорні сторіки",sp:48,days:8,keys:["PLAT-3313","PLAT-4172","PLAT-4255","PLAT-4269","PLAT-4270","PLAT-4289","PLAT-4308","PLAT-4337","PLAT-4338","PLAT-4344","PLAT-4366","PLAT-4374","PLAT-4406","PLAT-4408","PLAT-4419","PLAT-4422","PLAT-4426","PLAT-4437","PLAT-4498"]},
+                {name:"S46",full:"Platform_S46 orange cat sprint",sp:69,days:10,quizSp:3,platformSp:66,keys:["BTMA-3368","PLAT-1702","PLAT-3805","PLAT-4339","PLAT-4370","PLAT-4493","PLAT-4495","PLAT-4510","PLAT-4511","PLAT-4512","PLAT-4515","PLAT-4516","PLAT-4517","PLAT-4530","PLAT-4531","PLAT-4562","PLAT-4602","PLAT-4620"]},
+                {name:"S47",full:"Platform_S47 TRACKZILLA",sp:43,days:9,keys:["PLAT-4445","PLAT-4454","PLAT-4462","PLAT-4466","PLAT-4467","PLAT-4468","PLAT-4471","PLAT-4474","PLAT-4477","PLAT-4480","PLAT-4532","PLAT-4555","PLAT-4588","PLAT-4626","PLAT-4627","PLAT-4628","PLAT-4635","PLAT-4643","PLAT-4647","PLAT-4660","PLAT-4711","PLAT-4720","PLAT-4732","PLAT-4737","PLAT-4739","PLAT-4750","PLAT-4795"]},
+                {name:"S48",full:"Platform_S48 пузирик із носу",sp:34,days:7,keys:["PLAT-3387","PLAT-4777","PLAT-4778","PLAT-4787","PLAT-4788","PLAT-4802","PLAT-4811","PLAT-4823","PLAT-4824","PLAT-4825","PLAT-4836","PLAT-4860","PLAT-4861","PLAT-4871","PLAT-4904","PLAT-4914","PLAT-4957"]},
+                {name:"S49",full:"Platform_S49 спринт ім.Єгора 2",sp:0,days:10,keys:["PLAT-4594","PLAT-4595","PLAT-4629","PLAT-4638","PLAT-4994"]},
+                {name:"S50",full:"Platform_S50 На два фронти",sp:42,days:9,keys:["PLAT-3066","PLAT-4155","PLAT-4360","PLAT-4678","PLAT-4966","PLAT-4968","PLAT-4983","PLAT-5030","PLAT-5031","PLAT-5034","PLAT-5035","PLAT-5036","PLAT-5038","PLAT-5080","PLAT-5081","PLAT-5082","PLAT-5113","PLAT-5122","PLAT-5149","PLAT-5153","PLAT-5166"]}
+            ],
+            comments: {}
+        },
+        yelyzaveta: {
+            name: 'Yelyzaveta Klymova',
+            color: '#0065FF',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S1",full:"BTMA Sprint 1",sp:139,days:9,keys:["BTMA-26","BTMA-32","BTMA-35","BTMA-44","BTMA-49","BTMA-58","BTMA-67","BTMA-68","BTMA-81","BTMA-82","BTMA-84","BTMA-86","BTMA-88","BTMA-96","BTMA-97","BTMA-104","BTMA-108","BTMA-110","BTMA-112","BTMA-121","BTMA-124","BTMA-155","BTMA-166","BTMA-167","BTMA-171","BTMA-178","BTMA-180","BTMA-182","BTMA-183","BTMA-188","BTMA-192","BTMA-195","BTMA-196","BTMA-198","BTMA-199","BTMA-202","BTMA-204","BTMA-205","BTMA-206","BTMA-214","BTMA-215","BTMA-746","BTMA-816","BTMA-822","BTMA-882","BTMA-883","BTMA-895","BTMA-902","BTMA-904","BTMA-905","BTMA-913","BTMA-922","BTMA-929","BTMA-938","BTMA-951"]},
+                {name:"S2",full:"BTMA Sprint 2",sp:31,days:9,keys:["BTMA-245","BTMA-246","BTMA-256","BTMA-264","BTMA-268","BTMA-270","BTMA-271","BTMA-272","BTMA-276","BTMA-287","BTMA-289","BTMA-290","BTMA-293","BTMA-297"]},
+                {name:"S3",full:"BTMA Sprint 3",sp:3,days:10,keys:["BTMA-331","BTMA-358","BTMA-359"]},
+                {name:"S4",full:"BTMA Sprint 4",sp:149,days:9,keys:["BTMA-223","BTMA-229","BTMA-230","BTMA-233","BTMA-236","BTMA-305","BTMA-317","BTMA-339","BTMA-355","BTMA-372","BTMA-375","BTMA-378","BTMA-384","BTMA-387","BTMA-401","BTMA-402","BTMA-408","BTMA-409","BTMA-411","BTMA-414","BTMA-418","BTMA-422","BTMA-430","BTMA-435","BTMA-438","BTMA-439","BTMA-448","BTMA-450","BTMA-455","BTMA-462","BTMA-477","BTMA-482","BTMA-483","BTMA-963","BTMA-1005","BTMA-1015","BTMA-1022","BTMA-1057","BTMA-1075","BTMA-1089","BTMA-1094","BTMA-1096","BTMA-1104","BTMA-1106","BTMA-1115","BTMA-1119","BTMA-1131","BTMA-1132","BTMA-1134","BTMA-1135","BTMA-1141","BTMA-1148","BTMA-1149","BTMA-1150","BTMA-1151","BTMA-1152","BTMA-1182"]},
+                {name:"S5",full:"BTMA Sprint 5",sp:99,days:7,keys:["BTMA-347","BTMA-459","BTMA-481","BTMA-489","BTMA-490","BTMA-492","BTMA-496","BTMA-501","BTMA-507","BTMA-508","BTMA-509","BTMA-510","BTMA-513","BTMA-516","BTMA-517","BTMA-519","BTMA-520","BTMA-524","BTMA-527","BTMA-528","BTMA-531","BTMA-532","BTMA-534","BTMA-536","BTMA-539","BTMA-556","BTMA-571","BTMA-577","BTMA-581","BTMA-582","BTMA-591","BTMA-634","BTMA-954","BTMA-1128","BTMA-1146","BTMA-1156","BTMA-1158","BTMA-1172","BTMA-1177","BTMA-1179","BTMA-1189","BTMA-1190","BTMA-1194","BTMA-1210","BTMA-1213","BTMA-1217","BTMA-1219","BTMA-1222","BTMA-1225","BTMA-1256"]},
+                {name:"S6",full:"Sprint  6 - 25.07",sp:64,days:10,keys:["BTMA-563","BTMA-573","BTMA-579","BTMA-586","BTMA-588","BTMA-594","BTMA-598","BTMA-599","BTMA-600","BTMA-601","BTMA-602","BTMA-603","BTMA-614","BTMA-615","BTMA-621","BTMA-622","BTMA-623","BTMA-624","BTMA-625","BTMA-626","BTMA-631","BTMA-659","BTMA-660","BTMA-663","BTMA-664","BTMA-668","BTMA-672","BTMA-673","BTMA-1073","BTMA-1258","BTMA-1259","BTMA-1261","BTMA-1272","BTMA-1286","BTMA-1289","BTMA-1304"]},
+                {name:"S7",full:"Sprint 7",sp:132,days:10,keys:["BTMA-592","BTMA-619","BTMA-638","BTMA-639","BTMA-640","BTMA-654","BTMA-655","BTMA-658","BTMA-674","BTMA-675","BTMA-676","BTMA-680","BTMA-681","BTMA-682","BTMA-684","BTMA-685","BTMA-686","BTMA-687","BTMA-693","BTMA-694","BTMA-697","BTMA-702","BTMA-709","BTMA-724","BTMA-727","BTMA-728","BTMA-733","BTMA-737","BTMA-738","BTMA-1209","BTMA-1244","BTMA-1270","BTMA-1271","BTMA-1346","BTMA-1347","BTMA-1349","BTMA-1355","BTMA-1358","BTMA-1361","BTMA-1376","BTMA-1380","BTMA-1395","BTMA-1398","BTMA-1402","BTMA-1403","BTMA-1408","BTMA-1411","BTMA-1424","BTMA-1429","BTMA-1454","BTMA-1456"]},
+                {name:"S8",full:"Academy Sprint_8_22.08",sp:92,days:7,keys:["BTMA-428","BTMA-609","BTMA-647","BTMA-690","BTMA-740","BTMA-757","BTMA-759","BTMA-1201","BTMA-1414","BTMA-1448","BTMA-1453","BTMA-1460","BTMA-1466","BTMA-1480","BTMA-1485","BTMA-1497","BTMA-1499","BTMA-1501","BTMA-1516","BTMA-1517","BTMA-1518","BTMA-1527","BTMA-1544"]},
+                {name:"S9",full:"Sprint 9",sp:155,days:10,keys:["BTMA-744","BTMA-747","BTMA-808","BTMA-812","BTMA-838","BTMA-844","BTMA-856","BTMA-858","BTMA-863","BTMA-865","BTMA-868","BTMA-873","BTMA-1056","BTMA-1167","BTMA-1331","BTMA-1461","BTMA-1478","BTMA-1489","BTMA-1490","BTMA-1491","BTMA-1510","BTMA-1511","BTMA-1526","BTMA-1539","BTMA-1545","BTMA-1554","BTMA-1557","BTMA-1561","BTMA-1563","BTMA-1567","BTMA-1572","BTMA-1573","BTMA-1574","BTMA-1586","BTMA-1587","BTMA-1590","BTMA-1606","BTMA-1607","BTMA-1613","BTMA-1618","BTMA-1630","BTMA-1783","BTMA-1784","BTMA-1794"]},
+                {name:"S10",full:"Sprint10_Welcome_Artem",sp:95,days:10,keys:["BTMA-1431","BTMA-1432","BTMA-1433","BTMA-1532","BTMA-1593","BTMA-1628","BTMA-1631","BTMA-1632","BTMA-1639","BTMA-1640","BTMA-1641","BTMA-1647","BTMA-1651","BTMA-1652","BTMA-1654","BTMA-1655","BTMA-1657","BTMA-1661","BTMA-1663","BTMA-1664","BTMA-1668","BTMA-1681","BTMA-1682","BTMA-1692","BTMA-1700"]},
+                {name:"S11",full:"Sprint11_Take it easy",sp:74,days:15,keys:["BTMA-1476","BTMA-1595","BTMA-1599","BTMA-1619","BTMA-1621","BTMA-1637","BTMA-1665","BTMA-1679","BTMA-1688","BTMA-1702","BTMA-1703","BTMA-1705","BTMA-1707","BTMA-1728","BTMA-1730","BTMA-1741","BTMA-1745"]},
+                {name:"S12",full:"Sprint_12 Good Planning",sp:67,days:9,keys:["BTMA-1622","BTMA-1704","BTMA-1724","BTMA-1761","BTMA-1762","BTMA-1763","BTMA-1764","BTMA-1767","BTMA-1799","BTMA-1817","BTMA-1822","BTMA-1830","BTMA-1833","BTMA-1841","BTMA-1842","BTMA-1846","BTMA-1851","BTMA-1852"]},
+                {name:"S13",full:"Sprint_13_AI Course",sp:60,days:10,keys:["BTMA-1800","BTMA-1801","BTMA-1802","BTMA-1806","BTMA-1823","BTMA-1844","BTMA-1860"]},
+                {name:"S14",full:"Sprint_14",sp:80,days:10,keys:["BTMA-1508","BTMA-1585","BTMA-1743","BTMA-1772","BTMA-1813","BTMA-1816","BTMA-1843","BTMA-1853","BTMA-1856","BTMA-2002","BTMA-2004","BTMA-2008","BTMA-2009","BTMA-2012","BTMA-2016","BTMA-2019","BTMA-2493"]},
+                {name:"S15",full:"Platform S15 - Мийте руки",sp:113,days:9,quizSp:98,platformSp:15,keys:["BTMA-1336","BTMA-1337","BTMA-1773","BTMA-2021","BTMA-2023","BTMA-2024","BTMA-2030","BTMA-2037","BTMA-2043","BTMA-2045","BTMA-2049","BTMA-2054","BTMA-2055","BTMA-2056","BTMA-2057","BTMA-2058","BTMA-2059","BTMA-2062","BTMA-2076","BTMA-2080","BTMA-2338","PLAT-955","PLAT-1190","PLAT-1198"]},
+                {name:"S16",full:"Platform S16 - бджолиний",sp:99,days:9,keys:["BTMA-1312","BTMA-1354","BTMA-1359","BTMA-1360","BTMA-1855","BTMA-2014","BTMA-2033","BTMA-2048","BTMA-2068","BTMA-2070","BTMA-2082","BTMA-2088","BTMA-2090","BTMA-2092","BTMA-2093","BTMA-2094","BTMA-2102","BTMA-2103","BTMA-2104","BTMA-2105","BTMA-2112","BTMA-2119","BTMA-2120"]},
+                {name:"S17",full:"Spint_17 completed commitment",sp:112,days:9,keys:["BTMA-1785","BTMA-2067","BTMA-2091","BTMA-2095","BTMA-2098","BTMA-2108","BTMA-2114","BTMA-2117","BTMA-2126","BTMA-2135","BTMA-2136","BTMA-2137","BTMA-2142","BTMA-2152","BTMA-2153","BTMA-2156","BTMA-2158","BTMA-2171","BTMA-2176","BTMA-2182","BTMA-2184","BTMA-2186","BTMA-2193","BTMA-2212","BTMA-2224","BTMA-2225","BTMA-2275","BTMA-2347"]},
+                {name:"S18",full:"Sprint_18 Клей ПВА",sp:77,days:10,keys:["BTMA-1610","BTMA-2044","BTMA-2121","BTMA-2124","BTMA-2175","BTMA-2177","BTMA-2180","BTMA-2188","BTMA-2191","BTMA-2206","BTMA-2247","BTMA-2260","BTMA-2261","BTMA-2277","BTMA-2301"]},
+                {name:"S19",full:"Sprint_19 спринт ім.Артема",sp:67,days:10,keys:["BTMA-2157","BTMA-2174","BTMA-2207","BTMA-2257","BTMA-2311","BTMA-2346","BTMA-2348","BTMA-2349","BTMA-2351","BTMA-2362","BTMA-2363","BTMA-2367","BTMA-2371","BTMA-2383","BTMA-2392","BTMA-2416"]},
+                {name:"S20",full:"Sprint_20 Відродження АІ",sp:111,days:9,keys:["BTMA-2195","BTMA-2196","BTMA-2197","BTMA-2198","BTMA-2199","BTMA-2200","BTMA-2201","BTMA-2204","BTMA-2210","BTMA-2249","BTMA-2269","BTMA-2306","BTMA-2340","BTMA-2387","BTMA-2427","BTMA-2436","BTMA-2443","BTMA-2444","BTMA-2446","BTMA-2450","BTMA-2453","BTMA-2454","BTMA-2455","BTMA-2456","BTMA-2472","BTMA-2475"]},
+                {name:"S21",full:"Sprint_21 І ще трошки",sp:96,days:7,keys:["BTMA-2138","BTMA-2211","BTMA-2223","BTMA-2243","BTMA-2356","BTMA-2361","BTMA-2417","BTMA-2434","BTMA-2469","BTMA-2477","BTMA-2480","BTMA-2495","BTMA-2498","BTMA-2501","BTMA-2508","BTMA-2509","BTMA-2517","BTMA-2518","BTMA-2525","BTMA-2528","BTMA-2531","BTMA-2535","BTMA-2539"]},
+                {name:"S22",full:"Sprint_22",sp:32,days:4,keys:["BTMA-2357","BTMA-2451","BTMA-2452","BTMA-2489","BTMA-2532","BTMA-2536","BTMA-2587","BTMA-2592","BTMA-2686"]},
+                {name:"S23",full:"Sprint_23 Welcome Emiliia",sp:60,days:9,keys:["BTMA-2604","BTMA-2609","BTMA-2611","BTMA-2642","BTMA-2646","BTMA-2654","BTMA-2655","BTMA-2656","BTMA-2657","BTMA-2659","BTMA-2660","BTMA-2669","BTMA-2672","BTMA-2681","BTMA-2685"]},
+                {name:"S24",full:"Sprint_24 OLD FLOWS_DESTROYERZ",sp:131,days:10,keys:["BTMA-2013","BTMA-2046","BTMA-2272","BTMA-2300","BTMA-2388","BTMA-2424","BTMA-2426","BTMA-2470","BTMA-2471","BTMA-2494","BTMA-2507","BTMA-2579","BTMA-2580","BTMA-2648","BTMA-2676","BTMA-2679","BTMA-2680","BTMA-2689","BTMA-2690","BTMA-2695","BTMA-2707","BTMA-2708","BTMA-2709","BTMA-2710","BTMA-2712","BTMA-2713","BTMA-2716","BTMA-2724","BTMA-2727","BTMA-2736","BTMA-2738"]},
+                {name:"S25",full:"Sprint_25 довірливий",sp:17,days:2,keys:["BTMA-2748","BTMA-2749","BTMA-2761","BTMA-2763","BTMA-2778"]},
+                {name:"S26",full:"Sprint_26 амбітний",sp:80,days:8,keys:["BTMA-2750","BTMA-2776","BTMA-2788","BTMA-2798","BTMA-2799","BTMA-2800","BTMA-2801","BTMA-2833","BTMA-2836","BTMA-2837","BTMA-2840","BTMA-2846","BTMA-2850","BTMA-2852","BTMA-2853","BTMA-2859","BTMA-2861","BTMA-2868","BTMA-2869","BTMA-2887","BTMA-2888"]},
+                {name:"S27",full:"Sprint_27",sp:56,days:10,keys:["BTMA-2711","BTMA-2743","BTMA-2844","BTMA-2873","BTMA-2879","BTMA-2891","BTMA-2892","BTMA-2893","BTMA-2896","BTMA-2898","BTMA-2900","BTMA-2904","BTMA-2908","BTMA-2910","BTMA-2911","BTMA-2916","BTMA-2919","BTMA-2924"]},
+                {name:"S28",full:"Sprint_28_course_chazerz",sp:107,days:10,keys:["BTMA-2807","BTMA-2862","BTMA-2871","BTMA-2925","BTMA-2927","BTMA-2928","BTMA-2936","BTMA-2942","BTMA-2944","BTMA-2945","BTMA-2957","BTMA-2968","BTMA-2972","BTMA-2973","BTMA-2989","BTMA-2997","BTMA-2998","BTMA-3004","BTMA-3010","BTMA-3034"]},
+                {name:"S29",full:"Sprint_29_can't stop",sp:102,days:10,keys:["BTMA-2926","BTMA-2929","BTMA-2935","BTMA-2948","BTMA-2950","BTMA-2952","BTMA-2979","BTMA-2991","BTMA-3002","BTMA-3015","BTMA-3024","BTMA-3029","BTMA-3035","BTMA-3041","BTMA-3042","BTMA-3043","BTMA-3044","BTMA-3045","BTMA-3047","BTMA-3048","BTMA-3049","BTMA-3050","BTMA-3052","BTMA-3053"]},
+                {name:"S30",full:"Sprint_30 АнтонАпдейтниЛінкдн",sp:96,days:10,keys:["BTMA-2458","BTMA-2461","BTMA-2462","BTMA-2464","BTMA-2465","BTMA-2466","BTMA-3056","BTMA-3058","BTMA-3067","BTMA-3071","BTMA-3082","BTMA-3084","BTMA-3085","BTMA-3086","BTMA-3090","BTMA-3091","BTMA-3092","BTMA-3103","BTMA-3117","BTMA-3141","BTMA-3143"]},
+                {name:"S31",full:"Sprint_31_шосьпропп",sp:77,days:10,keys:["BTMA-2584","BTMA-2774","BTMA-2794","BTMA-3008","BTMA-3009","BTMA-3075","BTMA-3081","BTMA-3083","BTMA-3093","BTMA-3094","BTMA-3096","BTMA-3101","BTMA-3118","BTMA-3119","BTMA-3146","BTMA-3148","BTMA-3152","BTMA-3159","BTMA-3160","BTMA-3162","BTMA-3166","BTMA-3167","BTMA-3177","BTMA-3184"]},
+                {name:"S32",full:"Sprint_32_адвентовий",sp:40,days:9,keys:["BTMA-884","BTMA-3088","BTMA-3110","BTMA-3111","BTMA-3173","BTMA-3175","BTMA-3181","BTMA-3183","BTMA-3186","BTMA-3187","BTMA-3188"]},
+                {name:"S33",full:"Sprint_33_какао будеш пити.",sp:105,days:9,keys:["BTMA-3153","BTMA-3179","BTMA-3190","BTMA-3191","BTMA-3197","BTMA-3200","BTMA-3201","BTMA-3205","BTMA-3208","BTMA-3212","BTMA-3216","BTMA-3223","BTMA-3225","BTMA-3234","BTMA-3235","BTMA-3238","BTMA-3239","BTMA-3251","BTMA-3253","BTMA-3255","BTMA-3256"]},
+                {name:"S34",full:"Sprint_34 - постноворічний",sp:56,days:8,keys:["BTMA-3171","BTMA-3221","BTMA-3260","BTMA-3261","BTMA-3266","BTMA-3275","BTMA-3276","BTMA-3277","BTMA-3278","BTMA-3279","BTMA-3304","BTMA-3306","BTMA-3307","BTMA-3310","BTMA-3311","BTMA-3345","BTMA-3351","BTMA-3364"]},
+                {name:"S35",full:"Sprint_35 чілаутний",sp:71,days:6,keys:["BTMA-2589","BTMA-3280","BTMA-3282","BTMA-3284","BTMA-3285","BTMA-3305","BTMA-3313","BTMA-3342","BTMA-3343","BTMA-3346","BTMA-3353","BTMA-3362","BTMA-3376"]},
+                {name:"S36",full:"Sprint_36 Пальмочка",sp:4,days:2,keys:["BTMA-3312","BTMA-3366","BTMA-3412","BTMA-3413","BTMA-3414"]},
+                {name:"S37",full:"Sprint_37 всмислі не зможем",sp:105,days:10,keys:["BTMA-3294","BTMA-3295","BTMA-3299","BTMA-3300","BTMA-3402","BTMA-3403","BTMA-3409","BTMA-3419","BTMA-3423","BTMA-3424","BTMA-3482","BTMA-3484","BTMA-3486","BTMA-3491","BTMA-3500","BTMA-3504","BTMA-3507","BTMA-3511","BTMA-3512","BTMA-3513","BTMA-3514","BTMA-3515","BTMA-3517","BTMA-3563","BTMA-3568","BTMA-3569","BTMA-3571","BTMA-3577","BTMA-3654"]},
+                {name:"S38",full:"Sprint_38 Цей во, забув",sp:69,days:10,keys:["BTMA-3425","BTMA-3432","BTMA-3493","BTMA-3496","BTMA-3533","BTMA-3544","BTMA-3555","BTMA-3561","BTMA-3572","BTMA-3576","BTMA-3580","BTMA-3581","BTMA-3583","BTMA-3620","BTMA-3623","BTMA-3662"]},
+                {name:"S39",full:"Sprint_39 кітпес",sp:81,days:10,keys:["BTMA-3350","BTMA-3357","BTMA-3380","BTMA-3386","BTMA-3417","BTMA-3534","BTMA-3600","BTMA-3629","BTMA-3631","BTMA-3645","BTMA-3646","BTMA-3652","BTMA-3655","BTMA-3657","BTMA-3658","BTMA-3663","BTMA-3685","BTMA-3688","BTMA-3698","BTMA-3707","BTMA-3714","BTMA-3730"]},
+                {name:"S40",full:"Sprint_40 не трогай, воно воня",sp:63,days:10,keys:["BTMA-3457","BTMA-3601","BTMA-3713","BTMA-3725","BTMA-3727","BTMA-3728","BTMA-3744","BTMA-3746","BTMA-3761","BTMA-3766","BTMA-3775","BTMA-3776","BTMA-3783","BTMA-3810"]}
+            ],
+            comments: {}
+        },
+        antonenko: {
+            name: 'Artem Antonenko',
+            color: '#FF8B00',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S36",full:"Sprint_36 Пальмочка",sp:0,days:3,keys:[]},
+                {name:"S37",full:"Sprint_37 всмислі не зможем",sp:38,days:10,keys:["BTMA-3292","BTMA-3297","BTMA-3298","BTMA-3301","BTMA-3436","BTMA-3480","BTMA-3481","BTMA-3499","BTMA-3502","BTMA-3539","BTMA-3553","BTMA-3570","BTMA-3575"]},
+                {name:"S38",full:"Sprint_38 Цей во, забув",sp:30,days:10,keys:["BTMA-3494","BTMA-3518","BTMA-3543","BTMA-3545","BTMA-3546","BTMA-3591","BTMA-3592","BTMA-3593","BTMA-3594"]},
+                {name:"S39",full:"Sprint_39 кітпес",sp:55,days:10,keys:["BTMA-3349","BTMA-3415","BTMA-3418","BTMA-3422","BTMA-3557","BTMA-3781","BTMA-3787","BTMA-3788"]},
+                {name:"S40",full:"Sprint_40 не трогай, воно воня",sp:8,days:10,keys:["BTMA-3743","BTMA-3750"]}
+            ],
+            comments: {}
+        },
+        kuchma: {
+            name: 'Artem Kuchma',
+            color: '#00B8D9',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S20",full:"Platform S20",sp:28,days:null,quizSp:28,platformSp:0,keys:["BTMA-1645","BTMA-1658","BTMA-1659","BTMA-1660","BTMA-1667","BTMA-1673","BTMA-1678","BTMA-1696","BTMA-1697"]},
+                {name:"S21",full:"Platform S21",sp:35,days:15,quizSp:35,platformSp:0,keys:["BTMA-1669","BTMA-1683","BTMA-1706","BTMA-1726","BTMA-1729","BTMA-1733","BTMA-1734","BTMA-1737","BTMA-1738","BTMA-1750"]},
+                {name:"S22",full:"Platform S22",sp:33,days:10,quizSp:33,platformSp:0,keys:["BTMA-1644","BTMA-1755","BTMA-1818","BTMA-1824","BTMA-1832","BTMA-1845","BTMA-1850"]},
+                {name:"S23",full:"Platform S23 - спринт ім. Єгора",sp:32,days:9,quizSp:2,platformSp:30,keys:["BTMA-1898","PLAT-1469","PLAT-1803","PLAT-1804","PLAT-1820","PLAT-1850","PLAT-1912","PLAT-1921"]},
+                {name:"S24",full:"Platform S24 – безіменний",sp:96,days:10,quizSp:67,platformSp:29,keys:["BTMA-1514","BTMA-1746","BTMA-1775","BTMA-1825","BTMA-1838","BTMA-1839","BTMA-1863","BTMA-1911","BTMA-1912","BTMA-1926","BTMA-1930","BTMA-1931","BTMA-1934","BTMA-1937","BTMA-1941","BTMA-1952","BTMA-1955","BTMA-1956","BTMA-1965","BTMA-1971","BTMA-1981","BTMA-1982","BTMA-1983","BTMA-2015","BTMA-2022","BTMA-2041","PLAT-1807","PLAT-1897","PLAT-1925","PLAT-1956","PLAT-1958","PLAT-1973","PLAT-1981","PLAT-1983","PLAT-1985"]},
+                {name:"S25",full:"Platform S25",sp:41,days:9,quizSp:41,platformSp:0,keys:["BTMA-2007","BTMA-2020","BTMA-2025","BTMA-2027","BTMA-2034","BTMA-2051","BTMA-2066","BTMA-2118","PLAT-2266"]},
+                {name:"S26",full:"Platform S26 міжорний спринт",sp:36,days:10,quizSp:21,platformSp:15,keys:["BTMA-1787","BTMA-2071","BTMA-2072","BTMA-2073","BTMA-2074","BTMA-2075","BTMA-2113","PLAT-1996","PLAT-2014","PLAT-2246","PLAT-2296","PLAT-2299"]},
+                {name:"S27",full:"Platform S27 Спринт ім. Андрія",sp:36,days:9,quizSp:28,platformSp:8,keys:["BTMA-1736","BTMA-1864","BTMA-1892","BTMA-2039","BTMA-2097","BTMA-2101","BTMA-2132","BTMA-2147","BTMA-2190","PLAT-2347","PLAT-2349"]},
+                {name:"S28",full:"Platform S28 кохфє ток",sp:75,days:10,quizSp:27,platformSp:48,keys:["BTMA-2122","BTMA-2231","BTMA-2232","BTMA-2233","BTMA-2234","BTMA-2235","BTMA-2236","BTMA-2256","BTMA-2386","BTMA-2419","PLAT-2147","PLAT-2151","PLAT-2251","PLAT-2257","PLAT-2259","PLAT-2309","PLAT-2407","PLAT-2409","PLAT-2424","PLAT-2437","PLAT-2456","PLAT-2470","PLAT-2485","PLAT-2503","PLAT-2507","PLAT-2515","PLAT-2561","PLAT-2564","PLAT-2583","PLAT-2584","PLAT-2836"]},
+                {name:"S29",full:"Platform S29 finita la comedia",sp:15,days:10,quizSp:5,platformSp:10,keys:["BTMA-2332","PLAT-2473","PLAT-2496","PLAT-2611","PLAT-2612"]},
+                {name:"S30",full:"Platform S30",sp:70,days:8,quizSp:28,platformSp:42,keys:["BTMA-2203","BTMA-2219","BTMA-2240","BTMA-2250","BTMA-2268","BTMA-2305","BTMA-2335","BTMA-2341","BTMA-2395","BTMA-2435","BTMA-2437","BTMA-2449","PLAT-2497","PLAT-2657","PLAT-2660","PLAT-2707","PLAT-2770","PLAT-2774","PLAT-2775","PLAT-2776","PLAT-2778","PLAT-2808","PLAT-2871","PLAT-2872","PLAT-2873","PLAT-2874","PLAT-2875","PLAT-2876","PLAT-2877","PLAT-2878","PLAT-2893","PLAT-2895","PLAT-2897","PLAT-2898"]},
+                {name:"S31",full:"Platform S31 Впливові люди",sp:20,days:9,quizSp:1,platformSp:19,keys:["BTMA-2478","PLAT-1974","PLAT-2566","PLAT-2567","PLAT-2569","PLAT-2722","PLAT-2840","PLAT-2904","PLAT-3040","PLAT-3041"]},
+                {name:"S32",full:"Platform S32 Качка в польоті",sp:52.5,days:10,quizSp:14,platformSp:38.5,keys:["BTMA-2364","BTMA-2382","BTMA-2534","BTMA-2565","BTMA-2583","PLAT-2233","PLAT-2832","PLAT-2833","PLAT-2967","PLAT-2968","PLAT-2969","PLAT-2970","PLAT-2972","PLAT-2973","PLAT-2975","PLAT-2976","PLAT-2990","PLAT-3075","PLAT-3080","PLAT-3088"]},
+                {name:"S33",full:"Platform S33 UnderTheInfluence",sp:37,days:10,quizSp:3,platformSp:34,keys:["BTMA-2606","BTMA-2644","BTMA-2691","BTMA-2692","PLAT-2977","PLAT-2982","PLAT-2983","PLAT-2987","PLAT-3232","PLAT-3233","PLAT-3258","PLAT-3272","PLAT-3279"]},
+                {name:"S34",full:"PlatformS34_МейкЖираГрейтЕген",sp:28,days:7,quizSp:0,platformSp:28,keys:["BTMA-2677","BTMA-2779","PLAT-2971","PLAT-2974","PLAT-3045","PLAT-3046","PLAT-3082","PLAT-3083","PLAT-3259","PLAT-3261","PLAT-3265","PLAT-3309","PLAT-3326","PLAT-3331","PLAT-3393"]},
+                {name:"S35",full:"Platform S35. Саші привіт",sp:12,days:8,quizSp:1,platformSp:11,keys:["BTMA-2771","PLAT-2988","PLAT-2989","PLAT-3015","PLAT-3199","PLAT-3448","PLAT-3449"]},
+                {name:"S36",full:"Platform S36 на кіпіші",sp:61,days:10,quizSp:1,platformSp:60,keys:["BTMA-2790","BTMA-2822","BTMA-2831","PLAT-2993","PLAT-2994","PLAT-2997","PLAT-2999","PLAT-3019","PLAT-3020","PLAT-3021","PLAT-3053","PLAT-3054","PLAT-3194","PLAT-3195","PLAT-3474","PLAT-3475","PLAT-3545","PLAT-3561","PLAT-3562","PLAT-3563","PLAT-3564","PLAT-3565","PLAT-3567","PLAT-3573","PLAT-3613","PLAT-3614"]},
+                {name:"S37",full:"Platform S37 суші сет хоккайдо",sp:23,days:5,quizSp:5,platformSp:18,keys:["BTMA-2744","BTMA-2880","BTMA-2885","BTMA-2886","BTMA-2912","BTMA-2913","BTMA-2964","PLAT-3461","PLAT-3625","PLAT-3626","PLAT-3631","PLAT-3636","PLAT-3637","PLAT-3642","PLAT-3655","PLAT-3656","PLAT-3665","PLAT-3680","PLAT-3735"]},
+                {name:"S38",full:"Platform S38",sp:21,days:10,quizSp:6,platformSp:15,keys:["BTMA-2805","BTMA-2931","BTMA-2937","BTMA-2974","PLAT-3119","PLAT-3120","PLAT-3217","PLAT-3536","PLAT-3621","PLAT-3730","PLAT-3731","PLAT-3737","PLAT-3738","PLAT-3743","PLAT-3745","PLAT-3750","PLAT-3756","PLAT-3758","PLAT-3759"]},
+                {name:"S39",full:"Platform S39 Чайний-пуерний",sp:55,days:9,quizSp:3,platformSp:52,keys:["BTMA-2939","BTMA-2992","BTMA-3000","BTMA-3014","BTMA-3025","PLAT-3717","PLAT-3718","PLAT-3720","PLAT-3722","PLAT-3780","PLAT-3781","PLAT-3790","PLAT-3822","PLAT-3871","PLAT-3874","PLAT-3904"]},
+                {name:"S40",full:"Platform S40_AfterparTEA",sp:63,days:9,quizSp:5,platformSp:58,keys:["BTMA-3057","BTMA-3059","BTMA-3062","BTMA-3076","PLAT-2991","PLAT-2992","PLAT-3457","PLAT-3500","PLAT-3705","PLAT-3708","PLAT-3747","PLAT-3764","PLAT-3765","PLAT-3769","PLAT-3783","PLAT-3785","PLAT-3815","PLAT-3830","PLAT-3848","PLAT-3875","PLAT-3876","PLAT-4000","PLAT-4001","PLAT-4002","PLAT-4035","PLAT-4041","PLAT-4042","PLAT-4089","PLAT-4091","PLAT-4118","PLAT-4127","PLAT-4141","PLAT-4148","PLAT-4180"]},
+                {name:"S41",full:"Platform S41 _ 9 кіт пекла",sp:58,days:10,quizSp:27,platformSp:31,keys:["BTMA-2213","BTMA-2976","BTMA-2977","BTMA-3097","BTMA-3099","BTMA-3246","BTMA-3250","PLAT-3070","PLAT-3071","PLAT-4066","PLAT-4067","PLAT-4116","PLAT-4147","PLAT-4153","PLAT-4163","PLAT-4164","PLAT-4170","PLAT-4181","PLAT-4196","PLAT-4343"]},
+                {name:"S42",full:"Platform S42_Посттравматичний",sp:22,days:9,quizSp:9,platformSp:13,keys:["BTMA-3112","BTMA-3114","BTMA-3178","PLAT-4191","PLAT-4192","PLAT-4197","PLAT-4198","PLAT-4200","PLAT-4229"]},
+                {name:"S43",full:"PlatformS43_DeliverBeforeSanta",sp:66,days:9,quizSp:19,platformSp:47,keys:["BTMA-3192","BTMA-3194","BTMA-3195","BTMA-3202","BTMA-3213","BTMA-3233","BTMA-3240","BTMA-3243","PLAT-2350","PLAT-2356","PLAT-3591","PLAT-3784","PLAT-4167","PLAT-4193","PLAT-4213","PLAT-4218","PLAT-4261","PLAT-4274","PLAT-4287","PLAT-4300","PLAT-4305","PLAT-4316","PLAT-4317","PLAT-4323"]},
+                {name:"S44",full:"Platform S44 Палаюча коняка",sp:31,days:9,quizSp:8,platformSp:23,keys:["BTMA-3267","BTMA-3269","BTMA-3270","BTMA-3347","PLAT-2017","PLAT-2255","PLAT-2256","PLAT-2643","PLAT-2779","PLAT-3443","PLAT-3775","PLAT-3843","PLAT-3983","PLAT-4214","PLAT-4250","PLAT-4286","PLAT-4332","PLAT-4353","PLAT-4361"]},
+                {name:"S45",full:"Platform_S45 Офшорні сторіки",sp:24,days:5,quizSp:0,platformSp:24,keys:["PLAT-3011","PLAT-4227","PLAT-4291","PLAT-4292","PLAT-4302","PLAT-4304","PLAT-4365","PLAT-4367","PLAT-4418","PLAT-4457","PLAT-4460","PLAT-4520","PLAT-4533","PLAT-4534"]},
+                {name:"S46",full:"Platform_S46 orange cat sprint",sp:43,days:10,quizSp:9,platformSp:34,keys:["BTMA-3369","BTMA-3371","BTMA-3372","PLAT-4342","PLAT-4357","PLAT-4491","PLAT-4506","PLAT-4507","PLAT-4523","PLAT-4524","PLAT-4525","PLAT-4526","PLAT-4529","PLAT-4538","PLAT-4543","PLAT-4545","PLAT-4563"]},
+                {name:"S47",full:"Platform_S47 TRACKZILLA",sp:40,days:10,quizSp:17,platformSp:23,keys:["BTMA-3214","BTMA-3215","BTMA-3404","BTMA-3406","BTMA-3407","BTMA-3420","BTMA-3421","BTMA-3501","BTMA-3564","BTMA-3567","PLAT-2996","PLAT-3395","PLAT-3777","PLAT-4450","PLAT-4558","PLAT-4591","PLAT-4654","PLAT-4655","PLAT-4661","PLAT-4663","PLAT-4664","PLAT-4665","PLAT-4670","PLAT-4731","PLAT-4786"]},
+                {name:"S48",full:"Platform_S48 пузирик із носу",sp:34,days:9,quizSp:8,platformSp:26,keys:["BTMA-3497","BTMA-3556","BTMA-3660","BTMA-3661","PLAT-4333","PLAT-4334","PLAT-4783","PLAT-4785","PLAT-4794","PLAT-4815","PLAT-4816","PLAT-4819","PLAT-4820","PLAT-4821","PLAT-4884"]},
+                {name:"S49",full:"Platform_S49 спринт ім.Єгора 2",sp:27,days:9,quizSp:19,platformSp:8,keys:["BTMA-3578","BTMA-3579","BTMA-3635","BTMA-3636","BTMA-3637","BTMA-3643","BTMA-3647","BTMA-3650","BTMA-3689","BTMA-3710","BTMA-3711","BTMA-3734","PLAT-4946","PLAT-4954","PLAT-4958","PLAT-4960","PLAT-4974","PLAT-4975","PLAT-4976"]},
+                {name:"S50",full:"Platform_S50 На два фронти",sp:35,days:10,quizSp:17,platformSp:18,keys:["BTMA-3745","BTMA-3747","BTMA-3748","BTMA-3765","PLAT-4923","PLAT-4925","PLAT-4947","PLAT-4948","PLAT-4977","PLAT-5000","PLAT-5027","PLAT-5057","PLAT-5084","PLAT-5123","PLAT-5124","PLAT-5187"]}
+            ],
+            comments: {}
+        },
+        emiliia: {
+            name: 'Emiliia Voronova',
+            color: '#E91E63',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S25",full:"Platform S25",sp:3,days:null,quizSp:0,platformSp:3,keys:["PLAT-2216"]},
+                {name:"S30",full:"Platform S30",sp:2,days:null,quizSp:2,platformSp:0,keys:["BTMA-2237"]},
+                {name:"S33",full:"Platform S33 UnderTheInfluence",sp:5,days:10,quizSp:5,platformSp:0,keys:["BTMA-2643"]},
+                {name:"S34",full:"PlatformS34_МейкЖираГрейтЕген",sp:26,days:10,quizSp:23,platformSp:3,keys:["BTMA-2568","BTMA-2706","PLAT-3264"]},
+                {name:"S35",full:"Platform S35. Саші привіт",sp:16,days:10,quizSp:3,platformSp:13,keys:["BTMA-2569","PLAT-3012","PLAT-3138"]},
+                {name:"S36",full:"Platform S36 на кіпіші",sp:15,days:7,quizSp:10,platformSp:5,keys:["BTMA-2797","BTMA-2827","PLAT-3018"]},
+                {name:"S37",full:"Platform S37 суші сет хоккайдо",sp:22,days:10,quizSp:22,platformSp:0,keys:["BTMA-2845","BTMA-2874","BTMA-2905","BTMA-2906","BTMA-2907","BTMA-2909","BTMA-2920"]},
+                {name:"S38",full:"Platform S38",sp:22,days:10,quizSp:9,platformSp:13,keys:["BTMA-2917","BTMA-2959","BTMA-2971","PLAT-3209","PLAT-3519","PLAT-3570","PLAT-3571","PLAT-3638","PLAT-3755"]},
+                {name:"S39",full:"Platform S39 Чайний-пуерний",sp:54,days:9,quizSp:23,platformSp:31,keys:["BTMA-2954","BTMA-2999","BTMA-3013","BTMA-3026","BTMA-3028","PLAT-3719","PLAT-3789","PLAT-3820","PLAT-3878","PLAT-3901","PLAT-3902","PLAT-3905"]},
+                {name:"S40",full:"Platform S40_AfterparTEA",sp:30,days:7,quizSp:0,platformSp:30,keys:["BTMA-3039","PLAT-3628","PLAT-3741","PLAT-3779","PLAT-3903","PLAT-3997","PLAT-3999"]},
+                {name:"S41",full:"Platform S41 _ 9 кіт пекла",sp:37,days:9,quizSp:8,platformSp:29,keys:["BTMA-3066","PLAT-3379","PLAT-3380"]},
+                {name:"S42",full:"Platform S42_Посттравматичний",sp:8,days:6,quizSp:0,platformSp:8,keys:["PLAT-4228"]},
+                {name:"S43",full:"PlatformS43_DeliverBeforeSanta",sp:8,days:7,quizSp:0,platformSp:8,keys:["PLAT-4254","PLAT-4278"]},
+                {name:"S44",full:"Platform S44 Палаюча коняка",sp:20,days:9,quizSp:8,platformSp:12,keys:["BTMA-2570","BTMA-2571","PLAT-4249","PLAT-4320"]},
+                {name:"S45",full:"Platform_S45 Офшорні сторіки",sp:18,days:10,quizSp:1,platformSp:17,keys:["BTMA-3288","PLAT-4303","PLAT-4379","PLAT-4415"]},
+                {name:"S46",full:"Platform_S46 orange cat sprint",sp:12,days:5,quizSp:5,platformSp:7,keys:["BTMA-3289","PLAT-4294","PLAT-4535"]},
+                {name:"S47",full:"Platform_S47 TRACKZILLA",sp:36,days:10,quizSp:23,platformSp:13,keys:["BTMA-3296","BTMA-3393","BTMA-3498","BTMA-3552","BTMA-3566","PLAT-3749","PLAT-4432","PLAT-4669"]},
+                {name:"S48",full:"Platform_S48 пузирик із носу",sp:25,days:9,quizSp:5,platformSp:20,keys:["BTMA-3495","BTMA-3582","PLAT-4280","PLAT-4281","PLAT-4782","PLAT-4883"]},
+                {name:"S49",full:"Platform_S49 спринт ім.Єгора 2",sp:45,days:8,quizSp:45,platformSp:0,keys:["BTMA-3559","BTMA-3573","BTMA-3574","BTMA-3630","BTMA-3632","BTMA-3633","BTMA-3634","BTMA-3687","BTMA-3712"]},
+                {name:"S50",full:"Platform_S50 На два фронти",sp:26,days:8,quizSp:13,platformSp:13,keys:["BTMA-3760","BTMA-3806","PLAT-5014","PLAT-5053","PLAT-5132","PLAT-5142","PLAT-5184"]}
+            ],
+            comments: {}
+        },
+        mariia: {
+            name: 'Mariia Khmilovska',
+            color: '#AB47BC',
+            barColor: 'rgba(147, 197, 253, 0.35)',
+            barBorder: 'rgba(147, 197, 253, 0.7)',
+            sprints: [
+                {name:"S43",full:"PlatformS43_DeliverBeforeSanta",sp:6,days:8,quizSp:0,platformSp:6,keys:["PLAT-4182","PLAT-4205"]},
+                {name:"S44",full:"Platform S44 Палаюча коняка",sp:16,days:10,quizSp:0,platformSp:16,keys:["PLAT-4212","PLAT-4285"]},
+                {name:"S45",full:"Platform_S45 Офшорні сторіки",sp:26,days:10,quizSp:0,platformSp:26,keys:["PLAT-3009","PLAT-4206","PLAT-4301"]},
+                {name:"S46",full:"Platform_S46 orange cat sprint",sp:40,days:9,quizSp:0,platformSp:40,keys:["PLAT-4500","PLAT-4503"]},
+                {name:"S47",full:"Platform_S47 TRACKZILLA",sp:23,days:10,quizSp:0,platformSp:23,keys:["PLAT-2995","PLAT-4652","PLAT-4653","PLAT-4656","PLAT-4659","PLAT-4723","PLAT-4724"]},
+                {name:"S48",full:"Platform_S48 пузирик із носу",sp:22,days:8,quizSp:1,platformSp:21,keys:["BTMA-3558","PLAT-4784","PLAT-4812","PLAT-4814"]},
+                {name:"S49",full:"Platform_S49 спринт ім.Єгора 2",sp:1,days:10,quizSp:0,platformSp:1,keys:["PLAT-4953"]},
+                {name:"S50",full:"Platform_S50 На два фронти",sp:12,days:5,quizSp:0,platformSp:12,keys:["PLAT-4970","PLAT-4988","PLAT-5032"]}
+            ],
+            comments: {}
+        }
+    };
+
+    let chart = null;
+
+    // --- Persist sprint notes (localStorage + shared comments.json for GitHub) ---
+    const NOTES_STORAGE_KEY = 'plat_sp_report_comments_v1';
+    const NOTES_SHARED_FILE = 'comments.json';
+
+    function mergeCommentsInto(rawSource) {
+        if (!rawSource || typeof rawSource !== 'object') return;
+        Object.keys(rawSource).forEach(devKey => {
+            if (rawData[devKey]) {
+                rawData[devKey].comments = Object.assign(
+                    {},
+                    rawData[devKey].comments || {},
+                    rawSource[devKey] || {}
+                );
+            }
+        });
+    }
+
+    function collectAllComments() {
+        const out = {};
+        Object.keys(rawData).forEach(devKey => {
+            const c = rawData[devKey].comments || {};
+            if (Object.keys(c).length) out[devKey] = c;
+        });
+        return out;
+    }
+
+    function loadCommentsFromStorage() {
+        try {
+            const raw = localStorage.getItem(NOTES_STORAGE_KEY);
+            if (!raw) return;
+            mergeCommentsInto(JSON.parse(raw));
+        } catch (e) {
+            console.warn('Failed to load saved notes from localStorage:', e);
+        }
+    }
+
+    function persistCommentsToStorage() {
+        try {
+            localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(collectAllComments()));
+        } catch (e) {
+            console.warn('Failed to persist notes to localStorage:', e);
+        }
+    }
+
+    // Load order: bundled comments.json (baseline, shared via Git) -> localStorage (per-browser edits)
+    async function loadBundledComments() {
+        try {
+            const resp = await fetch(NOTES_SHARED_FILE, { cache: 'no-store' });
+            if (!resp.ok) return false;
+            const data = await resp.json();
+            mergeCommentsInto(data);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    loadCommentsFromStorage();
+
+    function buildJiraLink(keys) {
+        return JIRA_BASE + keys.map(k => encodeURIComponent(k)).join('%2C') + ')';
+    }
+
+    function splitKeysByProject(keys) {
+        const quiz = [], platform = [];
+        (keys || []).forEach(k => {
+            if (typeof k !== 'string') return;
+            if (k.startsWith('BTMA-')) quiz.push(k);
+            else if (k.startsWith('PLAT-')) platform.push(k);
+        });
+        return { quiz, platform };
+    }
+
+    const MIXED_PROJECT_COLOR = '#FFAB00'; // Jira yellow – highlights sprints with both Quiz + Platform work
+
+    function isMixedProjectSprint(sprint) {
+        if (sprint.quizSp != null && sprint.platformSp != null && sprint.quizSp > 0 && sprint.platformSp > 0) return true;
+        const split = splitKeysByProject(sprint.keys);
+        return split.quiz.length > 0 && split.platform.length > 0;
+    }
+
+    // Parse manual SP adjustments from a sprint note, e.g. "+15 SP", "дорахуй +7", "-3 sp"
+    // Returns { total: <signed int>, matches: [{sign, value, raw}] }.
+    function parseSPAdjustment(note) {
+        const result = { total: 0, matches: [] };
+        if (!note || typeof note !== 'string') return result;
+        // Require SP unit word nearby (sp / сп / сторіпоінт / story point(s)).
+        // Trailing lookahead handles Cyrillic (where \b fails) — end-of-string, whitespace or punctuation.
+        const re = /([+\-])\s*(\d+)\s*(sp|сп|сторіпоінт[а-яіїєґ]*|story\s*points?)(?=$|[\s.,;!?)\]\-])/giu;
+        let m;
+        while ((m = re.exec(note)) !== null) {
+            const sign = m[1] === '-' ? -1 : 1;
+            const val = parseInt(m[2], 10);
+            if (!isNaN(val)) {
+                result.matches.push({ sign: m[1], value: val, raw: m[0] });
+                result.total += sign * val;
+            }
+        }
+        return result;
+    }
+
+    function getAdjustedSP(sprint, comments) {
+        const note = comments && comments[sprint.name];
+        const adj = parseSPAdjustment(note).total;
+        return (sprint.sp || 0) + adj;
+    }
+
+    function updateChart(devKey) {
+        if (chart) chart.destroy();
+        const dev = rawData[devKey];
+        const sprints = dev.sprints;
+        const comments = dev.comments || {};
+        const labels = sprints.map(s => s.full);
+        const baseValues = sprints.map(s => s.sp);
+        const adjustments = sprints.map(s => parseSPAdjustment(comments[s.name]).total);
+        const values = sprints.map((s, i) => baseValues[i] + adjustments[i]);
+        const daysValues = sprints.map(s => s.days);
+        const totalSP = values.reduce((a, b) => a + b, 0);
+        const mixedFlags = sprints.map(isMixedProjectSprint);
+        const adjFlags = adjustments.map(a => a !== 0);
+        const pointBg = sprints.map((s, i) => adjFlags[i] ? '#36B37E' : (mixedFlags[i] ? MIXED_PROJECT_COLOR : dev.color));
+        const pointBorder = sprints.map((s, i) => (adjFlags[i] || mixedFlags[i]) ? '#172B4D' : '#fff');
+        const pointRadiusArr = sprints.map((s, i) => (adjFlags[i] || mixedFlags[i]) ? 7 : 5);
+        const pointHoverArr = sprints.map((s, i) => (adjFlags[i] || mixedFlags[i]) ? 10 : 8);
+        const pointStyleArr = sprints.map((s, i) => adjFlags[i] ? 'triangle' : (mixedFlags[i] ? 'rectRot' : 'circle'));
+        const datalabelColorArr = sprints.map((s, i) => adjFlags[i] ? '#006644' : (mixedFlags[i] ? '#B76E00' : dev.color));
+
+        const ctx = document.getElementById('spChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Factual Days',
+                        data: daysValues,
+                        backgroundColor: dev.barColor,
+                        borderColor: dev.barBorder,
+                        borderWidth: 1,
+                        yAxisID: 'yDays',
+                        order: 2,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8,
+                        datalabels: {
+                            display: true,
+                            color: '#97A0AF',
+                            font: { size: 9, weight: '500' },
+                            anchor: 'end',
+                            align: 'end',
+                            offset: -2,
+                            rotation: 0,
+                            formatter: function(value) { return value !== null ? value + 'd' : ''; }
+                        }
+                    },
+                    {
+                        type: 'line',
+                        label: dev.name + ' (SP)',
+                        data: values,
+                        borderColor: dev.color,
+                        backgroundColor: dev.color,
+                        pointBackgroundColor: pointBg,
+                        pointBorderColor: pointBorder,
+                        pointBorderWidth: 2,
+                        pointRadius: pointRadiusArr,
+                        pointHoverRadius: pointHoverArr,
+                        pointStyle: pointStyleArr,
+                        borderWidth: 2.5,
+                        tension: 0.1,
+                        fill: false,
+                        yAxisID: 'y',
+                        order: 1,
+                        datalabels: {
+                            display: true,
+                            color: function(ctx) { return datalabelColorArr[ctx.dataIndex]; },
+                            font: { size: 11, weight: '600' },
+                            anchor: 'top',
+                            align: 'top',
+                            offset: 2,
+                            rotation: -45,
+                            formatter: function(value) { return value; }
+                        }
+                    }
+                ]
+            },
+            plugins: [ChartDataLabels],
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                onClick: function(evt, elements) {
+                    if (elements.length > 0) {
+                        const el = elements.find(e => e.datasetIndex === 1) || elements[0];
+                        const idx = el.index;
+                        const sprint = sprints[idx];
+                        openSprintModal(devKey, idx, sprint);
+                    }
+                },
+                onHover: function(evt, elements) {
+                    evt.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { usePointStyle: true, padding: 20, font: { size: 13, weight: '600' } }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(23, 43, 77, 0.95)',
+                        titleFont: { size: 13 },
+                        bodyFont: { size: 13 },
+                        padding: 12,
+                        cornerRadius: 4,
+                        callbacks: {
+                            title: function(items) { return items[0].label; },
+                            label: function(ctx) {
+                                if (ctx.datasetIndex === 0) {
+                                    return 'Factual Days: ' + (ctx.raw !== null ? ctx.raw : 'N/A');
+                                }
+                                return 'Story Points: ' + ctx.raw;
+                            },
+                            afterLabel: function(ctx) {
+                                if (ctx.datasetIndex === 1) {
+                                    const sprint = sprints[ctx.dataIndex];
+                                    const days = sprint.days;
+                                    const spPerDay = days ? (ctx.raw / days).toFixed(1) : '—';
+                                    let extra = 'Issues: ' + sprint.keys.length + ' | SP/day: ' + spPerDay;
+                                    if (isMixedProjectSprint(sprint)) {
+                                        const qSp = sprint.quizSp != null ? sprint.quizSp : 0;
+                                        const pSp = sprint.platformSp != null ? sprint.platformSp : 0;
+                                        extra += '\n◆ Mixed: Quiz ' + qSp + ' SP + Platform ' + pSp + ' SP';
+                                    }
+                                    const adj = adjustments[ctx.dataIndex];
+                                    if (adj !== 0) {
+                                        const sign = adj > 0 ? '+' : '';
+                                        extra += '\n▲ Manual adj: base ' + baseValues[ctx.dataIndex] + ' ' + sign + adj + ' = ' + ctx.raw + ' SP';
+                                    }
+                                    return extra + '\nClick to view in Jira';
+                                }
+                                return '';
+                            }
+                        }
+                    },
+                    datalabels: {} // per-dataset config used above
+                },
+                scales: {
+                    x: {
+                        ticks: { maxRotation: 45, minRotation: 45, font: { size: 10 }, color: '#6B778C' },
+                        grid: { display: false }
+                    },
+                    y: {
+                        type: 'linear',
+                        position: 'left',
+                        beginAtZero: true,
+                        ticks: { font: { size: 12 }, color: '#6B778C' },
+                        grid: { color: '#F4F5F7' },
+                        title: { display: true, text: 'Story Points', font: { size: 13, weight: '500' }, color: '#6B778C' }
+                    },
+                    yDays: {
+                        type: 'linear',
+                        position: 'right',
+                        beginAtZero: true,
+                        max: 15,
+                        ticks: { font: { size: 11 }, color: '#97A0AF', stepSize: 2 },
+                        grid: { display: false },
+                        title: { display: true, text: 'Factual Days', font: { size: 12, weight: '500' }, color: '#97A0AF' }
+                    }
+                }
+            }
+        });
+
+        // Render AI summary
+        generateAISummary(devKey);
+    }
+
+    // --- Sprint Detail Modal Logic ---
+    let currentModalDevKey = null;
+    let currentModalSprintIdx = null;
+
+    function openSprintModal(devKey, idx, sprint) {
+        currentModalDevKey = devKey;
+        currentModalSprintIdx = idx;
+        const dev = rawData[devKey];
+
+        document.getElementById('modalTitle').textContent = sprint.full;
+        document.getElementById('modalSP').textContent = sprint.sp + ' SP';
+        document.getElementById('modalDays').textContent = sprint.days !== null ? sprint.days + ' days' : 'Days: N/A';
+        const spPerDay = sprint.days ? (sprint.sp / sprint.days).toFixed(1) : '—';
+        document.getElementById('modalSPDay').textContent = 'SP/day: ' + spPerDay;
+        document.getElementById('modalIssueCount').textContent = sprint.keys.length + ' issues';
+
+        // Set badge colors to match developer
+        document.getElementById('modalSP').style.background = dev.color;
+        document.querySelector('.sprint-comment') && null;
+
+        // Split keys by project (Quiz=BTMA, Platform=PLAT)
+        const split = splitKeysByProject(sprint.keys);
+        const hasMixedProjects = split.quiz.length > 0 && split.platform.length > 0;
+        const breakdownEl = document.getElementById('modalBreakdown');
+        if (hasMixedProjects || (sprint.platformSp != null && sprint.quizSp != null)) {
+            const qSp = sprint.quizSp != null ? sprint.quizSp : (sprint.sp - (sprint.platformSp || 0));
+            const pSp = sprint.platformSp != null ? sprint.platformSp : 0;
+            breakdownEl.innerHTML = '<strong>Quiz:</strong> ' + qSp + ' SP (' + split.quiz.length + ' issues) &nbsp;|&nbsp; <strong>Platform:</strong> ' + pSp + ' SP (' + split.platform.length + ' issues)';
+            breakdownEl.style.display = '';
+        } else {
+            breakdownEl.style.display = 'none';
+        }
+
+        // Jira links (Quiz + Platform separately if mixed)
+        const jiraLink = document.getElementById('modalJiraLink');
+        const jiraLinkPlatform = document.getElementById('modalJiraLinkPlatform');
+        if (hasMixedProjects) {
+            jiraLink.href = buildJiraLink(split.quiz);
+            jiraLink.textContent = 'Quiz issues →';
+            jiraLink.style.display = '';
+            jiraLinkPlatform.href = buildJiraLink(split.platform);
+            jiraLinkPlatform.style.display = '';
+        } else if (split.quiz.length > 0) {
+            jiraLink.href = buildJiraLink(split.quiz);
+            jiraLink.textContent = 'View issues in Jira →';
+            jiraLink.style.display = '';
+            jiraLinkPlatform.style.display = 'none';
+        } else if (split.platform.length > 0) {
+            jiraLink.href = buildJiraLink(split.platform);
+            jiraLink.textContent = 'View issues in Jira →';
+            jiraLink.style.display = '';
+            jiraLinkPlatform.style.display = 'none';
+        } else {
+            jiraLink.style.display = 'none';
+            jiraLinkPlatform.style.display = 'none';
+        }
+
+        // Load notes
+        const savedNotes = (dev.comments && dev.comments[sprint.name]) || '';
+        document.getElementById('modalNotes').value = savedNotes;
+
+        // Reset saved message
+        document.getElementById('modalSavedMsg').classList.remove('visible');
+
+        // Show modal
+        document.getElementById('sprintModal').classList.add('active');
+        document.getElementById('modalNotes').focus();
+    }
+
+    function closeSprintModal() {
+        document.getElementById('sprintModal').classList.remove('active');
+        currentModalDevKey = null;
+        currentModalSprintIdx = null;
+    }
+
+    function saveModalNotes() {
+        if (currentModalDevKey === null || currentModalSprintIdx === null) return;
+        const dev = rawData[currentModalDevKey];
+        const sprint = dev.sprints[currentModalSprintIdx];
+        const notes = document.getElementById('modalNotes').value.trim();
+
+        if (!dev.comments) dev.comments = {};
+        if (notes) {
+            dev.comments[sprint.name] = notes;
+        } else {
+            delete dev.comments[sprint.name];
+        }
+
+        // Persist to localStorage so notes survive page reload and HTML edits
+        persistCommentsToStorage();
+
+        // Update chart + AI Summary + Workload Dynamics to reflect new notes
+        const savedDevKey = currentModalDevKey;
+        const select = document.getElementById('developerSelect');
+        if (select.value === savedDevKey) {
+            updateChart(savedDevKey);
+        }
+        renderWorkloadDynamics();
+
+        // Show saved feedback
+        const msg = document.getElementById('modalSavedMsg');
+        msg.classList.add('visible');
+        setTimeout(() => msg.classList.remove('visible'), 2000);
+    }
+
+    // Modal event listeners
+    document.getElementById('modalClose').addEventListener('click', closeSprintModal);
+    document.getElementById('sprintModal').addEventListener('click', function(e) {
+        if (e.target === this) closeSprintModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeSprintModal();
+    });
+    document.getElementById('modalSaveBtn').addEventListener('click', saveModalNotes);
+    // Ctrl+Enter to save
+    document.getElementById('modalNotes').addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            saveModalNotes();
+        }
+    });
+
+    // AI Summary generation (Ukrainian)
+    function generateAISummary(devKey) {
+        const dev = rawData[devKey];
+        const sprints = dev.sprints;
+        const comments = dev.comments || {};
+
+        // Collect all sprint notes context (with adjusted SP)
+        const notesContext = [];
+        sprints.forEach(s => {
+            if (comments[s.name]) {
+                const adj = parseSPAdjustment(comments[s.name]);
+                notesContext.push({ sprint: s.name, note: comments[s.name], sp: s.sp + adj.total, baseSp: s.sp, adj: adj.total, days: s.days });
+            }
+        });
+
+        // Basic stats (use adjusted SP — manual +N / -N corrections from notes are applied)
+        const sps = sprints.map(s => getAdjustedSP(s, comments));
+        const totalSP = sps.reduce((a, b) => a + b, 0);
+        const avgSP = totalSP / sprints.length;
+        const daysWithData = sprints.filter(s => s.days !== null);
+        const totalDays = daysWithData.reduce((a, b) => a + b.days, 0);
+        const avgSpPerDay = totalDays > 0 ? totalSP / totalDays : 0;
+
+        // Recent trend (last 5 sprints) — adjusted SP
+        const recent5 = sprints.slice(-5);
+        const recent5SP = recent5.map(s => getAdjustedSP(s, comments));
+        const recent5Avg = recent5SP.reduce((a, b) => a + b, 0) / recent5.length;
+        const older = sprints.slice(-10, -5);
+        const olderAvg = older.length > 0 ? older.map(s => getAdjustedSP(s, comments)).reduce((a, b) => a + b, 0) / older.length : avgSP;
+
+        // Consistency: standard deviation
+        const variance = sps.reduce((sum, sp) => sum + Math.pow(sp - avgSP, 2), 0) / sps.length;
+        const stdDev = Math.sqrt(variance);
+        const cv = avgSP > 0 ? (stdDev / avgSP * 100) : 0;
+
+        // Best & worst sprints (adjusted)
+        const maxSP = Math.max(...sps);
+        const minSP = Math.min(...sps);
+        const bestSprint = sprints.find(s => getAdjustedSP(s, comments) === maxSP);
+
+        // SP/day efficiency (adjusted SP)
+        const efficiencies = daysWithData.filter(s => s.days > 0).map(s => { const sp = getAdjustedSP(s, comments); return { name: s.name, eff: sp / s.days, sp: sp, days: s.days }; });
+        const avgEff = efficiencies.length > 0 ? efficiencies.reduce((a, e) => a + e.eff, 0) / efficiencies.length : 0;
+        const recentEff = efficiencies.slice(-5);
+        const recentEffAvg = recentEff.length > 0 ? recentEff.reduce((a, e) => a + e.eff, 0) / recentEff.length : 0;
+
+        // Low-days sprints (< 7 days)
+        const lowDaysSprints = daysWithData.filter(s => s.days < 7);
+
+        // High-performance sprints (> avg + stdDev) — adjusted SP
+        const highPerfSprints = sprints.filter(s => getAdjustedSP(s, comments) > avgSP + stdDev);
+
+        // Detect context from notes
+        const contextNotes = [];
+        const contextKeywords = ['інший проєкт', 'другий проєкт', 'other project', 'іншому проєкті', 'зайнятий', 'busy', 'vacation', 'відпустка', 'sick', 'хворів', 'лікарняний', 'onboarding', 'навчання', 'половину спринту', 'частково'];
+        notesContext.forEach(nc => {
+            const lower = nc.note.toLowerCase();
+            contextKeywords.forEach(kw => {
+                if (lower.includes(kw) && !contextNotes.find(c => c.sprint === nc.sprint)) {
+                    contextNotes.push(nc);
+                }
+            });
+        });
+
+        // --- Build Summary (Ukrainian) ---
+        let overview = '';
+        const trendDir = recent5Avg > olderAvg * 1.1 ? 'up' : (recent5Avg < olderAvg * 0.9 ? 'down' : 'stable');
+
+        if (trendDir === 'up') {
+            overview += 'Останні спринти демонструють <strong style="color:#006644;">позитивну динаміку ↗</strong> — середнє за останні 5 спринтів: ' + recent5Avg.toFixed(1) + ' SP проти ' + olderAvg.toFixed(1) + ' SP раніше. ';
+        } else if (trendDir === 'down') {
+            overview += 'Останні спринти показують <strong style="color:#BF2600;">зниження velocity ↘</strong> — середнє за останні 5 спринтів: ' + recent5Avg.toFixed(1) + ' SP проти ' + olderAvg.toFixed(1) + ' SP раніше. ';
+        } else {
+            overview += 'Продуктивність <strong>стабільна →</strong> — середнє за останні 5 спринтів: ' + recent5Avg.toFixed(1) + ' SP проти ' + olderAvg.toFixed(1) + ' SP раніше. ';
+        }
+
+        const cvTooltip = 'CV (Coefficient of Variation, коефіцієнт варіації) = (Standard Deviation / Mean) × 100%. Показує наскільки розкид SP великий відносно середнього.\n\nДіапазони:\n• CV < 20% — дуже стабільно (низький розкид)\n• CV 20–40% — стабільно (норма для dev team)\n• CV 40–60% — помірна варіативність\n• CV 60–80% — значна варіативність (нестабільно)\n• CV > 80% — дуже висока варіативність (важко планувати)';
+        const cvHelp = ' <span class="cv-help" title="' + cvTooltip.replace(/"/g,'&quot;') + '" style="cursor:help;display:inline-block;width:14px;height:14px;border-radius:50%;background:#DFE1E6;color:#505F79;font-size:10px;font-weight:700;text-align:center;line-height:14px;vertical-align:middle;">?</span>';
+        if (cv < 40) {
+            overview += 'Стабільність результатів <strong style="color:#006644;">висока</strong> (CV: ' + cv.toFixed(0) + '%' + cvHelp + ').';
+        } else if (cv < 60) {
+            overview += 'Результати <strong>помірно варіюються</strong> між спринтами (CV: ' + cv.toFixed(0) + '%' + cvHelp + ').';
+        } else {
+            overview += 'Результати <strong style="color:#BF2600;">значно варіюються</strong> між спринтами (CV: ' + cv.toFixed(0) + '%' + cvHelp + ').';
+        }
+
+        document.getElementById('summaryOverview').innerHTML = overview;
+
+        // Strengths (Ukrainian)
+        const strengths = [];
+        if (highPerfSprints.length >= 3) {
+            strengths.push('Здатність до високого аутпуту: ' + highPerfSprints.length + ' спринтів понад ' + (avgSP + stdDev).toFixed(0) + ' SP (пік: ' + maxSP + ' SP у ' + bestSprint.name + ')');
+        } else if (maxSP > avgSP * 1.5) {
+            strengths.push('Пікова продуктивність ' + maxSP + ' SP у ' + bestSprint.name + ' — значний потенціал');
+        }
+        if (recentEffAvg > avgEff && avgEff > 0) {
+            strengths.push('Зростання ефективності: останні ' + recentEffAvg.toFixed(1) + ' SP/день проти загальних ' + avgEff.toFixed(1) + ' SP/день');
+        }
+        if (cv < 40) {
+            strengths.push('Стабільна delivery — передбачувана velocity для планування');
+        }
+        if (trendDir === 'up') {
+            strengths.push('Позитивна динаміка — зростання результатів в останніх спринтах');
+        }
+        if (totalDays > 0 && avgEff >= 5) {
+            strengths.push('Висока ефективність: ' + avgEff.toFixed(1) + ' SP/день в середньому');
+        }
+        const lowDaysHighOutput = lowDaysSprints.filter(s => getAdjustedSP(s, comments) > avgSP * 0.5);
+        if (lowDaysHighOutput.length > 0) {
+            strengths.push('Результативність у коротких спринтах (' + lowDaysHighOutput.map(s => s.name + ': ' + getAdjustedSP(s, comments) + 'SP/' + s.days + 'д').join(', ') + ')');
+        }
+        if (sprints.length > 20) {
+            strengths.push('Досвідчений учасник команди (' + sprints.length + ' спринтів) — глибоке знання домену');
+        }
+        if (strengths.length < 2 && avgSP > 30) {
+            strengths.push('Стабільна середня velocity: ' + avgSP.toFixed(1) + ' SP за спринт');
+        }
+        if (strengths.length < 2) {
+            strengths.push('Загальний внесок ' + totalSP + ' SP у проєкт');
+        }
+
+        document.getElementById('summaryStrengths').innerHTML = strengths.slice(0, 4).map(s => '<li>' + s + '</li>').join('');
+
+        // Collect applied SP corrections (from Sprint Notes "+N SP" / "-N SP" syntax)
+        const spCorrectionNotes = notesContext.filter(nc => nc.adj !== 0).map(nc => ({
+            sprint: nc.sprint, extra: nc.adj, note: nc.note, baseSp: nc.baseSp, sp: nc.sp
+        }));
+
+        // Areas to watch (Ukrainian)
+        const areas = [];
+        if (trendDir === 'down') {
+            areas.push('Зниження velocity — останнє середнє ' + recent5Avg.toFixed(1) + ' SP проти ' + olderAvg.toFixed(1) + ' SP раніше');
+        }
+        if (cv >= 60) {
+            areas.push('Значна варіативність результатів (CV: ' + cv.toFixed(0) + '%) — ускладнює планування спринтів');
+        } else if (cv >= 40) {
+            areas.push('Помірна варіативність — деякі спринти значно вище/нижче середнього');
+        }
+        if (minSP <= 10 && sprints.length > 5) {
+            const lowSprints = sprints.filter(s => getAdjustedSP(s, comments) <= 10);
+            const unexplained = lowSprints.filter(s => !comments[s.name]);
+            if (unexplained.length > 0) {
+                areas.push('Спринти з низьким результатом без контексту: ' + unexplained.slice(0, 3).map(s => s.name + ' (' + getAdjustedSP(s, comments) + ' SP)').join(', ') + ' — додайте нотатки через графік');
+            }
+        }
+        if (lowDaysSprints.length > 3) {
+            areas.push('Часта скорочена присутність: ' + lowDaysSprints.length + ' спринтів з <7 робочих днів');
+        }
+        if (recentEffAvg < avgEff * 0.8 && avgEff > 0) {
+            areas.push('Зниження ефективності: ' + recentEffAvg.toFixed(1) + ' SP/день проти загальних ' + avgEff.toFixed(1) + ' SP/день');
+        }
+
+        if (areas.length === 0) {
+            areas.push('Суттєвих зауважень немає — стабільна продуктивність');
+        }
+
+        document.getElementById('summaryAreas').innerHTML = areas.slice(0, 5).map(s => '<li>' + s + '</li>').join('');
+
+        // --- AI Hypothesis (Ймовірна причина) ---
+        const hypotheses = [];
+        if (trendDir === 'down') {
+            if (contextNotes.length > 0) {
+                hypotheses.push('Зниження velocity може бути пов\'язане з контекстом: ' + contextNotes.map(c => c.sprint + ' — "' + c.note.substring(0, 50) + '"').join('; '));
+            } else {
+                const recentLow = recent5.filter(s => s.sp < avgSP * 0.7);
+                if (recentLow.length >= 2) {
+                    hypotheses.push('Можливе перевантаження або відволікання на не-PLAT задачі — декілька спринтів поспіль нижче норми');
+                }
+                hypotheses.push('Потенційний техдебт або складність задач зросла — потрібна декомпозиція');
+            }
+        }
+        if (cv >= 50) {
+            const veryHighSprints = sprints.filter(s => s.sp > avgSP * 1.8);
+            const veryLowSprints = sprints.filter(s => s.sp < avgSP * 0.3 && s.sp >= 0);
+            if (veryHighSprints.length > 0 && veryLowSprints.length > 0) {
+                hypotheses.push('Нерівномірне навантаження: "feast or famine" патерн — ймовірно задачі не рівномірно розподілені між спринтами');
+            }
+        }
+        if (lowDaysSprints.length > 2) {
+            hypotheses.push('Скорочені спринти впливають на velocity — можливо, розробник працює на кількох проєктах паралельно');
+        }
+        if (contextNotes.length > 0) {
+            const otherProjectNotes = contextNotes.filter(c => {
+                const l = c.note.toLowerCase();
+                return l.includes('інший проєкт') || l.includes('другий проєкт') || l.includes('other project') || l.includes('іншому проєкті');
+            });
+            if (otherProjectNotes.length > 0) {
+                hypotheses.push('Розробник залучений до інших проєктів — це пояснює зниження velocity у ' + otherProjectNotes.map(c => c.sprint).join(', '));
+            }
+        }
+        if (hypotheses.length === 0) {
+            hypotheses.push('Загалом стабільна продуктивність — суттєвих проблем не виявлено');
+        }
+        document.getElementById('summaryHypothesis').innerHTML = hypotheses.slice(0, 3).map(h => '<li>' + h + '</li>').join('');
+
+        // --- Recommended Actions (Рекомендована дія) ---
+        const actions = [];
+        if (trendDir === 'down') {
+            actions.push('Провести 1-on-1 для з\'ясування причин зниження velocity');
+        }
+        if (cv >= 50) {
+            actions.push('Розглянути стабілізацію scope спринтів — менше варіативності у commitment');
+        }
+        if (spCorrectionNotes.length > 0) {
+            actions.push('Синхронізувати SP у Jira для спринтів: ' + spCorrectionNotes.map(c => c.sprint + ' (' + (c.extra > 0 ? '+' : '') + c.extra + ')').join(', ') + ' — ручні коригування вже застосовані до графіка');
+        }
+        if (minSP <= 10 && sprints.length > 5) {
+            const unexplainedLow = sprints.filter(s => getAdjustedSP(s, comments) <= 10 && !comments[s.name]);
+            if (unexplainedLow.length > 0) {
+                actions.push('Додати контекст до слабких спринтів (' + unexplainedLow.slice(0, 3).map(s => s.name).join(', ') + ') — натисніть на точку графіка');
+            }
+        }
+        if (lowDaysSprints.length > 3) {
+            actions.push('Уточнити причини скороченої присутності — розглянути вплив на командну velocity');
+        }
+        if (recentEffAvg < avgEff * 0.8 && avgEff > 0) {
+            actions.push('Оцінити складність останніх задач — можливо потрібна допомога або перерозподіл');
+        }
+        if (trendDir === 'up') {
+            actions.push('Зафіксувати успішні практики — що саме допомагає зростанню?');
+        }
+        if (actions.length === 0) {
+            actions.push('Продовжувати поточний підхід — результати стабільні');
+        }
+        document.getElementById('summaryAction').innerHTML = actions.slice(0, 3).map(a => '<li>' + a + '</li>').join('');
+
+        // Context from sprint notes (Ukrainian)
+        let contextHTML = '';
+        if (contextNotes.length > 0) {
+            contextHTML = '<strong>Контекст зі Sprint Notes:</strong> ';
+            contextHTML += contextNotes.map(nc =>
+                nc.sprint + ' — "' + nc.note.substring(0, 80) + (nc.note.length > 80 ? '...' : '') + '" (' + nc.sp + ' SP, ' + (nc.days || '?') + ' днів)'
+            ).join('; ');
+            contextHTML += '. <em>Ці фактори враховані в аналізі вище.</em>';
+        } else if (notesContext.length > 0) {
+            contextHTML = '<strong>Sprint Notes:</strong> ' + notesContext.length + ' спринтів мають нотатки. Натисніть на точку графіка щоб переглянути/редагувати.';
+        } else {
+            contextHTML = 'Натисніть на точку графіка щоб додати нотатки до спринту. Нотатки з контекстом (напр. "зайнятий на іншому проєкті", "відпустка") будуть відображені в аналізі.';
+        }
+        document.getElementById('summaryContext').innerHTML = contextHTML;
+
+        // SP Adjustments section — renders full sprint notes for each adjustment
+        const adjEl = document.getElementById('summaryAdjustments');
+        if (spCorrectionNotes.length > 0) {
+            const totalAdj = spCorrectionNotes.reduce((sum, c) => sum + c.extra, 0);
+            const totalAdjSign = totalAdj > 0 ? '+' : '';
+            const escapeHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g,'&quot;');
+            let adjHTML = '<h4>▲ Ручні SP-коригування зі Sprint Notes (застосовано до графіка)</h4>';
+            spCorrectionNotes.forEach(c => {
+                const sign = c.extra > 0 ? '+' : '';
+                const badgeClass = c.extra < 0 ? 'adj-badge neg' : 'adj-badge';
+                adjHTML += '<div class="adj-row">';
+                adjHTML += '<span class="' + badgeClass + '">' + sign + c.extra + ' SP</span>';
+                adjHTML += '<span class="adj-sprint">' + escapeHtml(c.sprint) + '</span>';
+                adjHTML += ' — база ' + c.baseSp + ' SP → підсумок <strong>' + c.sp + ' SP</strong>';
+                adjHTML += '<div class="adj-note">' + escapeHtml(c.note) + '</div>';
+                adjHTML += '</div>';
+            });
+            adjHTML += '<div class="adj-total">Сумарне коригування: ' + totalAdjSign + totalAdj + ' SP у ' + spCorrectionNotes.length + ' спринті(ах). Значення на графіку вже враховують ці правки.</div>';
+            adjEl.innerHTML = adjHTML;
+            adjEl.style.display = 'block';
+        } else {
+            adjEl.innerHTML = '';
+            adjEl.style.display = 'none';
+        }
+
+        // Update card border color to match developer
+        document.getElementById('aiSummaryCard').style.borderLeftColor = dev.color;
+    }
+
+    document.getElementById('developerSelect').addEventListener('change', function() {
+        updateChart(this.value);
+    });
+
+    // --- Export / Import sprint notes ---
+    function setNotesStatus(text, type) {
+        const el = document.getElementById('notesStatus');
+        el.textContent = text || '';
+        el.className = 'notes-status' + (type ? ' ' + type : '');
+        if (text) setTimeout(() => { if (el.textContent === text) { el.textContent=''; el.className='notes-status'; } }, 4000);
+    }
+
+    document.getElementById('exportNotesBtn').addEventListener('click', function() {
+        const data = collectAllComments();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'comments.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setNotesStatus('✓ Exported ' + Object.keys(data).length + ' devs\' notes to comments.json', 'success');
+    });
+
+    document.getElementById('importNotesBtn').addEventListener('click', function() {
+        document.getElementById('importNotesFile').click();
+    });
+
+    document.getElementById('importNotesFile').addEventListener('change', function(e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                const parsed = JSON.parse(ev.target.result);
+                mergeCommentsInto(parsed);
+                persistCommentsToStorage();
+                updateChart(document.getElementById('developerSelect').value);
+                setNotesStatus('✓ Imported notes from ' + file.name, 'success');
+            } catch (err) {
+                setNotesStatus('✗ Failed to import: ' + err.message, 'error');
+            }
+        };
+        reader.onerror = function() { setNotesStatus('✗ Failed to read file', 'error'); };
+        reader.readAsText(file);
+        e.target.value = '';
+    });
+
+    // --- Workload Dynamics ---
+    function getDevTeamGroups() {
+        return {
+            'Frontend': ['andrii', 'yehor', 'oleksandr'],
+            'Backend': ['kuchma', 'emiliia', 'mariia'],
+            'Quiz (FE)': ['yelyzaveta', 'antonenko']
+        };
+    }
+
+    function getAllDevKeys() {
+        const groups = getDevTeamGroups();
+        return Object.values(groups).flat();
+    }
+
+    function computeBurnoutRisk(dk) {
+        const dev = rawData[dk];
+        if (!dev) return null;
+        const comments = dev.comments || {};
+        const sprints = dev.sprints;
+        if (sprints.length < 3) return null;
+
+        const sps = sprints.map(s => getAdjustedSP(s, comments));
+        const avg = sps.reduce((a, b) => a + b, 0) / sps.length;
+        const last5 = sps.slice(-5);
+        const last5Avg = last5.reduce((a, b) => a + b, 0) / last5.length;
+        const prev5 = sps.slice(-10, -5);
+        const prev5Avg = prev5.length > 0 ? prev5.reduce((a, b) => a + b, 0) / prev5.length : avg;
+
+        const signals = [];
+        let riskScore = 0;
+
+        // 1. Declining trend (3+ consecutive drops)
+        let consecutiveDrops = 0;
+        for (let i = sps.length - 1; i > 0; i--) {
+            if (sps[i] < sps[i - 1]) consecutiveDrops++;
+            else break;
+        }
+        if (consecutiveDrops >= 3) {
+            signals.push({ type: 'danger', text: consecutiveDrops + ' спринтів поспіль зі зниженням SP' });
+            riskScore += 3;
+        } else if (consecutiveDrops >= 2) {
+            signals.push({ type: 'warn', text: '2 спринти зі зниженням — слідкувати далі' });
+            riskScore += 1;
+        }
+
+        // 2. Significant velocity drop
+        if (prev5Avg > 0 && last5Avg < prev5Avg * 0.65) {
+            signals.push({ type: 'danger', text: 'Velocity впала на ' + ((1 - last5Avg / prev5Avg) * 100).toFixed(0) + '% (останні 5 vs попередні 5)' });
+            riskScore += 3;
+        } else if (prev5Avg > 0 && last5Avg < prev5Avg * 0.8) {
+            signals.push({ type: 'warn', text: 'Velocity знизилась на ' + ((1 - last5Avg / prev5Avg) * 100).toFixed(0) + '%' });
+            riskScore += 1;
+        }
+
+        // 3. Feast-famine pattern (big spike followed by crash)
+        for (let i = sps.length - 1; i >= 1; i--) {
+            if (sps[i] < avg * 0.4 && sps[i - 1] > avg * 1.6) {
+                signals.push({ type: 'danger', text: 'Feast→famine: ' + sprints[i - 1].name + ' (' + sps[i - 1] + ' SP) → ' + sprints[i].name + ' (' + sps[i] + ' SP)' });
+                riskScore += 2;
+                break;
+            }
+        }
+
+        // 4. Consistently high load (above avg + 0.5*std for 3+ recent sprints)
+        const variance = sps.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / sps.length;
+        const std = Math.sqrt(variance);
+        const highThreshold = avg + std * 0.5;
+        const recentHigh = last5.filter(sp => sp > highThreshold).length;
+        if (recentHigh >= 4) {
+            signals.push({ type: 'warn', text: 'Перевантаження: ' + recentHigh + '/5 останніх спринтів вище норми (' + highThreshold.toFixed(0) + ' SP)' });
+            riskScore += 2;
+        }
+
+        // 5. High SP/day ratio consistently
+        const recentSprints = sprints.slice(-5);
+        const highEffSprints = recentSprints.filter(s => s.days && s.days > 0 && (getAdjustedSP(s, comments) / s.days) > 8);
+        if (highEffSprints.length >= 3) {
+            signals.push({ type: 'warn', text: 'Висока інтенсивність: ' + highEffSprints.length + '/5 спринтів з >8 SP/day' });
+            riskScore += 2;
+        }
+
+        // 6. Last sprint near zero
+        const lastSp = sps[sps.length - 1];
+        if (lastSp <= 5 && avg > 20) {
+            signals.push({ type: 'danger', text: 'Останній спринт майже порожній (' + lastSp + ' SP при середній ' + avg.toFixed(0) + ')' });
+            riskScore += 2;
+        }
+
+        // 7. Positive signal: stable or growing
+        if (last5Avg >= prev5Avg && consecutiveDrops === 0) {
+            signals.push({ type: 'ok', text: 'Стабільна або зростаюча velocity — без ознак перевтоми' });
+        }
+
+        // Determine risk level
+        let risk = 'low';
+        if (riskScore >= 5) risk = 'high';
+        else if (riskScore >= 2) risk = 'medium';
+
+        return { dev, signals, risk, riskScore, sps, avg, last5Avg, sprints };
+    }
+
+    function renderBurnoutCards() {
+        const devKeys = getAllDevKeys();
+        let html = '';
+
+        // Sort by risk score descending
+        const results = devKeys.map(dk => ({ dk, ...computeBurnoutRisk(dk) })).filter(r => r.dev);
+        results.sort((a, b) => b.riskScore - a.riskScore);
+
+        results.forEach(r => {
+            const riskLabel = r.risk === 'high' ? 'Високий ризик' : (r.risk === 'medium' ? 'Помірний' : 'Низький');
+            html += '<div class="burnout-card risk-' + r.risk + '">';
+            html += '<div class="burnout-card-header">';
+            html += '<span class="burnout-card-name" style="color:' + r.dev.color + ';">' + r.dev.name + '</span>';
+            html += '<span class="burnout-risk-badge ' + r.risk + '">' + riskLabel + '</span>';
+            html += '</div>';
+
+            html += '<ul class="burnout-signals">';
+            r.signals.slice(0, 4).forEach(s => {
+                const cls = s.type === 'danger' ? 'signal-danger' : (s.type === 'warn' ? 'signal-warn' : 'signal-ok');
+                html += '<li class="' + cls + '">' + s.text + '</li>';
+            });
+            html += '</ul>';
+
+            // Mini sparklines (last 10 sprints): SP + Issue Count
+            const last10Sprints = r.sprints.slice(-10);
+            const last10 = r.sps.slice(-10);
+            const last10Issues = last10Sprints.map(s => s.keys ? s.keys.length : 0);
+            const maxSp = Math.max(...last10, 1);
+            const maxIssues = Math.max(...last10Issues, 1);
+
+            html += '<div class="burnout-charts">';
+
+            // SP chart
+            html += '<div class="burnout-chart-row">';
+            html += '<span class="burnout-chart-label">SP</span>';
+            html += '<div class="burnout-mini-chart" title="Story Points (останні ' + last10.length + ' спринтів)">';
+            last10.forEach((sp, i) => {
+                const pct = (sp / maxSp * 100).toFixed(0);
+                const isLast = i === last10.length - 1;
+                let barColor = r.dev.color;
+                if (sp < r.avg * 0.4) barColor = '#FF5630';
+                else if (sp > r.avg * 1.5) barColor = '#FF8B00';
+                html += '<div class="burnout-mini-bar" style="height:' + Math.max(pct, 4) + '%;background:' + barColor + ';opacity:' + (isLast ? '1' : '0.6') + ';" title="' + last10Sprints[i].name + ': ' + sp + ' SP"></div>';
+            });
+            html += '</div></div>';
+
+            // Issues chart
+            const avgIssues = last10Issues.reduce((a, b) => a + b, 0) / last10Issues.length;
+            html += '<div class="burnout-chart-row">';
+            html += '<span class="burnout-chart-label">Tasks</span>';
+            html += '<div class="burnout-mini-chart" title="Кількість задач (останні ' + last10Issues.length + ' спринтів)">';
+            last10Issues.forEach((cnt, i) => {
+                const pct = (cnt / maxIssues * 100).toFixed(0);
+                const isLast = i === last10Issues.length - 1;
+                let barColor = '#0065FF';
+                if (cnt > avgIssues * 1.5) barColor = '#FF8B00';
+                else if (cnt < avgIssues * 0.4 && avgIssues > 3) barColor = '#FF5630';
+                html += '<div class="burnout-mini-bar" style="height:' + Math.max(pct, 4) + '%;background:' + barColor + ';opacity:' + (isLast ? '1' : '0.6') + ';" title="' + last10Sprints[i].name + ': ' + cnt + ' tasks"></div>';
+            });
+            html += '</div></div>';
+
+            // Sprint labels
+            html += '<div class="burnout-sprint-labels">';
+            last10Sprints.forEach(s => {
+                html += '<span>' + s.name.replace('S','') + '</span>';
+            });
+            html += '</div>';
+
+            html += '</div>';
+
+            html += '</div>';
+        });
+
+        document.getElementById('burnoutGrid').innerHTML = html;
+    }
+
+    function generateBurnoutSummary() {
+        const devKeys = getAllDevKeys();
+        const results = devKeys.map(dk => ({ dk, ...computeBurnoutRisk(dk) })).filter(r => r.dev);
+
+        const highRisk = results.filter(r => r.risk === 'high');
+        const medRisk = results.filter(r => r.risk === 'medium');
+        const lowRisk = results.filter(r => r.risk === 'low');
+
+        const points = [];
+
+        if (highRisk.length > 0) {
+            points.push({ cls: 'danger', text: '<strong>Високий ризик вигорання (' + highRisk.length + '):</strong> ' + highRisk.map(r => r.dev.name.split(' ')[0]).join(', ') + ' — потребують негайної уваги: 1-on-1, перерозподіл задач, або відпустка' });
+        }
+        if (medRisk.length > 0) {
+            points.push({ cls: 'warn', text: '<strong>Помірний ризик (' + medRisk.length + '):</strong> ' + medRisk.map(r => r.dev.name.split(' ')[0]).join(', ') + ' — спостерігати наступні 2-3 спринти, готувати план дій' });
+        }
+        if (lowRisk.length > 0) {
+            points.push({ cls: 'ok', text: '<strong>Низький ризик (' + lowRisk.length + '):</strong> ' + lowRisk.map(r => r.dev.name.split(' ')[0]).join(', ') + ' — стабільна робота, без тривожних сигналів' });
+        }
+
+        // Most common signals
+        const allSignals = results.flatMap(r => r.signals);
+        const feastFamine = allSignals.filter(s => s.text.includes('Feast'));
+        const declining = allSignals.filter(s => s.text.includes('зниженням') || s.text.includes('впала'));
+        const overloaded = allSignals.filter(s => s.text.includes('Перевантаження') || s.text.includes('інтенсивність'));
+
+        if (feastFamine.length > 0) {
+            points.push({ cls: 'info', text: 'Feast→famine патерн виявлено у ' + feastFamine.length + ' розробника(ів) — нерівномірний розподіл задач між спринтами. Рекомендація: стабілізувати scope commitment' });
+        }
+        if (declining.length >= 3) {
+            points.push({ cls: 'danger', text: 'Масове зниження velocity: ' + declining.length + ' сигналів зниження продуктивності — можливі системні проблеми (техдебт, незрозуміли вимоги, блокери)' });
+        }
+        if (overloaded.length > 0) {
+            points.push({ cls: 'warn', text: 'Перевантаження виявлено у ' + overloaded.length + ' сигнал(ах) — перевірити реалістичність commitment на наступний спринт' });
+        }
+
+        // Action
+        if (highRisk.length > 0 || medRisk.length >= 3) {
+            points.push({ cls: 'info', text: '<strong>Рекомендовані дії:</strong> провести ретроспективу щодо навантаження, запросити фідбек від розробників з помірним/високим ризиком, скоригувати capacity у наступному Sprint Planning' });
+        }
+
+        let html = '<div class="wai-title"><span class="wai-badge">AI</span> Оцінка ризиків вигорання</div>';
+        html += '<ul class="wai-points">';
+        points.forEach(p => { html += '<li class="' + p.cls + '">' + p.text + '</li>'; });
+        html += '</ul>';
+        document.getElementById('burnoutSummary').innerHTML = html;
+    }
+
+    function renderWorkloadDynamics() {
+        renderBurnoutCards();
+        generateBurnoutSummary();
+    }
+
+    // Initial render: try to pull bundled comments.json (for GitHub-hosted deployments), then render
+    (async () => {
+        const bundled = await loadBundledComments();
+        // localStorage already merged earlier; reapply on top so per-browser edits win
+        loadCommentsFromStorage();
+        updateChart('andrii');
+        renderWorkloadDynamics();
+        if (bundled) setNotesStatus('✓ Loaded shared notes from comments.json', 'success');
+    })();
+    </script>
+</body>
+</html>

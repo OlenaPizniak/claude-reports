@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "report",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "/Users/olenapizniak/claude reports"],
+      "port": 8765
+    },
+    {
+      "name": "sprint-report",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "/Users/olenapizniak/pm-skills/reports/sprint"],
+      "port": 8766
+    }
+  ]
+}
