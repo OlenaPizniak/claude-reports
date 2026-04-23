@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OKR Episode Dashboard · BTMA + PLAT · Feb–Apr 2026</title>
+<script>
+(function(){
+  if(sessionStorage.getItem('okr_auth')!=='1'){
+    document.addEventListener('DOMContentLoaded',function(){
+      document.body.style.display='none';
+      var overlay=document.createElement('div');
+      overlay.style.cssText='position:fixed;inset:0;background:#0f172a;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:Segoe UI,system-ui,sans-serif';
+      overlay.innerHTML='<div style="background:#1e293b;border:1px solid #334155;border-radius:16px;padding:40px 48px;text-align:center;min-width:320px"><div style="font-size:28px;margin-bottom:8px">🔒</div><div style="color:#e2e8f0;font-size:18px;font-weight:700;margin-bottom:4px">OKR Episode Dashboard</div><div style="color:#94a3b8;font-size:13px;margin-bottom:24px">BTMA · PLAT · Feb–Apr 2026</div><input id="pwd" type="password" placeholder="Пароль" style="width:100%;padding:10px 14px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:15px;outline:none;text-align:center" /><div id="err" style="color:#ef4444;font-size:12px;margin-top:8px;height:16px"></div><button onclick="checkPwd()" style="margin-top:16px;width:100%;padding:10px;background:#06b6d4;border:none;border-radius:8px;color:#0f172a;font-weight:700;font-size:15px;cursor:pointer">Увійти</button></div>';
+      document.body.parentNode.insertBefore(overlay,document.body);
+      document.body.parentNode.style.background='#0f172a';
+      setTimeout(function(){
+        var inp=document.getElementById('pwd');
+        if(inp){inp.focus();inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkPwd();});}
+      },50);
+    });
+  }
+  window.checkPwd=function(){
+    var v=document.getElementById('pwd').value;
+    if(v==='OKR1512'){
+      sessionStorage.setItem('okr_auth','1');
+      document.querySelector('div[style*="position:fixed"]').remove();
+      document.body.style.display='';
+    } else {
+      document.getElementById('err').textContent='Невірний пароль';
+      document.getElementById('pwd').value='';
+      document.getElementById('pwd').focus();
+    }
+  };
+})();
+</script>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--card2:#243044;--border:#334155;--accent:#06b6d4;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--orange:#f97316;--blue:#3b82f6;--purple:#a855f7;--gray:#64748b;--text:#e2e8f0;--muted:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#0f2344,#1a1040);border-bottom:1px solid var(--border);padding:20px 32px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.header h1{font-size:22px;font-weight:700;color:#fff}
+.header h1 span{color:var(--accent)}
+.header .sub{color:var(--muted);font-size:12px;margin-top:3px}
+.episode-badge{display:inline-block;background:rgba(6,182,212,0.15);border:1px solid var(--accent);color:var(--accent);padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600}
+
+/* NAV */
+.nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 32px;display:flex;gap:0}
+.nav-btn{padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none}
+.nav-btn:hover{color:var(--text)}
+.nav-btn.btma{color:#c084fc;border-bottom-color:#a855f7}
+.nav-btn.plat{color:#60a5fa;border-bottom-color:#3b82f6}
+
+/* CONTAINER */
+.container{max-width:1360px;margin:0 auto;padding:24px 32px}
+
+/* PROJECT SECTION */
+.proj-section{margin-bottom:48px}
+.proj-header{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.proj-header-left{display:flex;align-items:center;gap:14px}
+.proj-badge{padding:5px 12px;border-radius:6px;font-size:13px;font-weight:800;letter-spacing:1px}
+.proj-title{font-size:18px;font-weight:700;color:#fff}
+.proj-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.proj-summary-nums{display:flex;gap:24px}
+.proj-num{text-align:center;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.proj-num-divider{width:1px;background:var(--border);margin:0 8px;height:40px;align-self:center}
+.be-fe-wrap{display:flex;gap:14px;align-items:center}
+.be-chip,.fe-chip{display:flex;flex-direction:column;align-items:center}
+.be-chip .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:2px 6px;border-radius:4px;margin-bottom:3px;background:rgba(234,179,8,0.15);color:#eab308;border:1px solid rgba(234,179,8,0.25)}
+.fe-chip .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:2px 6px;border-radius:4px;margin-bottom:3px;background:rgba(6,182,212,0.15);color:#06b6d4;border:1px solid rgba(6,182,212,0.25)}
+.be-chip .bnum,.fe-chip .bnum{font-size:20px;font-weight:800;color:#fff;line-height:1.1}
+.bplan{font-size:9px;color:var(--muted);margin-top:2px;border-top:1px solid var(--border);padding-top:2px;text-align:center;white-space:nowrap}
+.be-chip .bsp,.fe-chip .bsp{font-size:10px;color:var(--muted)}
+.proj-num span{display:block;font-size:24px;font-weight:800;color:#fff;line-height:1.2}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:transform 0.15s,border-color 0.15s}
+.kpi-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:8px}
+.kpi-value{font-size:34px;font-weight:800;line-height:1;margin-bottom:4px}
+.kpi-value.green{color:var(--green)}
+.kpi-value.orange{color:var(--orange)}
+.kpi-value.gray{color:var(--gray)}
+.kpi-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi-sub .green{color:var(--green)}
+.kpi-sub .orange{color:var(--orange)}
+.kpi-sub .gray{color:var(--gray)}
+.kpi-link{font-size:11px;color:var(--accent);margin-top:8px;display:block}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1.3fr;gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:16px}
+
+/* DONUT */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.donut-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* BREAKDOWN */
+.breakdown-item{margin-bottom:14px}
+.breakdown-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.cat-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+.bname{color:var(--text);font-weight:600;font-size:13px}
+.bcount{font-size:13px;font-weight:700;color:var(--text)}
+.bar-wrap{background:rgba(255,255,255,0.06);border-radius:4px;height:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bsub{font-size:11px;color:var(--muted);margin-top:3px}
+.tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}
+.strat{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.25)}
+.hob-tag{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.25)}
+.oper-tag{background:rgba(100,116,139,0.1);color:#94a3b8;border:1px solid rgba(100,116,139,0.25)}
+.insight-box{background:rgba(6,182,212,0.05);border:1px solid rgba(6,182,212,0.2);border-radius:8px;padding:12px;margin-top:14px;font-size:12px;line-height:1.6;color:var(--muted)}
+.insight-box strong{color:var(--accent)}
+
+/* GOALS TABLE */
+.goals-table{width:100%;border-collapse:collapse;font-size:13px}
+.goals-table th{text-align:left;padding:7px 10px;border-bottom:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px}
+.goals-table td{padding:8px 10px;border-bottom:1px solid rgba(51,65,85,0.4)}
+.goals-table tr:hover td{background:rgba(255,255,255,0.02)}
+.tl-wrap{background:rgba(255,255,255,0.07);border-radius:3px;height:7px;position:relative;width:100%;min-width:120px;overflow:hidden}
+.tl-bar{position:absolute;top:0;height:100%;border-radius:3px}
+.tl-dates{font-size:9px;color:var(--muted);margin-top:2px}
+.done-chip{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.done-full{background:rgba(34,197,94,0.15);color:var(--green)}
+.done-part{background:rgba(234,179,8,0.15);color:var(--yellow)}
+.done-none{background:rgba(239,68,68,0.15);color:var(--red)}
+
+/* SPRINTS */
+.sprint-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:4px}
+.sprint-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;display:block;color:var(--text);transition:border-color 0.15s,transform 0.15s}
+.sprint-card:hover{border-color:var(--accent);transform:translateY(-1px);text-decoration:none}
+.sprint-dates{font-size:10px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.sprint-name{font-size:12px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.3}
+.sprint-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:3px}
+.sprint-row strong{color:var(--text)}
+.sprint-row small{color:var(--muted);font-size:10px}
+.mini-bar-wrap{display:flex;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);margin-top:8px;overflow:hidden}
+.mini-seg{height:100%}
+
+/* DIVIDER */
+.proj-divider{border:none;border-top:2px solid var(--border);margin:40px 0;position:relative}
+.proj-divider::after{content:'';display:block;width:60px;height:2px;background:var(--accent);position:absolute;top:-2px;left:50%;transform:translateX(-50%)}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.footer-links{display:flex;gap:16px}
+.footer-links a{font-size:12px;color:var(--accent)}
+
+@media(max-width:900px){.kpi-grid,.sprint-grid-4{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>BTMA · PLAT · <span>OKR Episode Dashboard</span></h1>
+    <div class="sub">Creator Quiz (BTMA) · Creators Platform (PLAT) &nbsp;|&nbsp; Дані з Jira MCP &nbsp;|&nbsp; Згенеровано Apr 21, 2026</div>
+  </div>
+  <div style="text-align:right">
+    <div class="episode-badge">Episode: Feb 13 – Jun 04, 2026</div>
+    <div class="sub" style="margin-top:6px">Sprints S37–S40 (BTMA) + S47–S50 (PLAT)</div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn btma" onclick="document.getElementById('proj-btma').scrollIntoView({behavior:'smooth'})">▸ BTMA · Creator Quiz</button>
+  <button class="nav-btn plat" onclick="document.getElementById('proj-plat').scrollIntoView({behavior:'smooth'})">▸ PLAT · Creators Platform</button>
+</div>
+
+<div class="container">
+
+<div class="proj-section" id="proj-btma">
+  <div class="proj-header" style="border-left:4px solid #a855f7">
+    <div class="proj-header-left">
+      <div class="proj-badge" style="background:#a855f720;color:#a855f7;border:1px solid #a855f750">BTMA</div>
+      <div>
+        <div class="proj-title">Creator Quiz</div>
+        <div class="proj-sub"><a href="https://newsiteam.atlassian.net/jira/software/c/projects/BTMA/boards/210" target="_blank" style="color:var(--muted)">↗ Jira Board</a> &nbsp;·&nbsp; Episode Feb 13 – Jun 04, 2026</div>
+      </div>
+    </div>
+    <div class="proj-summary-nums">
+      <div class="proj-num"><span>168</span>issues</div>
+      <div class="proj-num"><span>168</span>done</div>
+      <div class="proj-num"><span style="color:#a855f7">755</span>SP</div>
+      <div class="proj-num-divider"></div><div class="be-fe-wrap"><div class="be-chip"><span class="lbl">BE</span><span class="bnum">77</span><span class="bsp">story points</span><span class="bplan">plan 315 shared</span></div><div class="fe-chip"><span class="lbl">FE</span><span class="bnum">438</span><span class="bsp">story points</span><span class="bplan">plan 701</span></div></div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3161%2CBTMA-3214%2CBTMA-3292%2CBTMA-3294%2CBTMA-3295%2CBTMA-3296%2CBTMA-3297%2CBTMA-3298%2CBTMA-3299%2CBTMA-3300%2CBTMA-3301%2CBTMA-3302%2CBTMA-3316%2CBTMA-3349%2CBTMA-3357%2CBTMA-3367%2CBTMA-3383%2CBTMA-3385%2CBTMA-3393%2CBTMA-3402%2CBTMA-3403%2CBTMA-3404%2CBTMA-3405%2CBTMA-3406%2CBTMA-3407%2CBTMA-3408%2CBTMA-3409%2CBTMA-3415%2CBTMA-3416%2CBTMA-3417%2CBTMA-3418%2CBTMA-3422%2CBTMA-3423%2CBTMA-3425%2CBTMA-3426%2CBTMA-3431%2CBTMA-3434%2CBTMA-3437%2CBTMA-3457%2CBTMA-3458%2CBTMA-3459%2CBTMA-3477%2CBTMA-3478%2CBTMA-3479%2CBTMA-3482%2CBTMA-3484%2CBTMA-3486%2CBTMA-3488%2CBTMA-3493%2CBTMA-3494%2CBTMA-3495%2CBTMA-3498%2CBTMA-3499%2CBTMA-3502%2CBTMA-3504%2CBTMA-3506%2CBTMA-3507%2CBTMA-3511%2CBTMA-3512%2CBTMA-3516%2CBTMA-3518%2CBTMA-3521%2CBTMA-3533%2CBTMA-3534%2CBTMA-3535%2CBTMA-3536%2CBTMA-3537%2CBTMA-3538%2CBTMA-3540%2CBTMA-3543%2CBTMA-3544%2CBTMA-3545%2CBTMA-3546%2CBTMA-3552%2CBTMA-3553%2CBTMA-3554%2CBTMA-3555%2CBTMA-3556%2CBTMA-3557%2CBTMA-3558%2CBTMA-3559%2CBTMA-3560%2CBTMA-3561%2CBTMA-3566%2CBTMA-3569%2CBTMA-3570%2CBTMA-3572%2CBTMA-3573%2CBTMA-3574%2CBTMA-3575%2CBTMA-3576%2CBTMA-3577%2CBTMA-3582%2CBTMA-3583%2CBTMA-3591%2CBTMA-3592%2CBTMA-3593%2CBTMA-3595)','_blank')">
+      <div class="kpi-label">Всього виконано</div>
+      <div class="kpi-value" style="color:#a855f7">98</div>
+      <div class="kpi-sub">Done / Accepted issues</div>
+      <div class="kpi-sub"><span style="color:#a855f7">527 SP</span> estimated</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3161%2CBTMA-3214%2CBTMA-3292%2CBTMA-3294%2CBTMA-3295%2CBTMA-3296%2CBTMA-3297%2CBTMA-3298%2CBTMA-3299%2CBTMA-3300%2CBTMA-3301%2CBTMA-3302%2CBTMA-3316%2CBTMA-3349%2CBTMA-3357%2CBTMA-3367%2CBTMA-3383%2CBTMA-3385%2CBTMA-3393%2CBTMA-3402%2CBTMA-3403%2CBTMA-3404%2CBTMA-3405%2CBTMA-3406%2CBTMA-3407%2CBTMA-3408%2CBTMA-3409%2CBTMA-3415%2CBTMA-3416%2CBTMA-3417%2CBTMA-3418%2CBTMA-3422%2CBTMA-3423%2CBTMA-3425%2CBTMA-3426%2CBTMA-3431%2CBTMA-3434%2CBTMA-3437%2CBTMA-3457%2CBTMA-3458%2CBTMA-3459%2CBTMA-3477%2CBTMA-3478%2CBTMA-3479%2CBTMA-3482%2CBTMA-3484%2CBTMA-3486%2CBTMA-3488%2CBTMA-3493%2CBTMA-3494%2CBTMA-3495%2CBTMA-3498%2CBTMA-3499%2CBTMA-3502%2CBTMA-3504%2CBTMA-3506%2CBTMA-3507%2CBTMA-3511%2CBTMA-3512%2CBTMA-3516%2CBTMA-3518%2CBTMA-3521%2CBTMA-3533%2CBTMA-3534%2CBTMA-3535%2CBTMA-3536%2CBTMA-3537%2CBTMA-3538%2CBTMA-3540%2CBTMA-3543%2CBTMA-3544%2CBTMA-3545%2CBTMA-3546%2CBTMA-3552%2CBTMA-3553%2CBTMA-3554%2CBTMA-3555%2CBTMA-3556%2CBTMA-3557%2CBTMA-3558%2CBTMA-3559%2CBTMA-3560%2CBTMA-3561%2CBTMA-3566%2CBTMA-3569%2CBTMA-3570%2CBTMA-3572%2CBTMA-3573%2CBTMA-3574%2CBTMA-3575%2CBTMA-3576%2CBTMA-3577%2CBTMA-3582%2CBTMA-3583%2CBTMA-3591%2CBTMA-3592%2CBTMA-3593%2CBTMA-3595)" target="_blank">↗ переглянути всі</a>
+    </div>
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3292%2CBTMA-3294%2CBTMA-3295%2CBTMA-3296%2CBTMA-3297%2CBTMA-3298%2CBTMA-3299%2CBTMA-3300%2CBTMA-3301%2CBTMA-3302%2CBTMA-3385%2CBTMA-3415%2CBTMA-3416%2CBTMA-3417%2CBTMA-3418%2CBTMA-3422%2CBTMA-3423%2CBTMA-3425%2CBTMA-3431%2CBTMA-3434%2CBTMA-3457%2CBTMA-3458%2CBTMA-3459%2CBTMA-3477%2CBTMA-3478%2CBTMA-3479%2CBTMA-3482%2CBTMA-3484%2CBTMA-3488%2CBTMA-3493%2CBTMA-3494%2CBTMA-3495%2CBTMA-3498%2CBTMA-3499%2CBTMA-3502%2CBTMA-3504%2CBTMA-3507%2CBTMA-3516%2CBTMA-3518%2CBTMA-3533%2CBTMA-3534%2CBTMA-3535%2CBTMA-3536%2CBTMA-3537%2CBTMA-3538%2CBTMA-3552%2CBTMA-3553%2CBTMA-3569%2CBTMA-3570%2CBTMA-3572%2CBTMA-3573%2CBTMA-3574%2CBTMA-3575%2CBTMA-3576%2CBTMA-3577%2CBTMA-3582%2CBTMA-3583%2CBTMA-3591%2CBTMA-3592%2CBTMA-3593%2CBTMA-3595)','_blank')">
+      <div class="kpi-label">OKR-Linked</div>
+      <div class="kpi-value green">61</div>
+      <div class="kpi-sub"><span class="green">62.2%</span> всіх issues</div>
+      <div class="kpi-sub"><span class="green">412 SP · 78.2%</span> SP</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3292%2CBTMA-3294%2CBTMA-3295%2CBTMA-3296%2CBTMA-3297%2CBTMA-3298%2CBTMA-3299%2CBTMA-3300%2CBTMA-3301%2CBTMA-3302%2CBTMA-3385%2CBTMA-3415%2CBTMA-3416%2CBTMA-3417%2CBTMA-3418%2CBTMA-3422%2CBTMA-3423%2CBTMA-3425%2CBTMA-3431%2CBTMA-3434%2CBTMA-3457%2CBTMA-3458%2CBTMA-3459%2CBTMA-3477%2CBTMA-3478%2CBTMA-3479%2CBTMA-3482%2CBTMA-3484%2CBTMA-3488%2CBTMA-3493%2CBTMA-3494%2CBTMA-3495%2CBTMA-3498%2CBTMA-3499%2CBTMA-3502%2CBTMA-3504%2CBTMA-3507%2CBTMA-3516%2CBTMA-3518%2CBTMA-3533%2CBTMA-3534%2CBTMA-3535%2CBTMA-3536%2CBTMA-3537%2CBTMA-3538%2CBTMA-3552%2CBTMA-3553%2CBTMA-3569%2CBTMA-3570%2CBTMA-3572%2CBTMA-3573%2CBTMA-3574%2CBTMA-3575%2CBTMA-3576%2CBTMA-3577%2CBTMA-3582%2CBTMA-3583%2CBTMA-3591%2CBTMA-3592%2CBTMA-3593%2CBTMA-3595)" target="_blank">↗ переглянути issues</a>
+    </div>
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3349%2CBTMA-3486%2CBTMA-3540%2CBTMA-3566)','_blank')">
+      <div class="kpi-label">HOB (Bug + Tech Debt)</div>
+      <div class="kpi-value orange">4</div>
+      <div class="kpi-sub"><span class="orange">4.1%</span> всіх issues</div>
+      <div class="kpi-sub"><span class="orange">22 SP · 4.2%</span> SP</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3349%2CBTMA-3486%2CBTMA-3540%2CBTMA-3566)" target="_blank">↗ переглянути issues</a>
+    </div>
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3161%2CBTMA-3214%2CBTMA-3316%2CBTMA-3357%2CBTMA-3367%2CBTMA-3383%2CBTMA-3393%2CBTMA-3402%2CBTMA-3403%2CBTMA-3404%2CBTMA-3405%2CBTMA-3406%2CBTMA-3407%2CBTMA-3408%2CBTMA-3409%2CBTMA-3426%2CBTMA-3437%2CBTMA-3506%2CBTMA-3511%2CBTMA-3512%2CBTMA-3521%2CBTMA-3543%2CBTMA-3544%2CBTMA-3545%2CBTMA-3546%2CBTMA-3554%2CBTMA-3555%2CBTMA-3556%2CBTMA-3557%2CBTMA-3558%2CBTMA-3559%2CBTMA-3560%2CBTMA-3561)','_blank')">
+      <div class="kpi-label">Non-OKR Operational</div>
+      <div class="kpi-value gray">33</div>
+      <div class="kpi-sub"><span class="gray">33.7%</span> всіх issues</div>
+      <div class="kpi-sub"><span class="gray">93 SP · 17.6%</span> SP</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3161%2CBTMA-3214%2CBTMA-3316%2CBTMA-3357%2CBTMA-3367%2CBTMA-3383%2CBTMA-3393%2CBTMA-3402%2CBTMA-3403%2CBTMA-3404%2CBTMA-3405%2CBTMA-3406%2CBTMA-3407%2CBTMA-3408%2CBTMA-3409%2CBTMA-3426%2CBTMA-3437%2CBTMA-3506%2CBTMA-3511%2CBTMA-3512%2CBTMA-3521%2CBTMA-3543%2CBTMA-3544%2CBTMA-3545%2CBTMA-3546%2CBTMA-3554%2CBTMA-3555%2CBTMA-3556%2CBTMA-3557%2CBTMA-3558%2CBTMA-3559%2CBTMA-3560%2CBTMA-3561)" target="_blank">↗ переглянути issues</a>
+    </div>
+  </div>
+
+  <!-- OKR Focus -->
+  <div class="insight-box" style="margin-top:0">
+    <strong>AI Summary:</strong>
+    <strong>62.2%</strong> завдань пов'язані з OKR цілями епізоду. Команда витратила <strong>78.2% SP</strong> на стратегічну роботу. HOB незначний — <strong>4.1%</strong>. Основна ціль — <strong>AI Creator Quiz</strong> (32 tasks).
+  </div>
+
+<div class="card" style="margin-top:16px">
+    <div class="card-title">Product Ideas — BTMA</div>
+    <table class="goals-table">
+      <thead><tr>
+        <th>Product Idea</th>
+        <th><a href="https://newsiteam.atlassian.net/jira/polaris/projects/WS/ideas/view/10985805" target="_blank" style="color:var(--muted);text-decoration:none">↗ Delivery Progress (Done)</a></th>
+        <th style="min-width:240px"><span style="font-weight:400;color:var(--muted)">Таймлайн&nbsp;(січ–чер 2026)&nbsp;&nbsp;<span style="font-size:9px;opacity:.5;color:rgba(239,68,68,0.8)">│ сьогодні</span></span></th>
+      </tr></thead>
+      <tbody>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Pricing Plans from Constructor</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip done-none">5/36</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.9%;width:89.1%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.0%;width:78.1%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">26 січ → 31 трав</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 28 лют → 30 вер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Migration to IPS</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-full">4/4</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:0.0%;width:20.4%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.0%;width:21.9%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">9 лют → 15 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 13 лют → 13 бер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Academy. Feedback flow (before cancel)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-full">21/21</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.2%;width:10.2%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.7%;width:32.8%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">14 лют → 31 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 27 лют → 13 бер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">AI Creator quiz</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-part">33/34</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:0.0%;width:10.2%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:5.1%;width:10.2%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">20 лют → 6 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 13 лют → 27 лют</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Academy. Quizzes in Linkedin</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip done-part">26/32</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:17.5%;width:25.5%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:17.5%;width:35.0%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">9 бер → 26 квіт</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 9 бер → 13 квіт</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Scratch card release (2609 + AI quiz)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip done-full">2/2</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:33.6%;width:2.5%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:20.4%;width:9.5%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">13 бер → 26 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 бер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Dark theme 2609. A/B test</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-none">4/14</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:33.6%;width:21.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:44.5%;width:3.0%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">квіт → квіт</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 бер → 30 квіт</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Start and scale 2.0</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:45.3%;width:10.2%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:53.3%;width:14.6%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">27 квіт → 17 трав</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 16 квіт → 30 квіт</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Dark AI Quiz Multigender <span style="display:inline-block;padding:1px 5px;background:rgba(139,92,246,0.2);color:#a78bfa;border:1px solid rgba(139,92,246,0.4);border-radius:8px;font-size:9px;font-weight:700;vertical-align:middle">new</span></div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:53.3%;width:14.6%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">27 квіт → 17 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Personal growth 2.0</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:55.5%;width:44.5%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:66.4%;width:3.0%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">трав → трав</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 30 квіт → 30 чер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Academy app refactoring</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.35)">Low</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:55.5%;width:44.5%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:66.4%;width:22.6%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">трав → чер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 30 квіт → 30 чер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Pricing test (choose trial price)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:45.3%;width:21.2%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:83.9%;width:16.1%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">8 чер → 5 лип</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 16 квіт → 15 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Aсademy. In-app landings</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.35)">Low</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:78.1%;width:21.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:83.9%;width:16.1%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">8 чер → 5 лип</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 трав → 30 чер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Academy. Resubscribe (before cancel)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:33.6%;width:21.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:83.9%;width:16.1%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">8 чер → 5 лип</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 бер → 30 квіт</div></div></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI Summary: Product Ideas -->
+  <div class="insight-box" style="margin-top:12px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:8px">AI Summary · Product Ideas Progress</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px">ЗАВЕРШЕНО</div>
+        <div style="font-size:18px;font-weight:700;color:#22c55e">3<span style="font-size:11px;color:var(--muted)"> / 14</span></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Migration to IPS, Feedback flow, Scratch card</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px">В ПРОЦЕСІ</div>
+        <div style="font-size:18px;font-weight:700;color:#f59e0b">4<span style="font-size:11px;color:var(--muted)"> / 14</span></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Pricing Plans, AI Creator Quiz, Quizzes Linkedin, Dark theme</div>
+      </div>
+    </div>
+    <div style="font-size:11px;line-height:1.6;color:var(--text)">
+      <p style="margin:0 0 6px">📍 Сьогодні <strong>22 квіт</strong> — ми на <strong>~50% таймлайну</strong> епізоду, але лише <strong>21% ініціатив завершено</strong> (3 з 14). Темп нижчий за очікуваний.</p>
+      <p style="margin:0 0 6px">✅ <strong>High priority:</strong> 3 з 4 High-ініціатив у хорошому стані (Done або майже). Єдиний ризик — <strong>Dark theme 2609 A/B test</strong> (High, лише 4/14 = 29%) — потребує уваги до кінця квітня.</p>
+      <p style="margin:0 0 6px">⚠️ <strong>Medium priority:</strong> <strong>Pricing Plans from Constructor</strong> (5/36 = 14%) — найбільший обсяг роботи в епізоді, при цьому найменший прогрес. Ризик не встигнути до 31 трав.</p>
+      <p style="margin:0">🕐 <strong>7 ініціатив ще не розпочато</strong> — всі заплановані на трав–чер, що залишає мало буферу до кінця епізоду (4 чер). Рекомендується переглянути пріоритети й scope.</p>
+    </div>
+  </div>
+
+  <!-- Sprints -->
+<div class="card" style="margin-top:16px;display:none">
+  <div class="card-title">Sprint-by-Sprint — BTMA · Episode View</div>
+  <div class="sprint-grid-4">
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3214%2CBTMA-3292%2CBTMA-3294%2CBTMA-3295%2CBTMA-3296%2CBTMA-3297%2CBTMA-3298%2CBTMA-3299%2CBTMA-3300%2CBTMA-3301%2CBTMA-3367%2CBTMA-3393%2CBTMA-3402%2CBTMA-3403%2CBTMA-3404%2CBTMA-3406%2CBTMA-3407%2CBTMA-3408%2CBTMA-3409%2CBTMA-3410%2CBTMA-3423%2CBTMA-3426%2CBTMA-3437%2CBTMA-3482%2CBTMA-3484%2CBTMA-3488%2CBTMA-3502%2CBTMA-3504%2CBTMA-3506%2CBTMA-3507%2CBTMA-3511%2CBTMA-3512%2CBTMA-3516%2CBTMA-3552%2CBTMA-3553%2CBTMA-3566%2CBTMA-3569%2CBTMA-3570%2CBTMA-3575%2CBTMA-3577)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">13.02–26.02</div>
+  <div class="sprint-name">S37 · всмислі не зможем©</div>
+  <div class="sprint-row"><span>Issues</span><strong>40</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>40 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#a855f7">178</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">28 (70.0%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:70.0%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3161%2CBTMA-3302%2CBTMA-3316%2CBTMA-3385%2CBTMA-3405%2CBTMA-3425%2CBTMA-3431%2CBTMA-3486%2CBTMA-3493%2CBTMA-3494%2CBTMA-3495%2CBTMA-3498%2CBTMA-3499%2CBTMA-3518%2CBTMA-3521%2CBTMA-3533%2CBTMA-3535%2CBTMA-3536%2CBTMA-3537%2CBTMA-3543%2CBTMA-3544%2CBTMA-3545%2CBTMA-3546%2CBTMA-3554%2CBTMA-3555%2CBTMA-3556%2CBTMA-3558%2CBTMA-3560%2CBTMA-3561%2CBTMA-3562%2CBTMA-3572%2CBTMA-3576%2CBTMA-3582%2CBTMA-3583%2CBTMA-3591%2CBTMA-3592%2CBTMA-3593%2CBTMA-3603%2CBTMA-3616%2CBTMA-3660%2CBTMA-3662)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">27.02–12.03</div>
+  <div class="sprint-name">S38 · Цей во, забув…</div>
+  <div class="sprint-row"><span>Issues</span><strong>41</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>41 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#a855f7">174</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">18 (43.9%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:43.9%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3349%2CBTMA-3357%2CBTMA-3383%2CBTMA-3417%2CBTMA-3422%2CBTMA-3534%2CBTMA-3540%2CBTMA-3557%2CBTMA-3559%2CBTMA-3573%2CBTMA-3574%2CBTMA-3621%2CBTMA-3622%2CBTMA-3629%2CBTMA-3630%2CBTMA-3631%2CBTMA-3632%2CBTMA-3633%2CBTMA-3634%2CBTMA-3644%2CBTMA-3645%2CBTMA-3646%2CBTMA-3647%2CBTMA-3649%2CBTMA-3650%2CBTMA-3651%2CBTMA-3652%2CBTMA-3653%2CBTMA-3656%2CBTMA-3658%2CBTMA-3663%2CBTMA-3677%2CBTMA-3686%2CBTMA-3687%2CBTMA-3688%2CBTMA-3698%2CBTMA-3700%2CBTMA-3702%2CBTMA-3710%2CBTMA-3712%2CBTMA-3714)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">13.03–26.03</div>
+  <div class="sprint-name">S39 · кітпес =^..^=</div>
+  <div class="sprint-row"><span>Issues</span><strong>41</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>41 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#a855f7">175</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">10 (24.4%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:24.4%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3415%2CBTMA-3418%2CBTMA-3434%2CBTMA-3457%2CBTMA-3478%2CBTMA-3479%2CBTMA-3601%2CBTMA-3624%2CBTMA-3627%2CBTMA-3638%2CBTMA-3639%2CBTMA-3641%2CBTMA-3648%2CBTMA-3685%2CBTMA-3703%2CBTMA-3704%2CBTMA-3705%2CBTMA-3713%2CBTMA-3730%2CBTMA-3743%2CBTMA-3744%2CBTMA-3745%2CBTMA-3746%2CBTMA-3747%2CBTMA-3748%2CBTMA-3749%2CBTMA-3750%2CBTMA-3751%2CBTMA-3759%2CBTMA-3760%2CBTMA-3761%2CBTMA-3771%2CBTMA-3772%2CBTMA-3773%2CBTMA-3774%2CBTMA-3775%2CBTMA-3776%2CBTMA-3777%2CBTMA-3778%2CBTMA-3780%2CBTMA-3783%2CBTMA-3790%2CBTMA-3791%2CBTMA-3793%2CBTMA-3807%2CBTMA-3862)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">27.03–09.04</div>
+  <div class="sprint-name">S40 · не трогай, воно воня</div>
+  <div class="sprint-row"><span>Issues</span><strong>46</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>46 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#a855f7">228</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">5 (10.9%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:10.9%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+</div>
+<!-- SP Chart -->
+<svg width="100%" height="210" viewBox="0 0 560 210" style="margin-top:20px" preserveAspectRatio="xMidYMid meet">
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3214%2CBTMA-3292%2CBTMA-3294%2CBTMA-3295%2CBTMA-3296%2CBTMA-3297%2CBTMA-3298%2CBTMA-3299%2CBTMA-3300%2CBTMA-3301%2CBTMA-3367%2CBTMA-3393%2CBTMA-3402%2CBTMA-3403%2CBTMA-3404%2CBTMA-3406%2CBTMA-3407%2CBTMA-3408%2CBTMA-3409%2CBTMA-3410%2CBTMA-3423%2CBTMA-3426%2CBTMA-3437%2CBTMA-3482%2CBTMA-3484%2CBTMA-3488%2CBTMA-3502%2CBTMA-3504%2CBTMA-3506%2CBTMA-3507%2CBTMA-3511%2CBTMA-3512%2CBTMA-3516%2CBTMA-3552%2CBTMA-3553%2CBTMA-3566%2CBTMA-3569%2CBTMA-3570%2CBTMA-3575%2CBTMA-3577)" target="_blank">
+  <rect x="40" y="45.1" width="90" height="124.9" fill="#a855f7" rx="4" opacity="0.55"/>
+  <rect x="40" y="45.1" width="90" height="87.4" fill="#7c3aed" rx="4" opacity="0.9"/>
+  <text x="85" y="40.1" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">178</text>
+  <text x="85" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S37</text>
+  <text x="85" y="200" text-anchor="middle" fill="#7c3aed" font-size="10">70.0% OKR</text>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3161%2CBTMA-3302%2CBTMA-3316%2CBTMA-3385%2CBTMA-3405%2CBTMA-3425%2CBTMA-3431%2CBTMA-3486%2CBTMA-3493%2CBTMA-3494%2CBTMA-3495%2CBTMA-3498%2CBTMA-3499%2CBTMA-3518%2CBTMA-3521%2CBTMA-3533%2CBTMA-3535%2CBTMA-3536%2CBTMA-3537%2CBTMA-3543%2CBTMA-3544%2CBTMA-3545%2CBTMA-3546%2CBTMA-3554%2CBTMA-3555%2CBTMA-3556%2CBTMA-3558%2CBTMA-3560%2CBTMA-3561%2CBTMA-3562%2CBTMA-3572%2CBTMA-3576%2CBTMA-3582%2CBTMA-3583%2CBTMA-3591%2CBTMA-3592%2CBTMA-3593%2CBTMA-3603%2CBTMA-3616%2CBTMA-3660%2CBTMA-3662)" target="_blank">
+  <rect x="160" y="47.9" width="90" height="122.1" fill="#a855f7" rx="4" opacity="0.55"/>
+  <rect x="160" y="47.9" width="90" height="53.6" fill="#7c3aed" rx="4" opacity="0.9"/>
+  <text x="205" y="42.9" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">174</text>
+  <text x="205" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S38</text>
+  <text x="205" y="200" text-anchor="middle" fill="#7c3aed" font-size="10">43.9% OKR</text>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3349%2CBTMA-3357%2CBTMA-3383%2CBTMA-3417%2CBTMA-3422%2CBTMA-3534%2CBTMA-3540%2CBTMA-3557%2CBTMA-3559%2CBTMA-3573%2CBTMA-3574%2CBTMA-3621%2CBTMA-3622%2CBTMA-3629%2CBTMA-3630%2CBTMA-3631%2CBTMA-3632%2CBTMA-3633%2CBTMA-3634%2CBTMA-3644%2CBTMA-3645%2CBTMA-3646%2CBTMA-3647%2CBTMA-3649%2CBTMA-3650%2CBTMA-3651%2CBTMA-3652%2CBTMA-3653%2CBTMA-3656%2CBTMA-3658%2CBTMA-3663%2CBTMA-3677%2CBTMA-3686%2CBTMA-3687%2CBTMA-3688%2CBTMA-3698%2CBTMA-3700%2CBTMA-3702%2CBTMA-3710%2CBTMA-3712%2CBTMA-3714)" target="_blank">
+  <rect x="280" y="47.2" width="90" height="122.8" fill="#a855f7" rx="4" opacity="0.55"/>
+  <rect x="280" y="47.2" width="90" height="30.0" fill="#7c3aed" rx="4" opacity="0.9"/>
+  <text x="325" y="42.2" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">175</text>
+  <text x="325" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S39</text>
+  <text x="325" y="200" text-anchor="middle" fill="#7c3aed" font-size="10">24.4% OKR</text>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(BTMA-3415%2CBTMA-3418%2CBTMA-3434%2CBTMA-3457%2CBTMA-3478%2CBTMA-3479%2CBTMA-3601%2CBTMA-3624%2CBTMA-3627%2CBTMA-3638%2CBTMA-3639%2CBTMA-3641%2CBTMA-3648%2CBTMA-3685%2CBTMA-3703%2CBTMA-3704%2CBTMA-3705%2CBTMA-3713%2CBTMA-3730%2CBTMA-3743%2CBTMA-3744%2CBTMA-3745%2CBTMA-3746%2CBTMA-3747%2CBTMA-3748%2CBTMA-3749%2CBTMA-3750%2CBTMA-3751%2CBTMA-3759%2CBTMA-3760%2CBTMA-3761%2CBTMA-3771%2CBTMA-3772%2CBTMA-3773%2CBTMA-3774%2CBTMA-3775%2CBTMA-3776%2CBTMA-3777%2CBTMA-3778%2CBTMA-3780%2CBTMA-3783%2CBTMA-3790%2CBTMA-3791%2CBTMA-3793%2CBTMA-3807%2CBTMA-3862)" target="_blank">
+  <rect x="400" y="10.0" width="90" height="160.0" fill="#a855f7" rx="4" opacity="0.55"/>
+  <rect x="400" y="10.0" width="90" height="17.4" fill="#7c3aed" rx="4" opacity="0.9"/>
+  <text x="445" y="5.0" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">228</text>
+  <text x="445" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S40</text>
+  <text x="445" y="200" text-anchor="middle" fill="#7c3aed" font-size="10">10.9% OKR</text>
+</a>
+      <text x="14" y="10" fill="#64748b" font-size="9" transform="rotate(-90,14,80)">SP</text>
+    </svg>
+  </div>
+</div>
+
+
+<hr class="proj-divider">
+
+<div class="proj-section" id="proj-plat">
+  <div class="proj-header" style="border-left:4px solid #3b82f6">
+    <div class="proj-header-left">
+      <div class="proj-badge" style="background:#3b82f620;color:#3b82f6;border:1px solid #3b82f650">PLAT</div>
+      <div>
+        <div class="proj-title">Creators Platform</div>
+        <div class="proj-sub"><a href="https://newsiteam.atlassian.net/jira/software/c/projects/PLAT/boards/214" target="_blank" style="color:var(--muted)">↗ Jira Board</a> &nbsp;·&nbsp; Episode Feb 13 – Jun 04, 2026</div>
+      </div>
+    </div>
+    <div class="proj-summary-nums">
+      <div class="proj-num"><span>221</span>issues</div>
+      <div class="proj-num"><span>221</span>done</div>
+      <div class="proj-num"><span style="color:#3b82f6">1069</span>SP</div>
+      <div class="proj-num-divider"></div><div class="be-fe-wrap"><div class="be-chip"><span class="lbl">BE</span><span class="bnum">74</span><span class="bsp">story points</span><span class="bplan">plan 315 shared</span></div><div class="fe-chip"><span class="lbl">FE</span><span class="bnum">303</span><span class="bsp">story points</span><span class="bplan">plan 1150</span></div></div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1302%2CPLAT-1938%2CPLAT-1940%2CPLAT-2024%2CPLAT-2740%2CPLAT-2766%2CPLAT-2995%2CPLAT-3165%2CPLAT-3167%2CPLAT-3231%2CPLAT-3241%2CPLAT-3243%2CPLAT-3314%2CPLAT-3315%2CPLAT-3338%2CPLAT-3382%2CPLAT-3395%2CPLAT-3434%2CPLAT-3527%2CPLAT-3531%2CPLAT-3633%2CPLAT-3749%2CPLAT-3806%2CPLAT-3854%2CPLAT-3915%2CPLAT-3930%2CPLAT-4132%2CPLAT-4144%2CPLAT-4171%2CPLAT-4235%2CPLAT-4248%2CPLAT-4253%2CPLAT-4280%2CPLAT-4281%2CPLAT-4331%2CPLAT-4362%2CPLAT-4371%2CPLAT-4388%2CPLAT-4432%2CPLAT-4444%2CPLAT-4445%2CPLAT-4446%2CPLAT-4447%2CPLAT-4453%2CPLAT-4454%2CPLAT-4461%2CPLAT-4465%2CPLAT-4469%2CPLAT-4472%2CPLAT-4475%2CPLAT-4479%2CPLAT-4488%2CPLAT-4505%2CPLAT-4513%2CPLAT-4527%2CPLAT-4542%2CPLAT-4544%2CPLAT-4552%2CPLAT-4553%2CPLAT-4554%2CPLAT-4555%2CPLAT-4558%2CPLAT-4561%2CPLAT-4564%2CPLAT-4587%2CPLAT-4589%2CPLAT-4603%2CPLAT-4604%2CPLAT-4605%2CPLAT-4615%2CPLAT-4624%2CPLAT-4625%2CPLAT-4630%2CPLAT-4632%2CPLAT-4634%2CPLAT-4636%2CPLAT-4637%2CPLAT-4642%2CPLAT-4643%2CPLAT-4644%2CPLAT-4646%2CPLAT-4647%2CPLAT-4649%2CPLAT-4652%2CPLAT-4653%2CPLAT-4656%2CPLAT-4658%2CPLAT-4659%2CPLAT-4664%2CPLAT-4666%2CPLAT-4667%2CPLAT-4669%2CPLAT-4671%2CPLAT-4672%2CPLAT-4717%2CPLAT-4721%2CPLAT-4724%2CPLAT-4725%2CPLAT-4733)','_blank')">
+      <div class="kpi-label">Всього виконано</div>
+      <div class="kpi-value" style="color:#3b82f6">99</div>
+      <div class="kpi-sub">Done / Accepted issues</div>
+      <div class="kpi-sub"><span style="color:#3b82f6">468 SP</span> estimated</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1302%2CPLAT-1938%2CPLAT-1940%2CPLAT-2024%2CPLAT-2740%2CPLAT-2766%2CPLAT-2995%2CPLAT-3165%2CPLAT-3167%2CPLAT-3231%2CPLAT-3241%2CPLAT-3243%2CPLAT-3314%2CPLAT-3315%2CPLAT-3338%2CPLAT-3382%2CPLAT-3395%2CPLAT-3434%2CPLAT-3527%2CPLAT-3531%2CPLAT-3633%2CPLAT-3749%2CPLAT-3806%2CPLAT-3854%2CPLAT-3915%2CPLAT-3930%2CPLAT-4132%2CPLAT-4144%2CPLAT-4171%2CPLAT-4235%2CPLAT-4248%2CPLAT-4253%2CPLAT-4280%2CPLAT-4281%2CPLAT-4331%2CPLAT-4362%2CPLAT-4371%2CPLAT-4388%2CPLAT-4432%2CPLAT-4444%2CPLAT-4445%2CPLAT-4446%2CPLAT-4447%2CPLAT-4453%2CPLAT-4454%2CPLAT-4461%2CPLAT-4465%2CPLAT-4469%2CPLAT-4472%2CPLAT-4475%2CPLAT-4479%2CPLAT-4488%2CPLAT-4505%2CPLAT-4513%2CPLAT-4527%2CPLAT-4542%2CPLAT-4544%2CPLAT-4552%2CPLAT-4553%2CPLAT-4554%2CPLAT-4555%2CPLAT-4558%2CPLAT-4561%2CPLAT-4564%2CPLAT-4587%2CPLAT-4589%2CPLAT-4603%2CPLAT-4604%2CPLAT-4605%2CPLAT-4615%2CPLAT-4624%2CPLAT-4625%2CPLAT-4630%2CPLAT-4632%2CPLAT-4634%2CPLAT-4636%2CPLAT-4637%2CPLAT-4642%2CPLAT-4643%2CPLAT-4644%2CPLAT-4646%2CPLAT-4647%2CPLAT-4649%2CPLAT-4652%2CPLAT-4653%2CPLAT-4656%2CPLAT-4658%2CPLAT-4659%2CPLAT-4664%2CPLAT-4666%2CPLAT-4667%2CPLAT-4669%2CPLAT-4671%2CPLAT-4672%2CPLAT-4717%2CPLAT-4721%2CPLAT-4724%2CPLAT-4725%2CPLAT-4733)" target="_blank">↗ переглянути всі</a>
+    </div>
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-2995%2CPLAT-3314%2CPLAT-3315%2CPLAT-3633%2CPLAT-3806%2CPLAT-4248%2CPLAT-4331%2CPLAT-4362%2CPLAT-4432%2CPLAT-4444%2CPLAT-4445%2CPLAT-4446%2CPLAT-4453%2CPLAT-4454%2CPLAT-4527%2CPLAT-4552%2CPLAT-4553%2CPLAT-4554%2CPLAT-4555%2CPLAT-4558%2CPLAT-4561%2CPLAT-4564%2CPLAT-4587%2CPLAT-4615%2CPLAT-4634%2CPLAT-4637%2CPLAT-4647%2CPLAT-4649%2CPLAT-4652%2CPLAT-4653%2CPLAT-4656%2CPLAT-4659%2CPLAT-4666%2CPLAT-4669)','_blank')">
+      <div class="kpi-label">OKR-Linked</div>
+      <div class="kpi-value green">34</div>
+      <div class="kpi-sub"><span class="green">34.3%</span> всіх issues</div>
+      <div class="kpi-sub"><span class="green">254 SP · 54.3%</span> SP</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-2995%2CPLAT-3314%2CPLAT-3315%2CPLAT-3633%2CPLAT-3806%2CPLAT-4248%2CPLAT-4331%2CPLAT-4362%2CPLAT-4432%2CPLAT-4444%2CPLAT-4445%2CPLAT-4446%2CPLAT-4453%2CPLAT-4454%2CPLAT-4527%2CPLAT-4552%2CPLAT-4553%2CPLAT-4554%2CPLAT-4555%2CPLAT-4558%2CPLAT-4561%2CPLAT-4564%2CPLAT-4587%2CPLAT-4615%2CPLAT-4634%2CPLAT-4637%2CPLAT-4647%2CPLAT-4649%2CPLAT-4652%2CPLAT-4653%2CPLAT-4656%2CPLAT-4659%2CPLAT-4666%2CPLAT-4669)" target="_blank">↗ переглянути issues</a>
+    </div>
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1302%2CPLAT-2740%2CPLAT-2766%2CPLAT-3241%2CPLAT-3382%2CPLAT-3395%2CPLAT-3527%2CPLAT-3749%2CPLAT-3915%2CPLAT-4171%2CPLAT-4235%2CPLAT-4447%2CPLAT-4636%2CPLAT-4717%2CPLAT-4724)','_blank')">
+      <div class="kpi-label">HOB (Bug + Tech Debt)</div>
+      <div class="kpi-value orange">15</div>
+      <div class="kpi-sub"><span class="orange">15.2%</span> всіх issues</div>
+      <div class="kpi-sub"><span class="orange">68 SP · 14.5%</span> SP</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1302%2CPLAT-2740%2CPLAT-2766%2CPLAT-3241%2CPLAT-3382%2CPLAT-3395%2CPLAT-3527%2CPLAT-3749%2CPLAT-3915%2CPLAT-4171%2CPLAT-4235%2CPLAT-4447%2CPLAT-4636%2CPLAT-4717%2CPLAT-4724)" target="_blank">↗ переглянути issues</a>
+    </div>
+    <div class="kpi-card" onclick="window.open('https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1938%2CPLAT-1940%2CPLAT-2024%2CPLAT-3165%2CPLAT-3167%2CPLAT-3231%2CPLAT-3243%2CPLAT-3338%2CPLAT-3434%2CPLAT-3531%2CPLAT-3854%2CPLAT-3930%2CPLAT-4132%2CPLAT-4144%2CPLAT-4253%2CPLAT-4280%2CPLAT-4281%2CPLAT-4371%2CPLAT-4388%2CPLAT-4461%2CPLAT-4465%2CPLAT-4469%2CPLAT-4472%2CPLAT-4475%2CPLAT-4479%2CPLAT-4488%2CPLAT-4505%2CPLAT-4513%2CPLAT-4542%2CPLAT-4544%2CPLAT-4589%2CPLAT-4603%2CPLAT-4604%2CPLAT-4605%2CPLAT-4624%2CPLAT-4625%2CPLAT-4630%2CPLAT-4632%2CPLAT-4642%2CPLAT-4643%2CPLAT-4644%2CPLAT-4646%2CPLAT-4658%2CPLAT-4664%2CPLAT-4667%2CPLAT-4671%2CPLAT-4672%2CPLAT-4721%2CPLAT-4725%2CPLAT-4733)','_blank')">
+      <div class="kpi-label">Non-OKR Operational</div>
+      <div class="kpi-value gray">50</div>
+      <div class="kpi-sub"><span class="gray">50.5%</span> всіх issues</div>
+      <div class="kpi-sub"><span class="gray">146 SP · 31.2%</span> SP</div>
+      <a class="kpi-link" href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1938%2CPLAT-1940%2CPLAT-2024%2CPLAT-3165%2CPLAT-3167%2CPLAT-3231%2CPLAT-3243%2CPLAT-3338%2CPLAT-3434%2CPLAT-3531%2CPLAT-3854%2CPLAT-3930%2CPLAT-4132%2CPLAT-4144%2CPLAT-4253%2CPLAT-4280%2CPLAT-4281%2CPLAT-4371%2CPLAT-4388%2CPLAT-4461%2CPLAT-4465%2CPLAT-4469%2CPLAT-4472%2CPLAT-4475%2CPLAT-4479%2CPLAT-4488%2CPLAT-4505%2CPLAT-4513%2CPLAT-4542%2CPLAT-4544%2CPLAT-4589%2CPLAT-4603%2CPLAT-4604%2CPLAT-4605%2CPLAT-4624%2CPLAT-4625%2CPLAT-4630%2CPLAT-4632%2CPLAT-4642%2CPLAT-4643%2CPLAT-4644%2CPLAT-4646%2CPLAT-4658%2CPLAT-4664%2CPLAT-4667%2CPLAT-4671%2CPLAT-4672%2CPLAT-4721%2CPLAT-4725%2CPLAT-4733)" target="_blank">↗ переглянути issues</a>
+    </div>
+  </div>
+
+  </div>
+  <div class="insight-box" style="margin-top:0">
+    <strong>AI Summary:</strong>
+    <strong>34.3%</strong> завдань пов'язані з OKR. <strong>50.5%</strong> — операційна робота (QA, AQA, Security, standalone tasks). HOB: <strong>15.2%</strong>. Основний OKR-напрям — <strong>Influencers</strong> (24 tasks).
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Product Ideas — PLAT</div>
+    <table class="goals-table">
+      <thead><tr>
+        <th>Product Idea</th>
+        <th><a href="https://newsiteam.atlassian.net/jira/polaris/projects/WS/ideas/view/10985805" target="_blank" style="color:var(--muted);text-decoration:none">↗ Delivery Progress (Done)</a></th>
+        <th style="min-width:240px"><span style="font-weight:400;color:var(--muted)">Таймлайн&nbsp;(січ–чер 2026)&nbsp;&nbsp;<span style="font-size:9px;opacity:.5;color:rgba(239,68,68,0.8)">│ сьогодні</span></span></th>
+      </tr></thead>
+      <tbody>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Influencers. Resubscribe flow (after cancel)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-full">Done</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:0.0%;width:5.1%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.0%;width:5.1%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">січ → 20 лют</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 січ → 20 лют</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">AWS migration</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-part">78/84</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.9%;width:67.2%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.0%;width:52.6%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">26 січ → 26 квіт</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 28 лют → 31 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Influencers. Trackers</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-part">296/339</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:1.5%;width:3.6%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:1.5%;width:13.1%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">лют → 5 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: лют → 20 лют</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Influencers. PDR</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-full">4/4</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:0.0%;width:12.4%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:1.5%;width:18.2%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">лют → 12 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 1 лют → 2 бер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Migration to IPS (images)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-full">5/5</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:1.5%;width:8.8%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:1.5%;width:8.8%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">лют → 27 лют</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 15 лют → 27 лют</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Consumer's unsubscribe</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip done-full">7/7</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:0.0%;width:10.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.0%;width:29.9%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">13 лют → 26 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 13 лют → 28 лют</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Influencers. Calisthenics</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip done-full">6/6</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.9%;width:4.4%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:0.7%;width:14.6%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">14 лют → 6 бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 28 лют → 6 бер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform + Academy. Improved PDR</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.35)">Low</span></div></td>
+  <td><span class="done-chip done-none">1/5</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.9%;width:67.2%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:7.3%;width:59.1%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">23 лют → трав</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 28 лют → 31 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Content moderation flow</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.35)">Low</span></div></td>
+  <td><span class="done-chip done-full">4/4</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:33.6%;width:44.5%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:21.9%;width:3.0%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">бер → бер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 бер → 31 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Feedback flow (before cancel)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip done-full">7/7</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:32.8%;width:22.6%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:22.6%;width:17.5%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">16 бер → 9 квіт</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 30 бер → 30 квіт</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Lovable technical research</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.35)">Low</span></div></td>
+  <td><span class="done-chip done-none">29/75</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:33.6%;width:44.5%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:22.6%;width:43.8%;height:12px;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">16 бер → трав</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 бер → 31 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. In-app feedback flow</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.35)">Low</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:56.2%;width:21.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:66.4%;width:3.0%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">трав → трав</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 1 трав → 31 трав</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Improved 1st session flow</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:78.1%;width:21.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:66.4%;width:22.6%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">трав → чер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 трав → 30 чер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Business coach</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:78.1%;width:21.9%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:66.4%;width:22.6%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">трав → чер</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 31 трав → 30 чер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Platform. Resubscribe (before cancel) <span style="display:inline-block;padding:1px 5px;background:rgba(139,92,246,0.2);color:#a78bfa;border:1px solid rgba(139,92,246,0.4);border-radius:8px;font-size:9px;font-weight:700;vertical-align:middle">new</span></div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:66.4%;width:22.6%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">трав → 15 чер</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Redesign. Platform</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.9%;width:89.1%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:63.5%;width:36.5%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">11 трав → 1 лис</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 28 лют → 31 жов</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Redesign. Academy</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.35)">High</span></div></td>
+  <td><span class="done-chip" style="background:rgba(71,85,105,0.2);color:#94a3b8">To do</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:10.9%;width:89.1%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:63.5%;width:36.5%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">11 трав → 1 лис</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 28 лют → 31 жов</div></div></td>
+</tr>
+<tr>
+  <td><div style="font-weight:500;color:var(--text)">Influencers. Resubscribe (before cancel)</div><div style="margin-top:3px"><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.35)">Medium</span></div></td>
+  <td><span class="done-chip done-none">1/5</span></td>
+  <td><div style="min-width:240px"><div style="position:relative;height:16px;background:rgba(255,255,255,0.05);border-radius:3px"><div style="position:absolute;top:2px;left:55.5%;width:22.6%;height:12px;border:2px dashed rgba(255,255,255,0.75);background:transparent;border-radius:3px;box-sizing:border-box;z-index:2"></div><div style="position:absolute;top:2px;left:78.8%;width:21.2%;height:12px;background:#64748b;border-radius:3px;opacity:0.75"></div><div style="position:absolute;top:0;left:49.6%;width:1.5px;height:18px;background:rgba(239,68,68,0.8);z-index:4"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">1 чер → 5 лип</div><div style="font-size:9px;color:rgba(103,232,249,0.8);margin-top:1px">план: 30 квіт → 31 трав</div></div></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI Summary: PLAT Product Ideas -->
+  <div class="insight-box" style="margin-top:12px">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:8px">AI Summary · Product Ideas Progress</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px">ЗАВЕРШЕНО</div>
+        <div style="font-size:18px;font-weight:700;color:#22c55e">7<span style="font-size:11px;color:var(--muted)"> / 18</span></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Migration IPS, Consumer unsub, Calisthenics та ін.</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px">В ПРОЦЕСІ</div>
+        <div style="font-size:18px;font-weight:700;color:#f59e0b">2<span style="font-size:11px;color:var(--muted)"> / 18</span></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">AWS migration, Improved PDR, Lovable research</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px">НЕ РОЗПОЧАТО</div>
+        <div style="font-size:18px;font-weight:700;color:#94a3b8">9<span style="font-size:11px;color:var(--muted)"> / 18</span></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Redesign Platform/Academy та ін.</div>
+      </div>
+    </div>
+    <div style="font-size:11px;line-height:1.6;color:var(--text)">
+      <p style="margin:0 0 6px">📍 Сьогодні <strong>22 квіт</strong> — на <strong>~50% таймлайну</strong>. <strong>44% ініціатив завершено</strong> (7 з 18) — темп кращий за Quiz-команду.</p>
+      <p style="margin:0 0 6px">✅ <strong>High priority:</strong> Influencers-напрям (Trackers, PDR, Calisthenics, Resubscribe, Migration IPS) — виконано або майже. AWS migration (78/84) — в завершальній стадії.</p>
+      <p style="margin:0 0 6px">⚠️ <strong>Ризики:</strong> <strong>Redesign. Platform</strong> і <strong>Redesign. Academy</strong> (обидва High) стартують у трав — об'єм і терміни виходять за межі епізоду (Jun 4). <strong>Lovable technical research</strong> (Low, 29/75 = 39%) — великий scope, повільний прогрес.</p>
+      <p style="margin:0">🕐 <strong>9 ініціатив не розпочато</strong>, заплановані на трав–чер. Пріоритет — Redesign та Resubscribe flows. Рекомендується чітко визначити scope в рамках епізоду.</p>
+    </div>
+  </div>
+
+  <!-- Sprints -->
+<div class="card" style="margin-top:16px;display:none">
+  <div class="card-title">Sprint-by-Sprint — PLAT · Episode View</div>
+  <div class="sprint-grid-4">
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-2995%2CPLAT-3314%2CPLAT-3395%2CPLAT-3527%2CPLAT-3531%2CPLAT-3749%2CPLAT-3806%2CPLAT-4371%2CPLAT-4432%2CPLAT-4444%2CPLAT-4445%2CPLAT-4446%2CPLAT-4453%2CPLAT-4454%2CPLAT-4461%2CPLAT-4465%2CPLAT-4475%2CPLAT-4513%2CPLAT-4527%2CPLAT-4552%2CPLAT-4555%2CPLAT-4558%2CPLAT-4587%2CPLAT-4634%2CPLAT-4636%2CPLAT-4642%2CPLAT-4643%2CPLAT-4645%2CPLAT-4646%2CPLAT-4647%2CPLAT-4649%2CPLAT-4652%2CPLAT-4653%2CPLAT-4656%2CPLAT-4667%2CPLAT-4669%2CPLAT-4721%2CPLAT-4724%2CPLAT-4725%2CPLAT-4733%2CPLAT-4735%2CPLAT-4736%2CPLAT-4749%2CPLAT-4752%2CPLAT-4754%2CPLAT-4762%2CPLAT-4786)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">13.02–26.02</div>
+  <div class="sprint-name">S47 · TRACKZILLA</div>
+  <div class="sprint-row"><span>Issues</span><strong>47</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>47 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#3b82f6">261</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">26 (55.3%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:55.3%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1938%2CPLAT-1940%2CPLAT-3241%2CPLAT-3338%2CPLAT-3382%2CPLAT-3633%2CPLAT-3854%2CPLAT-4171%2CPLAT-4248%2CPLAT-4253%2CPLAT-4280%2CPLAT-4281%2CPLAT-4331%2CPLAT-4447%2CPLAT-4469%2CPLAT-4472%2CPLAT-4479%2CPLAT-4488%2CPLAT-4505%2CPLAT-4553%2CPLAT-4554%2CPLAT-4564%2CPLAT-4589%2CPLAT-4624%2CPLAT-4625%2CPLAT-4630%2CPLAT-4644%2CPLAT-4658%2CPLAT-4659%2CPLAT-4664%2CPLAT-4666%2CPLAT-4757%2CPLAT-4758%2CPLAT-4771%2CPLAT-4772%2CPLAT-4780%2CPLAT-4782%2CPLAT-4784%2CPLAT-4787%2CPLAT-4788%2CPLAT-4789%2CPLAT-4790%2CPLAT-4791%2CPLAT-4794%2CPLAT-4797%2CPLAT-4804%2CPLAT-4809%2CPLAT-4810%2CPLAT-4811%2CPLAT-4812%2CPLAT-4814%2CPLAT-4815%2CPLAT-4826%2CPLAT-4829%2CPLAT-4831%2CPLAT-4832%2CPLAT-4833%2CPLAT-4834%2CPLAT-4836%2CPLAT-4839%2CPLAT-4860%2CPLAT-4870%2CPLAT-4872%2CPLAT-4873%2CPLAT-4879%2CPLAT-4883%2CPLAT-4903%2CPLAT-4917%2CPLAT-4957)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">27.02–12.03</div>
+  <div class="sprint-name">S48 · пузирик із носу</div>
+  <div class="sprint-row"><span>Issues</span><strong>69</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>69 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#3b82f6">300</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">3 (4.3%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:4.3%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-3315%2CPLAT-4132%2CPLAT-4544%2CPLAT-4561%2CPLAT-4615%2CPLAT-4637%2CPLAT-4886%2CPLAT-4887%2CPLAT-4890%2CPLAT-4891%2CPLAT-4916%2CPLAT-4919%2CPLAT-4928%2CPLAT-4946%2CPLAT-4953%2CPLAT-4955%2CPLAT-4958%2CPLAT-4962%2CPLAT-4972%2CPLAT-4975%2CPLAT-4979%2CPLAT-4980%2CPLAT-5007%2CPLAT-5017%2CPLAT-5047%2CPLAT-5049%2CPLAT-5052)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">13.03–26.03</div>
+  <div class="sprint-name">S49 · спринт ім.Єгора 2</div>
+  <div class="sprint-row"><span>Issues</span><strong>27</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>27 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#3b82f6">146</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">4 (14.8%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:14.8%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1302%2CPLAT-2024%2CPLAT-2740%2CPLAT-2766%2CPLAT-3165%2CPLAT-3167%2CPLAT-3231%2CPLAT-3243%2CPLAT-3915%2CPLAT-4144%2CPLAT-4235%2CPLAT-4362%2CPLAT-4388%2CPLAT-4603%2CPLAT-4604%2CPLAT-4605%2CPLAT-4671%2CPLAT-4672%2CPLAT-4717%2CPLAT-4755%2CPLAT-4801%2CPLAT-4841%2CPLAT-4877%2CPLAT-4885%2CPLAT-4889%2CPLAT-4892%2CPLAT-4894%2CPLAT-4895%2CPLAT-4896%2CPLAT-4923%2CPLAT-4924%2CPLAT-4925%2CPLAT-4935%2CPLAT-4936%2CPLAT-4937%2CPLAT-4950%2CPLAT-4956%2CPLAT-4959%2CPLAT-4961%2CPLAT-4970%2CPLAT-4983%2CPLAT-4984%2CPLAT-4985%2CPLAT-4986%2CPLAT-4988%2CPLAT-4989%2CPLAT-5001%2CPLAT-5009%2CPLAT-5014%2CPLAT-5015%2CPLAT-5032%2CPLAT-5036%2CPLAT-5048%2CPLAT-5050%2CPLAT-5053%2CPLAT-5054%2CPLAT-5060%2CPLAT-5061%2CPLAT-5076%2CPLAT-5102%2CPLAT-5109%2CPLAT-5119%2CPLAT-5121%2CPLAT-5122%2CPLAT-5123%2CPLAT-5127%2CPLAT-5128%2CPLAT-5129%2CPLAT-5141%2CPLAT-5143%2CPLAT-5144%2CPLAT-5151%2CPLAT-5152%2CPLAT-5154%2CPLAT-5159%2CPLAT-5162%2CPLAT-5173%2CPLAT-5184)" target="_blank" class="sprint-card">
+  <div class="sprint-dates">27.03–09.04</div>
+  <div class="sprint-name">S50 · На два фронти</div>
+  <div class="sprint-row"><span>Issues</span><strong>78</strong></div>
+  <div class="sprint-row"><span>Done</span><strong>78 <small>(100.0%)</small></strong></div>
+  <div class="sprint-row"><span>SP</span><strong style="color:#3b82f6">362</strong></div>
+  <div class="sprint-row"><span>OKR</span><strong style="color:#22c55e">1 (1.3%)</strong></div>
+  <div class="mini-bar-wrap">
+    <div class="mini-seg" style="width:1.3%;background:#22c55e"></div>
+    <div class="mini-seg" style="width:0.0%;background:#ef4444"></div>
+  </div>
+</a>
+</div>
+<!-- SP Chart -->
+<svg width="100%" height="210" viewBox="0 0 560 210" style="margin-top:20px" preserveAspectRatio="xMidYMid meet">
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-2995%2CPLAT-3314%2CPLAT-3395%2CPLAT-3527%2CPLAT-3531%2CPLAT-3749%2CPLAT-3806%2CPLAT-4371%2CPLAT-4432%2CPLAT-4444%2CPLAT-4445%2CPLAT-4446%2CPLAT-4453%2CPLAT-4454%2CPLAT-4461%2CPLAT-4465%2CPLAT-4475%2CPLAT-4513%2CPLAT-4527%2CPLAT-4552%2CPLAT-4555%2CPLAT-4558%2CPLAT-4587%2CPLAT-4634%2CPLAT-4636%2CPLAT-4642%2CPLAT-4643%2CPLAT-4645%2CPLAT-4646%2CPLAT-4647%2CPLAT-4649%2CPLAT-4652%2CPLAT-4653%2CPLAT-4656%2CPLAT-4667%2CPLAT-4669%2CPLAT-4721%2CPLAT-4724%2CPLAT-4725%2CPLAT-4733%2CPLAT-4735%2CPLAT-4736%2CPLAT-4749%2CPLAT-4752%2CPLAT-4754%2CPLAT-4762%2CPLAT-4786)" target="_blank">
+  <rect x="40" y="54.6" width="90" height="115.4" fill="#3b82f6" rx="4" opacity="0.55"/>
+  <rect x="40" y="54.6" width="90" height="63.8" fill="#1d4ed8" rx="4" opacity="0.9"/>
+  <text x="85" y="49.6" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">261</text>
+  <text x="85" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S47</text>
+  <text x="85" y="200" text-anchor="middle" fill="#1d4ed8" font-size="10">55.3% OKR</text>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1938%2CPLAT-1940%2CPLAT-3241%2CPLAT-3338%2CPLAT-3382%2CPLAT-3633%2CPLAT-3854%2CPLAT-4171%2CPLAT-4248%2CPLAT-4253%2CPLAT-4280%2CPLAT-4281%2CPLAT-4331%2CPLAT-4447%2CPLAT-4469%2CPLAT-4472%2CPLAT-4479%2CPLAT-4488%2CPLAT-4505%2CPLAT-4553%2CPLAT-4554%2CPLAT-4564%2CPLAT-4589%2CPLAT-4624%2CPLAT-4625%2CPLAT-4630%2CPLAT-4644%2CPLAT-4658%2CPLAT-4659%2CPLAT-4664%2CPLAT-4666%2CPLAT-4757%2CPLAT-4758%2CPLAT-4771%2CPLAT-4772%2CPLAT-4780%2CPLAT-4782%2CPLAT-4784%2CPLAT-4787%2CPLAT-4788%2CPLAT-4789%2CPLAT-4790%2CPLAT-4791%2CPLAT-4794%2CPLAT-4797%2CPLAT-4804%2CPLAT-4809%2CPLAT-4810%2CPLAT-4811%2CPLAT-4812%2CPLAT-4814%2CPLAT-4815%2CPLAT-4826%2CPLAT-4829%2CPLAT-4831%2CPLAT-4832%2CPLAT-4833%2CPLAT-4834%2CPLAT-4836%2CPLAT-4839%2CPLAT-4860%2CPLAT-4870%2CPLAT-4872%2CPLAT-4873%2CPLAT-4879%2CPLAT-4883%2CPLAT-4903%2CPLAT-4917%2CPLAT-4957)" target="_blank">
+  <rect x="160" y="37.4" width="90" height="132.6" fill="#3b82f6" rx="4" opacity="0.55"/>
+  <rect x="160" y="37.4" width="90" height="5.8" fill="#1d4ed8" rx="4" opacity="0.9"/>
+  <text x="205" y="32.4" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">300</text>
+  <text x="205" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S48</text>
+  <text x="205" y="200" text-anchor="middle" fill="#1d4ed8" font-size="10">4.3% OKR</text>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-3315%2CPLAT-4132%2CPLAT-4544%2CPLAT-4561%2CPLAT-4615%2CPLAT-4637%2CPLAT-4886%2CPLAT-4887%2CPLAT-4890%2CPLAT-4891%2CPLAT-4916%2CPLAT-4919%2CPLAT-4928%2CPLAT-4946%2CPLAT-4953%2CPLAT-4955%2CPLAT-4958%2CPLAT-4962%2CPLAT-4972%2CPLAT-4975%2CPLAT-4979%2CPLAT-4980%2CPLAT-5007%2CPLAT-5017%2CPLAT-5047%2CPLAT-5049%2CPLAT-5052)" target="_blank">
+  <rect x="280" y="105.5" width="90" height="64.5" fill="#3b82f6" rx="4" opacity="0.55"/>
+  <rect x="280" y="105.5" width="90" height="9.6" fill="#1d4ed8" rx="4" opacity="0.9"/>
+  <text x="325" y="100.5" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">146</text>
+  <text x="325" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S49</text>
+  <text x="325" y="200" text-anchor="middle" fill="#1d4ed8" font-size="10">14.8% OKR</text>
+</a>
+<a href="https://newsiteam.atlassian.net/issues/?jql=key%20in%20(PLAT-1302%2CPLAT-2024%2CPLAT-2740%2CPLAT-2766%2CPLAT-3165%2CPLAT-3167%2CPLAT-3231%2CPLAT-3243%2CPLAT-3915%2CPLAT-4144%2CPLAT-4235%2CPLAT-4362%2CPLAT-4388%2CPLAT-4603%2CPLAT-4604%2CPLAT-4605%2CPLAT-4671%2CPLAT-4672%2CPLAT-4717%2CPLAT-4755%2CPLAT-4801%2CPLAT-4841%2CPLAT-4877%2CPLAT-4885%2CPLAT-4889%2CPLAT-4892%2CPLAT-4894%2CPLAT-4895%2CPLAT-4896%2CPLAT-4923%2CPLAT-4924%2CPLAT-4925%2CPLAT-4935%2CPLAT-4936%2CPLAT-4937%2CPLAT-4950%2CPLAT-4956%2CPLAT-4959%2CPLAT-4961%2CPLAT-4970%2CPLAT-4983%2CPLAT-4984%2CPLAT-4985%2CPLAT-4986%2CPLAT-4988%2CPLAT-4989%2CPLAT-5001%2CPLAT-5009%2CPLAT-5014%2CPLAT-5015%2CPLAT-5032%2CPLAT-5036%2CPLAT-5048%2CPLAT-5050%2CPLAT-5053%2CPLAT-5054%2CPLAT-5060%2CPLAT-5061%2CPLAT-5076%2CPLAT-5102%2CPLAT-5109%2CPLAT-5119%2CPLAT-5121%2CPLAT-5122%2CPLAT-5123%2CPLAT-5127%2CPLAT-5128%2CPLAT-5129%2CPLAT-5141%2CPLAT-5143%2CPLAT-5144%2CPLAT-5151%2CPLAT-5152%2CPLAT-5154%2CPLAT-5159%2CPLAT-5162%2CPLAT-5173%2CPLAT-5184)" target="_blank">
+  <rect x="400" y="10.0" width="90" height="160.0" fill="#3b82f6" rx="4" opacity="0.55"/>
+  <rect x="400" y="10.0" width="90" height="2.1" fill="#1d4ed8" rx="4" opacity="0.9"/>
+  <text x="445" y="5.0" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">362</text>
+  <text x="445" y="188" text-anchor="middle" fill="#94a3b8" font-size="11">S50</text>
+  <text x="445" y="200" text-anchor="middle" fill="#1d4ed8" font-size="10">1.3% OKR</text>
+</a>
+      <text x="14" y="10" fill="#64748b" font-size="9" transform="rotate(-90,14,80)">SP</text>
+    </svg>
+  </div>
+</div>
+
+
+<div class="footer">
+  <div style="font-size:12px;color:var(--muted)">
+    Згенеровано Apr 21, 2026 19:17 · Jira MCP · Дані на момент генерації
+  </div>
+  <div class="footer-links">
+    <a href="https://newsiteam.atlassian.net/jira/software/c/projects/BTMA/boards/210" target="_blank">↗ BTMA Board</a>
+    <a href="https://newsiteam.atlassian.net/jira/software/c/projects/PLAT/boards/214" target="_blank">↗ PLAT Board</a>
+    <a href="https://newsiteam.atlassian.net/jira/polaris/projects/WS/ideas/view/10985805" target="_blank">↗ OKR Polaris View</a>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
