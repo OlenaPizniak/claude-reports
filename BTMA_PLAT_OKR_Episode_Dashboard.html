@@ -13,7 +13,7 @@
   overlay.innerHTML='<div style="background:#1e293b;border:1px solid #334155;border-radius:16px;padding:40px 48px;text-align:center;width:340px"><div style="font-size:28px;margin-bottom:8px">🔒</div><div style="color:#e2e8f0;font-size:18px;font-weight:700;margin-bottom:4px">OKR Episode Dashboard</div><div style="color:#94a3b8;font-size:13px;margin-bottom:24px">BTMA · PLAT · Feb–Apr 2026</div><input id="okr-pwd" type="password" placeholder="Пароль" autocomplete="off" style="width:100%;padding:10px 14px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:15px;outline:none;text-align:center;box-sizing:border-box" /><div id="okr-err" style="color:#ef4444;font-size:12px;margin-top:8px;height:16px"></div><button id="okr-btn" style="margin-top:16px;width:100%;padding:10px;background:#06b6d4;border:none;border-radius:8px;color:#0f172a;font-weight:700;font-size:15px;cursor:pointer">Увійти</button></div>';
   function check(){
     var v=document.getElementById('okr-pwd').value;
-    if(v==='OKR1512'){sessionStorage.setItem('okr_auth','1');document.getElementById('okr-overlay').remove();}
+    if(v==='OKREp1'){sessionStorage.setItem('okr_auth','1');document.getElementById('okr-overlay').remove();}
     else{document.getElementById('okr-err').textContent='Невірний пароль';document.getElementById('okr-pwd').value='';document.getElementById('okr-pwd').focus();}
   }
   document.addEventListener('DOMContentLoaded',function(){
