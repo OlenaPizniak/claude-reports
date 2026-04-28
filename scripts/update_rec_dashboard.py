@@ -106,6 +106,42 @@ def jira_search(jql, fields, max_results=100):
     return all_issues
 
 
+def fetch_hired_transition_date(issue_key):
+    """Return YYYY-MM-DD of the most recent transition INTO 'Hired' status.
+
+    Pages through /rest/api/3/issue/{key}/changelog and inspects status
+    history items. None if the issue never transitioned to Hired.
+    """
+    headers = dict(HEADERS)
+    headers['Authorization'] = get_auth_header()
+    base = f"{JIRA_HOST}/rest/api/3/issue/{issue_key}/changelog"
+    latest_date = None
+    start_at = 0
+    while True:
+        url = base + '?' + urlencode({'startAt': start_at, 'maxResults': 100})
+        req = Request(url, headers=headers)
+        try:
+            with urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read())
+        except HTTPError as e:
+            # Don't fail the whole run for one issue's changelog
+            print(f"  ⚠ changelog fetch failed for {issue_key}: HTTP {e.code}")
+            return None
+        for entry in data.get('values', []):
+            for item in entry.get('items', []):
+                if item.get('field') == 'status' and item.get('toString') == 'Hired':
+                    d = (entry.get('created') or '')[:10]
+                    if d and (latest_date is None or d > latest_date):
+                        latest_date = d
+        got = len(data.get('values', []))
+        if got == 0 or data.get('isLast', True):
+            break
+        start_at += got
+        if start_at >= data.get('total', start_at):
+            break
+    return latest_date
+
+
 # ── Field extractors ────────────────────────────────────────
 def get_user(field):
     if isinstance(field, list) and field:
@@ -213,6 +249,15 @@ def build_data():
         ALL_FIELDS,
     )
     print(f"  got {len(hired)} hired items")
+
+    print("→ Fetching changelog for each hired item (transition-to-Hired date)...")
+    hired_transition = {}
+    for issue in hired:
+        key = issue['key']
+        hd = fetch_hired_transition_date(key)
+        hired_transition[key] = hd
+    have_hd = sum(1 for v in hired_transition.values() if v)
+    print(f"  got transition date for {have_hd}/{len(hired)} hired items")
 
     # Build lookups
     SD, SN, RECR, SRCR = {}, {}, {}, {}
@@ -323,6 +368,7 @@ def build_data():
             'rec': get_user(fld.get(F['recruiter'])),
             'src': get_user(fld.get(F['sourcer'])),
             'fcd': fld.get(F['fcd']),
+            'hd': hired_transition.get(issue['key']),
             'sd': fld.get(F['start_date']),
             'fcd_c': fld.get(F['fcd_contact']),
             'h': fld.get(F['num_hires']) or 1,
@@ -348,6 +394,7 @@ def build_data():
             's': fld.get('summary'),
             'sd': fld.get(F['start_date']),
             'fcd': fld.get(F['fcd']),
+            'hd': hired_transition.get(issue['key']),
             'fcd_c': fld.get(F['fcd_contact']),
             'sn': get_option(fld.get(F['seniority'])),
             'rec': get_user(fld.get(F['recruiter'])),

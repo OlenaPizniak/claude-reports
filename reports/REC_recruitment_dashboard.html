@@ -1531,8 +1531,10 @@ function r2(from,to){
   if(from!==undefined)s2From=from;
   if(to!==undefined)s2To=to;
 
-  // Source 1: HW filtered by fcd (factual close date from changelog)
-  const hwItems=HW.filter(v=>v.fcd&&v.fcd>=s2From&&v.fcd<=s2To);
+  // Hire-date for filtering = Factual close date OR transition-to-Hired date (from changelog)
+  // An item counts if EITHER date falls in the selected period.
+  const inRange=d=>d&&d>=s2From&&d<=s2To;
+  const hwItems=HW.filter(v=>inRange(v.fcd)||inRange(v.hd));
   const hwKeys=new Set(hwItems.map(v=>v.key));
 
   // Source 2: ALL_VACS items with st='Hired' and sd in range (not already in HW)
@@ -1550,7 +1552,8 @@ function r2(from,to){
         h:1,t:par?.t||null,sb:par?.sb||null,st:v.st};
     });
 
-  let items=[...hwItems,...avHired,...stHired];
+  // Annotate each item with effective close date (fcd || hd) for the table column
+  let items=[...hwItems,...avHired,...stHired].map(v=>({...v, fcd: v.fcd||v.hd||null}));
   const vacCount2=items.filter(v=>v.type!=='subtask').length;
   const hiresTotal2=items.reduce((s,v)=>s+(v.h||1),0);
   document.getElementById('b2').innerHTML=`<span class="bnum">${vacCount2}</span> vacancy &nbsp;·&nbsp; <span class="bnum">${hiresTotal2}</span> hires`;
