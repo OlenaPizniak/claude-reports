@@ -36,12 +36,9 @@ between `// <<<AUTO_*_START>>>` / `// <<<AUTO_*_END>>>` markers, then commits & 
      - `JIRA_EMAIL` — your Atlassian email
      - `JIRA_API_TOKEN` — the token from step 1
 
-3. **Enable GitHub Pages**
-   - Open <https://github.com/OlenaPizniak/claude-reports/settings/pages>
-   - Under **Source** select **Deploy from a branch**
-   - Branch: `main`, folder: `/ (root)` → **Save**
-   - Wait ~1 min — your URL will be:
-     `https://OlenaPizniak.github.io/claude-reports/reports/REC_recruitment_dashboard.html`
+3. **GitHub Pages is already enabled** for this repo (from `OKR Dashboard`)
+   - Public URL: `https://olenapizniak.github.io/claude-reports/reports/REC_recruitment_dashboard.html`
+   - No action needed — it picks up the new file automatically after each push
 
 4. **Trigger the first auto-update**
    - Open <https://github.com/OlenaPizniak/claude-reports/actions/workflows/update-rec-dashboard.yml>
