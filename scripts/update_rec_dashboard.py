@@ -71,30 +71,37 @@ HEADERS = {
 
 # ── Jira API ────────────────────────────────────────────────
 def jira_search(jql, fields, max_results=100):
-    """Search issues via Jira REST API with pagination."""
+    """Search issues via the /search/jql endpoint (POST + nextPageToken pagination).
+
+    The legacy /search endpoint was removed in 2025; this uses the new
+    enhanced search API: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-post
+    """
     headers = dict(HEADERS)
     headers['Authorization'] = get_auth_header()
+    url = f"{JIRA_HOST}/rest/api/3/search/jql"
     all_issues = []
-    start_at = 0
+    next_token = None
     while True:
-        url = f"{JIRA_HOST}/rest/api/3/search?" + urlencode({
+        body = {
             'jql': jql,
-            'fields': ','.join(fields),
-            'startAt': start_at,
+            'fields': fields,
             'maxResults': max_results,
-        })
-        req = Request(url, headers=headers)
+        }
+        if next_token:
+            body['nextPageToken'] = next_token
+        req = Request(url, data=json.dumps(body).encode('utf-8'),
+                      headers=headers, method='POST')
         try:
             with urlopen(req, timeout=60) as resp:
                 data = json.loads(resp.read())
         except HTTPError as e:
-            body = e.read().decode('utf-8', errors='replace')
-            sys.exit(f"Jira API error {e.code}: {body[:500]}")
+            err = e.read().decode('utf-8', errors='replace')
+            sys.exit(f"Jira API error {e.code}: {err[:500]}")
         issues = data.get('issues', [])
         all_issues.extend(issues)
-        total = data.get('total', len(all_issues))
-        start_at += len(issues)
-        if not issues or start_at >= total:
+        next_token = data.get('nextPageToken')
+        is_last = data.get('isLast', not next_token)
+        if is_last or not next_token:
             break
     return all_issues
 
