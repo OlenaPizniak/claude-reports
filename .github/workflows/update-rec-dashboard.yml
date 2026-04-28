@@ -2,8 +2,10 @@ name: Update REC Dashboard from Jira
 
 on:
   schedule:
-    # Every hour at :07 (offset to avoid GitHub cron congestion at :00)
+    # Twice an hour, at :07 and :37, to mitigate GitHub Actions scheduled-workflow drops.
+    # If one fires, the second commits-no-op (skipping when no data changed).
     - cron: '7 * * * *'
+    - cron: '37 * * * *'
   workflow_dispatch: {}   # allow manual trigger from Actions tab
 
 permissions:
