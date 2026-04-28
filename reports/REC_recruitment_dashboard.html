@@ -790,6 +790,9 @@ const _m=new Date(_d);_m.setDate(_d.getDate()-_dy+1);
 const _s=new Date(_m);_s.setDate(_m.getDate()+6);
 const _fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const WS=_fmt(_m), WE=_fmt(_s);
+// Effective close date for any Hired item: Factual close date field OR transition-to-Hired date from Jira changelog.
+// Use this everywhere instead of raw v.fcd to count hires by date even when the field was not filled in Jira.
+const closeDate = v => v.fcd || v.hd || null;
 
 // ── Date preset helper (shared across all period filters) ──
 // Presets: tw=this week, lw=last week, tm=this month, lm=last month
@@ -2210,7 +2213,7 @@ function rChartHires(from,to){
   document.getElementById('hires-from').value=hiresFrom;
   document.getElementById('hires-to').value=hiresTo;
   const dates=_dateRange(hiresFrom,hiresTo);
-  const counts=dates.map(d=>HW.filter(v=>v.fcd===d).length);
+  const counts=dates.map(d=>HW.filter(v=>closeDate(v)===d).length);
   const total=counts.reduce((a,b)=>a+b,0);
   document.getElementById('hires-total').textContent=total;
   if(_chHires){_chHires.destroy();_chHires=null;}
@@ -2475,7 +2478,7 @@ function rWorkload(){
           ?`<button id="wlsb-${did}-${v.key}" onclick="event.stopPropagation();togWLSubs('${did}','${v.key}')" style="background:none;border:1px solid #c8d2e0;border-radius:4px;cursor:pointer;font-size:9px;padding:1px 4px;color:#64748b;margin-right:4px;line-height:1">+</button>`
           :'';
         const activeHires=vSubs.length>0?vSubs.length+1:v.h;
-        const vDays=(v.fcd||v.sd)?dag(v.fcd||v.sd):null;
+        const vDays=(closeDate(v)||v.sd)?dag(closeDate(v)||v.sd):null;
         const vDaysBadge=vDays!=null?`<span class="${vDays>=45?'db45':vDays>=30?'db30':'dbnorm'}">${vDays}</span>`:'<span class="dash-val">—</span>';
         rows+=`<tr data-wl="${did}" style="display:none;background:#f0f4ff;border-bottom:1px solid #e8eef8">
           <td style="padding:8px 16px 8px 38px;font-size:12px">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:6px;white-space:normal">${v.s}</span></td>
@@ -2583,9 +2586,10 @@ function hwFilterType(t){
 }
 function rWorkloadHired(){
   const inRange=v=>{
-    if(!v.fcd) return !_hwDateFrom&&!_hwDateTo;
-    if(_hwDateFrom&&v.fcd<_hwDateFrom) return false;
-    if(_hwDateTo&&v.fcd>_hwDateTo) return false;
+    const cd=closeDate(v);
+    if(!cd) return !_hwDateFrom&&!_hwDateTo;
+    if(_hwDateFrom&&cd<_hwDateFrom) return false;
+    if(_hwDateTo&&cd>_hwDateTo) return false;
     return true;
   };
   const hiredPos=HW.filter(v=>v.type==='position'&&inRange(v));
@@ -2614,8 +2618,8 @@ function rWorkloadHired(){
     const hiresTotal=allVacs.reduce((s,v)=>s+(v._isSubParent?v._subs.length:v.h),0);
     const highCount=allVacs.filter(v=>v.pr==='High').length;
     const seniorCount=allVacs.filter(v=>['Senior','Lead','Expert'].includes(v.sn)).length;
-    const maxTTF=allVacs.reduce((m,v)=>{const d=diffDays(v.fcd,v.sd);return d!=null?Math.max(m,d):m;},-Infinity);
-    const maxTTH=allVacs.reduce((m,v)=>{const d=diffDays(v.fcd,v.fcd_c);return d!=null?Math.max(m,d):m;},-Infinity);
+    const maxTTF=allVacs.reduce((m,v)=>{const d=diffDays(closeDate(v),v.sd);return d!=null?Math.max(m,d):m;},-Infinity);
+    const maxTTH=allVacs.reduce((m,v)=>{const d=diffDays(closeDate(v),v.fcd_c);return d!=null?Math.max(m,d):m;},-Infinity);
     return{name,recVacs,srcVacs,allVacs,taskItems,hires:hiresTotal,highCount,seniorCount,maxTTF,maxTTH};
   });
   members.sort((a,b)=>{
@@ -2693,8 +2697,8 @@ function rWorkloadHired(){
         if(_hwSortCol==='sn')   return ((_snOrd[a.sn]??9)-(_snOrd[b.sn]??9))*_hwSortDir;
         if(_hwSortCol==='vac')  return ((_stOrd[a.st]??9)-(_stOrd[b.st]??9))*_hwSortDir;
         if(_hwSortCol==='hires'||_hwSortCol==='wl') return (a.h-b.h)*_hwSortDir;
-        if(_hwSortCol==='ttf'){const da=diffDays(a.fcd,a.sd)??-1,db=diffDays(b.fcd,b.sd)??-1;return(da-db)*_hwSortDir;}
-        if(_hwSortCol==='tth'){const da=diffDays(a.fcd,a.fcd_c)??-1,db=diffDays(b.fcd,b.fcd_c)??-1;return(da-db)*_hwSortDir;}
+        if(_hwSortCol==='ttf'){const da=diffDays(closeDate(a),a.sd)??-1,db=diffDays(closeDate(b),b.sd)??-1;return(da-db)*_hwSortDir;}
+        if(_hwSortCol==='tth'){const da=diffDays(closeDate(a),a.fcd_c)??-1,db=diffDays(closeDate(b),b.fcd_c)??-1;return(da-db)*_hwSortDir;}
         if(_hwSortCol==='role') return (a._role||'').localeCompare(b._role||'')*_hwSortDir;
         if(_hwSortCol==='name') return a.s.localeCompare(b.s)*_hwSortDir;
         return (a.h-b.h)*_hwSortDir;
@@ -2706,8 +2710,8 @@ function rWorkloadHired(){
         const hasSubToggle=vSubs.length>0;
         const subBtn=hasSubToggle?`<button id="hwsb-${did}-${v.key}" onclick="event.stopPropagation();togHWSubs('${did}','${v.key}')" style="border:none;background:transparent;cursor:pointer;color:#10b981;font-size:14px;font-weight:700;padding:0 4px 0 0;line-height:1">+</button>`:'';
         const activeHires=vSubs.length>0?vSubs.length:v.h;
-        const vTTF=diffDays(v.fcd,v.sd);
-        const vTTH=diffDays(v.fcd,v.fcd_c);
+        const vTTF=diffDays(closeDate(v),v.sd);
+        const vTTH=diffDays(closeDate(v),v.fcd_c);
         rows+=`<tr data-hw="${did}" style="display:none;background:#f0fdf4;border-bottom:1px solid #d1fae5">
           <td style="padding:8px 16px 8px 38px;font-size:12px">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:6px;white-space:normal">${v.s}</span></td>
           <td style="text-align:center">${roleBadgeH(v._role)}</td>
@@ -2724,8 +2728,8 @@ function rWorkloadHired(){
           const sSn=s.sn||v.sn;
           const sSnHtml=sSn?`<span style="font-size:11px;font-weight:600;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:'<span class="dash-val">—</span>';
           const sdt=[s.t||v.t,s.sb||v.sb].filter(Boolean).join(' / ');
-          const sTTF=diffDays(s.fcd,s.sd||v.sd);
-          const sTTH=diffDays(s.fcd,s.fcd_c);
+          const sTTF=diffDays(closeDate(s),s.sd||v.sd);
+          const sTTH=diffDays(closeDate(s),s.fcd_c);
           rows+=`<tr data-hw="${did}" data-hwsub="${did}-${v.key}" style="display:none;background:#dcfce7;border-bottom:1px solid #bbf7d0">
             <td style="padding:6px 16px 6px 58px;font-size:11px">↳ ${jl(s.key)} <span style="color:#374151;font-weight:500;margin-left:6px">${s.s}</span></td>
             <td style="text-align:center">${roleBadgeH(v._role)}</td>
@@ -2777,15 +2781,16 @@ function rWorkloadOverview(){
   const warning=mems.filter(m=>m.load>8&&m.load<=20).length;
   const ok=mems.filter(m=>m.load>0&&m.load<=8).length;
   const inRange=v=>{
-    if(!v.fcd)return!_hwDateFrom&&!_hwDateTo;
-    if(_hwDateFrom&&v.fcd<_hwDateFrom)return false;
-    if(_hwDateTo&&v.fcd>_hwDateTo)return false;
+    const cd=closeDate(v);
+    if(!cd)return!_hwDateFrom&&!_hwDateTo;
+    if(_hwDateFrom&&cd<_hwDateFrom)return false;
+    if(_hwDateTo&&cd>_hwDateTo)return false;
     return true;
   };
   const hwF=HW.filter(inRange);
   const hiredHires=hwF.reduce((s,v)=>s+v.h,0);
-  const ttfVals=hwF.filter(v=>v.sd&&v.fcd).map(v=>diffDays(v.fcd,v.sd)).filter(d=>d!=null);
-  const tthVals=hwF.filter(v=>v.fcd_c&&v.fcd).map(v=>diffDays(v.fcd,v.fcd_c)).filter(d=>d!=null);
+  const ttfVals=hwF.filter(v=>v.sd&&closeDate(v)).map(v=>diffDays(closeDate(v),v.sd)).filter(d=>d!=null);
+  const tthVals=hwF.filter(v=>v.fcd_c&&closeDate(v)).map(v=>diffDays(closeDate(v),v.fcd_c)).filter(d=>d!=null);
   const avgTTF=ttfVals.length?Math.round(ttfVals.reduce((a,b)=>a+b)/ttfVals.length):null;
   const avgTTH=tthVals.length?Math.round(tthVals.reduce((a,b)=>a+b)/tthVals.length):null;
 
@@ -2797,8 +2802,8 @@ function rWorkloadOverview(){
     const people=[];
     if(v.rec) people.push(v.rec);
     if(v.src&&v.src!==v.rec) people.push(v.src);
-    const ttf=diffDays(v.fcd,v.sd);
-    const tth=diffDays(v.fcd,v.fcd_c);
+    const ttf=diffDays(closeDate(v),v.sd);
+    const tth=diffDays(closeDate(v),v.fcd_c);
     people.forEach(name=>{
       if(!byRec[name])byRec[name]={ttfVals:[],tthVals:[],count:0};
       byRec[name].count++;
@@ -2953,10 +2958,10 @@ let _cvInit=false;
 function rCVDynamics(){
   const wThis=cvWeekRange(0), wPrev=cvWeekRange(1);
   // Open = vacancies whose Start date is in the week (from CV ∪ ALL_VACS)
-  // Hired = vacancies whose Factual close date is in the week (CV only)
+  // Hired = vacancies whose effective close date (fcd || hd transition) is in the week (CV only)
   const allOpen=[...ALL_VACS.filter(v=>v.st!=='Hired').map(v=>({sd:v.sd})),...CV.map(v=>({sd:v.sd}))];
   const openInWeek=w=>allOpen.filter(v=>cvInRange(v.sd,w.start,w.end)).length;
-  const hiredInWeek=w=>CV.filter(v=>cvInRange(v.fcd,w.start,w.end)).length;
+  const hiredInWeek=w=>CV.filter(v=>cvInRange(closeDate(v),w.start,w.end)).length;
   const oThis=openInWeek(wThis), oPrev=openInWeek(wPrev);
   const hThis=hiredInWeek(wThis), hPrev=hiredInWeek(wPrev);
 
@@ -3046,9 +3051,9 @@ function rCVDynamics(){
 // ── CV: Block 1 — Avg TTF by Department ────────────────────
 function rCVTTF(){
   const byDept={};
-  CV.filter(v=>v.t&&v.fcd&&v.sd).forEach(v=>{
+  CV.filter(v=>v.t&&closeDate(v)&&v.sd).forEach(v=>{
     if(!byDept[v.t])byDept[v.t]=[];
-    byDept[v.t].push(diffDays(v.fcd,v.sd));
+    byDept[v.t].push(diffDays(closeDate(v),v.sd));
   });
   const entries=Object.entries(byDept).map(([d,arr])=>({d,avg:cvAvg(arr),n:arr.length}))
     .filter(e=>e.avg!=null).sort((a,b)=>b.avg-a.avg);
@@ -3104,9 +3109,9 @@ function rCVTTF(){
 // ── CV: Block 2 — Avg TTH by Department ────────────────────
 function rCVTTH(){
   const byDept={};
-  CV.filter(v=>v.t&&v.fcd&&v.fcd_c).forEach(v=>{
+  CV.filter(v=>v.t&&closeDate(v)&&v.fcd_c).forEach(v=>{
     if(!byDept[v.t])byDept[v.t]=[];
-    byDept[v.t].push(diffDays(v.fcd,v.fcd_c));
+    byDept[v.t].push(diffDays(closeDate(v),v.fcd_c));
   });
   const entries=Object.entries(byDept).map(([d,arr])=>({d,avg:cvAvg(arr),n:arr.length}))
     .filter(e=>e.avg!=null).sort((a,b)=>b.avg-a.avg);
@@ -3114,7 +3119,7 @@ function rCVTTH(){
   const data=entries.map(e=>Math.round(e.avg));
   const colors=entries.map(e=>cvColor(e.d));
   const overallAvg=entries.length?Math.round(cvAvg(entries.flatMap(e=>byDept[e.d]))):0;
-  const totalWithData=CV.filter(v=>v.fcd&&v.fcd_c).length;
+  const totalWithData=CV.filter(v=>closeDate(v)&&v.fcd_c).length;
   document.getElementById('bcv-tth').textContent=
     entries.length?`Overall avg ${overallAvg}d · based on ${totalWithData} hires`
                   :`No data · First contact date not filled`;
@@ -3188,14 +3193,14 @@ function _cvPeriodKey(d){
 function rCVClosedCount(){
   _cvCntFrom=document.getElementById('cv-cnt-from').value||null;
   _cvCntTo=document.getElementById('cv-cnt-to').value||null;
-  const items=CV.filter(v=>v.fcd&&v.t).filter(v=>cvInRange(v.fcd,_cvCntFrom,_cvCntTo));
+  const items=CV.filter(v=>closeDate(v)&&v.t).filter(v=>cvInRange(closeDate(v),_cvCntFrom,_cvCntTo));
   // Group by period × dept
   const periodSet=new Set(), deptSet=new Set();
-  items.forEach(v=>{periodSet.add(_cvPeriodKey(v.fcd));deptSet.add(v.t);});
+  items.forEach(v=>{periodSet.add(_cvPeriodKey(closeDate(v)));deptSet.add(v.t);});
   const periods=[...periodSet].sort();
   const depts=[...deptSet].sort();
   const datasets=depts.map(d=>{
-    const data=periods.map(p=>items.filter(v=>v.t===d&&_cvPeriodKey(v.fcd)===p).length);
+    const data=periods.map(p=>items.filter(v=>v.t===d&&_cvPeriodKey(closeDate(v))===p).length);
     return{label:d,data,backgroundColor:cvColor(d),hoverBackgroundColor:cvColor(d)+'cc',borderRadius:6,borderSkipped:false,stack:'s1'};
   });
   document.getElementById('bcv-cnt').textContent=
