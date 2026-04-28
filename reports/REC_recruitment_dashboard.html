@@ -2280,8 +2280,9 @@ function rChartOpened(from,to){
   document.getElementById('opened-from').value=openedFrom;
   document.getElementById('opened-to').value=openedTo;
   const dates=_dateRange(openedFrom,openedTo);
-  const sdVals=Object.values(SD).filter(Boolean);
-  const counts=dates.map(d=>sdVals.filter(v=>v===d).length);
+  // "Opened" date = Created (cr) || Start date fallback. Counts each vacancy once across OP and CV.
+  const openedDates=[...ALL_VACS, ...CV].map(v=>v.cr||v.sd||SD[v.key]||null).filter(Boolean);
+  const counts=dates.map(d=>openedDates.filter(v=>v===d).length);
   const total=counts.reduce((a,b)=>a+b,0);
   document.getElementById('opened-total').textContent=total;
   if(_chOpened){_chOpened.destroy();_chOpened=null;}
@@ -2990,10 +2991,12 @@ let _cvInit=false;
 // ── CV: Block 4 — Vacancy Dynamics ─────────────────────────
 function rCVDynamics(){
   const wThis=cvWeekRange(0), wPrev=cvWeekRange(1);
-  // Open = vacancies whose Start date is in the week (from CV ∪ ALL_VACS)
+  // Open = vacancies whose "opened" date is in the week.
+  // "Opened" = Jira Created date (always set) OR Start date as fallback for legacy data without cr.
   // Hired = vacancies whose effective close date (fcd || hd transition) is in the week (CV only)
-  const allOpen=[...ALL_VACS.filter(v=>v.st!=='Hired').map(v=>({sd:v.sd})),...CV.map(v=>({sd:v.sd}))];
-  const openInWeek=w=>allOpen.filter(v=>cvInRange(v.sd,w.start,w.end)).length;
+  const openedDate=v=>v.cr||v.sd||null;
+  const allOpen=[...ALL_VACS.filter(v=>v.st!=='Hired').map(v=>({d:openedDate(v)})),...CV.map(v=>({d:openedDate(v)}))];
+  const openInWeek=w=>allOpen.filter(v=>cvInRange(v.d,w.start,w.end)).length;
   const hiredInWeek=w=>CV.filter(v=>cvInRange(closeDate(v),w.start,w.end)).length;
   const oThis=openInWeek(wThis), oPrev=openInWeek(wPrev);
   const hThis=hiredInWeek(wThis), hPrev=hiredInWeek(wPrev);

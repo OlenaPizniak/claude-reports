@@ -393,6 +393,7 @@ def build_data():
             'type': typ,
             's': fld.get('summary'),
             'sd': fld.get(F['start_date']),
+            'cr': get_date(fld.get('created')),
             'fcd': fld.get(F['fcd']),
             'hd': hired_transition.get(issue['key']),
             'fcd_c': fld.get(F['fcd_contact']),
