@@ -2638,7 +2638,8 @@ function rWorkloadHired(){
     return (a.hires-b.hires)*_hwSortDir;
   });
   const totalHiredVacs=hiredPos.length+Object.keys(subsByPk).length;
-  const totalHiredHires=HW.reduce((s,v)=>s+v.h,0);
+  // Sum hires across ONLY items that pass the date filter (was: full HW = bug)
+  const totalHiredHires=[...hiredPos,...Object.values(subsByPk).flat()].reduce((s,v)=>s+(v.h||0),0);
   const totalHiredTasks=TASKS.filter(t=>t.st==='Hired').length;
   const maxLoad=Math.max(...members.map(m=>m.hires+m.taskItems.length),1);
   const avatarColors=[
