@@ -632,7 +632,7 @@ function recTriggerRefresh(){
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#3b6ef5,#6366f1);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📋</div>
-      <h2>Open Vacancies This Week<br><span style="color:#94a3b8;font-weight:400;font-size:11px">filter by Start date · excludes Hired</span></h2>
+      <h2>Open Vacancies This Week<br><span style="color:#94a3b8;font-weight:400;font-size:11px">filter by Created date (or Start date if set) · excludes Hired</span></h2>
       <span class="sec-badge" id="b1" style="background:#eff6ff;color:#1d4ed8;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div class="toggle-btn">−</div>
     </div>
@@ -1490,7 +1490,9 @@ function toggleST(k){
 function r1(from,to){
   if(from!==undefined)s1From=from;
   if(to!==undefined)s1To=to;
-  let items=ALL_VACS.filter(v=>v.sd&&v.sd>=s1From&&v.sd<=s1To&&v.st!=='Hired');
+  // "Opened in period" = Created date (always set) || Start date as fallback
+  const opened=v=>v.cr||v.sd||null;
+  let items=ALL_VACS.filter(v=>{const d=opened(v);return d&&d>=s1From&&d<=s1To&&v.st!=='Hired';});
   if(s1SortCol){
     items=[...items].sort((a,b)=>{
       if(s1SortCol==='pr') return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*s1SortDir;
