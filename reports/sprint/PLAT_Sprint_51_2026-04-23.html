@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLAT Sprint 51 — Sprint Report</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.6}
+:root{--bg:#0f172a;--card:#1e293b;--accent:#06b6d4;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--orange:#f97316;--blue:#3b82f6;--purple:#a855f7;--gray:#64748b}
+.container{max-width:1300px;margin:0 auto;padding:0 20px 40px}
+
+/* Header */
+.header{padding:32px 0 24px;border-bottom:1px solid #1e293b;margin-bottom:28px}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.header-title h1{font-size:26px;font-weight:700;color:#e2e8f0}
+.header-title h1 span{color:#06b6d4}
+.header-meta{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+.meta-item{font-size:12px;color:#94a3b8}
+.meta-item strong{color:#cbd5e1}
+.header-badges{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Badges */
+.badge{padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.badge.green{background:#14532d;color:#4ade80;border:1px solid #16a34a}
+.badge.yellow{background:#713f12;color:#fbbf24;border:1px solid #d97706}
+.badge.red{background:#450a0a;color:#fca5a5;border:1px solid #b91c1c}
+.badge.blue{background:#1e3a5f;color:#93c5fd;border:1px solid #2563eb}
+.badge.gray{background:#1e293b;color:#94a3b8;border:1px solid #334155}
+.badge.cyan{background:#0e4e5f;color:#67e8f9;border:1px solid #0891b2}
+
+/* AI Summary */
+.ai-summary{background:#1e293b;border:1px solid #334155;border-left:3px solid #a855f7;border-radius:8px;padding:16px 20px;margin-bottom:28px}
+.ai-summary .ai-icon{color:#a855f7;font-size:16px;margin-right:8px}
+.ai-summary p{color:#cbd5e1;font-style:italic;font-size:13px}
+
+/* Sections */
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;user-select:none}
+.section-header h2{font-size:16px;font-weight:600;color:#e2e8f0}
+.chevron{color:#64748b;transition:transform 0.2s;font-size:12px}
+.chevron.open{transform:rotate(90deg)}
+.section-body{transition:all 0.2s}
+
+/* KPI Grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.kpi-card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:16px;cursor:default;position:relative}
+.kpi-card:hover{border-color:#06b6d4;transform:translateY(-1px);transition:all 0.15s}
+.kpi-val{font-size:28px;font-weight:700;color:#e2e8f0;line-height:1.1}
+.kpi-val.cyan{color:#06b6d4}
+.kpi-val.green{color:#22c55e}
+.kpi-val.yellow{color:#eab308}
+.kpi-val.red{color:#ef4444}
+.kpi-val.orange{color:#f97316}
+.kpi-label{font-size:11px;color:#94a3b8;margin-top:4px;margin-bottom:6px}
+.kpi-compare{font-size:10px;color:#64748b}
+.delta{padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;margin-right:4px}
+.delta.pos{background:#14532d;color:#4ade80}
+.delta.neg{background:#450a0a;color:#fca5a5}
+.delta.neutral{background:#1e293b;color:#94a3b8}
+
+/* Tooltip */
+[data-tip]{position:relative}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#334155;color:#e2e8f0;padding:6px 10px;border-radius:6px;font-size:11px;white-space:nowrap;z-index:100;border:1px solid #475569;pointer-events:none;max-width:250px;white-space:normal;text-align:center}
+
+/* Cards row */
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cards-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:768px){.cards-row,.cards-row-3{grid-template-columns:1fr}}
+.card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px}
+.card h3{font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#0f172a;color:#94a3b8;padding:8px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #334155}
+td{padding:8px 12px;border-bottom:1px solid #1e293b;color:#cbd5e1;vertical-align:middle}
+tr:hover td{background:#1e293b}
+.issue-link{color:#06b6d4;text-decoration:none;font-size:12px;font-weight:600}
+.issue-link:hover{text-decoration:underline}
+
+/* Progress bar */
+.prog-bar{height:8px;background:#0f172a;border-radius:4px;overflow:hidden;min-width:80px}
+.prog-fill{height:100%;border-radius:4px;transition:width 0.3s}
+
+/* Status chips */
+.chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500}
+.chip.done{background:#14532d;color:#4ade80}
+.chip.review{background:#713f12;color:#fbbf24}
+.chip.progress{background:#1e3a5f;color:#93c5fd}
+.chip.hold{background:#431407;color:#fb923c}
+.chip.backlog{background:#1e293b;color:#94a3b8}
+.chip.accepted{background:#14532d;color:#4ade80}
+
+/* Scope creep */
+.scope-stat{display:flex;align-items:center;gap:16px;padding:16px;background:#1e293b;border-radius:8px;border:1px solid #334155;margin-bottom:14px}
+.scope-num{font-size:32px;font-weight:700;color:#eab308}
+.scope-label{font-size:12px;color:#94a3b8}
+
+/* Chart container */
+.chart-wrap{background:#0f172a;border-radius:8px;padding:16px;overflow-x:auto}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#94a3b8}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* Rate colored */
+.rate-green{color:#22c55e;font-weight:600}
+.rate-yellow{color:#eab308;font-weight:600}
+.rate-red{color:#ef4444;font-weight:600}
+
+/* Status dist bar */
+.status-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.status-bar-label{width:140px;font-size:11px;color:#cbd5e1;flex-shrink:0}
+.status-bar-outer{flex:1;height:14px;background:#0f172a;border-radius:3px;overflow:hidden}
+.status-bar-inner{height:100%;border-radius:3px}
+.status-bar-count{width:30px;text-align:right;font-size:11px;color:#94a3b8}
+
+/* Type dist */
+.type-items{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.type-item{display:flex;align-items:center;gap:10px}
+.type-label{width:130px;font-size:12px;color:#cbd5e1}
+.type-bar{flex:1;height:12px;background:#0f172a;border-radius:3px;overflow:hidden}
+.type-bar-fill{height:100%;border-radius:3px;background:#3b82f6}
+.type-count{width:30px;text-align:right;font-size:11px;color:#94a3b8}
+
+/* Member SVG bar */
+.member-bar-container{display:flex;align-items:center;gap:8px}
+.member-name-col{width:160px;font-size:12px;color:#cbd5e1;flex-shrink:0}
+.member-stacked{flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden}
+.member-stacked div{height:100%}
+.member-pct{width:45px;text-align:right;font-size:11px}
+
+/* Footer */
+.footer{margin-top:40px;padding-top:20px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer p{font-size:11px;color:#475569}
+.footer a{color:#06b6d4;text-decoration:none}
+
+/* Health grid */
+.health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.health-grid{grid-template-columns:1fr}}
+.health-card{background:#1e293b;border-radius:8px;padding:16px;text-align:center;border:1px solid #334155}
+.health-card .h-icon{font-size:24px;margin-bottom:8px}
+.health-card .h-label{font-size:11px;color:#94a3b8;margin-bottom:6px}
+.health-card .h-val{font-size:15px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-title">
+      <h1>PLAT / <span>Sprint 51</span> — повні інженіри</h1>
+      <div class="header-meta">
+        <span class="meta-item"><strong>Дати:</strong> 9 квітня — 22 квітня 2026</span>
+        <span class="meta-item"><strong>Генеровано:</strong> 2026-04-23</span>
+        <span class="meta-item"><strong>Задач:</strong> 118</span>
+        <span class="meta-item"><strong>Команда:</strong> 14 учасників</span>
+      </div>
+    </div>
+    <div class="header-badges">
+      <span class="badge yellow">Уваги</span>
+      <span class="badge cyan">Sprint 51</span>
+      <span class="badge yellow">62.7% виконано</span>
+      <a href="https://newsiteam.atlassian.net/jira/software/c/projects/PLAT/boards/214" target="_blank" class="badge blue">Jira Board ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- AI SUMMARY -->
+<div class="ai-summary">
+  <span class="ai-icon">🤖</span>
+  <p>Спринт потребує уваги: 62.7% завершено (−32.1pp vs середньої). 16 задач залишається в ревью, 8 в роботі. Рекомендація: провести ретроспективу по причинам незакриття 19 backlog-задач.</p>
+</div>
+
+<!-- HEALTH OVERVIEW -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Health Overview</h2>
+  </div>
+  <div class="section-body">
+    <div class="health-grid">
+      <div class="health-card">
+        <div class="h-icon">⚠️</div>
+        <div class="h-label">Completion Rate</div>
+        <div class="h-val rate-yellow">62.7%</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px"><span class="badge yellow">Уваги</span></div>
+      </div>
+      <div class="health-card">
+        <div class="h-icon">⬇️</div>
+        <div class="h-label">Velocity Trend</div>
+        <div class="h-val rate-red">74 / 118</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px"><span class="badge red">Критичний</span></div>
+      </div>
+      <div class="health-card">
+        <div class="h-icon">📌</div>
+        <div class="h-label">Scope Creep</div>
+        <div class="h-val rate-yellow">12.7%</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px"><span class="badge yellow">Уваги</span></div>
+      </div>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>S51 — найнижчий completion rate за 7 спринтів: 62.7% (−32.1pp від медіани 94.8%). Зі 118 задач закрито лише 74. Незакриті: 16 у review, 8 in progress, 19 у backlog-стані. Паралельно scope creep досяг критичних 18.6%.</p>
+    </div>
+  </div>
+</div>
+
+<!-- KPI SUMMARY -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron">▶</span>
+    <h2>KPI Summary</h2>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="kpi-grid">
+      <div class="kpi-card" data-tip="Загальна кількість задач у спринті">
+        <div class="kpi-val cyan">118</div>
+        <div class="kpi-label">Всього задач</div>
+        <div class="kpi-compare"><span class="delta neg">-43</span> vs S50 (161)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі зі статусом ACCEPTED, Done, Done Security">
+        <div class="kpi-val green">74</div>
+        <div class="kpi-label">Завершено</div>
+        <div class="kpi-compare"><span class="delta neg">-63</span> vs S50 (137)</div>
+      </div>
+      <div class="kpi-card" data-tip="Відсоток завершених задач від загальної кількості">
+        <div class="kpi-val yellow">62.7%</div>
+        <div class="kpi-label">Completion Rate</div>
+        <div class="kpi-compare"><span class="delta neg">-22.39999999999999</span> vs S50 (85.1%)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі в Under Review, Code review, In Testing, Ready for deploy">
+        <div class="kpi-val yellow">16</div>
+        <div class="kpi-label">В ревью</div>
+        <div class="kpi-compare"><span class="delta neg">+8</span> vs S50 (8)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі зі статусом In progress">
+        <div class="kpi-val blue">8</div>
+        <div class="kpi-label">В роботі</div>
+        <div class="kpi-compare"><span class="delta neg">+7</span> vs S50 (1)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі зі статусом On hold / Blocked">
+        <div class="kpi-val orange">1</div>
+        <div class="kpi-label">Заблоковано</div>
+        <div class="kpi-compare"><span class="delta neutral">=</span> vs S50 (1)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі що не розпочаті (To Do, Backlog, Open, Dev Backlog)">
+        <div class="kpi-val yellow">19</div>
+        <div class="kpi-label">Backlog</div>
+        <div class="kpi-compare"><span class="delta neg">+5</span> vs S50 (14)</div>
+      </div>
+      <div class="kpi-card" data-tip="Загальна кількість Story Points у спринті (customfield_10004)">
+        <div class="kpi-val purple">272</div>
+        <div class="kpi-label">Total SP</div>
+        <div class="kpi-compare"><span class="delta neg">-147</span> vs S50 (419)</div>
+      </div>
+      <div class="kpi-card" data-tip="SP завершених задач / Total SP * 100">
+        <div class="kpi-val yellow">50.4%</div>
+        <div class="kpi-label">SP Completion</div>
+        <div class="kpi-compare"><span class="delta neg">-36.00000000000001</span> vs S50 (86.4%)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі додані в спринт після дати старту (2026-04-09)">
+        <div class="kpi-val yellow">12.7%</div>
+        <div class="kpi-label">Scope Creep</div>
+        <div class="kpi-compare">15 задач додано після старту</div>
+      </div>
+      <div class="kpi-card" data-tip="Медіана часу від створення до завершення задачі">
+        <div class="kpi-val green">14д</div>
+        <div class="kpi-label">Median Lead Time</div>
+        <div class="kpi-compare">P90: 290д</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VELOCITY TREND -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Velocity Trend (S45–S51)</h2>
+  </div>
+  <div class="section-body">
+    <div class="card">
+      <div class="chart-wrap">
+        <svg width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.7"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.2"/></linearGradient>
+<linearGradient id="gr2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.9"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.4"/></linearGradient></defs><line x1="30" y1="20" x2="670" y2="20" stroke="#1e293b" stroke-width="1"/><text x="25" y="24" text-anchor="end" fill="#475569" font-size="9">161</text><line x1="30" y1="70" x2="670" y2="70" stroke="#1e293b" stroke-width="1"/><text x="25" y="74" text-anchor="end" fill="#475569" font-size="9">120</text><line x1="30" y1="120" x2="670" y2="120" stroke="#1e293b" stroke-width="1"/><text x="25" y="124" text-anchor="end" fill="#475569" font-size="9">80</text><line x1="30" y1="170" x2="670" y2="170" stroke="#1e293b" stroke-width="1"/><text x="25" y="174" text-anchor="end" fill="#475569" font-size="9">40</text><line x1="30" y1="220" x2="670" y2="220" stroke="#1e293b" stroke-width="1"/><text x="25" y="224" text-anchor="end" fill="#475569" font-size="9">0</text><rect x="16" y="94" width="32" height="136" fill="url(#gr1)" opacity="0.7" rx="3"><title>S45 Total: 110</title></rect><rect x="48" y="103" width="32" height="127" fill="url(#gr2)" opacity="0.7" rx="3"><title>S45 Done: 103</title></rect><text x="48" y="250" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="normal">S45</text><text x="64" y="99" text-anchor="middle" fill="#22c55e" font-size="8">93.6%</text><rect x="113" y="62" width="32" height="168" fill="url(#gr1)" opacity="0.7" rx="3"><title>S46 Total: 136</title></rect><rect x="145" y="65" width="32" height="165" fill="url(#gr2)" opacity="0.7" rx="3"><title>S46 Done: 133</title></rect><text x="145" y="250" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="normal">S46</text><text x="161" y="61" text-anchor="middle" fill="#22c55e" font-size="8">97.8%</text><rect x="210" y="69" width="32" height="161" fill="url(#gr1)" opacity="0.7" rx="3"><title>S47 Total: 130</title></rect><rect x="242" y="71" width="32" height="159" fill="url(#gr2)" opacity="0.7" rx="3"><title>S47 Done: 128</title></rect><text x="242" y="250" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="normal">S47</text><text x="258" y="67" text-anchor="middle" fill="#22c55e" font-size="8">98.5%</text><rect x="308" y="63" width="32" height="167" fill="url(#gr1)" opacity="0.7" rx="3"><title>S48 Total: 135</title></rect><rect x="340" y="71" width="32" height="159" fill="url(#gr2)" opacity="0.7" rx="3"><title>S48 Done: 128</title></rect><text x="340" y="250" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="normal">S48</text><text x="356" y="67" text-anchor="middle" fill="#22c55e" font-size="8">94.8%</text><rect x="405" y="105" width="32" height="125" fill="url(#gr1)" opacity="0.7" rx="3"><title>S49 Total: 101</title></rect><rect x="437" y="119" width="32" height="111" fill="url(#gr2)" opacity="0.7" rx="3"><title>S49 Done: 90</title></rect><text x="437" y="250" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="normal">S49</text><text x="453" y="115" text-anchor="middle" fill="#22c55e" font-size="8">89.1%</text><rect x="502" y="30" width="32" height="200" fill="url(#gr1)" opacity="0.7" rx="3"><title>S50 Total: 161</title></rect><rect x="534" y="60" width="32" height="170" fill="url(#gr2)" opacity="0.7" rx="3"><title>S50 Done: 137</title></rect><text x="534" y="250" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="normal">S50</text><text x="550" y="56" text-anchor="middle" fill="#22c55e" font-size="8">85.1%</text><rect x="599" y="84" width="32" height="146" fill="url(#gr1)" opacity="1" rx="3"><title>S51 Total: 118</title></rect><rect x="631" y="139" width="32" height="91" fill="url(#gr2)" opacity="1" rx="3"><title>S51 Done: 74</title></rect><text x="631" y="250" text-anchor="middle" fill="#06b6d4" font-size="11" font-weight="bold">S51</text><text x="647" y="135" text-anchor="middle" fill="#22c55e" font-size="8">62.7%</text><rect x="40" y="205" width="12" height="10" fill="#3b82f6" opacity="0.7" rx="2"/>
+<text x="56" y="214" fill="#94a3b8" font-size="9">Всього</text>
+<rect x="110" y="205" width="12" height="10" fill="#22c55e" opacity="0.8" rx="2"/>
+<text x="126" y="214" fill="#94a3b8" font-size="9">Завершено</text></svg>
+      </div>
+      <div class="legend" style="margin-top:12px">
+        <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Всього задач</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Завершено</div>
+      </div>
+      <div style="margin-top:12px;overflow-x:auto">
+        <table>
+          <tr><th>Спринт</th><th>Всього</th><th>Завершено</th><th>Rate</th><th>SP Total</th><th>SP Done</th></tr>
+          <tr><td><strong>S45</strong></td><td>110</td><td>103</td><td class='rate-green'>93.6%</td><td>279</td><td>279</td></tr><tr><td><strong>S46</strong></td><td>136</td><td>133</td><td class='rate-green'>97.8%</td><td>375</td><td>375</td></tr><tr><td><strong>S47</strong></td><td>130</td><td>128</td><td class='rate-green'>98.5%</td><td>334</td><td>334</td></tr><tr><td><strong>S48</strong></td><td>135</td><td>128</td><td class='rate-green'>94.8%</td><td>330</td><td>309</td></tr><tr><td><strong>S49</strong></td><td>101</td><td>90</td><td class='rate-green'>89.1%</td><td>242</td><td>219</td></tr><tr><td><strong>S50</strong></td><td>161</td><td>137</td><td class='rate-green'>85.1%</td><td>419</td><td>362</td></tr><tr style="background:#1e293b"><td><strong>S51</strong></td><td>118</td><td>74</td><td class='rate-yellow'>62.7%</td><td>272</td><td>137</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>Третій спринт поспіль зі спадним velocity. S45–S47 тримали >93%, з S49 розпочався стійкий спад: 89.1% → 85.1% → 62.7%. SP: заплановано 272, завершено лише 137 (50.4%). Різке падіння між S50 і S51 більше, ніж сумарне за попередні 3 спринти.</p>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS & PRIORITY DISTRIBUTION -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron">▶</span>
+    <h2>Розподіл за статусом та пріоритетом</h2>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="cards-row">
+      <div class="card">
+        <h3>Статуси</h3>
+        <div style="display:flex;gap:20px;align-items:flex-start">
+          <div style="flex-shrink:0"><svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"><path d="M 110.0 58.0 L 110.0 30.0 A 80 80 0 0 1 161.06 171.59 L 143.19 150.03 A 52 52 0 0 0 110.0 58.0 Z" fill="#22c55e" opacity="0.9"><title>ACCEPTED: 46</title></path><path d="M 143.19 150.03 L 161.06 171.59 A 80 80 0 0 1 88.95 187.18 L 96.32 160.17 A 52 52 0 0 0 143.19 150.03 Z" fill="#16a34a" opacity="0.9"><title>Done Security: 18</title></path><path d="M 96.32 160.17 L 88.95 187.18 A 80 80 0 0 1 52.68 165.81 L 72.74 146.28 A 52 52 0 0 0 96.32 160.17 Z" fill="#4ade80" opacity="0.9"><title>Done: 10</title></path><path d="M 72.74 146.28 L 52.68 165.81 A 80 80 0 0 1 33.41 133.1 L 60.21 125.01 A 52 52 0 0 0 72.74 146.28 Z" fill="#eab308" opacity="0.9"><title>Under Review: 9</title></path><path d="M 60.21 125.01 L 33.41 133.1 A 80 80 0 0 1 31.39 95.18 L 58.9 100.36 A 52 52 0 0 0 60.21 125.01 Z" fill="#64748b" opacity="0.9"><title>Open: 9</title></path><path d="M 58.9 100.36 L 31.39 95.18 A 80 80 0 0 1 44.54 64.02 L 67.45 80.11 A 52 52 0 0 0 58.9 100.36 Z" fill="#3b82f6" opacity="0.9"><title>In progress: 8</title></path><path d="M 67.45 80.11 L 44.54 64.02 A 80 80 0 0 1 55.74 51.22 L 74.73 71.79 A 52 52 0 0 0 67.45 80.11 Z" fill="#f59e0b" opacity="0.9"><title>Ready for deploy: 4</title></path><path d="M 74.73 71.79 L 55.74 51.22 A 80 80 0 0 1 65.78 43.33 L 81.25 66.67 A 52 52 0 0 0 74.73 71.79 Z" fill="#475569" opacity="0.9"><title>To Do: 3</title></path><path d="M 81.25 66.67 L 65.78 43.33 A 80 80 0 0 1 76.94 37.15 L 88.51 62.65 A 52 52 0 0 0 81.25 66.67 Z" fill="#334155" opacity="0.9"><title>Dev Backlog: 3</title></path><path d="M 88.51 62.65 L 76.94 37.15 A 80 80 0 0 1 88.95 32.82 L 96.32 59.83 A 52 52 0 0 0 88.51 62.65 Z" fill="#1e293b" opacity="0.9"><title>Backlog: 3</title></path><path d="M 96.32 59.83 L 88.95 32.82 A 80 80 0 0 1 97.27 31.02 L 101.73 58.66 A 52 52 0 0 0 96.32 59.83 Z" fill="#fde047" opacity="0.9"><title>In Testing: 2</title></path><path d="M 101.73 58.66 L 97.27 31.02 A 80 80 0 0 1 101.5 30.45 L 104.47 58.29 A 52 52 0 0 0 101.73 58.66 Z" fill="#facc15" opacity="0.9"><title>Code review: 1</title></path><path d="M 104.47 58.29 L 101.5 30.45 A 80 80 0 0 1 105.74 30.11 L 107.23 58.07 A 52 52 0 0 0 104.47 58.29 Z" fill="#475569" opacity="0.9"><title>Ready for Dev: 1</title></path><path d="M 107.23 58.07 L 105.74 30.11 A 80 80 0 0 1 110.0 30.0 L 110.0 58.0 A 52 52 0 0 0 107.23 58.07 Z" fill="#f97316" opacity="0.9"><title>On hold: 1</title></path><text x="110" y="104" text-anchor="middle" fill="#e2e8f0" font-size="22" font-weight="bold">118</text><text x="110" y="124" text-anchor="middle" fill="#94a3b8" font-size="10">задач</text></svg></div>
+          <div style="flex:1">
+            <div class="status-bar-row">
+                <div class="status-bar-label">ACCEPTED</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:39.0%;background:#22c55e"></div></div>
+                <div class="status-bar-count">46</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Done Security</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:15.3%;background:#16a34a"></div></div>
+                <div class="status-bar-count">18</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Done</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:8.5%;background:#4ade80"></div></div>
+                <div class="status-bar-count">10</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Under Review</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:7.6%;background:#eab308"></div></div>
+                <div class="status-bar-count">9</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Open</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:7.6%;background:#64748b"></div></div>
+                <div class="status-bar-count">9</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">In progress</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:6.8%;background:#3b82f6"></div></div>
+                <div class="status-bar-count">8</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Ready for deploy</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:3.4%;background:#f59e0b"></div></div>
+                <div class="status-bar-count">4</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">To Do</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:2.5%;background:#475569"></div></div>
+                <div class="status-bar-count">3</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Dev Backlog</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:2.5%;background:#334155"></div></div>
+                <div class="status-bar-count">3</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Backlog</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:2.5%;background:#1e293b"></div></div>
+                <div class="status-bar-count">3</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">In Testing</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:1.7%;background:#fde047"></div></div>
+                <div class="status-bar-count">2</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Code review</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:0.8%;background:#facc15"></div></div>
+                <div class="status-bar-count">1</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Ready for Dev</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:0.8%;background:#475569"></div></div>
+                <div class="status-bar-count">1</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">On hold</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:0.8%;background:#f97316"></div></div>
+                <div class="status-bar-count">1</div>
+              </div>
+          </div>
+        </div>
+        <div class="legend" style="margin-top:8px">
+          <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Завершено: 74</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div>В ревью: 16</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>В роботі: 8</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>Заблоковано: 1</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#64748b"></div>Backlog: 19</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Пріоритети та типи задач</h3>
+        <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:16px">
+          <div style="flex-shrink:0"><svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><path d="M 90.0 45.0 L 90.0 20.0 A 70 70 0 0 1 97.44 20.4 L 94.78 45.25 A 45 45 0 0 0 90.0 45.0 Z" fill="#ef4444" opacity="0.9"><title>Critical: 2</title></path><path d="M 94.78 45.25 L 97.44 20.4 A 70 70 0 0 1 131.75 33.81 L 116.84 53.88 A 45 45 0 0 0 94.78 45.25 Z" fill="#f97316" opacity="0.9"><title>High: 10</title></path><path d="M 116.84 53.88 L 131.75 33.81 A 70 70 0 1 1 86.27 20.1 L 87.61 45.06 A 45 45 0 1 0 116.84 53.88 Z" fill="#3b82f6" opacity="0.9"><title>Medium: 105</title></path><path d="M 87.61 45.06 L 86.27 20.1 A 70 70 0 0 1 90.0 20.0 L 90.0 45.0 A 45 45 0 0 0 87.61 45.06 Z" fill="#22c55e" opacity="0.9"><title>Low: 1</title></path><text x="90" y="95" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="bold">118</text></svg></div>
+          <div style="flex:1">
+            <div class="status-bar-row">
+                <div class="status-bar-label">Critical</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:1.7%;background:#ef4444"></div></div>
+                <div class="status-bar-count">2</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">High</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:8.5%;background:#f97316"></div></div>
+                <div class="status-bar-count">10</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Medium</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:89.0%;background:#3b82f6"></div></div>
+                <div class="status-bar-count">105</div>
+              </div><div class="status-bar-row">
+                <div class="status-bar-label">Low</div>
+                <div class="status-bar-outer"><div class="status-bar-inner" style="width:0.8%;background:#22c55e"></div></div>
+                <div class="status-bar-count">1</div>
+              </div>
+          </div>
+        </div>
+        <h3 style="margin-top:12px">Типи задач</h3>
+        <div class="type-items">
+          <div class="type-item">
+              <div class="type-label">Task/Story</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:100.0%;background:#3b82f6"></div></div>
+              <div class="type-count">40</div>
+            </div><div class="type-item">
+              <div class="type-label">Security</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:90.0%;background:#a855f7"></div></div>
+              <div class="type-count">36</div>
+            </div><div class="type-item">
+              <div class="type-label">QA</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:47.5%;background:#eab308"></div></div>
+              <div class="type-count">19</div>
+            </div><div class="type-item">
+              <div class="type-label">Bug</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:27.5%;background:#ef4444"></div></div>
+              <div class="type-count">11</div>
+            </div><div class="type-item">
+              <div class="type-label">Technical debt</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:12.5%;background:#64748b"></div></div>
+              <div class="type-count">5</div>
+            </div><div class="type-item">
+              <div class="type-label">Sub-task/Other</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:10.0%;background:#64748b"></div></div>
+              <div class="type-count">4</div>
+            </div><div class="type-item">
+              <div class="type-label">Research</div>
+              <div class="type-bar"><div class="type-bar-fill" style="width:7.5%;background:#64748b"></div></div>
+              <div class="type-count">3</div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM ANALYTICS -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron">▶</span>
+    <h2>Team Analytics</h2>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="card" style="margin-bottom:16px">
+      <h3>Розподіл по учасниках</h3>
+      <div style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Artem Kuchma</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:78.6%;background:#22c55e" title="Done: 22"></div>
+              <div style="width:10.7%;background:#eab308" title="Review: 3"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:10.7%;background:#334155" title="Backlog: 3"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">78.6%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Unassigned</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:14.3%;background:#22c55e" title="Done: 2"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:85.7%;background:#334155" title="Backlog: 12"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#ef4444">14.3%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Oleksandr Menchynskyi</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:63.6%;background:#22c55e" title="Done: 7"></div>
+              <div style="width:18.2%;background:#eab308" title="Review: 2"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:9.1%;background:#f97316" title="On Hold: 1"></div>
+              <div style="width:9.1%;background:#334155" title="Backlog: 1"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#eab308">63.6%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Olena Samoilova</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:33.3%;background:#22c55e" title="Done: 3"></div>
+              <div style="width:44.4%;background:#eab308" title="Review: 4"></div>
+              <div style="width:22.2%;background:#3b82f6" title="In Progress: 2"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#ef4444">33.3%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">mariia.khmilovska</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:44.4%;background:#22c55e" title="Done: 4"></div>
+              <div style="width:33.3%;background:#eab308" title="Review: 3"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:22.2%;background:#334155" title="Backlog: 2"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#eab308">44.4%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Andrii Marusiak</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:87.5%;background:#22c55e" title="Done: 7"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:12.5%;background:#3b82f6" title="In Progress: 1"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">87.5%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Oksana Zhyrak</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:87.5%;background:#22c55e" title="Done: 7"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:12.5%;background:#3b82f6" title="In Progress: 1"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">87.5%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Vadym Perkin</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:85.7%;background:#22c55e" title="Done: 6"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:14.3%;background:#3b82f6" title="In Progress: 1"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">85.7%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Yehor Kaliuzhnyi</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:57.1%;background:#22c55e" title="Done: 4"></div>
+              <div style="width:28.6%;background:#eab308" title="Review: 2"></div>
+              <div style="width:14.3%;background:#3b82f6" title="In Progress: 1"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#eab308">57.1%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Emiliia Voronova</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:100.0%;background:#22c55e" title="Done: 5"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">100.0%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Daiana Dziublyk</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:25.0%;background:#22c55e" title="Done: 1"></div>
+              <div style="width:50.0%;background:#eab308" title="Review: 2"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:25.0%;background:#334155" title="Backlog: 1"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#ef4444">25.0%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Oleksandr Poshyvailov</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:75.0%;background:#22c55e" title="Done: 3"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:25.0%;background:#3b82f6" title="In Progress: 1"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">75.0%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Anton Hrechynskyi</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:50.0%;background:#22c55e" title="Done: 1"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:50.0%;background:#3b82f6" title="In Progress: 1"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#eab308">50.0%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Dmytro Soroka</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:100.0%;background:#22c55e" title="Done: 1"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">100.0%</div>
+          </div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:155px;font-size:12px;color:#cbd5e1;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">olena.pizniak</div>
+            <div style="flex:1;height:16px;display:flex;border-radius:3px;overflow:hidden">
+              <div style="width:100.0%;background:#22c55e" title="Done: 1"></div>
+              <div style="width:0.0%;background:#eab308" title="Review: 0"></div>
+              <div style="width:0.0%;background:#3b82f6" title="In Progress: 0"></div>
+              <div style="width:0.0%;background:#f97316" title="On Hold: 0"></div>
+              <div style="width:0.0%;background:#334155" title="Backlog: 0"></div>
+            </div>
+            <div style="width:38px;text-align:right;font-size:11px;color:#22c55e">100.0%</div>
+          </div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Done</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div>In Review</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>In Progress</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>On Hold</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#334155"></div>Backlog</div>
+      </div>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <tr>
+          <th data-tip="Ім'я учасника">Учасник</th>
+          <th data-tip="Загальна кількість задач">Всього</th>
+          <th data-tip="Завершені задачі">Завершено</th>
+          <th data-tip="В ревью">Ревью</th>
+          <th data-tip="В роботі">Прогрес</th>
+          <th data-tip="Заблоковані/On Hold">Блок</th>
+          <th data-tip="Backlog/To Do">Backlog</th>
+          <th data-tip="Відсоток завершення">Rate</th>
+          <th data-tip="Story Points (виконані/всього)">SP</th>
+          <th data-tip="High + Critical задачі">High/Crit</th>
+          <th data-tip="Прогрес-бар">Прогрес</th>
+        </tr>
+        <tr>
+            <td><strong>Artem Kuchma</strong></td>
+            <td>28</td>
+            <td>22</td>
+            <td>3</td>
+            <td>0</td>
+            <td>0</td>
+            <td>3</td>
+            <td class="rate-green">78.6%</td>
+            <td>13/20</td>
+            <td style="color:#ef4444">3</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:78.6%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>Unassigned</strong></td>
+            <td>14</td>
+            <td>2</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>12</td>
+            <td class="rate-red">14.3%</td>
+            <td>0/3</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:14.3%;background:#ef4444"></div></div></td>
+          </tr><tr>
+            <td><strong>Oleksandr Menchynskyi</strong></td>
+            <td>11</td>
+            <td>7</td>
+            <td>2</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td class="rate-yellow">63.6%</td>
+            <td>3/37</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:63.6%;background:#eab308"></div></div></td>
+          </tr><tr>
+            <td><strong>Olena Samoilova</strong></td>
+            <td>9</td>
+            <td>3</td>
+            <td>4</td>
+            <td>2</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-red">33.3%</td>
+            <td>0/0</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:33.3%;background:#ef4444"></div></div></td>
+          </tr><tr>
+            <td><strong>mariia.khmilovska</strong></td>
+            <td>9</td>
+            <td>4</td>
+            <td>3</td>
+            <td>0</td>
+            <td>0</td>
+            <td>2</td>
+            <td class="rate-yellow">44.4%</td>
+            <td>22/63</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:44.4%;background:#eab308"></div></div></td>
+          </tr><tr>
+            <td><strong>Andrii Marusiak</strong></td>
+            <td>8</td>
+            <td>7</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">87.5%</td>
+            <td>19/27</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:87.5%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>Oksana Zhyrak</strong></td>
+            <td>8</td>
+            <td>7</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">87.5%</td>
+            <td>0/0</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:87.5%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>Vadym Perkin</strong></td>
+            <td>7</td>
+            <td>6</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">85.7%</td>
+            <td>33/41</td>
+            <td style="color:#ef4444">6</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:85.7%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>Yehor Kaliuzhnyi</strong></td>
+            <td>7</td>
+            <td>4</td>
+            <td>2</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-yellow">57.1%</td>
+            <td>21/52</td>
+            <td style="color:#f97316">1</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:57.1%;background:#eab308"></div></div></td>
+          </tr><tr>
+            <td><strong>Emiliia Voronova</strong></td>
+            <td>5</td>
+            <td>5</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">100.0%</td>
+            <td>26/26</td>
+            <td style="color:#f97316">2</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:100.0%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>Daiana Dziublyk</strong></td>
+            <td>4</td>
+            <td>1</td>
+            <td>2</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td class="rate-red">25.0%</td>
+            <td>0/0</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:25.0%;background:#ef4444"></div></div></td>
+          </tr><tr>
+            <td><strong>Oleksandr Poshyvailov</strong></td>
+            <td>4</td>
+            <td>3</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">75.0%</td>
+            <td>0/3</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:75.0%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>Anton Hrechynskyi</strong></td>
+            <td>2</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-yellow">50.0%</td>
+            <td>0/0</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:50.0%;background:#eab308"></div></div></td>
+          </tr><tr>
+            <td><strong>Dmytro Soroka</strong></td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">100.0%</td>
+            <td>0/0</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:100.0%;background:#22c55e"></div></div></td>
+          </tr><tr>
+            <td><strong>olena.pizniak</strong></td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="rate-green">100.0%</td>
+            <td>0/0</td>
+            <td style="color:#64748b">0</td>
+            <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:100.0%;background:#22c55e"></div></div></td>
+          </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SCOPE CREEP -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Scope Creep Analysis</h2>
+  </div>
+  <div class="section-body">
+    <div class="scope-stat">
+      <div>
+        <div class="scope-num">22</div>
+        <div class="scope-label">задач додано після старту спринту</div>
+      </div>
+      <div style="font-size:32px;font-weight:700;color:#ef4444">18.6%</div>
+      <div>
+        <div class="scope-label">від загальної кількості</div>
+        <div style="margin-top:4px"><span class="badge red">Критично</span></div>
+      </div>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <tr><th>Key</th><th>Summary</th><th>Assignee</th><th>Додано</th><th>+Днів</th><th>Статус</th></tr>
+        <tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5204" target="_blank" class="issue-link">PLAT-5204</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition FE architecture builder POC</td>
+            <td style="font-size:12px">Andrii Marusiak</td>
+            <td>2026-04-10</td>
+            <td style="color:#f97316">+1д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-3694" target="_blank" class="issue-link">PLAT-3694</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] > Configure Platform BE stage env</td>
+            <td style="font-size:12px">Artem Kuchma</td>
+            <td>2026-04-14</td>
+            <td style="color:#f97316">+5д</td>
+            <td><span class="chip backlog">To Do</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5214" target="_blank" class="issue-link">PLAT-5214</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[MFE] Adjust Apollo Graph with dynamic schema for local development</td>
+            <td style="font-size:12px">Andrii Marusiak</td>
+            <td>2026-04-16</td>
+            <td style="color:#ef4444">+7д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5219" target="_blank" class="issue-link">PLAT-5219</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Theoretical knowledge] TypeScript Specifics and Usage</td>
+            <td style="font-size:12px">Oksana Zhyrak</td>
+            <td>2026-04-16</td>
+            <td style="color:#ef4444">+7д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5218" target="_blank" class="issue-link">PLAT-5218</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Theoretical knowledge] Modules + DOM</td>
+            <td style="font-size:12px">Oksana Zhyrak</td>
+            <td>2026-04-16</td>
+            <td style="color:#ef4444">+7д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4483" target="_blank" class="issue-link">PLAT-4483</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] [Platform] Implement scheduled runs for production on new CI/CD.</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-16</td>
+            <td style="color:#ef4444">+7д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-2820" target="_blank" class="issue-link">PLAT-2820</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE TD] [Sentry] Amplitude invalid user_ids given for app</td>
+            <td style="font-size:12px">Artem Kuchma</td>
+            <td>2026-04-16</td>
+            <td style="color:#ef4444">+7д</td>
+            <td><span class="chip done">Done</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5220" target="_blank" class="issue-link">PLAT-5220</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] iFrame POC in Quiz</td>
+            <td style="font-size:12px">Yehor Kaliuzhnyi</td>
+            <td>2026-04-17</td>
+            <td style="color:#ef4444">+8д</td>
+            <td><span class="chip done">Done</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4978" target="_blank" class="issue-link">PLAT-4978</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] [Academy] PDR removes User ID from Amplitude profile but leaves event data</td>
+            <td style="font-size:12px">Artem Kuchma</td>
+            <td>2026-04-17</td>
+            <td style="color:#ef4444">+8д</td>
+            <td><span class="chip review">In Testing</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5216" target="_blank" class="issue-link">PLAT-5216</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Link Questionnaire to Website Project for generated page rendering</td>
+            <td style="font-size:12px">mariia.khmilovska</td>
+            <td>2026-04-17</td>
+            <td style="color:#ef4444">+8д</td>
+            <td><span class="chip review">Ready for deploy</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4390" target="_blank" class="issue-link">PLAT-4390</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Theoretical knowledge] Playwright part</td>
+            <td style="font-size:12px">Oksana Zhyrak</td>
+            <td>2026-04-21</td>
+            <td style="color:#ef4444">+12д</td>
+            <td><span class="chip progress">In progress</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5100" target="_blank" class="issue-link">PLAT-5100</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Acquisition funnel. Prompts page, landing</td>
+            <td style="font-size:12px">Anton Hrechynskyi</td>
+            <td>2026-04-21</td>
+            <td style="color:#ef4444">+12д</td>
+            <td><span class="chip progress">In progress</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5262" target="_blank" class="issue-link">PLAT-5262</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Builder Redesign - Navigation and Layout</td>
+            <td style="font-size:12px">Andrii Marusiak</td>
+            <td>2026-04-22</td>
+            <td style="color:#ef4444">+13д</td>
+            <td><span class="chip progress">In progress</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5263" target="_blank" class="issue-link">PLAT-5263</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition POC</td>
+            <td style="font-size:12px">Yehor Kaliuzhnyi</td>
+            <td>2026-04-22</td>
+            <td style="color:#ef4444">+13д</td>
+            <td><span class="chip progress">In progress</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5068" target="_blank" class="issue-link">PLAT-5068</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Pages for Creator Website (query websitePageByPath)</td>
+            <td style="font-size:12px">mariia.khmilovska</td>
+            <td>2026-04-22</td>
+            <td style="color:#ef4444">+13д</td>
+            <td><span class="chip review">Ready for deploy</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5075" target="_blank" class="issue-link">PLAT-5075</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Checkout Page AI-generation</td>
+            <td style="font-size:12px">mariia.khmilovska</td>
+            <td>2026-04-09</td>
+            <td style="color:#94a3b8">+0д</td>
+            <td><span class="chip backlog">Backlog</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5213" target="_blank" class="issue-link">PLAT-5213</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] Adjust tests for new main*. prod account.</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-16</td>
+            <td style="color:#ef4444">+7д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5251" target="_blank" class="issue-link">PLAT-5251</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] Cover "Thank you page" suite for Platform regression (Critical)</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-20</td>
+            <td style="color:#ef4444">+11д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5255" target="_blank" class="issue-link">PLAT-5255</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] Move Cursor automation to new shared team account.</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-20</td>
+            <td style="color:#ef4444">+11д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5256" target="_blank" class="issue-link">PLAT-5256</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] [HC] Help HC team to set up initial Playwright framework.</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-21</td>
+            <td style="color:#ef4444">+12д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5261" target="_blank" class="issue-link">PLAT-5261</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] [HC] Bootstrap smoke tests & parallel execution setup.</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-22</td>
+            <td style="color:#ef4444">+13д</td>
+            <td><span class="chip progress">In progress</span></td>
+          </tr><tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5266" target="_blank" class="issue-link">PLAT-5266</a></td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] Support PROD migration with autotests.</td>
+            <td style="font-size:12px">Vadym Perkin</td>
+            <td>2026-04-22</td>
+            <td style="color:#ef4444">+13д</td>
+            <td><span class="chip done">ACCEPTED</span></td>
+          </tr>
+      </table>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>18.6% scope creep — вдвічі вище критичного порогу (10%). 7 із 22 доданих задач — AQA (Vadym Perkin), всі створені безпосередньо під час спринту без sprint planning. Пік: +12–13 днів від старту. Рекомендація: AQA задачі для HC-команди планувати заздалегідь або резервувати окремий capacity-буфер.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- REMOVED FROM SPRINT -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Викинуто зі спринту</h2>
+  </div>
+  <div class="section-body">
+    <div class="scope-stat" style="border-left:3px solid #a855f7">
+      <div>
+        <div class="scope-num" style="color:#a855f7">18</div>
+        <div class="scope-label">задач видалено зі спринту</div>
+      </div>
+      <div style="font-size:24px;font-weight:700;color:#64748b">111 SP</div>
+      <div>
+        <div class="scope-label" style="margin-bottom:8px">Куди переміщено:</div>
+        <span class='badge gray' style='margin-right:6px'>Platform_S52: 17</span><span class='badge gray' style='margin-right:6px'>Sprint Candidate: 1</span>
+      </div>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <tr>
+          <th>Key</th><th>Summary</th><th>Assignee</th><th>Priority</th><th>Статус</th><th>Переміщено до</th><th>SP</th><th>Дата</th>
+        </tr>
+        <tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5138" target="_blank" class="issue-link">PLAT-5138</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Prepare for Demo</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">3</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5110" target="_blank" class="issue-link">PLAT-5110</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Influencers] ePrivacy settings — incorrect toggle behavior (for US location)</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#f97316;font-size:12px">High</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Sprint Candidate</td>
+  <td style="color:#64748b">6</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5096" target="_blank" class="issue-link">PLAT-5096</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Add field to project & creator entities to distinguish "Vibecoder" user</td>
+  <td style="font-size:12px">mariia.khmilovska</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">3</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5073" target="_blank" class="issue-link">PLAT-5073</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition payment, email, signup</td>
+  <td style="font-size:12px">Yehor Kaliuzhnyi</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">—</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5072" target="_blank" class="issue-link">PLAT-5072</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition Checkout page. Controls, CTAs, triggers</td>
+  <td style="font-size:12px">Yehor Kaliuzhnyi</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">—</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4837" target="_blank" class="issue-link">PLAT-4837</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE TD] [Sentry] > Fix product list access updates for Input trackers</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#f97316;font-size:12px">High</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">8</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4827" target="_blank" class="issue-link">PLAT-4827</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE TD] [Sentry] > Failed to handle stripe webhook Pricing plan not found</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#f97316;font-size:12px">High</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">8</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4817" target="_blank" class="issue-link">PLAT-4817</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE TD] [Performance] > Revise retry configuration for BE exceptions in RabbitMq consumers</td>
+  <td style="font-size:12px">Artem Kuchma</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">To Do</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">5</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4641" target="_blank" class="issue-link">PLAT-4641</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Web app] No validation for AppName > 100 symbols on FE - silent fail for user</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">3</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4326" target="_blank" class="issue-link">PLAT-4326</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Academy, Platform] Fix null pricingPlanId in OrderChanged subscription</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">2</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5074" target="_blank" class="issue-link">PLAT-5074</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Theme AI-generation</td>
+  <td style="font-size:12px">mariia.khmilovska</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">8</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-09</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5071" target="_blank" class="issue-link">PLAT-5071</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition “AI-Loading” Page</td>
+  <td style="font-size:12px">Andrii Marusiak</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">—</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-14</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5089" target="_blank" class="issue-link">PLAT-5089</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">AI-generated creator website. Onboarding (welcome flow, home page)</td>
+  <td style="font-size:12px">Daiana Dziublyk</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip progress">In progress</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">—</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-16</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5077" target="_blank" class="issue-link">PLAT-5077</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] query aiWebsite</td>
+  <td style="font-size:12px">mariia.khmilovska</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">13</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-17</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5095" target="_blank" class="issue-link">PLAT-5095</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Navigation reorganization</td>
+  <td style="font-size:12px">Oleksandr Menchynskyi</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">13</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-21</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5070" target="_blank" class="issue-link">PLAT-5070</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition Prompt Page</td>
+  <td style="font-size:12px">Unassigned</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">13</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-21</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5067" target="_blank" class="issue-link">PLAT-5067</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Pages editor (sidebars, inputs, window-size update) w/o widgets</td>
+  <td style="font-size:12px">Oleksandr Menchynskyi</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">13</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-21</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5043" target="_blank" class="issue-link">PLAT-5043</a></td>
+  <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Widgets Customization</td>
+  <td style="font-size:12px">Oleksandr Menchynskyi</td>
+  <td style="color:#3b82f6;font-size:12px">Medium</td>
+  <td><span class="chip backlog">Backlog</span></td>
+  <td style="font-size:11px;color:#a855f7">Platform_S52</td>
+  <td style="color:#64748b">13</td>
+  <td style="font-size:11px;color:#94a3b8">2026-04-21</td>
+</tr>
+
+      </table>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>Зі спринту видалено 111 SP (18 задач) — переважно AI Website feature: BE Theme, Checkout Page, FE Navigation, Pages editor. Це ознака системної переоцінки capacity при плануванні S51. Фактично спринт стартував з overload ≈40% по SP відносно реального throughput команди.</p>
+    </div>
+  </div>
+</div>
+
+<!-- REESTIMATION SP -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Переоцінка Story Points під час спринту</h2>
+  </div>
+  <div class="section-body">
+    <div class="scope-stat" style="border-left:3px solid #f59e0b">
+      <div>
+        <div class="scope-num" style="color:#f59e0b">12</div>
+        <div class="scope-label">задач змінили SP під час спринту</div>
+      </div>
+      <div style="font-size:20px;font-weight:700;color:#64748b">SP змінено після старту (Apr 9)</div>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <tr><th>Key</th><th>Summary</th><th>Assignee</th><th>Зміни SP (дата)</th><th>Δ SP</th><th>Фінальний SP</th><th>Статус</th></tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5192" target="_blank" class="issue-link">PLAT-5192</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Audit and implement one-time autologin/reset-password token handling</td>
+          <td style="font-size:12px">Yehor Kaliuzhnyi</td>
+          <td style="font-size:11px;color:#94a3b8">13→18 (Apr 9)</td>
+          <td style="color:#22c55e;font-weight:700">+5</td>
+          <td style="font-weight:700">18</td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5256" target="_blank" class="issue-link">PLAT-5256</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] [HC] Help HC team to set up initial Playwright framework</td>
+          <td style="font-size:12px">Vadym Perkin</td>
+          <td style="font-size:11px;color:#94a3b8">5→13 (Apr 21)</td>
+          <td style="color:#22c55e;font-weight:700">+8</td>
+          <td style="font-weight:700">13</td>
+          <td><span class="chip done">ACCEPTED</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4483" target="_blank" class="issue-link">PLAT-4483</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[AQA] [Platform] Implement scheduled runs for production on new CI/CD</td>
+          <td style="font-size:12px">Vadym Perkin</td>
+          <td style="font-size:11px;color:#94a3b8">5→8 (Apr 16)</td>
+          <td style="color:#22c55e;font-weight:700">+3</td>
+          <td style="font-weight:700">8</td>
+          <td><span class="chip done">ACCEPTED</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-2018" target="_blank" class="issue-link">PLAT-2018</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Change git branching strategy on BE</td>
+          <td style="font-size:12px">Artem Kuchma</td>
+          <td style="font-size:11px;color:#94a3b8">5→8 (Apr 9)</td>
+          <td style="color:#22c55e;font-weight:700">+3</td>
+          <td style="font-weight:700">8</td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-2931" target="_blank" class="issue-link">PLAT-2931</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] [Web app] Creator doesn't receive reset password email</td>
+          <td style="font-size:12px">Emiliia Voronova</td>
+          <td style="font-size:11px;color:#94a3b8">2→5 (Apr 20)</td>
+          <td style="color:#22c55e;font-weight:700">+3</td>
+          <td style="font-weight:700">5</td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5042" target="_blank" class="issue-link">PLAT-5042</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Website. Pages</td>
+          <td style="font-size:12px">Oleksandr Menchynskyi</td>
+          <td style="font-size:11px;color:#94a3b8">3→5 (Apr 9)</td>
+          <td style="color:#22c55e;font-weight:700">+2</td>
+          <td style="font-weight:700">5</td>
+          <td><span class="chip review">Under Review</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5184" target="_blank" class="issue-link">PLAT-5184</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Inconsistent handling of nextChargeAt for soft-cancelled subscriptions</td>
+          <td style="font-size:12px">Emiliia Voronova</td>
+          <td style="font-size:11px;color:#94a3b8">2→6 (Apr 9) → 6→3 (Apr 9)</td>
+          <td style="color:#22c55e;font-weight:700">+1</td>
+          <td style="font-weight:700">3</td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-3694" target="_blank" class="issue-link">PLAT-3694</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] > Configure Platform BE stage env</td>
+          <td style="font-size:12px">Artem Kuchma</td>
+          <td style="font-size:11px;color:#94a3b8">1→3 (Apr 14) → 3→2 (Apr 14)</td>
+          <td style="color:#22c55e;font-weight:700">+1</td>
+          <td style="font-weight:700">2</td>
+          <td><span class="chip backlog">To Do</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-3856" target="_blank" class="issue-link">PLAT-3856</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE TD] > Enforce manual rotation of DataProtection keys</td>
+          <td style="font-size:12px">Artem Kuchma</td>
+          <td style="font-size:11px;color:#94a3b8">5→2 (Apr 17)</td>
+          <td style="color:#ef4444;font-weight:700">-3</td>
+          <td style="font-weight:700">2</td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4542" target="_blank" class="issue-link">PLAT-4542</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE][Influencers] [Research] PDR removes User ID from Amplitude profile</td>
+          <td style="font-size:12px">Artem Kuchma</td>
+          <td style="font-size:11px;color:#94a3b8">5→2 (Apr 9)</td>
+          <td style="color:#ef4444;font-weight:700">-3</td>
+          <td style="font-weight:700">2</td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4982" target="_blank" class="issue-link">PLAT-4982</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Images AI-generation Refactoring</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px;color:#94a3b8">13→5→13 (Apr 9), 13→1→13 (Apr 14)</td>
+          <td style="color:#94a3b8;font-weight:700">0</td>
+          <td style="font-weight:700">13</td>
+          <td><span class="chip backlog">To Do</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-2928" target="_blank" class="issue-link">PLAT-2928</a></td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Web app] [FE] Creator doesn't receive reset password email</td>
+          <td style="font-size:12px">Andrii Marusiak</td>
+          <td style="font-size:11px;color:#94a3b8">6→0 (Apr 22)</td>
+          <td style="color:#ef4444;font-weight:700">-6</td>
+          <td style="font-weight:700">0</td>
+          <td><span class="chip backlog">Backlog</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>12 задач переоцінено під час спринту: 7 збільшено, 3 зменшено, 2 net-нульових (PLAT-4982 — 4 зміни, net 0). PLAT-2928 обнулено до 0 SP без виконаної роботи. PLAT-5256 зросла з 5 до 13 SP після завершення (+8). Нестабільні оцінки є прямим індикатором нечіткого scope при плануванні.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DATE CHANGES -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Зміни дат (Start Date / Due Date) під час спринту</h2>
+  </div>
+  <div class="section-body">
+    <div class="scope-stat" style="border-left:3px solid #06b6d4">
+      <div>
+        <div class="scope-num" style="color:#06b6d4">20</div>
+        <div class="scope-label">задач з переносом дат</div>
+      </div>
+      <div style="font-size:20px;font-weight:700;color:#64748b">Найбільше переносів: mariia.khmilovska</div>
+    </div>
+
+    <p style="color:#94a3b8;font-size:13px;margin:0 0 12px">Показано перший та останній дедлайн, кількість змін. Зміна = будь-яке редагування поля під час спринту.</p>
+
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <tr><th>Key</th><th>Summary</th><th>Assignee</th><th>Поле</th><th>Початкова дата</th><th>Фінальна дата</th><th>Кількість змін</th><th>Статус</th></tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5042" target="_blank" class="issue-link">PLAT-5042</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Website. Pages</td>
+          <td style="font-size:12px">Oleksandr Menchynskyi</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">15/Apr/26<br>Apr 15</td>
+          <td style="font-size:11px">16/Apr/26<br>Apr 22</td>
+          <td style="text-align:center"><span style="color:#ef4444;font-weight:700">11</span><br><span style="color:#ef4444;font-weight:700">12</span></td>
+          <td><span class="chip review">Under Review</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5068" target="_blank" class="issue-link">PLAT-5068</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Pages for Creator Website (query websitePageByPath)</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">14/Apr/26<br>Apr 15</td>
+          <td style="font-size:11px">27/Apr/26<br>Apr 24</td>
+          <td style="text-align:center"><span style="color:#ef4444;font-weight:700">4</span><br><span style="color:#ef4444;font-weight:700">7</span></td>
+          <td><span class="chip review">Ready for deploy</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5088" target="_blank" class="issue-link">PLAT-5088</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Design] AI-generated creator website. Sections</td>
+          <td style="font-size:12px">Daiana Dziublyk</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 13</td>
+          <td style="font-size:11px">Apr 22</td>
+          <td style="text-align:center"><span style="color:#ef4444;font-weight:700">6</span></td>
+          <td><span class="chip review">Under Review</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4982" target="_blank" class="issue-link">PLAT-4982</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Images AI-generation Refactoring</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 10</td>
+          <td style="font-size:11px">Apr 30</td>
+          <td style="text-align:center"><span style="color:#ef4444;font-weight:700">6</span></td>
+          <td><span class="chip backlog">To Do</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5075" target="_blank" class="issue-link">PLAT-5075</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Checkout Page AI-generation</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">16/Apr/26<br>Apr 20</td>
+          <td style="font-size:11px">20/Apr/26<br>Apr 30</td>
+          <td style="text-align:center"><span style="color:#f97316;font-weight:700">2</span><br><span style="color:#ef4444;font-weight:700">6</span></td>
+          <td><span class="chip backlog">Backlog</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4999" target="_blank" class="issue-link">PLAT-4999</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">AI-generated creator's website. Widgets</td>
+          <td style="font-size:12px">Olena Samoilova</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 8</td>
+          <td style="font-size:11px">Apr 23</td>
+          <td style="text-align:center"><span style="color:#ef4444;font-weight:700">5</span></td>
+          <td><span class="chip progress">In progress</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5199" target="_blank" class="issue-link">PLAT-5199</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Store meta prompt in DB and add statuses to WebPage Entity</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">nil → 30/Mar/26<br>nil → Apr 14</td>
+          <td style="font-size:11px">15/Apr/26<br>Apr 17</td>
+          <td style="text-align:center"><span style="color:#ef4444;font-weight:700">5</span><br><span style="color:#ef4444;font-weight:700">5</span></td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4998" target="_blank" class="issue-link">PLAT-4998</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Design] AI-generated creator website. Navigation reorganization</td>
+          <td style="font-size:12px">Daiana Dziublyk</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 6</td>
+          <td style="font-size:11px">Apr 20</td>
+          <td style="text-align:center"><span style="color:#f97316;font-weight:700">4</span></td>
+          <td><span class="chip review">Ready for Dev</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5196" target="_blank" class="issue-link">PLAT-5196</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Storing AI generated images in S3</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">nil → 16/Apr/26<br>nil → Apr 20</td>
+          <td style="font-size:11px">16/Apr/26<br>Apr 21</td>
+          <td style="text-align:center"><span style="color:#eab308;font-weight:700">1</span><br><span style="color:#f97316;font-weight:700">4</span></td>
+          <td><span class="chip review">Ready for deploy</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5091" target="_blank" class="issue-link">PLAT-5091</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">AI-generated creator website. Pages editor</td>
+          <td style="font-size:12px">Olena Samoilova</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 15</td>
+          <td style="font-size:11px">Apr 23</td>
+          <td style="text-align:center"><span style="color:#f97316;font-weight:700">3</span></td>
+          <td><span class="chip progress">In progress</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5090" target="_blank" class="issue-link">PLAT-5090</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[Design] AI-generated creator website. Website pages section</td>
+          <td style="font-size:12px">Daiana Dziublyk</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 17</td>
+          <td style="font-size:11px">Apr 22</td>
+          <td style="text-align:center"><span style="color:#f97316;font-weight:700">3</span></td>
+          <td><span class="chip review">Under Review</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4989" target="_blank" class="issue-link">PLAT-4989</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Anonymous Questionnaire Creation</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 9</td>
+          <td style="font-size:11px">Apr 15</td>
+          <td style="text-align:center"><span style="color:#f97316;font-weight:700">3</span></td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5076" target="_blank" class="issue-link">PLAT-5076</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] mutation createWebsiteByAI (Put everything together)</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 9</td>
+          <td style="font-size:11px">Apr 15</td>
+          <td style="text-align:center"><span style="color:#f97316;font-weight:700">3</span></td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5037" target="_blank" class="issue-link">PLAT-5037</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Pages list/creation/editing/deleting</td>
+          <td style="font-size:12px">Oleksandr Menchynskyi</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">18/Apr/26<br>Apr 18</td>
+          <td style="font-size:11px">14/Apr/26<br>Apr 22</td>
+          <td style="text-align:center"><span style="color:#eab308;font-weight:700">1</span><br><span style="color:#eab308;font-weight:700">2</span></td>
+          <td><span class="chip review">Under Review</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5100" target="_blank" class="issue-link">PLAT-5100</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Acquisition funnel. Prompts page, landing</td>
+          <td style="font-size:12px">Anton Hrechynskyi</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">Apr 16</td>
+          <td style="font-size:11px">Apr 28</td>
+          <td style="text-align:center"><span style="color:#eab308;font-weight:700">2</span></td>
+          <td><span class="chip progress">In progress</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5204" target="_blank" class="issue-link">PLAT-5204</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Acquisition FE architecture builder POC</td>
+          <td style="font-size:12px">Andrii Marusiak</td>
+          <td style="font-size:11px">Start date<br>Due date</td>
+          <td style="font-size:11px">nil → 11/Apr/26<br>nil → Apr 17</td>
+          <td style="font-size:11px">11/Apr/26<br>Apr 15</td>
+          <td style="text-align:center"><span style="color:#eab308;font-weight:700">1</span><br><span style="color:#eab308;font-weight:700">2</span></td>
+          <td><span class="chip done">ACCEPTED</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5216" target="_blank" class="issue-link">PLAT-5216</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Link Questionnaire to Website Project</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Due date</td>
+          <td style="font-size:11px">nil</td>
+          <td style="font-size:11px">Apr 20</td>
+          <td style="text-align:center"><span style="color:#64748b;font-weight:700">1</span></td>
+          <td><span class="chip review">Ready for deploy</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5220" target="_blank" class="issue-link">PLAT-5220</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] iFrame POC in Quiz</td>
+          <td style="font-size:12px">Yehor Kaliuzhnyi</td>
+          <td style="font-size:11px">Start date</td>
+          <td style="font-size:11px">nil</td>
+          <td style="font-size:11px">16/Apr/26</td>
+          <td style="text-align:center"><span style="color:#64748b;font-weight:700">1</span></td>
+          <td><span class="chip done">Done</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5262" target="_blank" class="issue-link">PLAT-5262</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[FE] Builder Redesign - Navigation and Layout</td>
+          <td style="font-size:12px">Andrii Marusiak</td>
+          <td style="font-size:11px">Start date</td>
+          <td style="font-size:11px">nil</td>
+          <td style="font-size:11px">22/Apr/26</td>
+          <td style="text-align:center"><span style="color:#64748b;font-weight:700">1</span></td>
+          <td><span class="chip progress">In progress</span></td>
+        </tr>
+        <tr>
+          <td><a href="https://newsiteam.atlassian.net/browse/PLAT-5032" target="_blank" class="issue-link">PLAT-5032</a></td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[BE] Pages CRUD</td>
+          <td style="font-size:12px">mariia.khmilovska</td>
+          <td style="font-size:11px">Start date</td>
+          <td style="font-size:11px">21/Mar/26</td>
+          <td style="font-size:11px">21/Mar/26 (повернено)</td>
+          <td style="text-align:center"><span style="color:#64748b;font-weight:700">2</span></td>
+          <td><span class="chip done">ACCEPTED</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>20 задач (17% спринту) мали зміни Start/Due Date — індикатор нестабільного планування. Рекордсмен: PLAT-5042 — 23 зміни дат за 2 тижні. mariia.khmilovska — 8 задач з переносами, всі в AI Website feature. Більшість due date зсунуто на 5–20 днів вправо, що прямо корелює з 18 задачами, викинутими зі спринту.</p>
+    </div>
+  </div>
+</div>
+
+<!-- RISKS & BLOCKERS -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron open">▶</span>
+    <h2>Risks & Blockers</h2>
+  </div>
+  <div class="section-body">
+    <div class="card" style="overflow-x:auto"><table>
+        <tr><th>Key</th><th>Summary</th><th>Assignee</th><th>Priority</th><th>Статус</th></tr>
+        <tr>
+            <td><a href="https://newsiteam.atlassian.net/browse/PLAT-4798" target="_blank" class="issue-link">PLAT-4798</a></td>
+            <td>[MFE] Write docs, rules, and core pattern references for Coding Agents</td>
+            <td>Oleksandr Menchynskyi</td>
+            <td style="color:#3b82f6">Medium</td>
+            <td><span class="chip hold">On hold</span></td>
+          </tr>
+      </table></div>
+    <div style="margin-top:12px;padding:12px 16px;background:#1e293b;border-radius:8px;border-left:3px solid #eab308">
+      <strong style="color:#eab308">⚠️ 16 задач в ревью</strong>
+      <span style="color:#94a3b8;font-size:12px;margin-left:8px">Потребують завершення ревью для закриття спринту</span>
+    </div>
+    <div class="ai-summary" style="margin-top:16px;margin-bottom:0">
+      <span class="ai-icon">🤖</span>
+      <p>1 задача на hold: PLAT-4798 ([MFE] Write docs для Coding Agents, Oleksandr Menchynskyi) — прямого блокера на delivery немає. Ключовий ризик спринту не технічний: 16 задач залишились у review на момент закінчення спринту, потребують ручного завершення після закриття.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LEAD TIME -->
+<div class="section">
+  <div class="section-header" onclick="toggle(this)">
+    <span class="chevron">▶</span>
+    <h2>Lead Time</h2>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="cards-row-3">
+      <div class="card" style="text-align:center">
+        <div style="font-size:36px;font-weight:700;color:#22c55e">14д</div>
+        <div style="color:#94a3b8;font-size:12px;margin-top:4px">Median Lead Time</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:36px;font-weight:700;color:#a855f7">290д</div>
+        <div style="color:#94a3b8;font-size:12px;margin-top:4px">P90 Lead Time</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:36px;font-weight:700;color:#3b82f6">64</div>
+        <div style="color:#94a3b8;font-size:12px;margin-top:4px">Completed з датою</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Генеровано 2026-04-23 • Дані з <a href="https://newsiteam.atlassian.net" target="_blank">newsiteam.atlassian.net</a> • Проект PLAT</p>
+  <p><a href="https://newsiteam.atlassian.net/jira/software/c/projects/PLAT/boards/214" target="_blank">Platform Scrum Board ↗</a></p>
+</div>
+
+</div>
+
+<script>
+function toggle(header) {
+  const chevron = header.querySelector('.chevron');
+  const body = header.nextElementSibling;
+  const isOpen = chevron.classList.contains('open');
+  if (isOpen) {
+    body.style.display = 'none';
+    chevron.classList.remove('open');
+  } else {
+    body.style.display = '';
+    chevron.classList.add('open');
+  }
+}
+</script>
+</body>
+</html>
