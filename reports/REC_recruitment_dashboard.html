@@ -422,6 +422,20 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
 }
 .dp-chip:hover { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 .dp-chip:active { transform: translateY(1px); }
+.dp-chip.active { background: #3b6ef5; color: #fff; border-color: #3b6ef5; }
+.dp-chip.active:hover { background: #2554d8; color: #fff; border-color: #2554d8; }
+
+/* ── INSIGHT CARDS (light, matches other cv-cards) ─────────── */
+.cv-insight-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  box-shadow: var(--shadow-sm); min-height: 110px;
+}
+.cv-insight-lbl { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+.cv-insight-num { font-size: 36px; font-weight: 800; color: #0f172a; line-height: 1; }
+.cv-insight-num.txt { font-size: 24px; color: #ec4899; }
+.cv-insight-sub { font-size: 11px; color: #94a3b8; font-weight: 500; margin-top: auto; }
 </style>
 </head>
 <body>
@@ -703,12 +717,26 @@ function recTriggerRefresh(){
             <div id="cv-week-block"></div>
           </div>
           <div class="cv-card">
-            <div class="cv-card-title">🌐 All Time</div>
-            <div class="cv-card-sub">Cumulative since project start</div>
+            <div class="cv-card-title">🌐 All Time / Period</div>
+            <div class="cv-card-sub" id="cv-at-sub">Cumulative since project start</div>
+            <div class="dp-chips" style="margin-bottom:8px;flex-wrap:wrap">
+              <button type="button" class="dp-chip cv-at-chip active" data-mode="all" onclick="cvSetAllTime('all')">All time</button>
+              <button type="button" class="dp-chip cv-at-chip" data-mode="month" onclick="cvSetAllTime('month')">Month</button>
+              <button type="button" class="dp-chip cv-at-chip" data-mode="quarter" onclick="cvSetAllTime('quarter')">Quarter</button>
+              <button type="button" class="dp-chip cv-at-chip" data-mode="year" onclick="cvSetAllTime('year')">Year</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap;font-size:12px">
+              <span style="color:#64748b;font-weight:600">Custom:</span>
+              <input type="date" id="cv-at-from" class="cv-input">
+              <span style="color:#94a3b8">—</span>
+              <input type="date" id="cv-at-to" class="cv-input">
+              <button onclick="cvSetAllTime('custom')" style="padding:4px 10px;font-size:11px;background:#3b6ef5;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600">Apply</button>
+            </div>
             <div id="cv-alltime-block"></div>
           </div>
         </div>
-        <div class="cv-card" style="margin-top:0">
+        <!-- Weekly trend chart: hidden temporarily. To restore — remove style="display:none" from .cv-card below. -->
+        <div class="cv-card" style="display:none;margin-top:0">
           <div class="cv-card-title">📈 Weekly trend (last 12 weeks)</div>
           <div class="cv-card-sub">Bars: opened (start date) and hired (factual close date) per week</div>
           <div class="cv-canvas-wrap" style="height:220px"><canvas id="cv-trend-chart"></canvas></div>
@@ -759,7 +787,8 @@ function recTriggerRefresh(){
         <span class="sec-badge" id="bcv-cnt" style="background:#fef3c7;color:#b45309;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
         <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">
           <div class="cv-mode-bar" id="cv-cnt-mode">
-            <button data-mode="month" class="active" onclick="cvSetMode('month')">Month</button>
+            <button data-mode="all" class="active" onclick="cvSetMode('all')">All time</button>
+            <button data-mode="month" onclick="cvSetMode('month')">Month</button>
             <button data-mode="quarter" onclick="cvSetMode('quarter')">Quarter</button>
             <button data-mode="year" onclick="cvSetMode('year')">Year</button>
           </div>
@@ -771,12 +800,6 @@ function recTriggerRefresh(){
             <button onclick="rCVClosedCount()" style="background:#f59e0b;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Apply</button>
             <button onclick="cvResetCntPeriod()" style="background:transparent;color:#64748b;border:1px solid #cbd5e1;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Reset</button>
           </div>
-          <span class="dp-chips">
-            <button type="button" class="dp-chip" onclick="dpApply('tw','cv-cnt-from','cv-cnt-to','cv')">This week</button>
-            <button type="button" class="dp-chip" onclick="dpApply('lw','cv-cnt-from','cv-cnt-to','cv')">Last week</button>
-            <button type="button" class="dp-chip" onclick="dpApply('tm','cv-cnt-from','cv-cnt-to','cv')">This month</button>
-            <button type="button" class="dp-chip" onclick="dpApply('lm','cv-cnt-from','cv-cnt-to','cv')">Last month</button>
-          </span>
         </div>
       </div>
       <div class="section-body">
@@ -788,14 +811,23 @@ function recTriggerRefresh(){
     <div class="section">
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#ec4899,#f472b6);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🌍</div>
-        <h2>Hiring Sources<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Candidate Source distribution</span></h2>
+        <h2>Hiring Sources<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Candidate Source distribution · click bar to see vacancies</span></h2>
         <span class="sec-badge" id="bcv-src" style="background:#fce7f3;color:#9d174d;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
-        <div class="cv-mode-bar" style="margin-left:auto" id="cv-src-mode" onclick="event.stopPropagation()">
-          <button data-grp="dept" class="active" onclick="cvSetSrcGrp('dept')">By Department</button>
-          <button data-grp="sn" onclick="cvSetSrcGrp('sn')">By Seniority</button>
+        <div style="display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">
+          <span style="font-size:11px;color:#64748b;font-weight:600">Department:</span>
+          <select id="cv-src-dept" class="cv-input" onchange="rCVSources()" style="min-width:140px">
+            <option value="">All</option>
+          </select>
+          <span style="font-size:11px;color:#64748b;font-weight:600">Seniority:</span>
+          <select id="cv-src-sn" class="cv-input" onchange="rCVSources()" style="min-width:120px">
+            <option value="">All</option>
+          </select>
+          <button onclick="document.getElementById('cv-src-dept').value='';document.getElementById('cv-src-sn').value='';rCVSources()" style="background:transparent;color:#64748b;border:1px solid #cbd5e1;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Reset</button>
         </div>
       </div>
       <div class="section-body">
+        <div style="font-size:13px;color:#0f172a;font-weight:600;margin-bottom:10px">Інсайти</div>
+        <div id="cv-src-insights" class="cv-insights" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px"></div>
         <div class="cv-canvas-wrap" style="height:340px"><canvas id="cv-src-chart"></canvas></div>
         <div id="cv-src-empty" style="display:none;text-align:center;padding:30px;color:#94a3b8;font-size:13px;font-style:italic"></div>
       </div>
@@ -1627,7 +1659,9 @@ function r2(from,to){
   // Annotate each item with effective close date (fcd || hd) for the table column
   let items=[...hwItems,...avHired,...stHired].map(v=>({...v, fcd: v.fcd||v.hd||null}));
   const vacCount2=items.filter(v=>v.type!=='subtask').length;
-  const hiresTotal2=items.reduce((s,v)=>s+(v.h||1),0);
+  // Hires total: sub-task = 1 person hired (НЕ v.h — sub inherits parent.h, тому v.h=11/8 etc.)
+  // Position (parent itself hired) = v.h
+  const hiresTotal2=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
   document.getElementById('b2').innerHTML=`<span class="bnum">${vacCount2}</span> vacancy &nbsp;·&nbsp; <span class="bnum">${hiresTotal2}</span> hires`;
 
   const cols2=[
@@ -1681,7 +1715,8 @@ function r2(from,to){
     }
     subs.forEach(v=>{
       const dt=[v.t,v.sb].filter(Boolean).join(' / ');
-      rows2+=`<tr style="background:#f5f8ff"><td style="padding-left:18px;font-size:12px">↳ ${jl(v.key)}</td><td style="max-width:210px;font-size:11px">${v.s}</td><td>${sb2(v.st||'Hired')}</td><td>${pb(v.pr)}</td><td>${snBadge(v.sn)}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${fcdCell(v.fcd)}</td><td style="font-size:11px">${fv(dt)}</td><td style="text-align:center"><b style="color:#0f172a">${v.h}</b></td></tr>`;
+      // Sub-task = 1 hire (parent.h не релевантне для sub)
+      rows2+=`<tr style="background:#f5f8ff"><td style="padding-left:18px;font-size:12px">↳ ${jl(v.key)}</td><td style="max-width:210px;font-size:11px">${v.s}</td><td>${sb2(v.st||'Hired')}</td><td>${pb(v.pr)}</td><td>${snBadge(v.sn)}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${fcdCell(v.fcd)}</td><td style="font-size:11px">${fv(dt)}</td><td style="text-align:center"><b style="color:#0f172a">1</b></td></tr>`;
     });
   });
 
@@ -3186,11 +3221,34 @@ function cvInRange(date,from,to){
 function cvAvg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null;}
 
 // ── CV state ───────────────────────────────────────────────
-let _cvCntMode='month';
+let _cvCntMode='all';
 let _cvSrcGrp='dept';
 let _cvCntFrom=null,_cvCntTo=null;
 let _cvCharts={ttf:null,tth:null,cnt:null,src:null,trend:null};
 let _cvInit=false;
+// All Time / Period filter state
+let _cvAtMode='all', _cvAtFrom=null, _cvAtTo=null;
+function cvSetAllTime(mode){
+  const t=new Date();
+  const todayISO=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  if(mode==='all'){_cvAtFrom=null;_cvAtTo=null;}
+  else if(mode==='month'){_cvAtFrom=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-01`;_cvAtTo=todayISO;}
+  else if(mode==='quarter'){const qm=Math.floor(t.getMonth()/3)*3;_cvAtFrom=`${t.getFullYear()}-${String(qm+1).padStart(2,'0')}-01`;_cvAtTo=todayISO;}
+  else if(mode==='year'){_cvAtFrom=`${t.getFullYear()}-01-01`;_cvAtTo=todayISO;}
+  else if(mode==='custom'){
+    _cvAtFrom=document.getElementById('cv-at-from').value||null;
+    _cvAtTo=document.getElementById('cv-at-to').value||null;
+  }
+  _cvAtMode=mode;
+  // Reflect chosen dates in custom inputs
+  if(mode!=='custom'){
+    const fi=document.getElementById('cv-at-from'); if(fi) fi.value=_cvAtFrom||'';
+    const ti=document.getElementById('cv-at-to'); if(ti) ti.value=_cvAtTo||'';
+  }
+  // Update active chip state (clear all, set current)
+  document.querySelectorAll('.cv-at-chip').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  rCVDynamics();
+}
 
 // ── CV: Block 4 — Vacancy Dynamics ─────────────────────────
 function rCVDynamics(){
@@ -3233,28 +3291,47 @@ function rCVDynamics(){
       </div>
     </div>`;
 
-  // All time
-  const allActiveOpen=ALL_VACS.filter(v=>v.st!=='Hired').length;
-  const allHired=CV.length;
+  // All time / Period block — applies _cvAtFrom / _cvAtTo filter
+  // "Opened" = ALL_VACS opened (cr || sd) within period; "Hired" = CV hired (hd || fcd) within period.
+  const inAtRange=d=>{
+    if(!d)return false;
+    if(_cvAtFrom && d<_cvAtFrom)return false;
+    if(_cvAtTo && d>_cvAtTo)return false;
+    return true;
+  };
+  let openedCount, hiredCount, openedLbl, hiredLbl, subText;
+  if(_cvAtMode==='all'){
+    // Default: state-based snapshot (current open vs all-time hired)
+    openedCount=ALL_VACS.filter(v=>v.st!=='Hired').length;
+    hiredCount=CV.length;
+    openedLbl='Currently Open';
+    hiredLbl='Hired (all time)';
+    subText='Cumulative since project start';
+  } else {
+    // Period mode: count flow events (vacancies opened / hired in period)
+    openedCount=ALL_VACS.filter(v=>inAtRange(v.cr||v.sd)).length;
+    hiredCount=CV.filter(v=>inAtRange(v.hd||v.fcd)).length;
+    openedLbl='Opened';
+    hiredLbl='Hired';
+    const labelMap={month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
+    subText=`${labelMap[_cvAtMode]||'Period'}: ${_cvAtFrom||'—'} → ${_cvAtTo||'—'}`;
+  }
+  const sub=document.getElementById('cv-at-sub'); if(sub) sub.textContent=subText;
   document.getElementById('cv-alltime-block').innerHTML=`
     <div class="cv-cmpr-grid">
       <div class="cv-cmpr-side" style="border-left:4px solid #3b6ef5">
-        <div class="cv-cmpr-num" style="color:#3b6ef5">${allActiveOpen}</div>
-        <div class="cv-cmpr-lbl">Currently Open</div>
+        <div class="cv-cmpr-num" style="color:#3b6ef5">${openedCount}</div>
+        <div class="cv-cmpr-lbl">${openedLbl}</div>
       </div>
       <div class="cv-cmpr-vs">vs</div>
       <div class="cv-cmpr-side" style="border-left:4px solid #10b981">
-        <div class="cv-cmpr-num" style="color:#10b981">${allHired}</div>
-        <div class="cv-cmpr-lbl">Hired (all time)</div>
+        <div class="cv-cmpr-num" style="color:#10b981">${hiredCount}</div>
+        <div class="cv-cmpr-lbl">${hiredLbl}</div>
       </div>
-    </div>
-    <div style="display:flex;justify-content:space-around;margin-top:12px;font-size:11px;color:#64748b">
-      <span>Hired ratio: <b style="color:#0f172a">${allHired+allActiveOpen?Math.round(allHired/(allHired+allActiveOpen)*100):0}%</b></span>
-      <span>Total tracked: <b style="color:#0f172a">${allHired+allActiveOpen}</b></span>
     </div>`;
 
   document.getElementById('bcv1').innerHTML=
-    `<span class="bnum">${hThis}</span> hired this week &nbsp;·&nbsp; <span class="bnum">${allHired}</span> all time`;
+    `<span class="bnum">${hThis}</span> hired this week &nbsp;·&nbsp; <span class="bnum">${CV.length}</span> all time`;
 
   // Weekly trend chart — last 12 weeks
   const wks=[];
@@ -3411,40 +3488,48 @@ function rCVTTH(){
   });
 }
 
-// ── CV: Block 3 — Closed Vacancies count by Department ────
+// ── CV: Block 3 — Closed Vacancies by Department (vertical bars per dept) ─
+let _cvCntDeptVacs={};
 function cvSetMode(m){
+  const t=new Date();
+  const todayISO=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  if(m==='all'){_cvCntFrom=null;_cvCntTo=null;}
+  else if(m==='month'){_cvCntFrom=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-01`;_cvCntTo=todayISO;}
+  else if(m==='quarter'){const qm=Math.floor(t.getMonth()/3)*3;_cvCntFrom=`${t.getFullYear()}-${String(qm+1).padStart(2,'0')}-01`;_cvCntTo=todayISO;}
+  else if(m==='year'){_cvCntFrom=`${t.getFullYear()}-01-01`;_cvCntTo=todayISO;}
   _cvCntMode=m;
+  // Reflect dates in custom inputs (visual cue)
+  const fi=document.getElementById('cv-cnt-from'); if(fi) fi.value=_cvCntFrom||'';
+  const ti=document.getElementById('cv-cnt-to'); if(ti) ti.value=_cvCntTo||'';
   document.querySelectorAll('#cv-cnt-mode button').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));
   rCVClosedCount();
 }
-function cvResetCntPeriod(){
-  _cvCntFrom=null;_cvCntTo=null;
-  document.getElementById('cv-cnt-from').value='';
-  document.getElementById('cv-cnt-to').value='';
-  rCVClosedCount();
-}
-function _cvPeriodKey(d){
-  if(!d)return null;
-  const dt=new Date(d+'T00:00:00');
-  if(_cvCntMode==='month')return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-  if(_cvCntMode==='quarter')return `${dt.getFullYear()}-Q${Math.floor(dt.getMonth()/3)+1}`;
-  return String(dt.getFullYear());
-}
+function cvResetCntPeriod(){cvSetMode('all');}
 function rCVClosedCount(){
-  _cvCntFrom=document.getElementById('cv-cnt-from').value||null;
-  _cvCntTo=document.getElementById('cv-cnt-to').value||null;
+  // If user manually entered dates and clicks Apply, switch to 'custom' mode (deactivate preset highlight).
+  const fi=document.getElementById('cv-cnt-from'), ti=document.getElementById('cv-cnt-to');
+  if(fi && ti){
+    const inputFrom=fi.value||null, inputTo=ti.value||null;
+    if(inputFrom!==_cvCntFrom || inputTo!==_cvCntTo){
+      _cvCntFrom=inputFrom; _cvCntTo=inputTo;
+      _cvCntMode='custom';
+      document.querySelectorAll('#cv-cnt-mode button').forEach(b=>b.classList.remove('active'));
+    }
+  }
   const items=CV.filter(v=>closeDate(v)&&v.t).filter(v=>cvInRange(closeDate(v),_cvCntFrom,_cvCntTo));
-  // Group by period × dept
-  const periodSet=new Set(), deptSet=new Set();
-  items.forEach(v=>{periodSet.add(_cvPeriodKey(closeDate(v)));deptSet.add(v.t);});
-  const periods=[...periodSet].sort();
-  const depts=[...deptSet].sort();
-  const datasets=depts.map(d=>{
-    const data=periods.map(p=>items.filter(v=>v.t===d&&_cvPeriodKey(closeDate(v))===p).length);
-    return{label:d,data,backgroundColor:cvColor(d),hoverBackgroundColor:cvColor(d)+'cc',borderRadius:6,borderSkipped:false,stack:'s1'};
-  });
+  // Group vacancies by department, sort desc by count
+  const byDept={};
+  items.forEach(v=>{if(!byDept[v.t])byDept[v.t]=[];byDept[v.t].push(v);});
+  _cvCntDeptVacs=byDept;
+  const entries=Object.entries(byDept).map(([d,arr])=>({d,n:arr.length})).sort((a,b)=>b.n-a.n);
+  const labels=entries.map(e=>e.d);
+  const data=entries.map(e=>e.n);
+  const colors=entries.map(e=>cvColor(e.d));
+  // Period text
+  const labelMap={all:'All time',month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
+  const periodTxt=_cvCntMode==='all'?'all time':`${labelMap[_cvCntMode]||'Custom'}: ${_cvCntFrom||'—'} → ${_cvCntTo||'—'}`;
   document.getElementById('bcv-cnt').textContent=
-    `${items.length} closed · ${depts.length} depts · ${periods.length} ${_cvCntMode}${periods.length!==1?'s':''}`;
+    `${items.length} closed · ${entries.length} depts · ${periodTxt}`;
   if(_cvCharts.cnt){_cvCharts.cnt.destroy();_cvCharts.cnt=null;}
   if(!items.length){
     const ctx=document.getElementById('cv-cnt-chart').getContext('2d');
@@ -3455,100 +3540,249 @@ function rCVClosedCount(){
   }
   _cvCharts.cnt=new Chart(document.getElementById('cv-cnt-chart').getContext('2d'),{
     type:'bar',
-    data:{labels:periods,datasets},
+    data:{labels,datasets:[{
+      label:'Closed vacancies',data,backgroundColor:colors,
+      hoverBackgroundColor:colors.map(c=>c+'cc'),
+      borderRadius:7,borderSkipped:false,barPercentage:0.65
+    }]},
     options:{
       responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{
+        if(els.length){
+          const idx=els[0].index;
+          const dept=labels[idx];
+          showCVDeptPopup(dept,_cvCntDeptVacs[dept]||[]);
+        }
+      },
+      onHover:(evt,els)=>{evt.native.target.style.cursor=els.length?'pointer':'default';},
       plugins:{
-        legend:{position:'top',align:'center',labels:{font:{family:'Inter',size:11,weight:'500'},boxWidth:10,boxHeight:10,padding:12,usePointStyle:true,pointStyle:'rectRounded',color:'#475569'}},
+        legend:{display:false},
         tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',padding:{x:12,y:8},cornerRadius:8,
-          callbacks:{label:ctx=>`  ${ctx.dataset.label}: ${ctx.parsed.y}`}},
+          callbacks:{label:ctx=>`  ${ctx.parsed.y} closed · click to see list`}},
         datalabels:false
       },
       scales:{
-        x:{stacked:true,grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:11,weight:'600'},color:'#475569'}},
-        y:{stacked:true,beginAtZero:true,grid:{color:'#f1f5f9'},border:{display:false},ticks:{font:{family:'Inter',size:10},color:'#94a3b8',precision:0}}
+        x:{grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:11,weight:'600'},color:'#475569',maxRotation:30,minRotation:0}},
+        y:{beginAtZero:true,grid:{color:'#f1f5f9'},border:{display:false},ticks:{font:{family:'Inter',size:10},color:'#94a3b8',precision:0}}
       }
     },
     plugins:[{id:'cvCntLabels',afterDatasetsDraw(chart){
-      const {ctx}=chart;
-      chart.data.datasets.forEach((ds,di)=>{
-        const meta=chart.getDatasetMeta(di);
-        meta.data.forEach((bar,i)=>{
-          const v=ds.data[i]; if(!v)return;
-          const props=bar.getProps(['x','y','base'],true);
-          const barH=props.base-props.y;
-          ctx.save();ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-          if(barH>16){ctx.fillStyle='rgba(255,255,255,0.95)';ctx.fillText(v,props.x,props.y+barH/2);}
-          ctx.restore();
-        });
+      const {ctx}=chart, ds=chart.data.datasets[0];
+      const meta=chart.getDatasetMeta(0);
+      meta.data.forEach((bar,i)=>{
+        const v=ds.data[i]; if(!v)return;
+        const props=bar.getProps(['x','y','base'],true);
+        const barH=props.base-props.y;
+        ctx.save();ctx.font='bold 13px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        if(barH>22){ctx.fillStyle='rgba(255,255,255,0.95)';ctx.fillText(v,props.x,props.y+barH/2);}
+        else{ctx.fillStyle=ds.backgroundColor[i];ctx.fillText(v,props.x,props.y-10);}
+        ctx.restore();
       });
     }}]
   });
 }
+// Popup: list of closed vacancies for selected department
+function showCVDeptPopup(dept, vacs){
+  document.getElementById('s5popup-title').textContent=`Closed Vacancies — ${dept}`;
+  document.getElementById('s5popup-sub').textContent=`${vacs.length} закрито · period: ${_cvCntFrom||'—'} → ${_cvCntTo||'—'}`;
+  // Build CV-specific table (status, sd, fcd, recruiter, sourcer, dept, hires)
+  const rows=vacs.slice().sort((a,b)=>{
+    const da=closeDate(a)||'', db=closeDate(b)||'';
+    return db.localeCompare(da);
+  }).map(v=>{
+    const closeD=closeDate(v)||'—';
+    const snHtml=v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>';
+    const sb=[v.t,v.sb].filter(Boolean).join(' / ');
+    const isSub=v.type==='subtask';
+    return `<tr style="${isSub?'background:#f5f8ff':''}">
+      <td style="padding:8px 10px;font-size:12px${isSub?';padding-left:24px':''}">${isSub?'↳ ':''}${jl(v.key)}</td>
+      <td style="padding:8px 10px;font-size:12px;max-width:230px">${v.s||'—'}</td>
+      <td style="padding:8px 10px">${snHtml}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.rec||'—'}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.src||'—'}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.sd||'—'}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${closeD}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${sb||'—'}</td>
+    </tr>`;
+  }).join('');
+  const head=`<thead><tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Key</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Vacancy</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Seniority</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Recruiter</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Sourcer</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Start</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Closed</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Team</th>
+  </tr></thead>`;
+  // Replace the entire popup table content (keep id="s5popup-tbody" so other popups work too).
+  const popup=document.getElementById('s5popup');
+  const tbl=popup.querySelector('table');
+  if(tbl) tbl.innerHTML=`${head}<tbody id="s5popup-tbody">${rows}</tbody>`;
+  document.getElementById('s5overlay').style.display='block';
+  document.getElementById('s5popup').style.display='flex';
+}
 
-// ── CV: Block 5 — Hiring Sources by Department / Seniority ─
-function cvSetSrcGrp(g){
-  _cvSrcGrp=g;
-  document.querySelectorAll('#cv-src-mode button').forEach(b=>b.classList.toggle('active',b.dataset.grp===g));
-  rCVSources();
+// ── CV: Block 5 — Hiring Sources (filterable by Dept + Seniority) ─
+let _cvSrcVacsBySrc={};
+function _populateCVSrcDropdowns(){
+  // FULL list — departments union from CV + ALL_VACS, seniority — standard 6 levels.
+  const allDepts=[...new Set([...CV,...ALL_VACS].map(v=>v.t).filter(Boolean))].sort();
+  const allSns=['Intern','Junior','Middle','Senior','Lead','Expert'];
+  const dEl=document.getElementById('cv-src-dept');
+  const sEl=document.getElementById('cv-src-sn');
+  if(dEl && dEl.options.length<=1){
+    allDepts.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;dEl.appendChild(o);});
+  }
+  if(sEl && sEl.options.length<=1){
+    allSns.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sEl.appendChild(o);});
+  }
 }
 function rCVSources(){
-  const items=CV.filter(v=>v.cs&&v.t&&v.sn);
+  _populateCVSrcDropdowns();
+  const dept=document.getElementById('cv-src-dept')?.value||'';
+  const sn=document.getElementById('cv-src-sn')?.value||'';
+  const baseItems=CV.filter(v=>v.cs&&v.t&&v.sn);
+  const items=baseItems.filter(v=>(!dept||v.t===dept)&&(!sn||v.sn===sn));
   const empty=document.getElementById('cv-src-empty');
   const canvas=document.getElementById('cv-src-chart');
-  if(!items.length){
+  // Render insights cards (works regardless of chart state)
+  const insightsEl=document.getElementById('cv-src-insights');
+  if(insightsEl){
+    const totalHires=items.length;
+    const uniqueSources=new Set(items.map(v=>v.cs)).size;
+    const srcCounts={};
+    items.forEach(v=>{srcCounts[v.cs]=(srcCounts[v.cs]||0)+1;});
+    const top=Object.entries(srcCounts).sort((a,b)=>b[1]-a[1])[0];
+    const filterLabel=[dept&&dept, sn&&sn].filter(Boolean).join(' · ')||'усі команди';
+    insightsEl.innerHTML=`
+      <div class="cv-insight-card">
+        <div class="cv-insight-lbl">Всього наймів</div>
+        <div class="cv-insight-num">${totalHires}</div>
+        <div class="cv-insight-sub">${filterLabel}</div>
+      </div>
+      <div class="cv-insight-card">
+        <div class="cv-insight-lbl">Джерел</div>
+        <div class="cv-insight-num">${uniqueSources}</div>
+        <div class="cv-insight-sub">унікальних</div>
+      </div>
+      <div class="cv-insight-card">
+        <div class="cv-insight-lbl">Топ джерело</div>
+        <div class="cv-insight-num txt">${top?top[0]:'—'}</div>
+        <div class="cv-insight-sub">${top?`${top[1]} наймів`:'немає даних'}</div>
+      </div>`;
+  }
+  if(!baseItems.length){
     empty.style.display='block';canvas.style.display='none';
     empty.innerHTML='No Candidate Source data filled in Jira yet.<br>Fill the <b>Candidate Source</b> field on Hired vacancies to see distribution here.';
     document.getElementById('bcv-src').textContent='No data';
     if(_cvCharts.src){_cvCharts.src.destroy();_cvCharts.src=null;}
     return;
   }
+  if(!items.length){
+    empty.style.display='block';canvas.style.display='none';
+    empty.innerHTML=`No hires match the filter.<br><b>Department:</b> ${dept||'All'} · <b>Seniority:</b> ${sn||'All'}`;
+    document.getElementById('bcv-src').textContent='0 hires';
+    if(_cvCharts.src){_cvCharts.src.destroy();_cvCharts.src=null;}
+    return;
+  }
   empty.style.display='none';canvas.style.display='block';
 
-  // X-axis = candidate sources; datasets = group keys (dept or seniority)
-  const sources=[...new Set(items.map(v=>v.cs))].sort();
-  const grpField=_cvSrcGrp==='dept'?'t':'sn';
-  const grpKeys=[...new Set(items.map(v=>v[grpField]))].sort();
-  const SN_COL={Intern:'#94a3b8',Junior:'#7c3aed',Middle:'#1d4ed8',Senior:'#0369a1',Lead:'#065f46',Expert:'#92400e'};
-  const datasets=grpKeys.map(k=>{
-    const data=sources.map(s=>items.filter(v=>v.cs===s&&v[grpField]===k).length);
-    const color=_cvSrcGrp==='dept'?cvColor(k):(SN_COL[k]||'#64748b');
-    return{label:k,data,backgroundColor:color,hoverBackgroundColor:color+'cc',borderRadius:6,borderSkipped:false,stack:'src'};
-  });
+  // Group items by source
+  const bySrc={};
+  items.forEach(v=>{if(!bySrc[v.cs])bySrc[v.cs]=[];bySrc[v.cs].push(v);});
+  _cvSrcVacsBySrc=bySrc;
+  const entries=Object.entries(bySrc).map(([s,arr])=>({s,n:arr.length})).sort((a,b)=>b.n-a.n);
+  const labels=entries.map(e=>e.s);
+  const data=entries.map(e=>e.n);
+  // Colors: gradient pink-purple per bar
+  const palette=['#ec4899','#a855f7','#6366f1','#3b6ef5','#06b6d4','#10b981','#f59e0b','#ef4444','#8b5cf6','#0ea5e9','#14b8a6','#84cc16'];
+  const colors=labels.map((_,i)=>palette[i%palette.length]);
+
+  const filterTxt=[dept&&`Dept: ${dept}`, sn&&`Seniority: ${sn}`].filter(Boolean).join(' · ')||'All';
   document.getElementById('bcv-src').textContent=
-    `${items.length} hires · ${sources.length} sources · ${grpKeys.length} ${_cvSrcGrp==='dept'?'depts':'seniorities'}`;
+    `${items.length} hires · ${entries.length} sources · ${filterTxt}`;
   if(_cvCharts.src){_cvCharts.src.destroy();_cvCharts.src=null;}
   _cvCharts.src=new Chart(canvas.getContext('2d'),{
     type:'bar',
-    data:{labels:sources,datasets},
+    data:{labels,datasets:[{
+      label:'Hires',data,backgroundColor:colors,
+      hoverBackgroundColor:colors.map(c=>c+'cc'),
+      borderRadius:7,borderSkipped:false,barPercentage:0.65
+    }]},
     options:{
       responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{
+        if(els.length){
+          const idx=els[0].index;
+          const src=labels[idx];
+          showCVSrcPopup(src, _cvSrcVacsBySrc[src]||[], dept, sn);
+        }
+      },
+      onHover:(evt,els)=>{evt.native.target.style.cursor=els.length?'pointer':'default';},
       plugins:{
-        legend:{position:'top',align:'center',labels:{font:{family:'Inter',size:11,weight:'500'},boxWidth:10,boxHeight:10,padding:12,usePointStyle:true,pointStyle:'rectRounded',color:'#475569'}},
+        legend:{display:false},
         tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',padding:{x:12,y:8},cornerRadius:8,
-          callbacks:{label:ctx=>`  ${ctx.dataset.label}: ${ctx.parsed.y}`}},
+          callbacks:{label:ctx=>`  ${ctx.parsed.y} hires · click to see list`}},
         datalabels:false
       },
       scales:{
-        x:{stacked:true,grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:11,weight:'600'},color:'#475569',maxRotation:30,minRotation:0}},
-        y:{stacked:true,beginAtZero:true,grid:{color:'#f1f5f9'},border:{display:false},ticks:{font:{family:'Inter',size:10},color:'#94a3b8',precision:0}}
+        x:{grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:11,weight:'600'},color:'#475569',maxRotation:30,minRotation:0}},
+        y:{beginAtZero:true,grid:{color:'#f1f5f9'},border:{display:false},ticks:{font:{family:'Inter',size:10},color:'#94a3b8',precision:0}}
       }
     },
     plugins:[{id:'cvSrcLabels',afterDatasetsDraw(chart){
-      const {ctx}=chart;
-      chart.data.datasets.forEach((ds,di)=>{
-        const meta=chart.getDatasetMeta(di);
-        meta.data.forEach((bar,i)=>{
-          const v=ds.data[i]; if(!v)return;
-          const props=bar.getProps(['x','y','base'],true);
-          const barH=props.base-props.y;
-          ctx.save();ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-          if(barH>16){ctx.fillStyle='rgba(255,255,255,0.95)';ctx.fillText(v,props.x,props.y+barH/2);}
-          ctx.restore();
-        });
+      const {ctx}=chart, ds=chart.data.datasets[0];
+      const meta=chart.getDatasetMeta(0);
+      meta.data.forEach((bar,i)=>{
+        const v=ds.data[i]; if(!v)return;
+        const props=bar.getProps(['x','y','base'],true);
+        const barH=props.base-props.y;
+        ctx.save();ctx.font='bold 13px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        if(barH>22){ctx.fillStyle='rgba(255,255,255,0.95)';ctx.fillText(v,props.x,props.y+barH/2);}
+        else{ctx.fillStyle=ds.backgroundColor[i];ctx.fillText(v,props.x,props.y-10);}
+        ctx.restore();
       });
     }}]
   });
+}
+// Popup: list of hires from selected source (with current dept/seniority filter applied)
+function showCVSrcPopup(src, vacs, dept, sn){
+  const filter=[dept&&`Dept: ${dept}`, sn&&`Seniority: ${sn}`].filter(Boolean).join(' · ');
+  document.getElementById('s5popup-title').textContent=`Hiring Source — ${src}`;
+  document.getElementById('s5popup-sub').textContent=`${vacs.length} hires${filter?` · ${filter}`:''}`;
+  const rows=vacs.slice().sort((a,b)=>{
+    const da=closeDate(a)||'', db=closeDate(b)||'';
+    return db.localeCompare(da);
+  }).map(v=>{
+    const closeD=closeDate(v)||'—';
+    const snHtml=v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>';
+    const tt=[v.t,v.sb].filter(Boolean).join(' / ');
+    const isSub=v.type==='subtask';
+    return `<tr style="${isSub?'background:#f5f8ff':''}">
+      <td style="padding:8px 10px;font-size:12px${isSub?';padding-left:24px':''}">${isSub?'↳ ':''}${jl(v.key)}</td>
+      <td style="padding:8px 10px;font-size:12px;max-width:230px">${v.s||'—'}</td>
+      <td style="padding:8px 10px">${snHtml}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.rec||'—'}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.src||'—'}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${closeD}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#64748b">${tt||'—'}</td>
+    </tr>`;
+  }).join('');
+  const head=`<thead><tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Key</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Vacancy</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Seniority</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Recruiter</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Sourcer</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Closed</th>
+    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Team</th>
+  </tr></thead>`;
+  const popup=document.getElementById('s5popup');
+  const tbl=popup.querySelector('table');
+  if(tbl) tbl.innerHTML=`${head}<tbody id="s5popup-tbody">${rows}</tbody>`;
+  document.getElementById('s5overlay').style.display='block';
+  document.getElementById('s5popup').style.display='flex';
 }
 
 function rCV(){rCVDynamics();rCVTTF();rCVTTH();rCVClosedCount();rCVSources();}
