@@ -554,7 +554,7 @@ function recTriggerRefresh(){
   <!-- KPI — single row -->
   <div style="display:flex;align-items:stretch;gap:12px;margin-bottom:28px">
     <div class="kpi-card blue" style="flex:1;justify-content:center">
-      <div class="kpi-icon">📂</div>
+      <div class="kpi-icon">⚡</div>
       <div class="kpi-num" id="kn-av">—</div>
       <div class="kpi-label">Active Vacancies</div>
     </div>
@@ -564,19 +564,15 @@ function recTriggerRefresh(){
       <div class="kpi-label">Plan</div>
     </div>
     <div class="kpi-card orange" style="flex:1;justify-content:center">
-      <div class="kpi-icon">⚡</div>
-      <div class="kpi-num" id="kn-ip">—</div>
-      <div class="kpi-label">In Progress</div>
-    </div>
-    <div class="kpi-card orange" style="flex:1;justify-content:center">
       <div class="kpi-icon">🎯</div>
       <div class="kpi-num" id="kn-hn">—</div>
       <div class="kpi-label">Hires Needed</div>
     </div>
   </div>
 
-  <!-- Charts: Opened first, then Hires (cv-card style) -->
-  <div class="cv-row">
+  <!-- Charts: Opened This Week + Hires This Week — hidden temporarily.
+       To restore — remove style="display:none" from .cv-row below. -->
+  <div class="cv-row" style="display:none">
     <div class="cv-card">
       <div class="cv-card-title" style="justify-content:space-between;display:flex;align-items:center">
         <span style="display:flex;align-items:center;gap:8px">
@@ -642,18 +638,29 @@ function recTriggerRefresh(){
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🏢</div>
-      <h2>Open Vacancies per Department<br><span style="color:#94a3b8;font-weight:400;font-size:11px">expandable by department · sortable columns</span></h2>
+      <h2>Open Vacancies per Department <span style="font-size:13px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:6px;padding:2px 8px;margin-left:6px">In progress only</span><br><span style="color:#94a3b8;font-weight:400;font-size:11px">expandable by department · sortable columns</span></h2>
       <span class="sec-badge" id="b3" style="background:#ede9fe;color:#6d28d9;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div class="toggle-btn">−</div>
     </div>
     <div id="c3" style="padding:0 4px 8px"></div>
   </div>
 
+  <!-- S3 Plan-only mirror -->
+  <div class="section">
+    <div class="section-header" onclick="tog(this)">
+      <div class="section-icon" style="background:linear-gradient(135deg,#64748b,#94a3b8);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📌</div>
+      <h2>Open Vacancies per Department <span style="font-size:13px;font-weight:600;color:#475569;background:#f1f5f9;border-radius:6px;padding:2px 8px;margin-left:6px">Plan only</span><br><span style="color:#94a3b8;font-weight:400;font-size:11px">expandable by department · sortable columns</span></h2>
+      <span class="sec-badge" id="b3p" style="background:#f1f5f9;color:#475569;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
+      <div class="toggle-btn">−</div>
+    </div>
+    <div id="c3p" style="padding:0 4px 8px"></div>
+  </div>
+
   <!-- S4 -->
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#ef4444,#f87171);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">⏰</div>
-      <h2>30+ Day Open Roles<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Hiring Focus · filter by Start date</span></h2>
+      <h2>Roles by Days Open<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Hiring Focus · filter by Start date</span></h2>
       <span class="sec-badge" id="b4" style="background:#fee2e2;color:#b91c1c;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div onclick="event.stopPropagation()" style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto">
         <span style="font-size:11px;color:#94a3b8;white-space:nowrap">more than</span>
@@ -1483,10 +1490,17 @@ function vacInStatus(v, status){
 
 // KPI
 function rKPI(){
-  document.getElementById('kn-av').textContent=OP.length;
-  document.getElementById('kn-hn').textContent=OP.reduce((s,v)=>s+v.h,0);
+  // Active = In Progress (parent or via sub-task). Excludes Canceled/Hired.
+  document.getElementById('kn-av').textContent=OP.filter(v=>vacInStatus(v,'In progress')).length;
   document.getElementById('kn-plan').textContent=OP.filter(v=>vacInStatus(v,'Plan')).length;
-  document.getElementById('kn-ip').textContent=OP.filter(v=>vacInStatus(v,'In progress')).length;
+  // Hires Needed: actual slots (parent + active subs) for active vacancies only.
+  // Same formula as Workload-Active totalHires for full consistency.
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _activeOPs=OP.filter(v=>vacInStatus(v,'In progress')||vacInStatus(v,'Plan'));
+  document.getElementById('kn-hn').textContent=_activeOPs.reduce((s,v)=>{
+    const subs=_activeST.filter(x=>x.pk===v.key);
+    return s+(subs.length>0?subs.length+1:v.h);
+  },0);
 }
 
 // S1
@@ -1693,26 +1707,36 @@ function s3Sort(col){
   r3();
 }
 function r3(){
-  const totalH=ALL_VACS.reduce((s,v)=>s+v.h,0);
+  // Section "Open Vacancies per Department" — IN PROGRESS ONLY (parent or via sub-task).
+  // Hires count: only units matching 'In progress' (parent if IP + subs that are IP).
+  const _activeVacs=ALL_VACS.filter(v=>vacInStatus(v,'In progress'));
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _vacHires=v=>{
+    const subs=_activeST.filter(x=>x.pk===v.key);
+    if(subs.length>0){
+      const subsIp=subs.filter(x=>x.st==='In progress').length;
+      const parentIp=v.st==='In progress'?1:0;
+      return subsIp+parentIp;
+    }
+    return v.st==='In progress'?v.h:0;
+  };
+  const totalH=_activeVacs.reduce((s,v)=>s+_vacHires(v),0);
   document.getElementById('b3').innerHTML=
-    `<span class="bnum">${ALL_VACS.length}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalH}</span> hires`;
+    `<span class="bnum">${_activeVacs.length}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalH}</span> hires`;
 
   const depts={};
-  ALL_VACS.filter(v=>v.t).forEach(v=>{if(!depts[v.t])depts[v.t]=[];depts[v.t].push(v);});
+  _activeVacs.filter(v=>v.t).forEach(v=>{if(!depts[v.t])depts[v.t]=[];depts[v.t].push(v);});
   const entries=Object.entries(depts).map(([dept,vacs])=>({
     dept,vacs,
     ip:vacs.filter(v=>vacInStatus(v,'In progress')).length,
-    pl:vacs.filter(v=>vacInStatus(v,'Plan')).length,
-    h:vacs.reduce((s,v)=>s+v.h,0)
+    h:vacs.reduce((s,v)=>s+_vacHires(v),0)
   }));
   entries.sort((a,b)=>{
     if(_s3SortCol==='dept') return a.dept.localeCompare(b.dept)*_s3SortDir;
     if(_s3SortCol==='ip')   return (a.ip-b.ip)*_s3SortDir;
-    if(_s3SortCol==='pl')   return (a.pl-b.pl)*_s3SortDir;
     if(_s3SortCol==='vac')  return (a.vacs.length-b.vacs.length)*_s3SortDir;
     return (a.h-b.h)*_s3SortDir; // 'h' default
   });
-  const maxH=Math.max(...entries.map(e=>e.h));
 
   const arr=col=>col===_s3SortCol?(_s3SortDir===1?'▴':'▾'):'⇅';
   const thBase='font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none';
@@ -1721,8 +1745,7 @@ function r3(){
   const thL=`padding:11px 16px;text-align:left;${thBase};color:#64748b`;
 
   let tbody='';
-  entries.forEach(({dept,vacs,ip,pl,h:dh},idx)=>{
-    const barW=Math.round((dh/maxH)*100);
+  entries.forEach(({dept,vacs,ip,h:dh},idx)=>{
     const did=esc(dept);
     const bg=idx%2===0?'#ffffff':'#fafbfd';
 
@@ -1735,25 +1758,18 @@ function r3(){
       <td style="text-align:center;padding:11px 10px">
         <span style="background:#eff6ff;color:#1d4ed8;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600">${ip}</span>
       </td>
-      <td style="text-align:center;padding:11px 10px">
-        ${pl>0?`<span style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600">${pl}</span>`:`<span style="color:#cbd5e1;font-size:13px">—</span>`}
-      </td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${vacs.length}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${dh}</td>
-      <td style="padding:11px 20px 11px 10px;min-width:120px">
-        <div style="background:#e2e8f0;border-radius:99px;height:8px;overflow:hidden">
-          <div style="background:linear-gradient(90deg,#3b6ef5,#60a5fa);height:100%;width:${barW}%;border-radius:99px"></div>
-        </div>
-      </td>
     </tr>`;
 
-    // Vacancy rows (hidden by default)
-    const vacsSorted=[...vacs].sort((a,b)=>a.st==='Plan'?1:b.st==='Plan'?-1:0);
+    // Vacancy rows (hidden by default) — IP-only section: show only In progress subs.
+    const vacsSorted=[...vacs];
     _s3deptVacs[did]=vacsSorted.map(v=>v.key);
     vacsSorted.forEach(v=>{
       const vSn=v.sn?`<span style="font-size:11px;font-weight:500;color:${snColor[v.sn]||'#475569'}">${v.sn}</span>`:`<span style="color:#94a3b8">—</span>`;
       const isIp=v.st==='In progress', isPl=v.st==='Plan';
-      const subs3=ST.filter(s=>s.pk===v.key&&s.st!=='Hired');
+      // Show only In progress sub-tasks (Plan/other statuses live in Plan-only section).
+      const subs3=ST.filter(s=>s.pk===v.key&&s.st==='In progress');
       const togBtn3=subs3.length>0
         ?`<button id="s3tb-${v.key}" onclick="event.stopPropagation();togSubs3('${v.key}')" style="background:none;border:1px solid #c8d2e0;border-radius:4px;cursor:pointer;font-size:9px;padding:1px 4px;color:#64748b;margin-right:4px;line-height:1">+</button>`
         :'';
@@ -1764,10 +1780,8 @@ function r3(){
         <td style="text-align:center;padding:8px 10px">${vSn}</td>
         <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
         <td style="text-align:center;padding:8px 10px">${isIp?sb2(v.st):''}</td>
-        <td style="text-align:center;padding:8px 10px">${isPl?sb2(v.st):''}</td>
         <td style="padding:8px 10px"></td>
-        <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${v.h}</td>
-        <td style="padding:8px 20px 8px 10px"></td>
+        <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${_vacHires(v)}</td>
       </tr>`;
       // Subtask rows (hidden by default)
       subs3.forEach(s=>{
@@ -1780,10 +1794,8 @@ function r3(){
           <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
           <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="text-align:center;padding:6px 10px">${s.st==='In progress'?sb2(s.st):''}</td>
-          <td style="text-align:center;padding:6px 10px">${s.st==='Plan'?sb2(s.st):''}</td>
           <td style="padding:6px 10px"></td>
           <td style="text-align:center;padding:6px 10px;font-size:11px;color:#64748b;font-weight:600">1</td>
-          <td style="padding:6px 20px 6px 10px"></td>
         </tr>`;
       });
     });
@@ -1794,11 +1806,9 @@ function r3(){
     <td style="padding:11px 16px;font-weight:700;color:#374151;font-size:13px">Всього</td>
     <td style="padding:11px 10px"></td>
     <td style="padding:11px 10px"></td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#1d4ed8;font-size:14px">${ALL_VACS.filter(v=>vacInStatus(v,'In progress')).length}</td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#475569;font-size:14px">${ALL_VACS.filter(v=>vacInStatus(v,'Plan')).length}</td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${ALL_VACS.length}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#1d4ed8;font-size:14px">${_activeVacs.length}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${_activeVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${totalH}</td>
-    <td style="padding:11px 20px 11px 10px"></td>
   </tr>`;
 
   document.getElementById('c3').innerHTML=`
@@ -1809,14 +1819,158 @@ function r3(){
           <th style="${thCss}">Seniority</th>
           <th style="${thCss}">Teams</th>
           <th onclick="s3Sort('ip')"   style="${thCss}">In Progress${thArrSpan('ip')}</th>
-          <th onclick="s3Sort('pl')"   style="${thCss}">Plan${thArrSpan('pl')}</th>
           <th onclick="s3Sort('vac')"  style="${thCss}">Vacancies${thArrSpan('vac')}</th>
           <th onclick="s3Sort('h')"    style="${thCss}">Hires${thArrSpan('h')}</th>
-          <th onclick="s3Sort('dist')" style="${thCss.replace('center','left')}">Distribution${thArrSpan('h')}</th>
         </tr>
       </thead>
       <tbody>${tbody}</tbody>
     </table>`;
+}
+
+// ── S3 Plan-only mirror ────────────────────────────────────
+let _s3pSortCol='h', _s3pSortDir=-1, _s3pdeptVacs={};
+function s3pSort(col){
+  const c=col;
+  if(_s3pSortCol===c)_s3pSortDir*=-1; else{_s3pSortCol=c;_s3pSortDir=c==='dept'?1:-1;}
+  r3plan();
+}
+function r3plan(){
+  // Plan only: parent.st='Plan' OR has any active sub-task with st='Plan'.
+  // Hires count: only units matching 'Plan' (parent if Plan + subs that are Plan).
+  const _planVacs=ALL_VACS.filter(v=>vacInStatus(v,'Plan'));
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _vacHires=v=>{
+    const subs=_activeST.filter(x=>x.pk===v.key);
+    if(subs.length>0){
+      const subsPl=subs.filter(x=>x.st==='Plan').length;
+      const parentPl=v.st==='Plan'?1:0;
+      return subsPl+parentPl;
+    }
+    return v.st==='Plan'?v.h:0;
+  };
+  const totalH=_planVacs.reduce((s,v)=>s+_vacHires(v),0);
+  document.getElementById('b3p').innerHTML=
+    `<span class="bnum">${_planVacs.length}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalH}</span> hires`;
+
+  const depts={};
+  _planVacs.filter(v=>v.t).forEach(v=>{if(!depts[v.t])depts[v.t]=[];depts[v.t].push(v);});
+  const entries=Object.entries(depts).map(([dept,vacs])=>({
+    dept,vacs,
+    pl:vacs.filter(v=>vacInStatus(v,'Plan')).length,
+    h:vacs.reduce((s,v)=>s+_vacHires(v),0)
+  }));
+  entries.sort((a,b)=>{
+    if(_s3pSortCol==='dept') return a.dept.localeCompare(b.dept)*_s3pSortDir;
+    if(_s3pSortCol==='pl')   return (a.pl-b.pl)*_s3pSortDir;
+    if(_s3pSortCol==='vac')  return (a.vacs.length-b.vacs.length)*_s3pSortDir;
+    return (a.h-b.h)*_s3pSortDir;
+  });
+
+  const arr=col=>col===_s3pSortCol?(_s3pSortDir===1?'▴':'▾'):'⇅';
+  const thBase='font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none';
+  const thArrSpan=col=>`&thinsp;<span style="color:${col===_s3pSortCol?'#475569':'#c8d2e0'};font-size:9px">${arr(col)}</span>`;
+  const thCss=`padding:11px 10px;text-align:center;${thBase};color:#64748b`;
+  const thL=`padding:11px 16px;text-align:left;${thBase};color:#64748b`;
+
+  let tbody='';
+  entries.forEach(({dept,vacs,pl,h:dh},idx)=>{
+    const did=esc(dept);
+    const bg=idx%2===0?'#ffffff':'#fafbfd';
+    tbody+=`<tr style="background:${bg};border-bottom:1px solid #f1f5f9;cursor:pointer" onclick="togDept3p('${did}')">
+      <td style="padding:11px 16px;font-weight:700;color:#475569;font-size:13px;white-space:nowrap">
+        <span id="arr3p-${did}" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1.5px solid #cbd5e1;border-radius:4px;font-size:10px;color:#64748b;margin-right:8px;font-weight:700;flex-shrink:0;vertical-align:middle">+</span>${dept}
+      </td>
+      <td style="padding:11px 10px"></td>
+      <td style="padding:11px 10px"></td>
+      <td style="text-align:center;padding:11px 10px">
+        <span style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600">${pl}</span>
+      </td>
+      <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${vacs.length}</td>
+      <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${dh}</td>
+    </tr>`;
+    const vacsSorted=[...vacs];
+    _s3pdeptVacs[did]=vacsSorted.map(v=>v.key);
+    vacsSorted.forEach(v=>{
+      const vSn=v.sn?`<span style="font-size:11px;font-weight:500;color:${snColor[v.sn]||'#475569'}">${v.sn}</span>`:`<span style="color:#94a3b8">—</span>`;
+      // Plan-only section: show only Plan sub-tasks (other statuses live in their own sections).
+      const subs3=ST.filter(s=>s.pk===v.key&&s.st==='Plan');
+      const togBtn3=subs3.length>0
+        ?`<button id="s3ptb-${v.key}" onclick="event.stopPropagation();togSubs3p('${v.key}')" style="background:none;border:1px solid #c8d2e0;border-radius:4px;cursor:pointer;font-size:9px;padding:1px 4px;color:#64748b;margin-right:4px;line-height:1">+</button>`
+        :'';
+      // Show parent's status badge in Plan column only if parent itself is Plan; else dim
+      const isPl=v.st==='Plan';
+      tbody+=`<tr data-dept3p="${did}" style="display:none;background:#f8fafc;border-bottom:1px solid #eef2f7">
+        <td style="padding:8px 16px 8px 36px;font-size:12px">
+          ${togBtn3}${jl(v.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${v.s}</span>
+        </td>
+        <td style="text-align:center;padding:8px 10px">${vSn}</td>
+        <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
+        <td style="text-align:center;padding:8px 10px">${isPl?sb2(v.st):`<span style="color:#cbd5e1;font-size:11px">via sub</span>`}</td>
+        <td style="padding:8px 10px"></td>
+        <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${_vacHires(v)}</td>
+      </tr>`;
+      subs3.forEach(s=>{
+        const sSn=s.sn||v.sn;
+        const sSnTd=sSn?`<span style="font-size:11px;font-weight:500;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:`<span style="color:#94a3b8">—</span>`;
+        tbody+=`<tr data-s3pparent="${v.key}" style="display:none;background:#f1f5f9;border-bottom:1px solid #e2e8f0">
+          <td style="padding:6px 16px 6px 56px;font-size:11px">
+            ↳ ${jl(s.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${s.s}</span>
+          </td>
+          <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
+          <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
+          <td style="text-align:center;padding:6px 10px">${s.st==='Plan'?sb2(s.st):''}</td>
+          <td style="padding:6px 10px"></td>
+          <td style="text-align:center;padding:6px 10px;font-size:11px;color:#64748b;font-weight:600">1</td>
+        </tr>`;
+      });
+    });
+  });
+
+  // Footer row
+  tbody+=`<tr style="background:#f8fafc;border-top:2px solid #e2e8f0">
+    <td style="padding:11px 16px;font-weight:700;color:#374151;font-size:13px">Всього</td>
+    <td style="padding:11px 10px"></td>
+    <td style="padding:11px 10px"></td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#475569;font-size:14px">${_planVacs.length}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${_planVacs.length}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${totalH}</td>
+  </tr>`;
+
+  document.getElementById('c3p').innerHTML=`
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+          <th onclick="s3pSort('dept')" style="${thL}">Department${thArrSpan('dept')}</th>
+          <th style="${thCss}">Seniority</th>
+          <th style="${thCss}">Teams</th>
+          <th onclick="s3pSort('pl')"   style="${thCss}">Plan${thArrSpan('pl')}</th>
+          <th onclick="s3pSort('vac')"  style="${thCss}">Vacancies${thArrSpan('vac')}</th>
+          <th onclick="s3pSort('h')"    style="${thCss}">Hires${thArrSpan('h')}</th>
+        </tr>
+      </thead>
+      <tbody>${tbody}</tbody>
+    </table>`;
+}
+function togDept3p(did){
+  const rows=document.querySelectorAll(`[data-dept3p="${did}"]`);
+  const arr=document.getElementById('arr3p-'+did);
+  const hidden=rows[0]?.style.display==='none';
+  rows.forEach(r=>r.style.display=hidden?'table-row':'none');
+  if(arr)arr.textContent=hidden?'−':'+';
+  if(!hidden){
+    (_s3pdeptVacs[did]||[]).forEach(key=>{
+      document.querySelectorAll(`[data-s3pparent="${key}"]`).forEach(r=>r.style.display='none');
+      const btn=document.getElementById('s3ptb-'+key);
+      if(btn)btn.textContent='+';
+    });
+  }
+}
+function togSubs3p(key){
+  const rows=document.querySelectorAll(`[data-s3pparent="${key}"]`);
+  const btn=document.getElementById('s3ptb-'+key);
+  const hidden=rows[0]?.style.display==='none';
+  rows.forEach(r=>r.style.display=hidden?'table-row':'none');
+  if(btn)btn.textContent=hidden?'−':'+';
 }
 
 function togDept3(did){
@@ -2494,11 +2648,12 @@ function rWorkload(){
       ${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span>
     </th>`;
 
+  // totalVacs / totalTasks: count UNIQUE items respecting status filter
+  // (no double-count when same vacancy has both rec and src assigned).
+  const totalVacs=_wlFilterType==='task'?0:_allActiveVacs.length;
+  const totalTasks=_wlFilterType==='vac'?0:TASKS.filter(t=>_wlFilterSt.has(t.st)).length;
   let rows='';
-  let totalVacs=0, totalTasks=0;
   members.forEach((m,idx)=>{
-    totalVacs+=m.allVacs.length;
-    totalTasks+=m.taskItems.length;
     const [c1,c2]=avatarColors[idx%avatarColors.length];
     const initials=m.name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
     const load=m.hires+m.taskItems.length;
@@ -3398,7 +3553,7 @@ function rCVSources(){
 
 function rCV(){rCVDynamics();rCVTTF();rCVTTH();rCVClosedCount();rCVSources();}
 
-rKPI(); r1(); r2(); r3(); r4(); r5(); rWorkload(); rWorkloadHired(); rWorkloadOverview();
+rKPI(); r1(); r2(); r3(); r3plan(); r4(); r5(); rWorkload(); rWorkloadHired(); rWorkloadOverview();
 </script>
 </body>
 </html>
