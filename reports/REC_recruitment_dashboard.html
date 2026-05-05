@@ -2551,7 +2551,7 @@ function rWorkload(){
     }
   });
 
-  document.getElementById('bw').innerHTML=`<span class="bnum">${totalVacs}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalTasks}</span> tasks &nbsp;·&nbsp; <span class="bnum">${totalHires}</span> hires`;
+  document.getElementById('bw').innerHTML=`<span class="bnum">${totalVacs}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalHires}</span> hires &nbsp;·&nbsp; <span class="bnum">${totalTasks}</span> tasks`;
   document.getElementById('c-workload').innerHTML=`<div class="tbl-wrap"><table>
     <thead><tr>
       ${mkTh('name','RECRUITER','left','200px')}
@@ -2785,7 +2785,7 @@ function rWorkloadHired(){
       });
     }
   });
-  document.getElementById('bwh').innerHTML=`<span class="bnum">${totalHiredVacs}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalHiredTasks}</span> tasks &nbsp;·&nbsp; <span class="bnum">${totalHiredHires}</span> hires`;
+  document.getElementById('bwh').innerHTML=`<span class="bnum">${totalHiredVacs}</span> vacancies &nbsp;·&nbsp; <span class="bnum">${totalHiredHires}</span> hires &nbsp;·&nbsp; <span class="bnum">${totalHiredTasks}</span> tasks`;
   document.getElementById('c-hired').innerHTML=`<div class="tbl-wrap"><table>
     <thead><tr>
       ${mkThH('name','RECRUITER','left','200px')}
