@@ -23,7 +23,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
@@ -45,8 +45,19 @@ jobs:
           if [[ -n "$(git status --porcelain reports/REC_recruitment_dashboard.html)" ]]; then
             git add reports/REC_recruitment_dashboard.html
             git commit -m "chore(rec): auto-refresh dashboard data from Jira [skip ci]"
-            git push
-            echo "✓ Dashboard updated and pushed."
+            # Retry push with rebase up to 3 times — handles race conditions
+            # when a human (or another bot run) pushes while this job runs.
+            for i in 1 2 3; do
+              if git push 2>/dev/null; then
+                echo "✓ Dashboard updated and pushed (attempt $i)."
+                exit 0
+              fi
+              echo "Push attempt $i rejected, rebasing on remote main..."
+              git pull --rebase origin main
+              sleep 2
+            done
+            echo "✗ Failed to push after 3 attempts."
+            exit 1
           else
             echo "ℹ No data changes — skipping commit."
           fi
