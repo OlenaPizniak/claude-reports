@@ -514,9 +514,11 @@ function recTriggerRefresh(){
       <div class="section-body"><div id="c-workload"></div></div>
     </div>
 
-    <div id="wl-tt-overview" style="margin:16px 0"></div>
+    <!-- AVG TTF / AVG TTH cards: hidden temporarily. To restore — remove display:none below. -->
+    <div id="wl-tt-overview" style="display:none;margin:16px 0"></div>
 
-    <div class="section">
+    <!-- Workload-Hired section: hidden temporarily. To restore — remove style="display:none" from .section below. -->
+    <div class="section" style="display:none">
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#10b981,#34d399);font-size:18px;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">✅</div>
         <h2>Workload - Hired &nbsp;<span style="color:#94a3b8;font-weight:400;font-size:12px">completed hires by team member</span></h2>
@@ -815,7 +817,8 @@ function recTriggerRefresh(){
 
 <script>
 const J='https://newsiteam.atlassian.net/browse/';
-const TODAY=new Date('2026-04-24');
+// TODAY = local midnight (avoids hour drift, always reflects real date)
+const TODAY=(()=>{const t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate());})();
 // Auto-calculate current week Mon–Sun
 const _d=new Date(),_dy=_d.getDay()||7;
 const _m=new Date(_d);_m.setDate(_d.getDate()-_dy+1);
@@ -1433,7 +1436,14 @@ const ALL_VACS=OP.map(v=>{
   return{key:v.key,s:v.s,st:v.st,pr:v.pr,sn:SN[v.key]||null,rec,src,sd:SD[v.key]||null,h:v.h,t:v.t,sb:v.sb,r:v.r,cr:v.cr};
 });
 
-function dag(d){return Math.floor((TODAY-new Date(d))/(864e5));}
+// Calendar-day diff between TODAY (local midnight) and date string 'YYYY-MM-DD' (parsed as local).
+// Avoids UTC vs local timezone offset that produced off-by-one days (e.g. '2026-04-30' showed as 4 instead of 5).
+function dag(d){
+  if(!d) return null;
+  const parts=String(d).split('-').map(Number);
+  const sd=new Date(parts[0],parts[1]-1,parts[2]);
+  return Math.floor((TODAY-sd)/86400000);
+}
 function diffDays(d1,d2){if(!d1||!d2)return null;return Math.round((new Date(d1)-new Date(d2))/864e5);}
 function ttBadge(d){return d==null?'<span class="dash-val">—</span>':`<span class="dbnorm">${d}d</span>`;}
 function pb(p){const m={High:'ph',Medium:'pm',Low:'pl'};return p?`<span class="bp ${m[p]||'pl'}">${p}</span>`:'<span class="dash-val">—</span>';}
@@ -1462,12 +1472,21 @@ function tog(hdr){
   if(btn)btn.textContent=hdr.classList.contains('collapsed')?'+':'−';
 }
 
+// Helper: vacancy is in given status (or any of its statuses).
+// Considers BOTH parent's own status AND active sub-task statuses (ST array).
+// Example: REC-228 parent='In progress', sub REC-229='Plan' → matches both 'Plan' and 'In progress'.
+// Used for status filtering/counting consistently across the dashboard.
+function vacInStatus(v, status){
+  if(v.st===status) return true;
+  return ST.some(s=>s.pk===v.key && s.st!=='Hired' && s.st===status);
+}
+
 // KPI
 function rKPI(){
   document.getElementById('kn-av').textContent=OP.length;
   document.getElementById('kn-hn').textContent=OP.reduce((s,v)=>s+v.h,0);
-  document.getElementById('kn-plan').textContent=OP.filter(v=>v.st==='Plan').length;
-  document.getElementById('kn-ip').textContent=OP.filter(v=>v.st==='In progress').length;
+  document.getElementById('kn-plan').textContent=OP.filter(v=>vacInStatus(v,'Plan')).length;
+  document.getElementById('kn-ip').textContent=OP.filter(v=>vacInStatus(v,'In progress')).length;
 }
 
 // S1
@@ -1682,8 +1701,8 @@ function r3(){
   ALL_VACS.filter(v=>v.t).forEach(v=>{if(!depts[v.t])depts[v.t]=[];depts[v.t].push(v);});
   const entries=Object.entries(depts).map(([dept,vacs])=>({
     dept,vacs,
-    ip:vacs.filter(v=>v.st==='In progress').length,
-    pl:vacs.filter(v=>v.st==='Plan').length,
+    ip:vacs.filter(v=>vacInStatus(v,'In progress')).length,
+    pl:vacs.filter(v=>vacInStatus(v,'Plan')).length,
     h:vacs.reduce((s,v)=>s+v.h,0)
   }));
   entries.sort((a,b)=>{
@@ -1775,8 +1794,8 @@ function r3(){
     <td style="padding:11px 16px;font-weight:700;color:#374151;font-size:13px">Всього</td>
     <td style="padding:11px 10px"></td>
     <td style="padding:11px 10px"></td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#1d4ed8;font-size:14px">${ALL_VACS.filter(v=>v.st==='In progress').length}</td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#475569;font-size:14px">${ALL_VACS.filter(v=>v.st==='Plan').length}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#1d4ed8;font-size:14px">${ALL_VACS.filter(v=>vacInStatus(v,'In progress')).length}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#475569;font-size:14px">${ALL_VACS.filter(v=>vacInStatus(v,'Plan')).length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${ALL_VACS.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${totalH}</td>
     <td style="padding:11px 20px 11px 10px"></td>
@@ -2383,16 +2402,34 @@ function rWorkload(){
   const activeVacs=ALL_VACS.filter(v=>v.st!=='Hired');
   const activeST=ST.filter(s=>s.st!=='Hired');
 
+  // Vacancy passes status filter if its own status matches OR any of its active
+  // sub-tasks has matching status (e.g. parent='In progress', sub='Plan' like REC-228/REC-229).
+  const _vacMatchesSt=v=>{
+    if(_wlFilterSt.has(v.st)) return true;
+    const subs=activeST.filter(s=>s.pk===v.key);
+    return subs.some(s=>_wlFilterSt.has(s.st));
+  };
+
   const members=TEAM_ALL.map(name=>{
     // Also include Plan vacancies present in WP but missing from RECR lookup
-    const recVacs=activeVacs.filter(v=>(v.rec===name||(v.rec==null&&WP.find(w=>w.key===v.key)?.rec===name))&&_wlFilterSt.has(v.st));
-    const srcVacs=activeVacs.filter(v=>v.src===name&&v.rec!==name&&!recVacs.some(r=>r.key===v.key)&&_wlFilterSt.has(v.st));
-    const taskItems=_wlFilterType==='vac'?[]:TASKS.filter(t=>t.asgn===name).map(t=>({...t,_role:'Task',h:0,sn:null,t:null,sb:null}));
-    const allVacs=_wlFilterType==='task'?[]:[...recVacs.map(v=>({...v,_role:'Recruiter'})),...srcVacs.map(v=>({...v,_role:'Sourcer'}))];
-    // Active hires: count across all assigned vacancies (rec + src roles)
+    const recVacs=activeVacs.filter(v=>(v.rec===name||(v.rec==null&&WP.find(w=>w.key===v.key)?.rec===name))&&_vacMatchesSt(v));
+    const srcVacs=activeVacs.filter(v=>v.src===name&&v.rec!==name&&!recVacs.some(r=>r.key===v.key)&&_vacMatchesSt(v));
+    const taskItems=_wlFilterType==='vac'?[]:TASKS.filter(t=>t.asgn===name&&_wlFilterSt.has(t.st)).map(t=>({...t,_role:'Task',h:0,sn:null,t:null,sb:null}));
+    const allVacs=_wlFilterType==='task'?[]:[
+      ...recVacs.map(v=>({...v,_role:v.src?'Interviewing':'Full-cycle'})),
+      ...srcVacs.map(v=>({...v,_role:'Sourcing'}))
+    ];
+    // Active hires: count units (parent + subs) that match the status filter.
+    // Parent without subs → count v.h if parent matches (already implied by allVacs filter).
+    // Parent with subs → count parent's own slot if v.st matches + each sub whose st matches.
     const hiresTotal=allVacs.reduce((s,v)=>{
       const activeSubs=activeST.filter(x=>x.pk===v.key);
-      return s+(activeSubs.length>0?activeSubs.length+1:v.h);
+      if(activeSubs.length>0){
+        const subsMatching=activeSubs.filter(x=>_wlFilterSt.has(x.st)).length;
+        const parentMatching=_wlFilterSt.has(v.st)?1:0;
+        return s+subsMatching+parentMatching;
+      }
+      return s+(_wlFilterSt.has(v.st)?v.h:0);
     },0);
     const highCount=recVacs.filter(v=>v.pr==='High').length;
     const seniorCount=recVacs.filter(v=>['Senior','Lead','Expert'].includes(v.sn)).length;
@@ -2417,12 +2454,18 @@ function rWorkload(){
     return (a.hires-b.hires)*_wlSortDir;
   });
 
-  // totalHires: unique hire slots across all active vacancies (avoid double-count rec+src)
-  const _allActiveVacs=ALL_VACS.filter(v=>v.st!=='Hired');
+  // totalHires: unique hire slots across all active vacancies that pass status filter.
+  // Same per-unit logic as per-member calc: count parent + matching subs separately.
+  const _allActiveVacs=ALL_VACS.filter(v=>v.st!=='Hired'&&_vacMatchesSt(v));
   const _allActiveST=ST.filter(s=>s.st!=='Hired');
   const totalHires=_allActiveVacs.reduce((s,v)=>{
     const subs=_allActiveST.filter(x=>x.pk===v.key);
-    return s+(subs.length>0?subs.length+1:v.h);
+    if(subs.length>0){
+      const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
+      const parentMatching=_wlFilterSt.has(v.st)?1:0;
+      return s+subsMatching+parentMatching;
+    }
+    return s+(_wlFilterSt.has(v.st)?v.h:0);
   },0);
   const maxLoad=Math.max(...members.map(m=>m.hires+m.taskItems.length),1);
   const avatarColors=[
@@ -2437,12 +2480,14 @@ function rWorkload(){
   // Sort arrow helpers
   const arw=col=>_wlSortCol===col?(_wlSortDir===1?'▴':'▾'):'⇅';
   const arwC=col=>_wlSortCol===col?'#3b6ef5':'#c8d2e0';
-  const roleBadge=r=>r==='Recruiter'
-    ?`<span style="font-size:10px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:4px;padding:2px 6px">REC</span>`
-    :r==='Sourcer'
-    ?`<span style="font-size:10px;font-weight:600;color:#8b5cf6;background:#f5f3ff;border-radius:4px;padding:2px 6px">SRC</span>`
+  const roleBadge=r=>r==='Full-cycle'
+    ?`<span style="font-size:10px;font-weight:600;color:#0e7490;background:#ecfeff;border-radius:4px;padding:2px 6px">Full-cycle</span>`
+    :r==='Interviewing'
+    ?`<span style="font-size:10px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:4px;padding:2px 6px">Interviewing</span>`
+    :r==='Sourcing'
+    ?`<span style="font-size:10px;font-weight:600;color:#8b5cf6;background:#f5f3ff;border-radius:4px;padding:2px 6px">Sourcing</span>`
     :r==='Task'
-    ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">TASK</span>`
+    ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">Owner</span>`
     :'<span class="dash-val">—</span>';
   const mkTh=(col,lbl,align,w)=>
     `<th onclick="wlSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};`:''};white-space:nowrap;user-select:none">
@@ -2458,11 +2503,6 @@ function rWorkload(){
     const initials=m.name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
     const load=m.hires+m.taskItems.length;
     const pct=maxLoad>0?Math.round(load/maxLoad*100):0;
-    const isOvld=load>20;
-    const isWarn=!isOvld&&load>8;
-    const barColor=isOvld?'#ef4444':(isWarn?'#f97316':'#3b6ef5');
-    const badge=isOvld?`<span class="wl-overloaded">Перевантажена</span>`
-                :isWarn?`<span class="wl-warn">!</span>`:'';
     const hasVacs=m.allVacs.length+m.taskItems.length>0;
     if(!hasVacs) return; // hide empty rows after filtering
     const did='wl_'+m.name.replace(/\s+/g,'_');
@@ -2476,7 +2516,6 @@ function rWorkload(){
             <div style="font-weight:600;font-size:13px;color:#0f172a;line-height:1.2">${m.name}</div>
 
           </div>
-          ${badge?`<div style="margin-left:6px">${badge}</div>`:''}
           ${hasVacs?`<span id="arr-${did}" style="color:#94a3b8;font-size:11px;margin-left:auto;flex-shrink:0">+</span>`:''}
         </div>
       </td>
@@ -2486,13 +2525,11 @@ function rWorkload(){
       <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a">${m.allVacs.length||'<span style="color:#cbd5e1;font-size:14px">—</span>'}</td>
       <td style="text-align:center;font-size:17px;font-weight:700;color:#0891b2">${m.taskItems.length||'<span style="color:#cbd5e1;font-size:14px">—</span>'}</td>
       <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a">${m.hires||'<span style="color:#cbd5e1;font-size:14px">—</span>'}</td>
-      <td style="padding:10px 20px 10px 10px;min-width:140px">
-        ${load>0?`<div class="wl-bar-wrap"><div class="wl-bar" style="width:${pct}%;background:${barColor}"></div></div>`:'<span style="color:#cbd5e1">—</span>'}
-      </td>
+      <td></td>
       <td></td>
     </tr>`;
 
-    // Expanded vacancy rows: Priority=badge, Seniority=badge, Vacancies=status, Hires=count, Workload=dept/team, Days=number
+    // Expanded vacancy rows: Priority=badge, Seniority=badge, Vacancies=status, Hires=count, Team/Subteam=dept/team, Days=number
     if(hasVacs){
       const _snOrd={Expert:0,Lead:1,Senior:2,Middle:3,Junior:4,Intern:5};
       const _stOrd={'In progress':0,'Plan':1};
@@ -2517,13 +2554,16 @@ function rWorkload(){
         const activeHires=vSubs.length>0?vSubs.length+1:v.h;
         const vDays=(closeDate(v)||v.sd)?dag(closeDate(v)||v.sd):null;
         const vDaysBadge=vDays!=null?`<span class="${vDays>=45?'db45':vDays>=30?'db30':'dbnorm'}">${vDays}</span>`:'<span class="dash-val">—</span>';
+        const _isTask=v._role==='Task';
+        const _vacCell=_isTask?'':sb2(v.st);
+        const _taskCell=_isTask?sb2(v.st):'';
         rows+=`<tr data-wl="${did}" style="display:none;background:#f0f4ff;border-bottom:1px solid #e8eef8">
           <td style="padding:8px 16px 8px 38px;font-size:12px">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:6px;white-space:normal">${v.s}</span></td>
           <td style="text-align:center">${roleBadge(v._role)}</td>
           <td style="text-align:center">${pb(v.pr)}</td>
           <td style="text-align:center">${snHtml}</td>
-          <td style="text-align:center">${sb2(v.st)}</td>
-          <td></td>
+          <td style="text-align:center">${_vacCell}</td>
+          <td style="text-align:center">${_taskCell}</td>
           <td style="text-align:center;font-size:12px;font-weight:700;color:#0f172a">${activeHires}</td>
           <td style="padding:8px 20px 8px 10px;font-size:11px;color:#64748b">${fv(dt)}</td>
           <td style="text-align:center">${vDaysBadge}</td>
@@ -2561,8 +2601,8 @@ function rWorkload(){
       ${mkTh('vac','VACANCIES')}
       ${mkTh('tasks','TASKS')}
       ${mkTh('hires','HIRES')}
-      ${mkTh('wl','WORKLOAD','left','140px')}
-      ${mkTh('days','DAYS')}
+      ${mkTh('team','TEAM / SUBTEAM','left','160px')}
+      ${mkTh('days','DAYS OPEN')}
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`;
@@ -2651,7 +2691,10 @@ function rWorkloadHired(){
     const recVacs=allHWVacs.filter(v=>v.rec===name);
     const srcVacs=allHWVacs.filter(v=>v.src===name&&v.rec!==name&&!recVacs.some(r=>r.key===v.key));
     const taskItems=_hwFilterType==='vac'?[]:TASKS.filter(t=>t.asgn===name&&t.st==='Hired').map(t=>({...t,_role:'Task',h:0,sn:null,t:null,sb:null}));
-    const allVacs=_hwFilterType==='task'?[]:[...recVacs.map(v=>({...v,_role:'Recruiter'})),...srcVacs.map(v=>({...v,_role:'Sourcer'}))];
+    const allVacs=_hwFilterType==='task'?[]:[
+      ...recVacs.map(v=>({...v,_role:v.src?'Interviewing':'Full-cycle'})),
+      ...srcVacs.map(v=>({...v,_role:'Sourcing'}))
+    ];
     const hiresTotal=allVacs.reduce((s,v)=>s+(v._isSubParent?v._subs.length:v.h),0);
     const highCount=allVacs.filter(v=>v.pr==='High').length;
     const seniorCount=allVacs.filter(v=>['Senior','Lead','Expert'].includes(v.sn)).length;
@@ -2689,12 +2732,14 @@ function rWorkloadHired(){
   ];
   const arwH=col=>_hwSortCol===col?(_hwSortDir===1?'▴':'▾'):'⇅';
   const arwHC=col=>_hwSortCol===col?'#10b981':'#c8d2e0';
-  const roleBadgeH=r=>r==='Recruiter'
-    ?`<span style="font-size:10px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:4px;padding:2px 6px">REC</span>`
-    :r==='Sourcer'
-    ?`<span style="font-size:10px;font-weight:600;color:#8b5cf6;background:#f5f3ff;border-radius:4px;padding:2px 6px">SRC</span>`
+  const roleBadgeH=r=>r==='Full-cycle'
+    ?`<span style="font-size:10px;font-weight:600;color:#0e7490;background:#ecfeff;border-radius:4px;padding:2px 6px">Full-cycle</span>`
+    :r==='Interviewing'
+    ?`<span style="font-size:10px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:4px;padding:2px 6px">Interviewing</span>`
+    :r==='Sourcing'
+    ?`<span style="font-size:10px;font-weight:600;color:#8b5cf6;background:#f5f3ff;border-radius:4px;padding:2px 6px">Sourcing</span>`
     :r==='Task'
-    ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">TASK</span>`
+    ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">Owner</span>`
     :'<span class="dash-val">—</span>';
   const mkThH=(col,lbl,align,w)=>
     `<th onclick="hwSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};`:''};white-space:nowrap;user-select:none">
@@ -2721,9 +2766,7 @@ function rWorkloadHired(){
       <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a">${m.allVacs.length||'<span style="color:#cbd5e1;font-size:14px">—</span>'}</td>
       <td style="text-align:center;font-size:17px;font-weight:700;color:#0891b2">${m.taskItems.length||'<span style="color:#cbd5e1;font-size:14px">—</span>'}</td>
       <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a">${m.hires||'<span style="color:#cbd5e1;font-size:14px">—</span>'}</td>
-      <td style="padding:10px 20px 10px 10px;min-width:140px">
-        ${load>0?`<div class="wl-bar-wrap"><div class="wl-bar" style="width:${pct}%;background:#10b981"></div></div>`:'<span style="color:#cbd5e1">—</span>'}
-      </td>
+      <td></td>
       <td style="text-align:center">${m.maxTTF!==-Infinity?ttBadge(m.maxTTF):'<span class="dash-val">—</span>'}</td>
       <td style="text-align:center">${m.maxTTH!==-Infinity?ttBadge(m.maxTTH):'<span class="dash-val">—</span>'}</td>
     </tr>`;
@@ -2750,13 +2793,16 @@ function rWorkloadHired(){
         const activeHires=vSubs.length>0?vSubs.length:v.h;
         const vTTF=diffDays(closeDate(v),v.sd);
         const vTTH=diffDays(closeDate(v),v.fcd_c);
+        const _isTaskH=v._role==='Task';
+        const _vacCellH=_isTaskH?'':sb2(v.st||'Hired');
+        const _taskCellH=_isTaskH?sb2(v.st||'Hired'):'';
         rows+=`<tr data-hw="${did}" style="display:none;background:#f0fdf4;border-bottom:1px solid #d1fae5">
           <td style="padding:8px 16px 8px 38px;font-size:12px">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:6px;white-space:normal">${v.s}</span></td>
           <td style="text-align:center">${roleBadgeH(v._role)}</td>
           <td style="text-align:center">${pb(v.pr)}</td>
           <td style="text-align:center">${snHtml}</td>
-          <td style="text-align:center">${sb2(v.st||'Hired')}</td>
-          <td></td>
+          <td style="text-align:center">${_vacCellH}</td>
+          <td style="text-align:center">${_taskCellH}</td>
           <td style="text-align:center;font-size:12px;font-weight:700;color:#0f172a">${activeHires}</td>
           <td style="padding:8px 20px 8px 10px;font-size:11px;color:#64748b">${fv(dt)}</td>
           <td style="text-align:center">${ttBadge(vTTF)}</td>
@@ -2795,7 +2841,7 @@ function rWorkloadHired(){
       ${mkThH('vac','VACANCIES')}
       ${mkThH('tasks','TASKS')}
       ${mkThH('hires','HIRES')}
-      ${mkThH('wl','WORKLOAD','left','140px')}
+      ${mkThH('team','TEAM / SUBTEAM','left','160px')}
       ${mkThH('ttf','TTF')}
       ${mkThH('tth','TTH')}
     </tr></thead>
