@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 6 травня 2026, оновлено 17:40 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 6 травня 2026, оновлено 18:13 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -915,7 +915,6 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
-  "REC-317":"2026-05-04",
   "REC-316":null,
   "REC-315":"2026-05-05",
   "REC-296":"2026-04-24",
@@ -995,6 +994,7 @@ const SD={
   "REC-167":"2026-03-23",
   "REC-143":"2026-03-05",
   "REC-142":"2026-03-05",
+  "REC-317":"2026-05-04",
   "REC-314":"2026-04-23",
   "REC-313":"2026-03-23",
   "REC-251":"2026-03-23",
@@ -1029,7 +1029,6 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
-  "REC-317":"Middle",
   "REC-316":"Junior",
   "REC-315":"Senior",
   "REC-296":"Junior",
@@ -1105,6 +1104,7 @@ const SN={
   "REC-167":"Junior",
   "REC-143":"Expert",
   "REC-142":"Expert",
+  "REC-317":"Middle",
   "REC-314":"Junior",
   "REC-313":"Junior",
   "REC-251":"Junior",
@@ -1138,7 +1138,6 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
-  {key:"REC-317",s:"AI Creative Designer (Brand Design Team)",st:"In progress",pr:"Medium",so:"Yaroslav Leonenko",re:null,h:1,r:"Extention",t:"Brand Design",sb:"Brand Design",cr:"2026-05-06"},
   {key:"REC-316",s:"E-com Writer ",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-05-06"},
   {key:"REC-315",s:"Product Designer",st:"In progress",pr:"Medium",so:"Alex Minieieva",re:null,h:1,r:"Replacement",t:"Product",sb:"Design",cr:"2026-05-05"},
   {key:"REC-296",s:"Influencer Marketing Specialist BetterMe Store",st:"In progress",pr:"Medium",so:null,re:null,h:2,r:"Extention",t:"Brand communications",sb:"Influence marketing",cr:"2026-05-04"},
@@ -1187,6 +1186,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-317",s:"AI Creative Designer (Brand Design Team)",type:"position",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,fcd:null,hd:"2026-05-06",sd:"2026-05-04",fcd_c:null,h:1,t:"Brand Design",sb:"Brand Design"},
   {key:"REC-314",s:"2D Motion Designer",type:"subtask",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-04",hd:"2026-05-05",sd:"2026-04-23",fcd_c:"2026-04-17",h:11,t:"Marketing",sb:"Creative",pk:"REC-163"},
   {key:"REC-313",s:"2D Motion Designer",type:"subtask",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-04",hd:"2026-05-05",sd:"2026-03-23",fcd_c:"2026-04-09",h:11,t:"Marketing",sb:"Creative",pk:"REC-163"},
   {key:"REC-251",s:"AI Creative Designer",type:"subtask",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-04",hd:"2026-05-05",sd:"2026-03-23",fcd_c:"2026-04-07",h:3,t:"Marketing",sb:"Creative",pk:"REC-249"},
@@ -1221,7 +1221,6 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
-  {key:"REC-317",s:"AI Creative Designer (Brand Design Team)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-05-04",h:1,t:"Brand Design",sb:"Brand Design",cr:"2026-05-06"},
   {key:"REC-316",s:"E-com Writer ",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-06"},
   {key:"REC-315",s:"Product Designer",st:"In progress",pr:"Medium",sn:"Senior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-05-05",h:1,t:"Product",sb:"Design",cr:"2026-05-05"},
   {key:"REC-296",s:"Influencer Marketing Specialist BetterMe Store",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-04-24",h:2,t:"Brand communications",sb:"Influence marketing",cr:"2026-05-04"},
@@ -1307,7 +1306,6 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
-  "REC-317":"Polina Serdiuk",
   "REC-315":"Anastasiia Shapovalenko",
   "REC-296":"Polina Serdiuk",
   "REC-289":"Veronika Khovrina",
@@ -1382,6 +1380,7 @@ const RECR={
   "REC-167":"Mariia Salabai",
   "REC-143":"Anastasiia Shapovalenko",
   "REC-142":"Anastasiia Shapovalenko",
+  "REC-317":"Polina Serdiuk",
   "REC-314":"Mariia Salabai",
   "REC-313":"Mariia Salabai",
   "REC-251":"Mariia Salabai",
@@ -3162,6 +3161,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-317",type:"position",s:"AI Creative Designer (Brand Design Team)",sd:"2026-05-04",cr:"2026-05-06",fcd:null,hd:"2026-05-06",fcd_c:null,sn:"Middle",rec:"Polina Serdiuk",src:null,h:1,t:"Brand Design",sb:"Brand Design",cs:null,pk:null},
   {key:"REC-314",type:"subtask",s:"2D Motion Designer",sd:"2026-04-23",cr:"2026-05-05",fcd:"2026-05-04",hd:"2026-05-05",fcd_c:"2026-04-17",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",h:11,t:"Marketing",sb:"Creative",cs:"Career Portal",pk:"REC-163"},
   {key:"REC-313",type:"subtask",s:"2D Motion Designer",sd:"2026-03-23",cr:"2026-05-05",fcd:"2026-05-04",hd:"2026-05-05",fcd_c:"2026-04-09",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",h:11,t:"Marketing",sb:"Creative",cs:"Work",pk:"REC-163"},
   {key:"REC-251",type:"subtask",s:"AI Creative Designer",sd:"2026-03-23",cr:"2026-04-21",fcd:"2026-05-04",hd:"2026-05-05",fcd_c:"2026-04-07",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",h:3,t:"Marketing",sb:"Creative",cs:"Work",pk:"REC-249"},
