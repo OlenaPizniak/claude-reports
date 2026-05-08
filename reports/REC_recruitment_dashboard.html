@@ -3354,7 +3354,7 @@ function rCVDynamics(){
     return `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
   });
   const opened=wks.map(w=>openInWeek(w));
-  const hired=wks.map(w=>hiredInWeek(w));
+  const hired=wks.map(w=>hiredItemsInWeek(w).reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0));
   if(_cvCharts.trend){_cvCharts.trend.destroy();_cvCharts.trend=null;}
   _cvCharts.trend=new Chart(document.getElementById('cv-trend-chart').getContext('2d'),{
     type:'bar',
