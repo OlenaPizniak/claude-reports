@@ -2503,3 +2503,91 @@ URL: `https://olenapizniak.github.io/claude-reports/reports/REC_recruitment_dash
 - ❌ Запускати workflow без `JIRA_EMAIL`/`JIRA_API_TOKEN` секретів → exit code 1, повідомлення `JIRA_EMAIL and JIRA_API_TOKEN env vars are required`
 - ❌ `switchView` з `view-hired` рядком — цей елемент не існує, викличе помилку JS
 
+
+## Jira Automation Rules: live `Number of hires` decrement (з 2026-05-08)
+
+У проекті REC налаштовані 3 правила Jira Automation, що тримають поле `Number of hires` (customfield_23545) синхронізованим з реальним станом hire-процесу:
+
+### Rule 1: sub-task → Hired декрементує parent
+```
+Trigger: Work item transitioned → Hired
+Condition: Work item type = Vacancy sub-task
+Branch: Parent
+Action: Edit work item
+  Number of hires = {{#=}}{{issue."Number of hires"}} - 1{{/}}
+```
+
+### Rule 2: parent → Hired декрементує власне поле (тільки якщо є sub-tasks)
+```
+Trigger: Work item transitioned → Hired
+Condition 1: Work item type = Open position
+Condition 2: {{issue."Number of hires"}} > 0
+Condition 3: Related work items (Sub-tasks) → Are present
+Action: Edit work item
+  Number of hires = {{#=}}{{issue."Number of hires"}} - 1{{/}}
+```
+**Важливо**: Condition 3 (`Are present`) виключає solo вакансії — для solo parent при закритті h залишається на оригінальному значенні (типово 1), щоб не зіпсувати аналітику.
+
+### Rule 3: parent's `Number of hires` змінився → синкає у всі sub-tasks
+```
+Trigger: Field value changed (Number of hires)
+Condition: Work item type = Open position
+Branch: Sub-tasks
+Action: Edit work item
+  Number of hires = {{triggerIssue."Number of hires"}}
+Rule details: ✅ "Allow other rule actions to trigger this rule" — ОБОВ'ЯЗКОВО включити!
+```
+Без галочки "Allow other rule actions" Rule 3 не спрацює коли Rule 1/2 змінюють поле.
+
+### Семантика поля `h` (Number of hires) після цих правил
+
+| Стан вакансії | Значення `h` | Приклад |
+|----------------|---------------|---------|
+| Активна, sub-task'и не закриті | total expected hires | h=3, 2 subs активні + parent |
+| Активна, частина subs закрита | remaining hires | h=2 (1 sub був закритий) |
+| Hired (parent + всі subs) | 0 (multi) або original (solo) | h=0 для multi, h=1 для solo |
+
+### КРИТИЧНО: КОНВЕНЦІЯ FORMULA для підрахунку hires
+
+Через нову автоматизацію `v.h` тепер відображає **remaining hires**, не **total expected**. Тому ВСІ формули підрахунку hires у дашборді мають використовувати **уніфіковану формулу**:
+
+```javascript
+// Уніфікована формула hires per vacancy (active phase)
+const _activeST = ST.filter(s => s.st !== 'Hired');
+const _hires = v => {
+  const subs = _activeST.filter(x => x.pk === v.key);
+  return subs.length > 0 ? subs.length + 1 : v.h;
+};
+```
+
+**Чому**: `subs.length+1` для multi-vacancies НЕ залежить від `v.h` — рахує реальні active units (живі subs + parent). Це робить формулу стійкою до:
+- Legacy даних, де `v.h` не оновлювалось (час до автоматизації)
+- Ручних правок поля
+- Race conditions у Jira automation
+
+Для solo (без subs) використовуємо `v.h` — для них Rule 1/2 не декрементують.
+
+### Місця де ця формула застосована (✅ всі узгоджені після 2026-05-08)
+
+- `rKPI()` → KPI HIRES NEEDED (line ~1532)
+- `rWorkload()` → Workload-Active hires column + per-recruiter (line ~2744)
+- `rWorkloadOverview()` → totalHires + per-member load (line ~3046, 3051) — ✅ виправлено 2026-05-08
+- `r3()` / `r3plan()` → Open Vacancies per Department (lines ~1756, 1884) — використовує count за статусом
+- `rWorkloadHired()` → `v.type==='subtask'?1:(v.h||1)` — спеціальна формула для closed (sub=1, parent=h з fallback)
+
+### Анти-приклад (НЕ робити)
+
+```javascript
+// ❌ НЕ використовуй v.h напряму для multi-vacancies
+const totalHires = allActive.reduce((s, v) => s + v.h, 0);
+// Це дасть НЕТОЧНУ цифру якщо v.h "відстає" від реального remaining
+// (legacy data, manual edits, race conditions)
+```
+
+### Тестування при змінах формули
+
+Якщо змінюєш формулу підрахунку hires — обов'язково перевір на REC-249 (h=3, 3 active subs):
+- Очікувано: hires = 4 (parent + 3 subs)
+- Якщо повертає 3 — формула використовує `v.h` напряму (BUG)
+- Якщо повертає 4 — формула uses `subs.length+1` (правильно)
+

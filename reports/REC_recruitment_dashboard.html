@@ -3044,12 +3044,17 @@ function rWorkloadOverview(){
   const totalVac=allActive.length;
   const plan=allActive.filter(v=>v.st==='Plan').length;
   const inProg=allActive.filter(v=>v.st==='In progress').length;
-  const totalHires=allActive.reduce((s,v)=>s+v.h,0);
+  // Unified hires formula (same as rKPI / rWorkload): for vacancies WITH active subs,
+  // count = active subs + parent (= subs.length+1). For solo vacancies, count = v.h.
+  // Robust to legacy data where v.h didn't track decrements correctly.
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _hires=v=>{const subs=_activeST.filter(x=>x.pk===v.key);return subs.length>0?subs.length+1:v.h;};
+  const totalHires=allActive.reduce((s,v)=>s+_hires(v),0);
   const mems=TEAM_ALL.map(name=>{
     const rv=allActive.filter(v=>v.rec===name||(v.rec==null&&WP.find(w=>w.key===v.key)?.rec===name));
     const sv=allActive.filter(v=>v.src===name&&v.rec!==name&&!rv.some(r=>r.key===v.key));
     const tk=TASKS.filter(t=>t.asgn===name);
-    const h=rv.reduce((s,v)=>s+v.h,0)+sv.reduce((s,v)=>s+v.h,0);
+    const h=rv.reduce((s,v)=>s+_hires(v),0)+sv.reduce((s,v)=>s+_hires(v),0);
     return{load:h+tk.length};
   });
   const overloaded=mems.filter(m=>m.load>20).length;
