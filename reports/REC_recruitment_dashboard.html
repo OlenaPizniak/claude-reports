@@ -505,18 +505,7 @@ function recTriggerRefresh(){
         <h2>Workload - Active &nbsp;<span style="color:#94a3b8;font-weight:400;font-size:12px">team workload · active positions</span></h2>
         <span class="sec-badge" style="background:#eff6ff;color:#1d4ed8;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px" id="bw"></span>
         <div style="display:flex;align-items:center;gap:8px;margin-left:auto" onclick="event.stopPropagation()">
-          <!-- Status filter -->
-          <div style="display:flex;align-items:center;gap:6px;background:#f1f5f9;border-radius:8px;padding:4px 10px;font-size:12px;color:#64748b">
-            <span style="font-weight:600;color:#475569;margin-right:2px">Status:</span>
-            <label style="display:flex;align-items:center;gap:3px;cursor:pointer">
-              <input type="checkbox" id="wlf-ip" checked onchange="wlFilterSt()" style="accent-color:#3b6ef5">
-              <span>In progress</span>
-            </label>
-            <label style="display:flex;align-items:center;gap:3px;cursor:pointer">
-              <input type="checkbox" id="wlf-pl" checked onchange="wlFilterSt()" style="accent-color:#3b6ef5">
-              <span>Plan</span>
-            </label>
-          </div>
+
           <!-- Type filter -->
           <div style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
             <button onclick="wlFilterType('all')" id="wlft-all" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b6ef5;color:#fff">All</button>
@@ -568,14 +557,14 @@ function recTriggerRefresh(){
   <!-- KPI — single row -->
   <div style="display:flex;align-items:stretch;gap:12px;margin-bottom:28px">
     <div class="kpi-card blue" style="flex:1;justify-content:center">
-      <div class="kpi-icon">⚡</div>
-      <div class="kpi-num" id="kn-av">—</div>
-      <div class="kpi-label">Active Vacancies</div>
-    </div>
-    <div class="kpi-card blue" style="flex:1;justify-content:center">
       <div class="kpi-icon">📌</div>
       <div class="kpi-num" id="kn-plan">—</div>
       <div class="kpi-label">Plan</div>
+    </div>
+    <div class="kpi-card blue" style="flex:1;justify-content:center">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-num" id="kn-av">—</div>
+      <div class="kpi-label">Active Vacancies</div>
     </div>
     <div class="kpi-card orange" style="flex:1;justify-content:center">
       <div class="kpi-icon">🎯</div>
@@ -641,7 +630,7 @@ function recTriggerRefresh(){
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#3b6ef5,#6366f1);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📋</div>
-      <h2>Open Vacancies This Week<br><span style="color:#94a3b8;font-weight:400;font-size:11px">filter by Created date (or Start date if set) · excludes Hired</span></h2>
+      <h2>Open Vacancies This Week</h2>
       <span class="sec-badge" id="b1" style="background:#eff6ff;color:#1d4ed8;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div class="toggle-btn">−</div>
     </div>
@@ -652,7 +641,7 @@ function recTriggerRefresh(){
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🏢</div>
-      <h2>Open Vacancies per Department <span style="font-size:13px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:6px;padding:2px 8px;margin-left:6px">In progress only</span><br><span style="color:#94a3b8;font-weight:400;font-size:11px">expandable by department · sortable columns</span></h2>
+      <h2>Open Vacancies per Department</h2>
       <span class="sec-badge" id="b3" style="background:#ede9fe;color:#6d28d9;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div class="toggle-btn">−</div>
     </div>
@@ -663,7 +652,7 @@ function recTriggerRefresh(){
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#64748b,#94a3b8);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📌</div>
-      <h2>Open Vacancies per Department <span style="font-size:13px;font-weight:600;color:#475569;background:#f1f5f9;border-radius:6px;padding:2px 8px;margin-left:6px">Plan only</span><br><span style="color:#94a3b8;font-weight:400;font-size:11px">expandable by department · sortable columns</span></h2>
+      <h2>Plan Vacancies per Department</h2>
       <span class="sec-badge" id="b3p" style="background:#f1f5f9;color:#475569;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div class="toggle-btn">−</div>
     </div>
@@ -691,7 +680,7 @@ function recTriggerRefresh(){
   <div class="section">
     <div class="section-header" onclick="tog(this)">
       <div class="section-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🔍</div>
-      <h2>Open Roles by Hiring Reason &amp; Team<br><span style="color:#94a3b8;font-weight:400;font-size:11px">grouped bars · click any bar to drill down</span></h2>
+      <h2>Open Roles by Hiring Reason &amp; Team</h2>
       <span class="sec-badge" id="b5" style="background:#fef3c7;color:#b45309;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
       <div class="toggle-btn">−</div>
     </div>
@@ -718,7 +707,7 @@ function recTriggerRefresh(){
           </div>
           <div class="cv-card">
             <div class="cv-card-title">🌐 All Time / Period</div>
-            <div class="cv-card-sub" id="cv-at-sub">Cumulative since project start</div>
+            <div class="cv-card-sub" id="cv-at-sub"></div>
             <div class="dp-chips" style="margin-bottom:8px;flex-wrap:wrap">
               <button type="button" class="dp-chip cv-at-chip active" data-mode="all" onclick="cvSetAllTime('all')">All time</button>
               <button type="button" class="dp-chip cv-at-chip" data-mode="month" onclick="cvSetAllTime('month')">Month</button>
@@ -748,7 +737,7 @@ function recTriggerRefresh(){
     <div class="section">
       <div class="section-header" onclick="tog(this)">
         <div class="section-icon" style="background:linear-gradient(135deg,#10b981,#34d399);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">✅</div>
-        <h2>Hired This Week<br><span style="color:#94a3b8;font-weight:400;font-size:11px">filter by Factual close date + transition to Hired status</span></h2>
+        <h2>Hired This Week</h2>
         <span class="sec-badge" id="b2" style="background:#d1fae5;color:#065f46;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
         <div class="toggle-btn">−</div>
       </div>
@@ -908,7 +897,6 @@ function dpChips(fromId, toId, kind){
     <button type="button" class="dp-chip" onclick="dpApply('tw','${fromId}','${toId}','${kind}')">This week</button>
     <button type="button" class="dp-chip" onclick="dpApply('lw','${fromId}','${toId}','${kind}')">Last week</button>
     <button type="button" class="dp-chip" onclick="dpApply('tm','${fromId}','${toId}','${kind}')">This month</button>
-    <button type="button" class="dp-chip" onclick="dpApply('lm','${fromId}','${toId}','${kind}')">Last month</button>
   </span>`;
 }
 
@@ -1565,7 +1553,7 @@ function r1(from,to){
   if(to!==undefined)s1To=to;
   // "Opened in period" = Created date (always set) || Start date as fallback
   const opened=v=>v.cr||v.sd||null;
-  let items=ALL_VACS.filter(v=>{const d=opened(v);return d&&d>=s1From&&d<=s1To&&v.st!=='Hired';});
+  let items=ALL_VACS.filter(v=>{const d=opened(v);return d&&d>=s1From&&d<=s1To&&v.st==='In progress';});
   if(s1SortCol){
     items=[...items].sort((a,b)=>{
       if(s1SortCol==='pr') return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*s1SortDir;
@@ -2577,14 +2565,9 @@ function wlSort(col){
   openDids.forEach(did=>togWL(did));
 }
 
-let _wlFilterSt=new Set(['In progress','Plan']);
+const _wlFilterSt=new Set(['In progress']);
 let _wlFilterType='all';
-function wlFilterSt(){
-  _wlFilterSt=new Set();
-  if(document.getElementById('wlf-ip').checked) _wlFilterSt.add('In progress');
-  if(document.getElementById('wlf-pl').checked) _wlFilterSt.add('Plan');
-  rWorkload();
-}
+function wlFilterSt(){ rWorkload(); }
 function wlFilterType(t){
   _wlFilterType=t;
   ['all','vac','task'].forEach(k=>{
@@ -3272,11 +3255,25 @@ function rCVDynamics(){
   // "Opened" = Jira Created date (always set) OR Start date as fallback for legacy data without cr.
   // Hired = vacancies whose effective close date (fcd || hd transition) is in the week (CV only)
   const openedDate=v=>v.cr||v.sd||null;
-  const allOpen=[...ALL_VACS.filter(v=>v.st!=='Hired').map(v=>({d:openedDate(v)})),...CV.map(v=>({d:openedDate(v)}))];
-  const openInWeek=w=>allOpen.filter(v=>cvInRange(v.d,w.start,w.end)).length;
-  const hiredInWeek=w=>CV.filter(v=>cvInRange(closeDate(v),w.start,w.end)).length;
-  const oThis=openInWeek(wThis), oPrev=openInWeek(wPrev);
-  const hThis=hiredInWeek(wThis), hPrev=hiredInWeek(wPrev);
+  // Open this week: same logic as S1 table — only In progress, only ALL_VACS, by opened date
+  const openInWeek=w=>ALL_VACS.filter(v=>v.st==='In progress'&&cvInRange(openedDate(v),w.start,w.end));
+  // Hired this week: same logic as r2 (Hired This Week table)
+  const hiredItemsInWeek=w=>{
+    const inR=d=>d&&d>=w.start&&d<=w.end;
+    const hw=HW.filter(v=>inR(v.fcd)||inR(v.hd));
+    const hwKeys=new Set(hw.map(v=>v.key));
+    const avH=ALL_VACS.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!hwKeys.has(v.key)).map(v=>({...v,type:'position'}));
+    const usedKeys=new Set([...hwKeys,...avH.map(v=>v.key)]);
+    const stH=ST.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!usedKeys.has(v.key)).map(v=>({...v,type:'subtask'}));
+    return [...hw,...avH,...stH];
+  };
+  const oThisArr=openInWeek(wThis), oPrevArr=openInWeek(wPrev);
+  const hThisArr=hiredItemsInWeek(wThis), hPrevArr=hiredItemsInWeek(wPrev);
+  const oThis=oThisArr.length, oPrev=oPrevArr.length;
+  const hThis=hThisArr.length, hPrev=hPrevArr.length;
+  const oThisHires=oThisArr.reduce((s,v)=>s+(v.h||0),0), oPrevHires=oPrevArr.reduce((s,v)=>s+(v.h||0),0);
+  const hThisHires=hThisArr.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
+  const hPrevHires=hPrevArr.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
 
   document.getElementById('cv-week-range').textContent=
     `This week: ${wThis.start} → ${wThis.end} · Prev week: ${wPrev.start} → ${wPrev.end}`;
@@ -3295,14 +3292,15 @@ function rCVDynamics(){
       <div class="cv-stat" style="border-left:3px solid #3b6ef5">
         <div class="cv-stat-lbl">Open · this week</div>
         <div class="cv-stat-num" style="color:#3b6ef5">${oThis}</div>
+        <div style="font-size:12px;color:#64748b;margin-top:2px"><b>${oThisHires}</b> hires needed</div>
         ${delta(oThis,oPrev)}
-        <div style="font-size:11px;color:#94a3b8;margin-top:2px">Prev week: <b>${oPrev}</b></div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px">Prev week: <b>${oPrev}</b> vac · <b>${oPrevHires}</b> hires</div>
       </div>
       <div class="cv-stat" style="border-left:3px solid #10b981">
         <div class="cv-stat-lbl">Hired · this week</div>
-        <div class="cv-stat-num" style="color:#10b981">${hThis}</div>
-        ${delta(hThis,hPrev)}
-        <div style="font-size:11px;color:#94a3b8;margin-top:2px">Prev week: <b>${hPrev}</b></div>
+        <div class="cv-stat-num" style="color:#10b981">${hThisHires}</div>
+        ${delta(hThisHires,hPrevHires)}
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px">Prev week: <b>${hPrevHires}</b> hires</div>
       </div>
     </div>`;
 
@@ -3321,7 +3319,7 @@ function rCVDynamics(){
     hiredCount=CV.length;
     openedLbl='Currently Open';
     hiredLbl='Hired (all time)';
-    subText='Cumulative since project start';
+    subText='';
   } else {
     // Period mode: count flow events (vacancies opened / hired in period)
     openedCount=ALL_VACS.filter(v=>inAtRange(v.cr||v.sd)).length;
