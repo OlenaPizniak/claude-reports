@@ -1656,7 +1656,7 @@ function r2(from,to){
   // Hires total: sub-task = 1 person hired (НЕ v.h — sub inherits parent.h, тому v.h=11/8 etc.)
   // Position (parent itself hired) = v.h
   const hiresTotal2=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
-  document.getElementById('b2').innerHTML=`<span class="bnum">${vacCount2}</span> vacancy &nbsp;·&nbsp; <span class="bnum">${hiresTotal2}</span> hires`;
+  document.getElementById('b2').innerHTML=`<span class="bnum">${hiresTotal2}</span> hires`;
 
   const cols2=[
     {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
