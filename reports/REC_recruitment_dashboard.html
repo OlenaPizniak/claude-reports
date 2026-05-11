@@ -1522,10 +1522,15 @@ function rKPI(){
   // Hires Needed: actual slots (parent + active subs) for active vacancies only.
   // Same formula as Workload-Active totalHires for full consistency.
   const _activeST=ST.filter(s=>s.st!=='Hired');
-  const _activeOPs=OP.filter(v=>vacInStatus(v,'In progress')||vacInStatus(v,'Plan'));
+  const _activeOPs=OP.filter(v=>vacInStatus(v,'In progress'));
   document.getElementById('kn-hn').textContent=_activeOPs.reduce((s,v)=>{
     const subs=_activeST.filter(x=>x.pk===v.key);
-    return s+(subs.length>0?subs.length+1:v.h);
+    if(subs.length>0){
+      const subsIp=subs.filter(x=>x.st==='In progress').length;
+      const parentIp=v.st==='In progress'?1:0;
+      return s+subsIp+parentIp;
+    }
+    return s+(v.st==='In progress'?v.h:0);
   },0);
 }
 
