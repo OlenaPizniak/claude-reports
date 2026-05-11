@@ -815,7 +815,7 @@ function recTriggerRefresh(){
         </div>
       </div>
       <div class="section-body">
-        <div style="font-size:13px;color:#0f172a;font-weight:600;margin-bottom:10px">Інсайти</div>
+        <div style="font-size:13px;color:#0f172a;font-weight:600;margin-bottom:10px">Insights</div>
         <div id="cv-src-insights" class="cv-insights" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px"></div>
         <div class="cv-canvas-wrap" style="height:340px"><canvas id="cv-src-chart"></canvas></div>
         <div id="cv-src-empty" style="display:none;text-align:center;padding:30px;color:#94a3b8;font-size:13px;font-style:italic"></div>
@@ -3673,22 +3673,22 @@ function rCVSources(){
     const srcCounts={};
     items.forEach(v=>{srcCounts[v.cs]=(srcCounts[v.cs]||0)+1;});
     const top=Object.entries(srcCounts).sort((a,b)=>b[1]-a[1])[0];
-    const filterLabel=[dept&&dept, sn&&sn].filter(Boolean).join(' · ')||'усі команди';
+    const filterLabel=[dept&&dept, sn&&sn].filter(Boolean).join(' · ')||'all teams';
     insightsEl.innerHTML=`
       <div class="cv-insight-card">
-        <div class="cv-insight-lbl">Всього наймів</div>
+        <div class="cv-insight-lbl">Total Hires</div>
         <div class="cv-insight-num">${totalHires}</div>
         <div class="cv-insight-sub">${filterLabel}</div>
       </div>
       <div class="cv-insight-card">
-        <div class="cv-insight-lbl">Джерел</div>
+        <div class="cv-insight-lbl">Sources</div>
         <div class="cv-insight-num">${uniqueSources}</div>
-        <div class="cv-insight-sub">унікальних</div>
+        <div class="cv-insight-sub">unique</div>
       </div>
       <div class="cv-insight-card">
-        <div class="cv-insight-lbl">Топ джерело</div>
+        <div class="cv-insight-lbl">Top Source</div>
         <div class="cv-insight-num txt">${top?top[0]:'—'}</div>
-        <div class="cv-insight-sub">${top?`${top[1]} наймів`:'немає даних'}</div>
+        <div class="cv-insight-sub">${top?`${top[1]} hires`:'no data'}</div>
       </div>`;
   }
   if(!baseItems.length){
