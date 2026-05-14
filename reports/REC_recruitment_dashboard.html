@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 14 травня 2026, оновлено 11:11 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 14 травня 2026, оновлено 13:29 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -903,6 +903,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-348":null,
   "REC-347":null,
   "REC-342":null,
   "REC-341":null,
@@ -1021,6 +1022,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-348":"Expert",
   "REC-347":"Expert",
   "REC-342":"Expert",
   "REC-341":"Junior",
@@ -1136,6 +1138,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-348",s:"Influence Marketing Consultant ",st:"Plan",pr:"Medium",so:"Kateryna Danyliuk",re:null,h:1,r:"Consultation",t:"Brand communications",sb:"Influence marketing",cr:"2026-05-14"},
   {key:"REC-347",s:"Content  Production Specialist",st:"Plan",pr:"Medium",so:"Tetiana Shneider",re:null,h:1,r:"Consultation",t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-342",s:"E-com Consultants",st:"Plan",pr:"Medium",so:null,re:null,h:2,r:"Consultation",t:"E-commerce",sb:"Non-tech",cr:"2026-05-13"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-05-13"},
@@ -1180,7 +1183,7 @@ const OP=[
   {key:"REC-197",s:"Instructional Designer / Methodologist",st:"Canceled",pr:"Medium",so:"Olya Pyrozhenko",re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-196",s:"Educational Content Producer",st:"Canceled",pr:"Low",so:"Olya Pyrozhenko",re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-195",s:"Backend Engineer Core Team (GoLang + PHP)",st:"In progress",pr:"Medium",so:"Daryna Varycheva",re:null,h:1,r:"Extention",t:"Engineering",sb:"Backend Core",cr:"2026-04-02"},
-  {key:"REC-193",s:"Full Stack Engineer Mobile Team (PHP + JavaScript)",st:"In progress",pr:"Low",so:"Constantine Chernenko",re:null,h:1,r:"Extention",t:"Engineering",sb:"Mind",cr:"2026-04-02"},
+  {key:"REC-193",s:"Full Stack Engineer Mobile Team (PHP + JavaScript)",st:"Canceled",pr:"Low",so:"Constantine Chernenko",re:null,h:1,r:"Extention",t:"Engineering",sb:"Mind",cr:"2026-04-02"},
   {key:"REC-191",s:"Data Analyst (Marketing)",st:"In progress",pr:"Medium",so:"Pavlo Boiko",re:null,h:1,r:"Extention",t:"Analytics",sb:"Analytics",cr:"2026-04-02"},
   {key:"REC-188",s:"Post-Production Producer",st:"In progress",pr:"High",so:"Tetiana Shneider",re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-184",s:"Gym Coach (Consultant) (2 male+ 2 female)",st:"In progress",pr:"High",so:"Viktoriia Dumuch",re:null,h:3,r:"Consultation",t:"Content",sb:null,cr:"2026-04-02"},
@@ -1244,6 +1247,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-348",s:"Influence Marketing Consultant ",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,h:1,t:"Brand communications",sb:"Influence marketing",cr:"2026-05-14"},
   {key:"REC-347",s:"Content  Production Specialist",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-342",s:"E-com Consultants",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,h:2,t:"E-commerce",sb:"Non-tech",cr:"2026-05-13"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
@@ -1268,7 +1272,7 @@ const WP=[
   {key:"REC-274",s:"Тренера/-ку з бігу для формування програм підготовки до забігів на 5 / 10 / 21 км",st:"In progress",pr:"Low",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-04-23",h:2,t:"Content",sb:null,cr:"2026-04-22"},
   {key:"REC-272",s:"Walk & Run for mental health",st:"In progress",pr:"Low",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-04-23",h:2,t:"Content",sb:null,cr:"2026-04-22"},
   {key:"REC-271",s:"Pilates Instructor (Reformer)",st:"In progress",pr:"Medium",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",h:1,t:"Content",sb:null,cr:"2026-04-22"},
-  {key:"REC-249",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:"Kateryna Yaremenko",sd:"2026-05-12",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-21"},
+  {key:"REC-249",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-12",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-21"},
   {key:"REC-245",s:"TaiChi Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",h:1,t:"Content",sb:null,cr:"2026-04-16"},
   {key:"REC-244",s:"Line Producer (China)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-17",h:1,t:"Content",sb:null,cr:"2026-04-15"},
   {key:"REC-242",s:"Junior Creative Specialist",st:"In progress",pr:"Low",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-04-08",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-09"},
@@ -1284,11 +1288,11 @@ const WP=[
   {key:"REC-210",s:"Financial Controller",st:"In progress",pr:"Low",sn:"Middle",rec:"Victoria Kotenko",src:null,sd:"2026-03-31",h:1,t:"Finance",sb:"Finance",cr:"2026-04-02"},
   {key:"REC-205",s:"Graphic Designer",st:"Canceled",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-03-11",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-204",s:"Reporting Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Victoria Kotenko",src:null,sd:"2026-03-31",h:1,t:"Finance",sb:"Finance",cr:"2026-04-02"},
-  {key:"REC-198",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:"Kateryna Yaremenko",sd:"2026-01-05",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
+  {key:"REC-198",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-01-05",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-197",s:"Instructional Designer / Methodologist",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-196",s:"Educational Content Producer",st:"Canceled",pr:"Low",sn:"Middle",rec:"Veronika Khovrina",src:null,sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-195",s:"Backend Engineer Core Team (GoLang + PHP)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:"2026-04-02",h:1,t:"Engineering",sb:"Backend Core",cr:"2026-04-02"},
-  {key:"REC-193",s:"Full Stack Engineer Mobile Team (PHP + JavaScript)",st:"In progress",pr:"Low",sn:"Middle",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:"2026-04-02",h:1,t:"Engineering",sb:"Mind",cr:"2026-04-02"},
+  {key:"REC-193",s:"Full Stack Engineer Mobile Team (PHP + JavaScript)",st:"Canceled",pr:"Low",sn:"Middle",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:"2026-04-02",h:1,t:"Engineering",sb:"Mind",cr:"2026-04-02"},
   {key:"REC-191",s:"Data Analyst (Marketing)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Veronika Khovrina",src:null,sd:"2026-04-02",h:1,t:"Analytics",sb:"Analytics",cr:"2026-04-02"},
   {key:"REC-188",s:"Post-Production Producer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Prylutska",src:"Anastasiia Melnyk",sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-184",s:"Gym Coach (Consultant) (2 male+ 2 female)",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",h:3,t:"Content",sb:null,cr:"2026-04-02"},
@@ -1297,7 +1301,7 @@ const WP=[
   {key:"REC-181",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-02-25",h:1,t:"Marketing",sb:"User Acquisition",cr:"2026-04-01"},
   {key:"REC-178",s:"Brand Designer",st:"In progress",pr:"Medium",sn:"Senior",rec:"Veronika Khovrina",src:"Anastasiia Melnyk",sd:"2026-03-09",h:1,t:"Product",sb:"Brand design",cr:"2026-03-31"},
   {key:"REC-177",s:"Line Producer (Warsaw)",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-03-27",h:1,t:"Content",sb:null,cr:"2026-03-31"},
-  {key:"REC-163",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",sd:"2026-03-23",h:1,t:"Marketing",sb:"Creative",cr:"2026-03-30"},
+  {key:"REC-163",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-03-23",h:1,t:"Marketing",sb:"Creative",cr:"2026-03-30"},
   {key:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",pr:"High",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",h:3,t:"Content",sb:null,cr:"2026-03-27"},
   {key:"REC-46",s:"Producer Assistant (Warsaw)",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-02-12",h:1,t:"Content",sb:null,cr:"2026-03-26"},
   {key:"REC-40",s:"International Tax Manager",st:"In progress",pr:"Low",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-30",h:1,t:"Legal",sb:null,cr:"2026-03-26"},
@@ -1305,7 +1309,7 @@ const WP=[
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
   {key:"REC-343",pk:"REC-342",s:"E-com Consultants",st:"Plan",sd:null,rec:null,src:null},
-  {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"In progress",sd:"2026-05-12",rec:"Mariia Salabai",src:"Kateryna Yaremenko"},
+  {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"In progress",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
   {key:"REC-275",pk:"REC-274",s:"Тренера/-ку з бігу для формування програм підготовки до забігів на 5 / 10 / 21 км",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-273",pk:"REC-272",s:"Walk & Run for mental health",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-231",pk:"REC-184",s:"Gym Coach (Consultant) - woman",st:"In progress",sd:null,rec:"Yaroslava Bondarchuk",src:null},
@@ -1314,7 +1318,7 @@ const ST=[
   {key:"REC-217",pk:"REC-213",s:"Junior Creative Marketing Specialist",st:"In progress",sd:"2026-04-03",rec:"Alina Muravchyk",src:null},
   {key:"REC-216",pk:"REC-213",s:"Junior Creative Marketing Specialist",st:"Canceled",sd:"2026-04-03",rec:"Alina Muravchyk",src:null},
   {key:"REC-212",pk:"REC-211",s:"Graphic Designer",st:"In progress",sd:"2026-03-25",rec:"Mariia Salabai",src:null},
-  {key:"REC-199",pk:"REC-198",s:"Motion Designer/Video Editor",st:"In progress",sd:"2025-12-25",rec:"Mariia Salabai",src:"Kateryna Yaremenko"},
+  {key:"REC-199",pk:"REC-198",s:"Motion Designer/Video Editor",st:"In progress",sd:"2025-12-25",rec:"Mariia Salabai",src:null},
   {key:"REC-143",pk:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",sd:"2026-03-05",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-142",pk:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",sd:"2026-03-05",rec:"Anastasiia Shapovalenko",src:null},
 ];
@@ -1422,20 +1426,15 @@ const RECR={
 };
 // Sourcer lookup (customfield_23510) — fresh from Jira
 const SRCR={
-  "REC-249":"Kateryna Yaremenko",
   "REC-237":"Kateryna Yaremenko",
   "REC-221":"Kateryna Yaremenko",
   "REC-220":"Anastasiia Melnyk",
-  "REC-198":"Kateryna Yaremenko",
   "REC-195":"Alina Muravchyk",
   "REC-193":"Alina Muravchyk",
   "REC-188":"Anastasiia Melnyk",
   "REC-178":"Anastasiia Melnyk",
   "REC-177":"Anastasiia Melnyk",
-  "REC-163":"Kateryna Yaremenko",
   "REC-46":"Anastasiia Melnyk",
-  "REC-330":"Kateryna Yaremenko",
-  "REC-199":"Kateryna Yaremenko",
   "REC-314":"Kateryna Yaremenko",
   "REC-313":"Kateryna Yaremenko",
   "REC-306":"Kateryna Yaremenko",
