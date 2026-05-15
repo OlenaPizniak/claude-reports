@@ -35,7 +35,7 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 | Number of hires | `customfield_23545` | integer | |
 | **Factual close date** | `customfield_22878` | date string | Заповнюється РУКАМИ — часто пропускається. У JS зберігається як `v.fcd` |
 | **First contact date** | `customfield_23407` | date string | Дата першого контакту з кандидатом → для TTH. У JS — `v.fcd_c` |
-| **Team and subteams** | `customfield_23547` | cascading select | `value`=Department (`v.t`), `child.value`=sub-team (`v.sb`) |
+| **Team and subteams** | `customfield_23547` | cascading select | `value`=Department (`v.t`), `child.value`=sub-team (`v.sb`). Структура оновлена 2026-05-15 — див. секцію нижче. |
 | **Candidate Source** | `customfield_24344` | option | Звідки прийшов кандидат (Dou, LinkedIn, Genesis, etc). У JS — `v.cs` |
 | **Reason for opening** | `customfield_22877` | option | Replacement / Extention / Consultation. У JS — `v.r` |
 
@@ -50,6 +50,71 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 > ```
 >
 > Auto-updater (`scripts/update_rec_dashboard.py`) додає `hd` до кожного hired item у HW і CV. Helper `closeDate(v) = v.fcd || v.hd` використовується усюди в HTML для filter/aggregation.
+
+---
+
+## Team and subteams structure (customfield_23547) — оновлено 2026-05-15
+
+Cascading select. `value`=Department (parent → JS `v.t`), `child.value`=sub-team (JS `v.sb`).
+**ВАЖЛИВО**: написання має точно збігатися з Jira (case-sensitive, з пробілами).
+
+### 13 департаментів і їх sub-teams (актуально станом на 2026-05-15)
+
+| # | Department (parent `v.t`) | Sub-teams (`v.sb`) |
+|---|----------------------------|---------------------|
+| 1 | **Analytics** | Analytics, Web Analytics, Product, Data Analytics |
+| 2 | **Brand Communications** | Brand Communications, Pr-Brand-Affiliate, SMM team, Influence marketing, E-mail Marketing |
+| 3 | **Brand Design** | UX/UI, Brand Design, 2D, 3D |
+| 4 | **Content** | Workout Content, Content Production, Content |
+| 5 | **Customer Support** | Customer Support |
+| 6 | **E-commerce** | Supply, Tech, Non-tech |
+| 7 | **Employee Experience** | People Engagement, Operations |
+| 8 | **Engineering** | Backend Core, BE Compliance, BE Core Platform, Coach, Coach Android, Coach iOS, DevOps, Embedded, Finance, Food Android, Food iOS, Hardware Android, Hardware iOS, Innovation, IT support, Mind, Mind Android, Mind iOS, Project, QA Core, Scrum, Security Operations, Web app, Workouts Android, Workouts iOS |
+| 9 | **Finance** | Finance |
+| 10 | **Legal** | Legal |
+| 11 | **HR & TA** | HR, TA |
+| 12 | **Marketing** | Creative, User Acquisition, Creative Marketing, PPC, SEO |
+| 13 | **Product** | B2B, Business Analysts, Coach, Design, Growth Analytics, Product, Product Management, Retention, UX Research, Сreator platform (Cyrillic С!) |
+
+### Що змінилося vs стара структура
+
+| Зміна | Деталі |
+|-------|--------|
+| `Brand communications` → `Brand Communications` | Capital C |
+| Додано: `Customer Support` | Новий dept |
+| Видалено: `Leadership` | Більше нема як parent |
+| `Content` отримав sub-teams | Workout Content, Content Production (раніше тільки Content) |
+| `E-commerce` додано `Supply` | Раніше Tech, Non-tech |
+| `Engineering` додано: `BE Compliance`, `BE Core Platform`, `Finance`, `Innovation`, `Project` | |
+| `Product` додано: `Coach`, `Growth Analytics`, `Retention` | |
+| `Marketing` додано: `Creative Marketing` | Раніше Creative окремо від Marketing |
+| `Employee Experience` змінив sub-teams | Тепер: People Engagement, Operations |
+
+### Gotchas (case-sensitive!)
+
+- `E-commerce` — мала **c**, не E-Commerce
+- `HR & TA` — з **пробілами** навколо `&`
+- `Influence marketing` — мала **m** (на відміну від `Marketing` parent)
+- `IT support`, `Web app` — мала перша літера у другому слові
+- `Сreator platform` — починається з **Cyrillic С** (U+0421), не латинської C!
+- Brand Communications — обидва слова з великої
+
+### CV_DEPT_COLORS map (REC_recruitment_dashboard.html)
+
+Має ключі для всіх 13 поточних департаментів + legacy aliases для backward compatibility:
+
+```javascript
+const CV_DEPT_COLORS={
+  Marketing:'#3b6ef5', Product:'#10b981', Engineering:'#8b5cf6', Content:'#f59e0b',
+  'E-commerce':'#ec4899', Legal:'#06b6d4', 'Brand Design':'#a855f7',
+  'Brand Communications':'#f97316', Analytics:'#14b8a6', Finance:'#0ea5e9',
+  'HR & TA':'#84cc16', 'Employee Experience':'#22d3ee', 'Customer Support':'#f43f5e',
+  // Legacy aliases:
+  'Brand communications':'#f97316', Leadership:'#dc2626'
+};
+```
+
+При додаванні нового department у Jira → **обов'язково** додати ключ у `CV_DEPT_COLORS`. Інакше використається сірий fallback `#64748b`.
 
 ---
 

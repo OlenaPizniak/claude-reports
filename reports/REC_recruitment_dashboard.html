@@ -3228,11 +3228,27 @@ const CV=[
 // <<<AUTO_CV_END>>>
 
 // ── CV: helpers ────────────────────────────────────────────
+// Department colors — keys match Jira "Team and subteams" parent values exactly (customfield_23547).
+// Updated 2026-05-15: new structure with 13 depts including Customer Support.
+// Old lowercase aliases kept for backward-compatibility with existing in-memory data
+// until next auto-update refreshes everything to the new spellings.
 const CV_DEPT_COLORS={
-  Marketing:'#3b6ef5',Product:'#10b981',Engineering:'#8b5cf6',Content:'#f59e0b',
-  'E-commerce':'#ec4899',Legal:'#06b6d4','Brand Design':'#a855f7','Brand communications':'#f97316',
-  Analytics:'#14b8a6',Finance:'#0ea5e9','HR & TA':'#84cc16',Leadership:'#dc2626',
-  'Employee Experience':'#22d3ee'
+  Marketing:'#3b6ef5',
+  Product:'#10b981',
+  Engineering:'#8b5cf6',
+  Content:'#f59e0b',
+  'E-commerce':'#ec4899',
+  Legal:'#06b6d4',
+  'Brand Design':'#a855f7',
+  'Brand Communications':'#f97316',
+  Analytics:'#14b8a6',
+  Finance:'#0ea5e9',
+  'HR & TA':'#84cc16',
+  'Employee Experience':'#22d3ee',
+  'Customer Support':'#f43f5e',
+  // Aliases (legacy spellings still present in cached data)
+  'Brand communications':'#f97316',
+  Leadership:'#dc2626'
 };
 const cvColor=d=>CV_DEPT_COLORS[d]||'#64748b';
 const cvISO=d=>{const dt=new Date(d);return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;};
