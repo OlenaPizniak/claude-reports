@@ -44,6 +44,7 @@ F = {
     'num_hires':      'customfield_23545',
     'team':           'customfield_23547',
     'cand_source':    'customfield_24344',
+    'cand_source_other': 'customfield_25662',  # text field, filled when Candidate Source = Other
 }
 
 ALL_FIELDS = ['summary', 'status', 'priority', 'issuetype', 'created',
@@ -404,6 +405,7 @@ def build_data():
             't': t,
             'sb': sb,
             'cs': get_option(fld.get(F['cand_source'])),
+            'cs_other': fld.get(F['cand_source_other']) or None,
             'pk': pk,
         })
 

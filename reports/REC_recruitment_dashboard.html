@@ -3709,6 +3709,9 @@ function _populateCVSrcDropdowns(){
     allSns.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sEl.appendChild(o);});
   }
 }
+// Source label helper — for "Other" use free-text value from customfield_25662 (v.cs_other)
+// so each user-typed source becomes its own bucket. Falls back to plain "Other" if empty.
+const _srcLabel=v=>v.cs==='Other'?(v.cs_other?`Other: ${v.cs_other}`:'Other'):v.cs;
 function rCVSources(){
   _populateCVSrcDropdowns();
   const dept=document.getElementById('cv-src-dept')?.value||'';
@@ -3721,9 +3724,9 @@ function rCVSources(){
   const insightsEl=document.getElementById('cv-src-insights');
   if(insightsEl){
     const totalHires=items.length;
-    const uniqueSources=new Set(items.map(v=>v.cs)).size;
+    const uniqueSources=new Set(items.map(_srcLabel)).size;
     const srcCounts={};
-    items.forEach(v=>{srcCounts[v.cs]=(srcCounts[v.cs]||0)+1;});
+    items.forEach(v=>{const k=_srcLabel(v);srcCounts[k]=(srcCounts[k]||0)+1;});
     const top=Object.entries(srcCounts).sort((a,b)=>b[1]-a[1])[0];
     const filterLabel=[dept&&dept, sn&&sn].filter(Boolean).join(' · ')||'all teams';
     insightsEl.innerHTML=`
@@ -3759,9 +3762,9 @@ function rCVSources(){
   }
   empty.style.display='none';canvas.style.display='block';
 
-  // Group items by source
+  // Group items by source (Other uses cs_other so each free-text answer is its own bucket)
   const bySrc={};
-  items.forEach(v=>{if(!bySrc[v.cs])bySrc[v.cs]=[];bySrc[v.cs].push(v);});
+  items.forEach(v=>{const k=_srcLabel(v);if(!bySrc[k])bySrc[k]=[];bySrc[k].push(v);});
   _cvSrcVacsBySrc=bySrc;
   const entries=Object.entries(bySrc).map(([s,arr])=>({s,n:arr.length})).sort((a,b)=>b.n-a.n);
   const labels=entries.map(e=>e.s);
