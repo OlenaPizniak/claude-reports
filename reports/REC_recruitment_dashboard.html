@@ -1563,6 +1563,8 @@ function rKPI(){
 // S1
 let s1From=WS, s1To=WE, s1SortCol=null, s1SortDir=1;
 const pOrd={High:0,Medium:1,Low:2};
+// Seniority colors. Expert kept for backward-compat with legacy data only — option
+// removed from Jira on 2026-05-15 (customfield_22876). New hires won't pick Expert.
 const snColor={Junior:'#7c3aed',Middle:'#1d4ed8',Senior:'#0369a1',Lead:'#065f46',Expert:'#92400e',Intern:'#6b7280'};
 
 function s1sort(col){
@@ -3699,7 +3701,10 @@ let _cvSrcVacsBySrc={};
 function _populateCVSrcDropdowns(){
   // FULL list — departments union from CV + ALL_VACS, seniority — standard 6 levels.
   const allDepts=[...new Set([...CV,...ALL_VACS].map(v=>v.t).filter(Boolean))].sort();
-  const allSns=['Intern','Junior','Middle','Senior','Lead','Expert'];
+  // Seniority dropdown — 5 active options. "Expert" was removed from Jira on 2026-05-15,
+  // but snColor below still keeps an Expert entry so legacy hires already in data
+  // (e.g. REC-184, REC-185, REC-201) render with the brown chip instead of fallback grey.
+  const allSns=['Intern','Junior','Middle','Senior','Lead'];
   const dEl=document.getElementById('cv-src-dept');
   const sEl=document.getElementById('cv-src-sn');
   if(dEl && dEl.options.length<=1){

@@ -31,7 +31,7 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 | Recruiter | `customfield_13935` | multi-user array | `[0].displayName` — є і в OP, і в subtasks! Використовувати RECR lookup |
 | Sourcer | `customfield_23510` | user picker object | `.displayName` — є і в OP, і в subtasks |
 | Hiring Manager | `customfield_23509` | user picker | В OP зберігається як поле `so` (НЕ Sourcer!) |
-| Seniority | `customfield_22876` | array `[{value:"Junior"}]` | Брати `[0].value` |
+| Seniority | `customfield_22876` | array `[{value:"Junior"}]` | Брати `[0].value`. 5 актуальних опцій: Intern/Junior/Middle/Senior/Lead. **Expert видалено 2026-05-15** — але історичні дані ще містять його, тому `snColor.Expert` лишається у HTML для коректного відображення старих чіпсів. |
 | Number of hires | `customfield_23545` | integer | |
 | **Factual close date** | `customfield_22878` | date string | Заповнюється РУКАМИ — часто пропускається. У JS зберігається як `v.fcd` |
 | **First contact date** | `customfield_23407` | date string | Дата першого контакту з кандидатом → для TTH. У JS — `v.fcd_c` |
