@@ -3825,6 +3825,8 @@ function showCVSrcPopup(src, vacs, dept, sn){
   const filter=[dept&&`Dept: ${dept}`, sn&&`Seniority: ${sn}`].filter(Boolean).join(' · ');
   document.getElementById('s5popup-title').textContent=`Hiring Source — ${src}`;
   document.getElementById('s5popup-sub').textContent=`${vacs.length} hires${filter?` · ${filter}`:''}`;
+  // Show free-text column ONLY for Other-related bars (src is "Other" or "Other: <text>")
+  const isOther = typeof src === 'string' && src.startsWith('Other');
   const rows=vacs.slice().sort((a,b)=>{
     const da=closeDate(a)||'', db=closeDate(b)||'';
     return db.localeCompare(da);
@@ -3833,6 +3835,9 @@ function showCVSrcPopup(src, vacs, dept, sn){
     const snHtml=v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>';
     const tt=[v.t,v.sb].filter(Boolean).join(' / ');
     const isSub=v.type==='subtask';
+    const otherCell = isOther
+      ? `<td style="padding:8px 10px;font-size:11px;color:${v.cs_other?'#0f172a':'#cbd5e1'};font-weight:${v.cs_other?'600':'400'};font-style:${v.cs_other?'normal':'italic'}">${v.cs_other||'—'}</td>`
+      : '';
     return `<tr style="${isSub?'background:#f5f8ff':''}">
       <td style="padding:8px 10px;font-size:12px${isSub?';padding-left:24px':''}">${isSub?'↳ ':''}${jl(v.key)}</td>
       <td style="padding:8px 10px;font-size:12px;max-width:230px">${v.s||'—'}</td>
@@ -3841,8 +3846,12 @@ function showCVSrcPopup(src, vacs, dept, sn){
       <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.src||'—'}</td>
       <td style="padding:8px 10px;font-size:11px;color:#64748b">${closeD}</td>
       <td style="padding:8px 10px;font-size:11px;color:#64748b">${tt||'—'}</td>
+      ${otherCell}
     </tr>`;
   }).join('');
+  const otherHead = isOther
+    ? `<th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Other source</th>`
+    : '';
   const head=`<thead><tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
     <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Key</th>
     <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Vacancy</th>
@@ -3851,6 +3860,7 @@ function showCVSrcPopup(src, vacs, dept, sn){
     <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Sourcer</th>
     <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Closed</th>
     <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Team</th>
+    ${otherHead}
   </tr></thead>`;
   const popup=document.getElementById('s5popup');
   const tbl=popup.querySelector('table');

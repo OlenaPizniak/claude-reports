@@ -175,6 +175,15 @@ const _srcLabel=v=>v.cs==='Other'?(v.cs_other?`Other: ${v.cs_other}`:'Other'):v.
 
 Insights cards (Total Hires / Sources / Top Source) і click-to-popup також використовують `_srcLabel`.
 
+### Conditional "Other source" колонка у popup
+
+У `showCVSrcPopup(src, vacs, dept, sn)` детектиться по `src.startsWith('Other')`:
+
+- popup для `"Other"` або `"Other: <text>"` → додається **8-а колонка** "Other source" зі значенням `v.cs_other` (порожні значення показуються як italic dash)
+- popup для будь-якого іншого source (Dou, LinkedIn, etc) → колонка **НЕ** додається, popup має звичайні 7 колонок
+
+Це дозволяє рекрутерам бачити прямо у popup'і вільний текст, який ввели у customfield_25662 коли обрали "Other".
+
 ---
 
 ## JQL запити
