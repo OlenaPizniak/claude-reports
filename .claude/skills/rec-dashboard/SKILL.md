@@ -36,7 +36,8 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 | **Factual close date** | `customfield_22878` | date string | Заповнюється РУКАМИ — часто пропускається. У JS зберігається як `v.fcd` |
 | **First contact date** | `customfield_23407` | date string | Дата першого контакту з кандидатом → для TTH. У JS — `v.fcd_c` |
 | **Team and subteams** | `customfield_23547` | cascading select | `value`=Department (`v.t`), `child.value`=sub-team (`v.sb`). Структура оновлена 2026-05-15 — див. секцію нижче. |
-| **Candidate Source** | `customfield_24344` | option | Звідки прийшов кандидат (Dou, LinkedIn, Genesis, etc). У JS — `v.cs` |
+| **Candidate Source** | `customfield_24344` | option | Звідки прийшов кандидат (36 options — див. секцію нижче). У JS — `v.cs` |
+| **Candidate source [Other]** | `customfield_25662` | textfield | Free-form text, заповнюється коли `cs="Other"`. У JS — `v.cs_other` |
 | **Reason for opening** | `customfield_22877` | option | Replacement / Extention / Consultation. У JS — `v.r` |
 
 ### Поле `hd` — Hired transition date (НЕ з custom field, з changelog!)
@@ -115,6 +116,64 @@ const CV_DEPT_COLORS={
 ```
 
 При додаванні нового department у Jira → **обов'язково** додати ключ у `CV_DEPT_COLORS`. Інакше використається сірий fallback `#64748b`.
+
+---
+
+## Candidate Source structure (customfield_24344 + customfield_25662) — оновлено 2026-05-15
+
+**Два поля працюють в парі**:
+
+- `customfield_24344` "Candidate Source" — select з 36 опцій (включно з "Other")
+- `customfield_25662` "Candidate source [Other]" — textfield, заповнюється коли в попередньому полі обрано "Other"
+
+В CV-записах це проявляється як `v.cs` (option value) + `v.cs_other` (free text).
+
+### 36 опцій Candidate Source
+
+```
+LinkedIn Sourced, LinkedIn Application, Djinni, Dou, Career Portal,
+Internal Referral, External Referral, Internal Database,
+Internal remote employee, Work.ua, Happy Monday, Robota.ua, Indeed,
+Instagram, Hiring Event, Cresume, Upwork, Mate Academy, Support Team,
+Vakansiatv, Balanced Body Site, Xiaohongshu, Motionintern, Network,
+Law_events, Uniwork, Workado, Mediaplatforma, Behance, R9, Lezo,
+WeChat, GoIT, After Courses, Genesis Transfer, Other
+```
+
+### Перейменування vs стара версія (важливо)
+
+| Стара назва (видалена) | Нова назва |
+|------------------------|------------|
+| `Перехід Genesis` | `Genesis Transfer` |
+| `Після курсів` | `After Courses` |
+| `Internal Recommendation` | `Internal Referral` |
+| `External Recommendation` | `External Referral` |
+| `LinkedIn Applied` | `LinkedIn Application` |
+| `Work` | `Work.ua` |
+| `Robota` | `Robota.ua` |
+
+Видалено: `Telegram`, `Employee`. Додано: `Mate Academy`, `Motionintern`, `Network`, `Lezo`.
+
+### Gotcha: `Dou` зі звичайної D
+
+Не `DOU` (як часто пишуть у мові) — у Jira саме `Dou`. Case-sensitive.
+
+### Як показується "Other" з cs_other в дашборді
+
+В дашборді (`reports/REC_recruitment_dashboard.html`) є helper:
+
+```javascript
+const _srcLabel=v=>v.cs==='Other'?(v.cs_other?`Other: ${v.cs_other}`:'Other'):v.cs;
+```
+
+Викликається в `rCVSources()`:
+- Якщо `v.cs="Other"` + `v.cs_other="Friend's referral"` → label = `"Other: Friend's referral"` (окремий бар)
+- Якщо `v.cs="Other"` без cs_other → label = `"Other"` (загальний бар)
+- Якщо `v.cs="Dou"` → label = `"Dou"`
+
+Це дозволяє різним free-text Other-відповідям бути окремими сегментами у Hiring Sources block замість зливатися в один "Other" bar.
+
+Insights cards (Total Hires / Sources / Top Source) і click-to-popup також використовують `_srcLabel`.
 
 ---
 
