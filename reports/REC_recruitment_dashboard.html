@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 19 травня 2026, оновлено 11:44 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 19 травня 2026, оновлено 13:03 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1364,6 +1364,7 @@ const SRCR={
 
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
+  {key:"REC-485",s:"Тестування нових ATS ",st:"In progress",pr:"Medium",asgn:null,sd:"2026-05-18"},
   {key:"REC-482",s:"Тестування нових ATS",st:"In progress",pr:"Medium",asgn:"Polina Serdiuk",sd:"2026-05-18"},
   {key:"REC-481",s:"Підготовка документу по стендах компаній Dou Day 2026",st:"In progress",pr:"Low",asgn:"Polina Serdiuk",sd:"2026-05-18"},
   {key:"REC-346",s:"Збір даних  та допомога з питаннями для Employer Brand команди",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
@@ -3124,10 +3125,41 @@ const CV=[
 // <<<AUTO_CV_END>>>
 
 // <<<AUTO_RA_START>>> — Recruitment Assignment (consultant track), populated by auto-update script
-// Added 2026-05-19. Arrays available globally but NOT YET rendered in any dashboard block.
-// See .claude/skills/rec-dashboard/SKILL.md → "Recruitment Assignment structure" for schema.
-const RA=[];
-const RAS=[];
+// Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track
+// Schema: see SKILL.md "Recruitment Assignment structure" section
+const RA=[
+  {key:"REC-484",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-03-23",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"Creative",cr:"2026-05-19",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-483",s:"Тестування нових АТС",st:"In progress",pr:"Medium",sn:null,rec:null,src:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null,cr:"2026-05-19",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-351",s:"Influence Marketing Consultant ",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-04-07",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-350",s:"Content  Production Specialist",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-03-16",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-349",s:"Logistic Specialist",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-01-30",ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Non-tech",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-348",s:"Influence Marketing Consultant ",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-347",s:"Content  Production Specialist",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-13",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-342",s:"E-com Consultants",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Non-tech",cr:"2026-05-13",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-334",s:"Mental Practices Specialist",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-13",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-285",s:"KiGong Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-24",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-284",s:" Kundalini Yoga Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-24",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-283",s:"Asian Pilates Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-23",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-282",s:"Power Yoga Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-23",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-274",s:"Тренера/-ку з бігу для формування програм підготовки до забігів на 5 / 10 / 21 км",st:"In progress",pr:"Low",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-272",s:"Walk & Run for mental health",st:"In progress",pr:"Low",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-271",s:"Pilates Instructor (Reformer)",st:"In progress",pr:"Medium",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-245",s:"TaiChi Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-228",s:"Calisthenics Expert (female)",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-03",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-184",s:"Gym Coach (Consultant) (2 male+ 2 female)",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-02",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",pr:"High",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-03-27",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+];
+// Recruitment Assignment sub-tasks (issuetype=Recruitment Assignment sub-task, not Hired)
+const RAS=[
+  {key:"REC-363",pk:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-362",pk:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-361",pk:"REC-184",s:"Gym Coach (Consultant) - woman",st:"In progress",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:null,t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-360",pk:"REC-184",s:"REC-185  Gym Coach (Consultant) - man",st:"In progress",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:null,t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-358",pk:"REC-228",s:"Calisthenics Expert (female)",st:"Plan",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-23",t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-357",pk:"REC-272",s:"Walk & Run for mental health",st:"In progress",pr:"Medium",sn:null,rec:null,src:null,sd:null,t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-356",pk:"REC-274",s:"Тренера/-ку з бігу для формування програм підготовки до забігів на 5 / 10 / 21 км",st:"In progress",pr:"Medium",sn:null,rec:null,src:null,sd:null,t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-355",pk:"REC-342",s:"E-com Consultants",st:"Plan",pr:"Medium",sn:null,rec:null,src:null,sd:null,t:"E-commerce",sb:"Non-tech",cf_cooperation:null},
+];
 // <<<AUTO_RA_END>>>
 
 // ── CV: helpers ────────────────────────────────────────────
