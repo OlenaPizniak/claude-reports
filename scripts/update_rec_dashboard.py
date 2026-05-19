@@ -244,6 +244,23 @@ def build_data():
     )
     print(f"  got {len(tasks)} active tasks")
 
+    # ── Recruitment Assignment + RA sub-task (issuetypes 17332 / 17365) ──
+    # Added 2026-05-19. New consultant-tracking paradigm parallel to Open position.
+    # Not yet rendered on dashboard — data captured into RA / RAS arrays for future use.
+    print("→ Fetching active recruitment assignments...")
+    ra_active = jira_search(
+        f'project = {PROJECT} AND issuetype = "Recruitment Assignment" AND status != Hired ORDER BY key DESC',
+        ALL_FIELDS,
+    )
+    print(f"  got {len(ra_active)} active recruitment assignments")
+
+    print("→ Fetching active RA sub-tasks...")
+    ras_active = jira_search(
+        f'project = {PROJECT} AND issuetype = "Recruitment Assignment sub-task" AND status != Hired ORDER BY key DESC',
+        ALL_FIELDS,
+    )
+    print(f"  got {len(ras_active)} active RA sub-tasks")
+
     print("→ Fetching all hired (positions + sub-tasks)...")
     hired = jira_search(
         f'project = {PROJECT} AND status = Hired ORDER BY key DESC',
@@ -409,10 +426,68 @@ def build_data():
             'pk': pk,
         })
 
+    # ── RA — Recruitment Assignments (active, consultant track) ──
+    # Schema is intentionally close to OP so future dashboard blocks can reuse helpers.
+    # Extra RA-only fields stored as cf-prefixed keys (cf_cooperation, cf_budget, etc).
+    RA = []
+    for issue in ra_active:
+        fld = issue['fields']
+        t, sb = get_team(fld.get(F['team']))
+        RA.append({
+            'key': issue['key'],
+            's': fld.get('summary'),
+            'st': (fld.get('status') or {}).get('name'),
+            'pr': (fld.get('priority') or {}).get('name'),
+            'sn': get_option(fld.get(F['seniority'])),
+            'rec': get_user(fld.get(F['recruiter'])),
+            'src': get_user(fld.get(F['sourcer'])),
+            'sd': fld.get(F['start_date']),
+            'ed': fld.get('customfield_11232'),  # End date (RA-only)
+            'fcd_c': fld.get(F['fcd_contact']),
+            'h': fld.get('customfield_25663') or 1,  # Number of specialists needed
+            't': t,
+            'sb': sb,
+            'cr': get_date(fld.get('created')),
+            'cf_cooperation': get_option(fld.get('customfield_25664')),
+            'cf_cooperation_other': fld.get('customfield_25665'),
+            'cf_core_req': fld.get('customfield_25666'),
+            'cf_nice_req': fld.get('customfield_25667'),
+            'cf_duration': fld.get('customfield_25668'),
+            'cf_legal': get_option(fld.get('customfield_25669')),
+            'cf_nda': get_option(fld.get('customfield_25670')),
+            'cf_marketing': get_option(fld.get('customfield_25671')),
+            'cf_budget': fld.get('customfield_25672'),
+            'cf_payment': get_option(fld.get('customfield_25673')),
+            'cf_stages': fld.get('customfield_25674'),
+        })
+
+    # ── RAS — Recruitment Assignment sub-tasks (active) ──
+    RAS = []
+    for issue in ras_active:
+        fld = issue['fields']
+        parent = fld.get('parent')
+        pk = parent.get('key') if parent else None
+        t, sb = get_team(fld.get(F['team']))
+        RAS.append({
+            'key': issue['key'],
+            'pk': pk,
+            's': fld.get('summary'),
+            'st': (fld.get('status') or {}).get('name'),
+            'pr': (fld.get('priority') or {}).get('name'),
+            'sn': get_option(fld.get(F['seniority'])),
+            'rec': get_user(fld.get(F['recruiter'])),
+            'src': get_user(fld.get(F['sourcer'])),
+            'sd': fld.get(F['start_date']),
+            't': t,
+            'sb': sb,
+            'cf_cooperation': get_option(fld.get('customfield_25664')),
+        })
+
     return {
         'SD': SD, 'SN': SN, 'RECR': RECR, 'SRCR': SRCR,
         'OP': OP, 'WP': WP, 'ST': ST, 'TASKS': TASKS,
         'HW': HW, 'CV': CV,
+        'RA': RA, 'RAS': RAS,
     }
 
 
@@ -474,6 +549,30 @@ def rewrite_html(data):
         r'// <<<AUTO_CV_END>>>',
         cv_block,
     )
+
+    # ── Block 4: RA (Recruitment Assignment + sub-tasks) ──
+    # Added 2026-05-19. Not yet rendered on dashboard but data is captured for
+    # future consultant-tracking blocks/tab. Markers are optional — if absent,
+    # block is silently skipped (graceful degradation).
+    ra_block = '\n'.join([
+        '// Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track',
+        '// Schema: see SKILL.md "Recruitment Assignment structure" section',
+        js_array_decl('RA', data['RA']),
+        '// Recruitment Assignment sub-tasks (issuetype=Recruitment Assignment sub-task, not Hired)',
+        js_array_decl('RAS', data['RAS']),
+    ])
+
+    # Optional marker block — skip with warning if dashboard doesn't have markers yet.
+    if re.search(r'// <<<AUTO_RA_START>>>', html):
+        html = replace_marker_block(
+            html,
+            r'// <<<AUTO_RA_START>>>[^\n]*',
+            r'// <<<AUTO_RA_END>>>',
+            ra_block,
+        )
+    else:
+        print(f"  (info: AUTO_RA markers not in HTML yet — RA/RAS arrays skipped, "
+              f"{len(data['RA'])} RA + {len(data['RAS'])} RAS captured but not embedded)")
 
     # ── Block 3: header date ──
     now_kyiv = datetime.now(timezone(timedelta(hours=3)))  # Kyiv ≈ UTC+3

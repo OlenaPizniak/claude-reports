@@ -19,7 +19,12 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 - **Cloud ID**: `657e24cd-f643-4482-aba5-7e848607df28`
 - **Instance**: `https://newsiteam.atlassian.net`
 - **MCP**: використовувати `mcp__9d92ed01-04ea-45ee-8a28-04392ecea6c7__searchJiraIssuesUsingJql` (НЕ curl/API token — немає доступу)
-- **Issue types**: `"Open position"` (батьківська), `"Vacancy sub-task"` (авто при hires > 1)
+- **Issue types** (5):
+  - `"Open position"` (id `16298`) — основні вакансії (FTE / Staff hire) → масиви `OP`, `WP`
+  - `"Vacancy sub-task"` (id `16698`) — авто-створюється при `Number of hires > 1`, parent: Open position → масив `ST`
+  - `"Recruitment Assignment"` (id `17332`) — **парадигма консультантів/контрактників** (Part-time / Project-based / Freelance / Consulting calls). Має 12 додаткових полів — див. секцію "Recruitment Assignment structure" нижче. Додано 2026-05-18.
+  - `"Recruitment Assignment sub-task"` (id `17365`) — авто-створюється при `Number of specialists needed > 1`, parent: Recruitment Assignment.
+  - `"Task"` (id `3`) — внутрішні задачі команди (research, операційні) → масив `TASKS`
 
 ---
 
@@ -39,6 +44,24 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 | **Candidate Source** | `customfield_24344` | option | Звідки прийшов кандидат (36 options — див. секцію нижче). У JS — `v.cs` |
 | **Candidate source [Other]** | `customfield_25662` | textfield | Free-form text, заповнюється коли `cs="Other"`. У JS — `v.cs_other` |
 | **Reason for opening** | `customfield_22877` | option | Replacement / Extention / Consultation. У JS — `v.r` |
+| **End date** | `customfield_11232` | date string | Доступне в обох issue types (Open position + Recruitment Assignment). Додано 2026-05-18. |
+
+### Recruitment Assignment — 12 додаткових полів (issuetype 17332 / 17365)
+
+| Поле | Field ID | Тип | Примітки |
+|------|----------|-----|----------|
+| **Number of specialists needed** | `customfield_25663` | number (float) | Аналог `Number of hires` для консультантів. Тригер для авто-створення sub-task'ів. |
+| **Type of cooperation** | `customfield_25664` | option | Consulting call(s) / Part-time / Project-based / Freelance / Other |
+| **Type of cooperation [Other]** | `customfield_25665` | textfield | Free-text коли обрано "Other" |
+| **Core requirements** | `customfield_25666` | textarea | Multi-line вимоги |
+| **Nice-to-have requirements** | `customfield_25667` | textarea | Має пробіл наприкінці назви: `"Nice-to-have requirements "` |
+| **Expected duration of engagement** | `customfield_25668` | textfield | Має пробіл наприкінці: `"Expected duration of engagement "` |
+| **Will legal verification be required?** | `customfield_25669` | option | Yes / No / TBD |
+| **Will NDA be required?** | `customfield_25670` | option | Yes / No (без TBD) |
+| **Will Marketing Consent be needed?** | `customfield_25671` | option | Yes / No / TBD |
+| **Budget range** | `customfield_25672` | textfield | Має пробіл наприкінці: `"Budget range "` |
+| **Payment model** | `customfield_25673` | option | Має пробіл наприкінці. Hourly / Per deliverable / Fixed project fee / Monthly retainer / TBD |
+| **Selection stages** | `customfield_25674` | textarea | Multi-line етапи відбору |
 
 ### Поле `hd` — Hired transition date (НЕ з custom field, з changelog!)
 
@@ -186,6 +209,87 @@ Insights cards (Total Hires / Sources / Top Source) і click-to-popup також
 
 ---
 
+## Recruitment Assignment structure (issue types 17332 / 17365) — додано 2026-05-19
+
+**Парадигма консультантів/контрактників** — паралельна до Open position. Використовується для:
+- Consulting call(s)
+- Part-time
+- Project-based
+- Freelance
+
+### Issue types
+
+| Issue type | id | hierarchyLevel | Призначення |
+|------------|----|----|-------------|
+| Recruitment Assignment | `17332` | 0 (parent) | Основна задача |
+| Recruitment Assignment sub-task | `17365` | -1 (sub-task) | Авто при `Number of specialists needed > 1` |
+
+Sub-task має **той самий набір 27 полів** що й parent (всі 21 custom field + system) — потрібно для парадигми "кожен консультант = окремий sub-task із копією umbrella-метаданих".
+
+### Автоматизації (4 правила) — копія патерна з Open position
+
+| # | Назва | Тригер | Дія |
+|---|-------|--------|-----|
+| **Rule 1** | `[LP] subtasks creation for Number of specialists needed` | Field value changed: `Number of specialists needed` (Value added) на RA | Створює N−1 sub-task'ів якщо значення > 1 (до 9 гілок: > 1 → 1 sub, > 2 → 2 sub, …, > 9 → 9 sub) |
+| **Rule 2** | `[RA] Decrement Number of specialists needed when sub-task Hired` | Work item transitioned → Hired, на RA sub-task | Branch: Parent → `Edit work item: Number of specialists needed = {{#=}}{{issue."Number of specialists needed"}} - 1{{/}}` |
+| **Rule 3** | `[RA] Sync Number of specialists needed from parent to sub-tasks` | Field value changed: `Number of specialists needed` на RA | Branch: Sub-tasks → `Edit work item: Number of specialists needed = {{triggerIssue."Number of specialists needed"}}`. **Потрібна галочка "Allow other rule actions to trigger this rule"** у Rule details! |
+| **Rule 4** | `Decrement Number of specialists needed when parent Hired` (опціональне) | Work item transitioned → Hired, на RA + умова "має sub-tasks" | `Number of specialists needed −= 1` тільки якщо є subs (solo parents → не чіпати, щоб аналітика лишилась коректною) |
+
+### JSON template для копіювання полів у sub-task (Rule 1)
+
+⚠️ **Дати** (`customfield_11223`, `11232`, `23407`) **не копіюються через Additional fields JSON** — Jira automation рендерить їх з timestamp/timezone який ламає JSON парсинг. Дати додавати через UI "Choose fields to set" (там datepicker handles format автоматично).
+
+Робочий JSON для Additional fields (без дат — їх через UI):
+
+```json
+{
+  "fields": {
+    "priority": {"name": "{{issue.priority.name}}"}
+    {{#issue.customfield_23509}},"customfield_23509": "{{issue.customfield_23509}}"{{/}}
+    {{#issue.customfield_25662}},"customfield_25662": "{{issue.customfield_25662}}"{{/}}
+    {{#issue.customfield_25663}},"customfield_25663": {{issue.customfield_25663}}{{/}}
+    {{#issue.customfield_25665}},"customfield_25665": "{{issue.customfield_25665}}"{{/}}
+    {{#issue.customfield_25666}},"customfield_25666": "{{issue.customfield_25666}}"{{/}}
+    {{#issue.customfield_25667}},"customfield_25667": "{{issue.customfield_25667}}"{{/}}
+    {{#issue.customfield_25668}},"customfield_25668": "{{issue.customfield_25668}}"{{/}}
+    {{#issue.customfield_25672}},"customfield_25672": "{{issue.customfield_25672}}"{{/}}
+    {{#issue.customfield_25674}},"customfield_25674": "{{issue.customfield_25674}}"{{/}}
+    {{#issue.customfield_13935.size}},"customfield_13935": [{{#issue.customfield_13935}}{"accountId": "{{accountId}}"}{{^last}},{{/}}{{/}}]{{/}}
+    {{#issue.customfield_23510}},"customfield_23510": {"accountId": "{{accountId}}"}{{/}}
+    {{#issue.customfield_23547}},"customfield_23547": {"value": "{{value}}"{{#child.value}}, "child": {"value": "{{child.value}}"}{{/}}}{{/}}
+    {{#issue.customfield_24344}},"customfield_24344": {"value": "{{value}}"}{{/}}
+    {{#issue.customfield_25664}},"customfield_25664": {"value": "{{value}}"}{{/}}
+    {{#issue.customfield_25669}},"customfield_25669": {"value": "{{value}}"}{{/}}
+    {{#issue.customfield_25670}},"customfield_25670": {"value": "{{value}}"}{{/}}
+    {{#issue.customfield_25671}},"customfield_25671": {"value": "{{value}}"}{{/}}
+    {{#issue.customfield_25673}},"customfield_25673": {"value": "{{value}}"}{{/}}
+  }
+}
+```
+
+UI "Choose fields to set" — додати 5 полів:
+- `Summary` = `{{issue.summary}}`
+- `Description` = `{{issue.description}}`
+- `Start date` = `{{issue.customfield_11223}}`
+- `End date` = `{{issue.customfield_11232}}`
+- `First contact date` = `{{issue.customfield_23407}}`
+
+### Lessons learned (важливе для майбутніх правил)
+
+1. **Conditional Mustache `{{#issue.X}}...{{/}}`** — обов'язково для всіх select/cascading/user полів. Якщо parent поле порожнє, `{"value": ""}` → API rejects з "Specify a valid value for X".
+2. **Multi-user (Recruiter)** — використовувати `{{#issue.customfield_13935.size}}...{{/}}` для conditional + ітерація `{{#issue.customfield_13935}}{{^last}},{{/}}{{/}}` для масиву accountId'ів.
+3. **Дати ламають JSON Additional fields** — використовувати UI "Choose fields to set" або Branch + Edit work item.
+4. **`{{value}}` усередині `{{#issue.cf_X}}`** працює — Jira перемикає контекст на field object.
+5. **`.jsonEncode` / `.jiraDate`** smart values — НЕ використовувати, поведінка нестабільна, ламає інші поля.
+
+### Дашборд інтеграція (статус 2026-05-19)
+
+Поки що RA та RA sub-task **НЕ рендеряться** на дашборді — це окрема парадигма (консультанти, не FTE hires). Auto-update script вже **фетчить** обидва types у нові арреї `RA` і `RAS` (готові для майбутніх блоків). Existing блоки (Workload / Open Vacancies / Closed Vacancies) працюють тільки з Open position + Vacancy sub-task.
+
+Якщо буде потреба показати консультантів — додати окремі секції або таб "Consultants" на основі `RA` / `RAS` масивів.
+
+---
+
 ## JQL запити
 
 ```
@@ -203,6 +307,17 @@ fields: ["summary","status","priority","customfield_11223","customfield_13935","
 // Hired цього тижня (для HW)
 project = REC AND status = Hired AND statusCategory = Done AND updated >= "YYYY-MM-DD"
 // + expand=changelog для кожної задачі щоб отримати factual close date
+
+// Recruitment Assignments (консультанти) — окрема парадигма
+project = REC AND issuetype = "Recruitment Assignment" AND statusCategory != Done ORDER BY key DESC
+fields: ["summary","status","priority","customfield_11223","customfield_11232","customfield_22876",
+         "customfield_13935","customfield_23510","customfield_23509",
+         "customfield_25663","customfield_25664","customfield_25666","customfield_25674"]
+
+// Активні RA sub-tasks
+project = REC AND issuetype = "Recruitment Assignment sub-task" AND statusCategory != Done ORDER BY key DESC
+fields: ["summary","status","priority","customfield_11223","customfield_13935","parent",
+         "customfield_25663","customfield_25664"]
 ```
 
 ### Обробка великих результатів JQL через Bash
