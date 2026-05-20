@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 20 травня 2026, оновлено 07:49 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 20 травня 2026, оновлено 11:33 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -903,7 +903,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
-  "REC-395":"2026-05-18",
+  "REC-395":"2026-05-20",
   "REC-341":null,
   "REC-340":null,
   "REC-339":null,
@@ -1190,7 +1190,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
-  {key:"REC-395",s:"UX Writer",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-05-18",h:1,t:"Product",sb:"UX Research",cr:"2026-05-18"},
+  {key:"REC-395",s:"UX Writer",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-05-20",h:1,t:"Product",sb:"UX Research",cr:"2026-05-18"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-340",s:"Content Researcher",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-339",s:"SEO Writer",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
@@ -1365,7 +1365,6 @@ const SRCR={
 const TASKS=[
   {key:"REC-485",s:"Тестування нових ATS ",st:"In progress",pr:"Medium",asgn:null,sd:"2026-05-18"},
   {key:"REC-482",s:"Тестування нових ATS",st:"In progress",pr:"Medium",asgn:"Polina Serdiuk",sd:"2026-05-18"},
-  {key:"REC-481",s:"Підготовка документу по стендах компаній Dou Day 2026",st:"In progress",pr:"Low",asgn:"Polina Serdiuk",sd:"2026-05-18"},
   {key:"REC-346",s:"Збір даних  та допомога з питаннями для Employer Brand команди",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
   {key:"REC-345",s:"Оновлення  презентації про компанію",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-05-11"},
   {key:"REC-344",s:"Актуалізація Confluence",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
@@ -3128,6 +3127,7 @@ const CV=[
 // Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track
 // Schema: see SKILL.md "Recruitment Assignment structure" section
 const RA=[
+  {key:"REC-486",s:"Amazon Audit Consultant",st:"In progress",pr:"High",sn:null,rec:"Victoria Kotenko",src:null,sd:"2026-05-20",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"PPC",cr:"2026-05-20",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-484",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-05-12",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"Creative",cr:"2026-05-19",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-483",s:"Тестування нових АТС",st:"In progress",pr:"Medium",sn:null,rec:null,src:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null,cr:"2026-05-19",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-351",s:"Influence Marketing Consultant ",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-04-07",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
