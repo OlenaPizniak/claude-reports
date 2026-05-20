@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 20 травня 2026, оновлено 11:41 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 20 травня 2026, оновлено 14:55 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1211,7 +1211,7 @@ const WP=[
   {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-02-03",h:3,t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
   {key:"REC-236",s:"Treasury Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:"Kateryna Yaremenko",sd:"2026-03-31",h:1,t:"Finance",sb:"Finance",cr:"2026-04-06"},
   {key:"REC-222",s:"Manual QA Engineer (Android) ",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Violetta Strelchenko",src:null,sd:"2026-01-28",h:1,t:"Engineering",sb:"Coach Android",cr:"2026-04-03"},
-  {key:"REC-221",s:"QA Engineer (Backend)",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Kateryna Yaremenko",sd:"2026-03-18",h:1,t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
+  {key:"REC-221",s:"QA Engineer (Backend)",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-18",h:1,t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
   {key:"REC-213",s:"Junior Creative Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-03-19",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-03"},
   {key:"REC-211",s:"Graphic Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-03-25",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-210",s:"Financial Controller",st:"In progress",pr:"Low",sn:"Middle",rec:"Victoria Kotenko",src:null,sd:"2026-03-31",h:1,t:"Finance",sb:"Finance",cr:"2026-04-02"},
@@ -1221,7 +1221,7 @@ const WP=[
   {key:"REC-196",s:"Educational Content Producer",st:"Canceled",pr:"Low",sn:"Middle",rec:"Veronika Khovrina",src:null,sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-195",s:"Backend Engineer Core Team (GoLang + PHP)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:"2026-04-02",h:1,t:"Engineering",sb:"Backend Core",cr:"2026-04-02"},
   {key:"REC-193",s:"Full Stack Engineer Mobile Team (PHP + JavaScript)",st:"Canceled",pr:"Low",sn:"Middle",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:"2026-04-02",h:1,t:"Engineering",sb:"Mind",cr:"2026-04-02"},
-  {key:"REC-191",s:"Data Analyst (Marketing)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Veronika Khovrina",src:"Kateryna Yaremenko",sd:"2026-04-02",h:1,t:"Analytics",sb:"Analytics",cr:"2026-04-02"},
+  {key:"REC-191",s:"Data Analyst (Marketing)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Veronika Khovrina",src:null,sd:"2026-04-02",h:1,t:"Analytics",sb:"Analytics",cr:"2026-04-02"},
   {key:"REC-188",s:"Post-Production Producer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Prylutska",src:"Anastasiia Melnyk",sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-183",s:"AI Content Producer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-03-02",h:1,t:"Content",sb:null,cr:"2026-04-01"},
   {key:"REC-182",s:"Creative Marketing Specialist",st:"Canceled",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-03-05",h:2,t:"Brand Communications",sb:null,cr:"2026-04-01"},
@@ -1329,10 +1329,8 @@ const SRCR={
   "REC-395":"Anastasiia Melnyk",
   "REC-331":"Kateryna Yaremenko",
   "REC-236":"Kateryna Yaremenko",
-  "REC-221":"Kateryna Yaremenko",
   "REC-195":"Alina Muravchyk",
   "REC-193":"Alina Muravchyk",
-  "REC-191":"Kateryna Yaremenko",
   "REC-188":"Anastasiia Melnyk",
   "REC-177":"Anastasiia Melnyk",
   "REC-314":"Kateryna Yaremenko",
@@ -1363,7 +1361,8 @@ const SRCR={
 
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
-  {key:"REC-485",s:"Тестування нових ATS ",st:"In progress",pr:"Medium",asgn:null,sd:"2026-05-18"},
+  {key:"REC-487",s:"Тестування нових АТС",st:"In progress",pr:"Medium",asgn:"Anastasiia Melnyk",sd:"2026-05-17"},
+  {key:"REC-485",s:"Тестування нових ATS ",st:"In progress",pr:"Medium",asgn:"Mariia Salabai",sd:"2026-05-18"},
   {key:"REC-482",s:"Тестування нових ATS",st:"In progress",pr:"Medium",asgn:"Polina Serdiuk",sd:"2026-05-18"},
   {key:"REC-346",s:"Збір даних  та допомога з питаннями для Employer Brand команди",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
   {key:"REC-345",s:"Оновлення  презентації про компанію",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-05-11"},
@@ -3127,13 +3126,12 @@ const CV=[
 // Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track
 // Schema: see SKILL.md "Recruitment Assignment structure" section
 const RA=[
+  {key:"REC-488",s:"TEST",st:"Plan",pr:"Medium",sn:null,rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-05-20",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-486",s:"Amazon Audit Consultant",st:"In progress",pr:"High",sn:null,rec:"Victoria Kotenko",src:null,sd:"2026-05-20",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"PPC",cr:"2026-05-20",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-484",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-05-12",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"Creative",cr:"2026-05-19",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-483",s:"Тестування нових АТС",st:"In progress",pr:"Medium",sn:null,rec:null,src:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null,cr:"2026-05-19",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-351",s:"Influence Marketing Consultant ",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-04-07",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-350",s:"Content  Production Specialist",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-03-16",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-351",s:"Influence Marketing Consultant ",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Melnyk",src:null,sd:"2026-04-07",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-350",s:"Content  Production Specialist",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Melnyk",src:null,sd:"2026-03-16",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-349",s:"Logistic Specialist",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:null,sd:"2026-01-30",ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Non-tech",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-348",s:"Influence Marketing Consultant ",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-347",s:"Content  Production Specialist",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-13",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-342",s:"E-com Consultants",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Non-tech",cr:"2026-05-13",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-334",s:"Mental Practices Specialist",st:"Plan",pr:"Medium",sn:"Expert",rec:null,src:null,sd:null,ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-13",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
