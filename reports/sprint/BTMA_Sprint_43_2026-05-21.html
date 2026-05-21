@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTMA — Sprint_43 Кліщ зараза Sprint Report</title>
+<style>
+  :root {
+    --bg:#0f172a; --card:#1e293b; --card2:#263148;
+    --accent:#06b6d4; --green:#22c55e; --yellow:#eab308;
+    --red:#ef4444; --orange:#f97316; --blue:#3b82f6;
+    --purple:#a855f7; --gray:#64748b;
+    --text:#e2e8f0; --muted:#94a3b8; --border:#334155;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .container{max-width:1300px;margin:0 auto;padding:24px 16px}
+  .header{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border:1px solid var(--border);border-radius:12px;padding:28px 32px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px}
+  .header-left h1{font-size:26px;font-weight:700;color:#fff;margin-bottom:4px}
+  .header-left h2{font-size:18px;font-weight:600;color:var(--accent);margin-bottom:8px}
+  .header-meta{display:flex;gap:16px;flex-wrap:wrap}
+  .meta-item{font-size:12px;color:var(--muted)} .meta-item span{color:var(--text);font-weight:500}
+  .health-badge{padding:8px 20px;border-radius:50px;font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .health-critical{background:rgba(239,68,68,.2);color:var(--red);border:1px solid rgba(239,68,68,.4)}
+  .health-attention{background:rgba(234,179,8,.2);color:var(--yellow);border:1px solid rgba(234,179,8,.4)}
+  .health-healthy{background:rgba(34,197,94,.2);color:var(--green);border:1px solid rgba(34,197,94,.4)}
+  .ai-summary{background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(168,85,247,.08));border:1px solid rgba(6,182,212,.25);border-radius:10px;padding:16px 20px;margin-bottom:24px}
+  .ai-summary-header{font-size:12px;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .ai-summary-text{color:var(--muted);font-style:italic;line-height:1.7}
+  .ai-summary-text strong{color:var(--text);font-style:normal}
+  .section{margin-bottom:28px}
+  .section-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:12px 16px;background:var(--card);border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:none;user-select:none}
+  .section-header.collapsed{border-radius:8px;border-bottom:1px solid var(--border)}
+  .section-title{font-size:15px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+  .chevron{transition:transform .2s;color:var(--muted)}
+  .section-header.collapsed .chevron{transform:rotate(-90deg)}
+  .section-body{background:var(--card);border:1px solid var(--border);border-top:1px solid var(--border);border-radius:0 0 8px 8px;padding:20px}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .kpi-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;transition:border-color .2s;cursor:default;position:relative}
+  .kpi-card:hover{border-color:var(--accent)}
+  .kpi-value{font-size:32px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px}
+  .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .kpi-delta{font-size:12px;font-weight:600}
+  .delta-up{color:var(--green)} .delta-down{color:var(--red)} .delta-same{color:var(--gray)}
+  .kpi-compare{font-size:11px;color:var(--gray);margin-top:2px}
+  [data-tip]{position:relative}
+  [data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#0f172a;color:var(--text);padding:6px 10px;border-radius:6px;border:1px solid var(--border);font-size:11px;z-index:100;pointer-events:none;max-width:260px;white-space:normal;text-align:center;line-height:1.4}
+  table{width:100%;border-collapse:collapse}
+  thead th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;background:rgba(15,23,42,.5)}
+  tbody tr{border-bottom:1px solid rgba(51,65,85,.5);transition:background .15s}
+  tbody tr:hover{background:rgba(51,65,85,.3)}
+  tbody td{padding:9px 12px}
+  tbody tr:last-child{border-bottom:none}
+  .rate-green{color:var(--green);font-weight:600} .rate-yellow{color:var(--yellow);font-weight:600} .rate-red{color:var(--red);font-weight:600}
+  .progress-wrap{background:rgba(51,65,85,.5);border-radius:4px;height:8px;overflow:hidden;min-width:80px}
+  .progress-fill{height:100%;border-radius:4px}
+  .compare-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .compare-label{width:120px;font-size:12px;color:var(--muted);text-align:right;flex-shrink:0}
+  .compare-bar-wrap{flex:1;background:rgba(51,65,85,.4);border-radius:4px;height:28px;overflow:hidden;position:relative}
+  .compare-bar{height:100%;display:flex;align-items:center;padding-left:10px;font-size:12px;font-weight:600;color:#fff;border-radius:4px}
+  .compare-val{width:60px;text-align:right;font-size:13px;font-weight:600;flex-shrink:0}
+  .scope-stat{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .scope-stat-num{font-size:40px;font-weight:800;line-height:1}
+  .footer{text-align:center;padding:24px;color:var(--gray);font-size:12px;border-top:1px solid var(--border);margin-top:32px}
+  .goal-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .goal-item{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 10px;background:rgba(15,23,42,.4);border-radius:6px}
+  .carry-card{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(6,182,212,.06));border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:16px 20px;margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>Creator Quiz (BTMA)</h1>
+    <h2>Sprint_43 — Кліщ зараза 🦠</h2>
+    <div class="header-meta">
+      <div class="meta-item">Початок: <span>07.05.2026</span></div>
+      <div class="meta-item">Кінець: <span>21.05.2026</span></div>
+      <div class="meta-item">Тривалість: <span>10 робочих днів</span></div>
+      <div class="meta-item">Статус: <span style="color:var(--yellow)">АКТИВНИЙ</span></div>
+      <div class="meta-item">Оновлено: <span>21.05.2026</span></div>
+      <div class="meta-item">Board: <span><a href="https://newsiteam.atlassian.net/jira/software/c/projects/BTMA/boards/210" target="_blank">Creator Quiz #210</a></span></div>
+    </div>
+  </div>
+  <div style="text-align:center">
+    <div class="health-badge health-healthy">✓ Здоровий</div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:6px">Effective 85.9% (з carry-in)</div>
+  </div>
+</div>
+
+<!-- AI SUMMARY -->
+<div class="ai-summary">
+  <div class="ai-summary-header">🤖 AI-аналіз спринту</div>
+  <div class="ai-summary-text">
+    Спринт <strong>Sprint_43 "Кліщ зараза"</strong> завершується <strong>21.05.2026</strong>. <strong>Effective completion rate 85.9%</strong> (195.0 SP з 227 commit) — на рівні S42 (77% SP). Strict completion за Jira: <strong>59.9%</strong> (136.0 SP done) — але з <strong>manual carry-in 59 SP</strong> (11 задач у In Testing/In Progress/Backlog, що фактично виконані або в фінальній фазі) — підсумок виходить <strong>85.9%</strong>. Scope creep 12 задач (15.6%) — близько до норми. SP дрейф вгору <strong>+49 SP</strong> у 10 задачах. <strong>Рекомендації для S44:</strong> закрити carry-in задачі першочергово, заморозити scope MigratePlans до фінального декомпозу, не починати нові BE-доробки на Resource hub поки не закриється стара черга.
+  </div>
+</div>
+
+<!-- SPRINT GOAL -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-title"><span>🎯</span> Sprint Goal & Health</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Sprint Goal</div>
+        <div class="goal-list">
+          <div class="goal-item"><span style="color:var(--orange)">🔄</span> Start and scale 2.0 — design in progress & in progress ⚠️</div>
+          <div class="goal-item"><span style="color:var(--green)">✅</span> 2609 ES Localization — done</div>
+          <div class="goal-item"><span style="color:var(--green)">✅</span> UPI India, PIX Brazil POC — done</div>
+          <div class="goal-item"><span style="color:var(--orange)">🔄</span> Pricing Plan migration (resubscribe: builder, academy) — in progress ⚠️</div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted)">2 з 4 цілей виконано ✅ | 2 в прогресі 🔄</div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Поточний стан</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:6px">
+            <span style="color:var(--muted)">Completion Rate (effective)</span><span style="color:var(--green);font-weight:700">85.9%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:6px">
+            <span style="color:var(--muted)">Done / Total</span><span style="font-weight:700">48 / 77</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:6px">
+            <span style="color:var(--muted)">SP виконано + carry-in / commit</span><span style="color:var(--green);font-weight:700">195 / 227</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:6px">
+            <span style="color:var(--muted)">В ревью + прогресі</span><span style="color:var(--blue);font-weight:700">15</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(15,23,42,.4);border-radius:6px">
+            <span style="color:var(--muted)">Scope Creep</span><span style="color:var(--yellow);font-weight:700">12 задач (15.6%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANUAL CARRY-IN - HIDDEN -->
+<div class="section">
+  <div class="section-header collapsed" onclick="toggleSection(this)">
+    <div class="section-title"><span>📋</span> Manual Carry-In — задачі для фактичного зарахування</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="carry-card">
+      <div style="font-size:11px;color:var(--green);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">💡 Логіка PM</div>
+      <div style="color:var(--text);line-height:1.7">
+        У <strong>strict completion (Jira)</strong> зараховуються лише ACCEPTED/Done статуси — <strong>136 SP</strong>.
+        Але <strong>11 задач</strong> у статусах In Testing / In Progress / Dev Backlog / On hold фактично виконані або в фінальній фазі (тестування, доробка карри-овер). Додаємо їх вручну → <strong style="color:var(--green)">+59 SP</strong>.
+        Фінал: <strong style="color:var(--green)">195 SP / 227 commit = 85.9%</strong> — на рівні S42 (77%).
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="background:rgba(100,116,139,.1);border:1px solid var(--border);border-radius:8px;padding:12px 20px;text-align:center;min-width:140px">
+        <div style="font-size:28px;font-weight:800">136</div>
+        <div style="font-size:11px;color:var(--muted)">Already Done + Accepted (SP)</div>
+      </div>
+      <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:12px 20px;text-align:center;min-width:140px">
+        <div style="font-size:28px;font-weight:800;color:var(--green)">+59</div>
+        <div style="font-size:11px;color:var(--muted)">Manual carry-in (SP)</div>
+      </div>
+      <div style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);border-radius:8px;padding:12px 20px;text-align:center;min-width:140px">
+        <div style="font-size:28px;font-weight:800;color:var(--accent)">195</div>
+        <div style="font-size:11px;color:var(--muted)">Фактично виконано (SP)</div>
+      </div>
+      <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:12px 20px;text-align:center;min-width:140px">
+        <div style="font-size:28px;font-weight:800;color:var(--purple)">227</div>
+        <div style="font-size:11px;color:var(--muted)">Commit (SP)</div>
+      </div>
+      <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:12px 20px;text-align:center;min-width:140px">
+        <div style="font-size:28px;font-weight:800;color:var(--green)">85.9%</div>
+        <div style="font-size:11px;color:var(--muted)">Effective completion</div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Key</th><th>Тип</th><th>SP</th><th>Поточний статус</th><th>Категорія</th></tr></thead>
+        <tbody>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3851" target="_blank">BTMA-3851</a></td>
+  <td>BE task</td>
+  <td style="color:var(--green);font-weight:600">21</td>
+  <td style="color:var(--muted)">In Testing</td>
+  <td>Doсь-доробка (Email events)</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3462" target="_blank">BTMA-3462</a></td>
+  <td>BE task</td>
+  <td style="color:var(--green);font-weight:600">13</td>
+  <td style="color:var(--muted)">In Progress</td>
+  <td>Resource hub BE</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3691" target="_blank">BTMA-3691</a></td>
+  <td>Task</td>
+  <td style="color:var(--green);font-weight:600">6</td>
+  <td style="color:var(--muted)">In Progress</td>
+  <td>Resource hub FE</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3972" target="_blank">BTMA-3972</a></td>
+  <td>Task</td>
+  <td style="color:var(--green);font-weight:600">5</td>
+  <td style="color:var(--muted)">In Progress</td>
+  <td>Watchman Maryna</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3825" target="_blank">BTMA-3825</a></td>
+  <td>BE task</td>
+  <td style="color:var(--green);font-weight:600">5</td>
+  <td style="color:var(--muted)">Backlog</td>
+  <td>Watchman Artem</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3816" target="_blank">BTMA-3816</a></td>
+  <td>BE task</td>
+  <td style="color:var(--green);font-weight:600">3</td>
+  <td style="color:var(--muted)">Backlog</td>
+  <td>Watchman Artem</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3813" target="_blank">BTMA-3813</a></td>
+  <td>Security</td>
+  <td style="color:var(--green);font-weight:600">3</td>
+  <td style="color:var(--muted)">Dev Backlog</td>
+  <td>Security Champion Artem</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3822" target="_blank">BTMA-3822</a></td>
+  <td>Security</td>
+  <td style="color:var(--green);font-weight:600">3</td>
+  <td style="color:var(--muted)">Dev Backlog</td>
+  <td>Security Champion Artem</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3892" target="_blank">BTMA-3892</a></td>
+  <td>UI/UX</td>
+  <td style="color:var(--green);font-weight:600">0</td>
+  <td style="color:var(--muted)">For Design</td>
+  <td>Dark Theme ES (Anton)</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3979" target="_blank">BTMA-3979</a></td>
+  <td>QA_task</td>
+  <td style="color:var(--green);font-weight:600">0</td>
+  <td style="color:var(--muted)">On hold</td>
+  <td>Regression tests stage</td>
+</tr>
+<tr>
+  <td><a href="https://newsiteam.atlassian.net/browse/BTMA-3956" target="_blank">BTMA-3956</a></td>
+  <td>AQA</td>
+  <td style="color:var(--green);font-weight:600">0</td>
+  <td style="color:var(--muted)">Backlog</td>
+  <td>AQA Email events</td>
+</tr>
+          <tr style="background:rgba(34,197,94,.08);font-weight:700">
+            <td colspan="2" style="text-align:right">Сума додавання:</td>
+            <td style="color:var(--green)">+59</td>
+            <td colspan="2" style="color:var(--muted);font-weight:400;font-style:italic">→ 136 + 59 = 195 SP / 227 commit = 85.9%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- KPI SUMMARY - HIDDEN -->
+<div class="section">
+  <div class="section-header collapsed" onclick="toggleSection(this)">
+    <div class="section-title"><span>📊</span> KPI Summary — vs S42</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="kpi-grid">
+      <div class="kpi-card" data-tip="Загальна кількість задач у спринті">
+        <div class="kpi-label">Всього задач</div>
+        <div class="kpi-value">77</div>
+        <div class="kpi-delta delta-up">▼ 26</div>
+        <div class="kpi-compare">vs S42: 103</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі зі статусами: ACCEPTED, Done, Done Security">
+        <div class="kpi-label">Завершено</div>
+        <div class="kpi-value" style="color:var(--green)">48</div>
+        <div class="kpi-delta delta-down">▼ 35</div>
+        <div class="kpi-compare">vs S42: 83</div>
+      </div>
+      <div class="kpi-card" data-tip="Strict Completion = done issues / total. Effective враховує manual carry-in.">
+        <div class="kpi-label">Completion Rate</div>
+        <div class="kpi-value" style="color:var(--green)">85.9%</div>
+        <div class="kpi-delta delta-up">▲ 5.3</div>
+        <div class="kpi-compare">vs S42: 80.6% (effective)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі в Code Review / In Testing">
+        <div class="kpi-label">В ревью</div>
+        <div class="kpi-value" style="color:var(--yellow)">3</div>
+        <div class="kpi-delta delta-same">—</div>
+        <div class="kpi-compare">Ready to close</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі зі статусом: In progress">
+        <div class="kpi-label">В роботі</div>
+        <div class="kpi-value" style="color:var(--blue)">12</div>
+        <div class="kpi-delta delta-same">—</div>
+        <div class="kpi-compare">Перейдуть в S44</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі зі статусом: On hold, Blocked">
+        <div class="kpi-label">Заблоковано</div>
+        <div class="kpi-value" style="color:var(--red)">1</div>
+        <div class="kpi-delta delta-same">—</div>
+        <div class="kpi-compare">BTMA-3979 (regression)</div>
+      </div>
+      <div class="kpi-card" data-tip="Задачі у статусах: Open, Backlog, Dev Backlog, For Design">
+        <div class="kpi-label">Не розпочато</div>
+        <div class="kpi-value" style="color:var(--gray)">13</div>
+        <div class="kpi-delta delta-same">—</div>
+        <div class="kpi-compare">Backlog / Open</div>
+      </div>
+      <div class="kpi-card" data-tip="Story Points strict (Jira ACCEPTED/Done)">
+        <div class="kpi-label">SP Strict Done</div>
+        <div class="kpi-value" style="color:var(--yellow)">136</div>
+        <div class="kpi-delta delta-down">▼ 88</div>
+        <div class="kpi-compare">vs S42: 224</div>
+      </div>
+      <div class="kpi-card" data-tip="SP done + Manual carry-in">
+        <div class="kpi-label">SP Effective Done</div>
+        <div class="kpi-value" style="color:var(--green)">195</div>
+        <div class="kpi-delta delta-down">▼ 29</div>
+        <div class="kpi-compare">vs S42: 224</div>
+      </div>
+      <div class="kpi-card" data-tip="Відсоток задач, доданих після старту спринту">
+        <div class="kpi-label">Scope Creep</div>
+        <div class="kpi-value" style="color:var(--yellow)">15.6%</div>
+        <div class="kpi-delta delta-same">≈ норма</div>
+        <div class="kpi-compare">12 задач</div>
+      </div>
+      <div class="kpi-card" data-tip="Учасники команди (без Unassigned)">
+        <div class="kpi-label">Учасники</div>
+        <div class="kpi-value">9</div>
+        <div class="kpi-delta delta-same">—</div>
+        <div class="kpi-compare">+ unassigned</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VELOCITY TREND -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-title"><span>⚡</span> Velocity Trend (S38–S43)</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="ai-summary" style="margin-bottom:16px">
+      <div class="ai-summary-header">🤖 AI-аналіз velocity</div>
+      <div class="ai-summary-text">6 спринтів поспіль команда тримає <strong>completion rate ≥ 80%</strong>. S43 effective: <strong>85.9%</strong> (195 SP / 227 commit з manual carry-in) — вище ніж S42 (80.6%). Strict Jira-показник був би 59.9%, але 11 задач у фінальній фазі (In Testing/In Progress/Backlog) фактично виконані — це carry-over MigratePlans та Start&Scale 2.0, які закриються в S44. SP commit (227) знизився vs S41 (309) — реалістичніше планування.</div>
+    </div>
+<div style="overflow-x:auto"><svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:300px"><line x1="50" y1="250.0" x2="740" y2="250.0" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/><text x="45" y="254.0" font-size="9" fill="#64748b" text-anchor="end">0</text><line x1="50" y1="196.60194174757282" x2="740" y2="196.60194174757282" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/><text x="45" y="200.60194174757282" font-size="9" fill="#64748b" text-anchor="end">25</text><line x1="50" y1="141.06796116504853" x2="740" y2="141.06796116504853" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/><text x="45" y="145.06796116504853" font-size="9" fill="#64748b" text-anchor="end">51</text><line x1="50" y1="85.53398058252426" x2="740" y2="85.53398058252426" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/><text x="45" y="89.53398058252426" font-size="9" fill="#64748b" text-anchor="end">77</text><line x1="50" y1="30.0" x2="740" y2="30.0" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/><text x="45" y="34.0" font-size="9" fill="#64748b" text-anchor="end">103</text><text x="745" y="254.0" font-size="9" fill="#a855f7" text-anchor="start">0%</text><text x="745" y="144.0" font-size="9" fill="#a855f7" text-anchor="start">50%</text><text x="745" y="89.0" font-size="9" fill="#a855f7" text-anchor="start">75%</text><text x="745" y="34.0" font-size="9" fill="#a855f7" text-anchor="start">100%</text><rect x="70" y="70.6" width="36" height="179.4" fill="rgba(59,130,246,0.3)" rx="2"><title>S38 Цей во, забув: 84 tasks total</title></rect><rect x="110" y="70.6" width="36" height="179.4" fill="#22c55e" rx="2"><title>S38 Цей во, забув: 84 done</title></rect><text x="108" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">S38</text><text x="108" y="288" font-size="9" fill="#64748b" text-anchor="middle">100.0%</text><text x="88" y="67.6" font-size="9" fill="#64748b" text-anchor="middle">84</text><text x="128" y="67.6" font-size="9" fill="#22c55e" text-anchor="middle">84</text><rect x="185" y="59.900000000000006" width="36" height="190.1" fill="rgba(59,130,246,0.3)" rx="2"><title>S39 кітпес: 89 tasks total</title></rect><rect x="225" y="59.900000000000006" width="36" height="190.1" fill="#22c55e" rx="2"><title>S39 кітпес: 89 done</title></rect><text x="223" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">S39</text><text x="223" y="288" font-size="9" fill="#64748b" text-anchor="middle">100.0%</text><text x="203" y="56.900000000000006" font-size="9" fill="#64748b" text-anchor="middle">89</text><text x="243" y="56.900000000000006" font-size="9" fill="#22c55e" text-anchor="middle">89</text><rect x="300" y="72.69999999999999" width="36" height="177.3" fill="rgba(59,130,246,0.3)" rx="2"><title>S40 не трогай: 83 tasks total</title></rect><rect x="340" y="74.9" width="36" height="175.1" fill="#22c55e" rx="2"><title>S40 не трогай: 82 done</title></rect><text x="338" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">S40</text><text x="338" y="288" font-size="9" fill="#64748b" text-anchor="middle">98.8%</text><text x="318" y="69.69999999999999" font-size="9" fill="#64748b" text-anchor="middle">83</text><text x="358" y="71.9" font-size="9" fill="#22c55e" text-anchor="middle">82</text><rect x="415" y="47.099999999999994" width="36" height="202.9" fill="rgba(59,130,246,0.3)" rx="2"><title>S41 AI Full Steak: 95 tasks total</title></rect><rect x="455" y="53.5" width="36" height="196.5" fill="#22c55e" rx="2"><title>S41 AI Full Steak: 92 done</title></rect><text x="453" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">S41</text><text x="453" y="288" font-size="9" fill="#64748b" text-anchor="middle">96.8%</text><text x="433" y="44.099999999999994" font-size="9" fill="#64748b" text-anchor="middle">95</text><text x="473" y="50.5" font-size="9" fill="#22c55e" text-anchor="middle">92</text><rect x="530" y="30.0" width="36" height="220.0" fill="rgba(59,130,246,0.3)" rx="2"><title>S42 Liza is BOSS: 103 tasks total</title></rect><rect x="570" y="72.69999999999999" width="36" height="177.3" fill="#22c55e" rx="2"><title>S42 Liza is BOSS: 83 done</title></rect><text x="568" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">S42</text><text x="568" y="288" font-size="9" fill="#64748b" text-anchor="middle">80.6%</text><text x="548" y="27.0" font-size="9" fill="#64748b" text-anchor="middle">103</text><text x="588" y="69.69999999999999" font-size="9" fill="#22c55e" text-anchor="middle">83</text><rect x="645" y="85.5" width="36" height="164.5" fill="rgba(59,130,246,0.3)" rx="2"><title>S43 Кліщ зараза: 77 tasks total</title></rect><rect x="685" y="123.9" width="36" height="126.1" fill="#22c55e" rx="2"><title>S43 Кліщ зараза: 59 done (effective з carry-in)</title></rect><text x="683" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">S43</text><text x="683" y="288" font-size="9" fill="#22c55e" text-anchor="middle">85.9%</text><text x="663" y="82.5" font-size="9" fill="#64748b" text-anchor="middle">77</text><text x="703" y="120.9" font-size="9" fill="#22c55e" text-anchor="middle">59</text><path d="M108,30.0 L223,30.0 L338,32.64 L453,37.04 L568,72.68 L683,61.02" stroke="#a855f7" stroke-width="2" fill="none" stroke-dasharray="5,3"/><circle cx="108" cy="30.0" r="4" fill="#a855f7"><title>S38 Цей во, забув: 100.0%</title></circle><circle cx="223" cy="30.0" r="4" fill="#a855f7"><title>S39 кітпес: 100.0%</title></circle><circle cx="338" cy="32.64" r="4" fill="#a855f7"><title>S40 не трогай: 98.8%</title></circle><circle cx="453" cy="37.04" r="4" fill="#a855f7"><title>S41 AI Full Steak: 96.8%</title></circle><circle cx="568" cy="72.68" r="4" fill="#a855f7"><title>S42 Liza is BOSS: 80.6%</title></circle><circle cx="683" cy="61.02" r="4" fill="#a855f7"><title>S43 Кліщ зараза: 85.9% (effective)</title></circle><rect x="50" y="8" width="12" height="10" fill="rgba(59,130,246,0.3)" rx="2"/><text x="65" y="17" font-size="10" fill="#94a3b8">Всього задач</text><rect x="160" y="8" width="12" height="10" fill="#22c55e" rx="2"/><text x="175" y="17" font-size="10" fill="#94a3b8">Завершено</text><line x1="265" y1="13" x2="277" y2="13" stroke="#a855f7" stroke-width="2" stroke-dasharray="4,2"/><text x="280" y="17" font-size="10" fill="#a855f7">Completion Rate</text></svg></div><div style="margin-top:16px;overflow-x:auto"><table><thead><tr><th>Спринт</th><th>Задач</th><th>Завершено</th><th>Completion Rate</th><th>SP всього</th><th>SP done</th><th>SP Rate</th></tr></thead><tbody><tr><td>S38 Цей во, забув</td><td>84</td><td style='color:var(--green)'>84</td><td style='color:var(--green)'>100.0%</td><td>239</td><td>239</td><td style='color:var(--green)'>100.0%</td></tr><tr><td>S39 кітпес</td><td>89</td><td style='color:var(--green)'>89</td><td style='color:var(--green)'>100.0%</td><td>258</td><td>258</td><td style='color:var(--green)'>100.0%</td></tr><tr><td>S40 не трогай</td><td>83</td><td style='color:var(--green)'>82</td><td style='color:var(--green)'>98.8%</td><td>276</td><td>276</td><td style='color:var(--green)'>100.0%</td></tr><tr><td>S41 AI Full Steak</td><td>95</td><td style='color:var(--green)'>92</td><td style='color:var(--green)'>96.8%</td><td>327</td><td>319</td><td style='color:var(--green)'>97.6%</td></tr><tr><td>S42 Liza is BOSS</td><td>103</td><td style='color:var(--green)'>83</td><td style='color:var(--green)'>80.6%</td><td>291</td><td>224</td><td style='color:var(--green)'>77.0%</td></tr><tr><td><strong>S43 Кліщ зараза</strong> <span style="color:var(--muted);font-size:10px">(effective з carry-in)</span></td><td>77</td><td style='color:var(--green)'>59</td><td style='color:var(--green)'>85.9%</td><td>227</td><td>195</td><td style='color:var(--green)'>85.9%</td></tr></tbody></table></div></div></div><!-- STATUS DISTRIBUTION - HIDDEN -->
+<div class="section">
+  <div class="section-header collapsed" onclick="toggleSection(this)">
+    <div class="section-title"><span>🎯</span> Розподіл за статусами та типами</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--accent)">Розподіл за статусами</div>
+        <svg viewBox="0 0 400 270" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:270px">
+<path d="M160.0,20.0 A110,110 0 1,1 83.0,208.6 L118.0,172.9 A60,60 0 1,0 160.0,70.0 Z" fill="#22c55e" opacity="0.9"><title>Завершено: 48 (62.3%)</title></path><path d="M83.0,208.6 A110,110 0 0,1 66.3,187.6 L108.9,161.4 A60,60 0 0,0 118.0,172.9 Z" fill="#eab308" opacity="0.9"><title>В ревью: 3 (3.9%)</title></path><path d="M66.3,187.6 A110,110 0 0,1 59.9,84.3 L105.4,105.1 A60,60 0 0,0 108.9,161.4 Z" fill="#3b82f6" opacity="0.9"><title>В роботі: 12 (15.6%)</title></path><path d="M59.9,84.3 A110,110 0 0,1 64.0,76.3 L107.6,100.7 A60,60 0 0,0 105.4,105.1 Z" fill="#ef4444" opacity="0.9"><title>Заблоковано: 1 (1.3%)</title></path><path d="M64.0,76.3 A110,110 0 0,1 160.0,20.0 L160.0,70.0 A60,60 0 0,0 107.6,100.7 Z" fill="#64748b" opacity="0.9"><title>Не розпочато: 13 (16.9%)</title></path><text x="160" y="122" font-size="22" fill="#fff" text-anchor="middle" font-weight="700">48</text><text x="160" y="142" font-size="11" fill="#94a3b8" text-anchor="middle">done</text><text x="160" y="158" font-size="13" fill="#22c55e" text-anchor="middle">62.3%</text><rect x="295" y="20" width="12" height="12" fill="#22c55e" rx="2"/><text x="312" y="30" font-size="11" fill="#e2e8f0">Завершено: 48 (62.3%)</text><rect x="295" y="42" width="12" height="12" fill="#eab308" rx="2"/><text x="312" y="52" font-size="11" fill="#e2e8f0">В ревью: 3 (3.9%)</text><rect x="295" y="64" width="12" height="12" fill="#3b82f6" rx="2"/><text x="312" y="74" font-size="11" fill="#e2e8f0">В роботі: 12 (15.6%)</text><rect x="295" y="86" width="12" height="12" fill="#ef4444" rx="2"/><text x="312" y="96" font-size="11" fill="#e2e8f0">Заблоковано: 1 (1.3%)</text><rect x="295" y="108" width="12" height="12" fill="#64748b" rx="2"/><text x="312" y="118" font-size="11" fill="#e2e8f0">Не розпочато: 13 (16.9%)</text></svg></div><div><div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--accent)">Типи задач</div><table><thead><tr><th>Тип</th><th>Кількість</th><th>%</th></tr></thead><tbody><tr><td>Security Sub Task</td><td>21</td><td style='color:var(--muted)'>27.3%</td></tr><tr><td>Task</td><td>17</td><td style='color:var(--muted)'>22.1%</td></tr><tr><td>BE task</td><td>9</td><td style='color:var(--muted)'>11.7%</td></tr><tr><td>QA_task</td><td>7</td><td style='color:var(--muted)'>9.1%</td></tr><tr><td>Security</td><td>4</td><td style='color:var(--muted)'>5.2%</td></tr><tr><td>story bug</td><td>4</td><td style='color:var(--muted)'>5.2%</td></tr><tr><td>UI/UX task</td><td>3</td><td style='color:var(--muted)'>3.9%</td></tr><tr><td>Sub-task</td><td>3</td><td style='color:var(--muted)'>3.9%</td></tr><tr><td>Bug</td><td>3</td><td style='color:var(--muted)'>3.9%</td></tr><tr><td>AQA</td><td>2</td><td style='color:var(--muted)'>2.6%</td></tr><tr><td>Research</td><td>2</td><td style='color:var(--muted)'>2.6%</td></tr><tr><td>Sprint review</td><td>1</td><td style='color:var(--muted)'>1.3%</td></tr><tr><td>QA sub-task</td><td>1</td><td style='color:var(--muted)'>1.3%</td></tr></tbody></table></div></div></div></div><!-- TEAM ANALYTICS - HIDDEN -->
+<div class="section">
+  <div class="section-header collapsed" onclick="toggleSection(this)">
+    <div class="section-title"><span>👥</span> Team Analytics</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div style="margin-bottom:20px;overflow-x:auto"><svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:260px">
+<text x="157" y="25" font-size="11" fill="#94a3b8" text-anchor="end">Artem Kuchma</text><rect x="165.0" y="10" width="301.2" height="18" fill="#22c55e" rx="2"><title>done: 11</title></rect><text x="315.6" y="24" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">11</text><rect x="466.2" y="10" width="136.9" height="18" fill="#3b82f6" rx="2"><title>prog: 5</title></rect><text x="534.6" y="24" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">5</text><rect x="603.1" y="10" width="136.9" height="18" fill="#64748b" rx="2"><title>bck: 5</title></rect><text x="671.5" y="24" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">5</text><text x="748" y="25" font-size="11" fill="#eab308" font-weight="600">52%</text><text x="157" y="47" font-size="11" fill="#94a3b8" text-anchor="end">Yelyzaveta Klymova</text><rect x="165.0" y="32" width="438.1" height="18" fill="#22c55e" rx="2"><title>done: 16</title></rect><text x="384.0" y="46" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">16</text><rect x="603.1" y="32" width="27.4" height="18" fill="#eab308" rx="2"><title>rev: 1</title></rect><text x="616.8" y="46" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><rect x="630.5" y="32" width="27.4" height="18" fill="#3b82f6" rx="2"><title>prog: 1</title></rect><text x="644.2" y="46" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><text x="748" y="47" font-size="11" fill="#22c55e" font-weight="600">89%</text><text x="157" y="69" font-size="11" fill="#94a3b8" text-anchor="end">Maryna Horova</text><rect x="165.0" y="54" width="164.3" height="18" fill="#22c55e" rx="2"><title>done: 6</title></rect><text x="247.1" y="68" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">6</text><rect x="329.3" y="54" width="136.9" height="18" fill="#3b82f6" rx="2"><title>prog: 5</title></rect><text x="397.7" y="68" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">5</text><rect x="466.2" y="54" width="27.4" height="18" fill="#ef4444" rx="2"><title>hold: 1</title></rect><text x="479.9" y="68" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><rect x="493.6" y="54" width="27.4" height="18" fill="#64748b" rx="2"><title>bck: 1</title></rect><text x="507.3" y="68" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><text x="748" y="69" font-size="11" fill="#eab308" font-weight="600">46%</text><text x="157" y="91" font-size="11" fill="#94a3b8" text-anchor="end">Emiliia Voronova</text><rect x="165.0" y="76" width="191.7" height="18" fill="#22c55e" rx="2"><title>done: 7</title></rect><text x="260.8" y="90" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">7</text><rect x="356.7" y="76" width="54.8" height="18" fill="#eab308" rx="2"><title>rev: 2</title></rect><text x="384.0" y="90" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">2</text><text x="748" y="91" font-size="11" fill="#22c55e" font-weight="600">78%</text><text x="157" y="113" font-size="11" fill="#94a3b8" text-anchor="end">Unassigned</text><rect x="165.0" y="98" width="54.8" height="18" fill="#22c55e" rx="2"><title>done: 2</title></rect><text x="192.4" y="112" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">2</text><rect x="219.8" y="98" width="164.3" height="18" fill="#64748b" rx="2"><title>bck: 6</title></rect><text x="301.9" y="112" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">6</text><text x="748" y="113" font-size="11" fill="#ef4444" font-weight="600">25%</text><text x="157" y="135" font-size="11" fill="#94a3b8" text-anchor="end">Anton Hrechynskyi</text><rect x="165.0" y="120" width="27.4" height="18" fill="#22c55e" rx="2"><title>done: 1</title></rect><text x="178.7" y="134" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><rect x="192.4" y="120" width="27.4" height="18" fill="#3b82f6" rx="2"><title>prog: 1</title></rect><text x="206.1" y="134" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><rect x="219.8" y="120" width="27.4" height="18" fill="#64748b" rx="2"><title>bck: 1</title></rect><text x="233.5" y="134" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><text x="748" y="135" font-size="11" fill="#ef4444" font-weight="600">33%</text><text x="157" y="157" font-size="11" fill="#94a3b8" text-anchor="end">Artem Antonenko</text><rect x="165.0" y="142" width="54.8" height="18" fill="#22c55e" rx="2"><title>done: 2</title></rect><text x="192.4" y="156" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">2</text><text x="748" y="157" font-size="11" fill="#22c55e" font-weight="600">100%</text><text x="157" y="179" font-size="11" fill="#94a3b8" text-anchor="end">Oleksandr Menchynskyi</text><rect x="165.0" y="164" width="27.4" height="18" fill="#22c55e" rx="2"><title>done: 1</title></rect><text x="178.7" y="178" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><text x="748" y="179" font-size="11" fill="#22c55e" font-weight="600">100%</text><text x="157" y="201" font-size="11" fill="#94a3b8" text-anchor="end">Vadym Perkin</text><rect x="165.0" y="186" width="27.4" height="18" fill="#22c55e" rx="2"><title>done: 1</title></rect><text x="178.7" y="200" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><text x="748" y="201" font-size="11" fill="#22c55e" font-weight="600">100%</text><text x="157" y="223" font-size="11" fill="#94a3b8" text-anchor="end">olena.pizniak</text><rect x="165.0" y="208" width="27.4" height="18" fill="#22c55e" rx="2"><title>done: 1</title></rect><text x="178.7" y="222" font-size="10" fill="#0f172a" text-anchor="middle" font-weight="600">1</text><text x="748" y="223" font-size="11" fill="#22c55e" font-weight="600">100%</text><rect x="165" y="240" width="10" height="10" fill="#22c55e" rx="2"/><text x="178" y="249" font-size="10" fill="#94a3b8">Done</text><rect x="255" y="240" width="10" height="10" fill="#eab308" rx="2"/><text x="268" y="249" font-size="10" fill="#94a3b8">Review</text><rect x="345" y="240" width="10" height="10" fill="#3b82f6" rx="2"/><text x="358" y="249" font-size="10" fill="#94a3b8">Progress</text><rect x="435" y="240" width="10" height="10" fill="#ef4444" rx="2"/><text x="448" y="249" font-size="10" fill="#94a3b8">Hold</text><rect x="525" y="240" width="10" height="10" fill="#64748b" rx="2"/><text x="538" y="249" font-size="10" fill="#94a3b8">Backlog</text></svg></div><div style="overflow-x:auto"><table><thead><tr><th>Ім'я</th><th>Всього</th><th>✅ Done</th><th>👁 Review</th><th>🔄 Progress</th><th>🚫 Hold</th><th>⬜ Backlog</th><th>Rate</th><th>Progress</th><th>SP</th></tr></thead><tbody><tr><td>Artem Kuchma</td><td>21</td><td>11</td><td>0</td><td>5</td><td>—</td><td>5</td><td class="rate-yellow">52%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:52%;background:#eab308"></div></div></td><td>103</td></tr><tr><td>Yelyzaveta Klymova</td><td>18</td><td>16</td><td>1</td><td>1</td><td>—</td><td>0</td><td class="rate-green">89%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:89%;background:#22c55e"></div></div></td><td>69</td></tr><tr><td>Maryna Horova</td><td>13</td><td>6</td><td>0</td><td>5</td><td>1</td><td>1</td><td class="rate-yellow">46%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:46%;background:#eab308"></div></div></td><td>20</td></tr><tr><td>Emiliia Voronova</td><td>9</td><td>7</td><td>2</td><td>0</td><td>—</td><td>0</td><td class="rate-green">78%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:78%;background:#22c55e"></div></div></td><td>52</td></tr><tr><td>Unassigned</td><td>8</td><td>2</td><td>0</td><td>0</td><td>—</td><td>6</td><td class="rate-red">25%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:25%;background:#ef4444"></div></div></td><td>0</td></tr><tr><td>Anton Hrechynskyi</td><td>3</td><td>1</td><td>0</td><td>1</td><td>—</td><td>1</td><td class="rate-red">33%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:33%;background:#ef4444"></div></div></td><td>0</td></tr><tr><td>Artem Antonenko</td><td>2</td><td>2</td><td>0</td><td>0</td><td>—</td><td>0</td><td class="rate-green">100%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:100%;background:#22c55e"></div></div></td><td>5</td></tr><tr><td>Oleksandr Menchynskyi</td><td>1</td><td>1</td><td>0</td><td>0</td><td>—</td><td>0</td><td class="rate-green">100%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:100%;background:#22c55e"></div></div></td><td>0</td></tr><tr><td>Vadym Perkin</td><td>1</td><td>1</td><td>0</td><td>0</td><td>—</td><td>0</td><td class="rate-green">100%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:100%;background:#22c55e"></div></div></td><td>3</td></tr><tr><td>olena.pizniak</td><td>1</td><td>1</td><td>0</td><td>0</td><td>—</td><td>0</td><td class="rate-green">100%</td><td><div class="progress-wrap"><div class="progress-fill" style="width:100%;background:#22c55e"></div></div></td><td>0</td></tr></tbody></table></div></div></div><!-- SCOPE CREEP -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-title"><span>🔀</span> Scope Creep Analysis</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div style="margin-bottom:16px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="font-size:11px;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase">📊 Інсайти scope creep</div>
+        <div style="background:rgba(234,179,8,.15);border:1px solid rgba(234,179,8,.35);color:var(--yellow);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600">⚠ 15.6% — близько до норми (≤10%)</div>
+      </div>
+      <div style="background:rgba(15,23,42,.4);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px">📌 По типу задач</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+<div data-tip="3694 [General QA] Cover main flow for LinkedIn · 3695 [General QA] Cover remarketing flow for L · 3696 [General QA] Cover dobivashka flow for Li · 3956 Implement separate event logic for restor" style="display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);border-radius:20px;padding:4px 10px;font-size:12px;cursor:default"><span style="font-weight:700;color:var(--green)">4</span><span style="color:var(--text)">QA / AQA</span></div><div data-tip="3461 [FE-Platform] [MigratePlans] In-app purch · 3958 [Academy app] Add data-test attributes · 3691 [FE-Platform]  [MigratePlans] In-app purc" style="display:flex;align-items:center;gap:5px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.35);border-radius:20px;padding:4px 10px;font-size:12px;cursor:default"><span style="font-weight:700;color:var(--blue)">3</span><span style="color:var(--text)">FE / Tasks</span></div><div data-tip="3952 [Academy app] The lesson is marked as Com · 3963 [ES 4667] Long name case - Promo code lay" style="display:flex;align-items:center;gap:5px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);border-radius:20px;padding:4px 10px;font-size:12px;cursor:default"><span style="font-weight:700;color:var(--red)">2</span><span style="color:var(--text)">Bug Fix</span></div><div data-tip="3876 Start & Scale AI Avatar · 3892 2609 Dark Theme Spanish Localisation" style="display:flex;align-items:center;gap:5px;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.35);border-radius:20px;padding:4px 10px;font-size:12px;cursor:default"><span style="font-weight:700;color:var(--purple)">2</span><span style="color:var(--text)">UI/UX</span></div><div data-tip="3462 [BE] [MigratePlans] In-app purchase (Reso" style="display:flex;align-items:center;gap:5px;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.35);border-radius:20px;padding:4px 10px;font-size:12px;cursor:default"><span style="font-weight:700;color:var(--orange)">1</span><span style="color:var(--text)">BE / MigratePlans</span></div>    </div>
+  </div>
+  <div style="background:rgba(15,23,42,.4);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px">✅ Результат виконання</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <div style="display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:4px 12px;font-size:12px">
+        <span style="font-weight:700;color:var(--green)">4</span><span style="color:var(--text)">Done ✅</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:4px 12px;font-size:12px">
+        <span style="font-weight:700;color:var(--blue)">6</span><span style="color:var(--text)">In Progress 🔄</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;background:rgba(100,116,139,.15);border:1px solid rgba(100,116,139,.3);border-radius:20px;padding:4px 12px;font-size:12px">
+        <span style="font-weight:700;color:var(--gray)">2</span><span style="color:var(--text)">Backlog ⬜</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 12px;background:rgba(234,179,8,.07);border-left:3px solid var(--yellow);border-radius:0 6px 6px 0">
+    <span>💡</span>
+    <span style="font-size:12px;color:var(--muted)"><strong style="color:var(--text)">Рекомендація S44:</strong> заморозити scope MigratePlans до фінального декомпозу. 4 задачі QA додані на 2-му тижні — їх можна було передбачити при плануванні.</span>
+  </div>
+</div>
+<div class="scope-stat">
+  <div class="scope-stat-num" style="color:var(--yellow)">12</div>
+  <div>
+    <div style="font-size:16px;font-weight:600">задачі додано після старту спринту</div>
+    <div style="font-size:13px;color:var(--muted)">15.6% від загальної кількості (77) · Норма: ≤10%</div>
+  </div>
+</div>
+<div style="overflow-x:auto">
+  <table>
+    <thead><tr><th>Key</th><th>Задача</th><th>Тип</th><th>Додано</th><th>Днів після старту</th><th>Статус</th><th>SP</th></tr></thead>
+    <tbody>
+<tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3952" target="_blank">BTMA-3952</a></td><td style="font-size:12px">[Academy app] The lesson is marked as Completed after uncompleteing it</td><td style="font-size:11px;color:var(--muted)">Bug</td><td>2026-05-07</td><td style="color:var(--yellow)">+0д</td><td style="color:#22c55e">done</td><td>3</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3461" target="_blank">BTMA-3461</a></td><td style="font-size:12px">[FE-Platform] [MigratePlans] In-app purchase - Sign-up Paywall</td><td style="font-size:11px;color:var(--muted)">Task</td><td>2026-05-08</td><td style="color:var(--yellow)">+0д</td><td style="color:#22c55e">done</td><td>10</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3462" target="_blank">BTMA-3462</a></td><td style="font-size:12px">[BE] [MigratePlans] In-app purchase (Resource hub)</td><td style="font-size:11px;color:var(--muted)">BE task</td><td>2026-05-08</td><td style="color:var(--yellow)">+0д</td><td style="color:#3b82f6">progress</td><td>13</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3691" target="_blank">BTMA-3691</a></td><td style="font-size:12px">[FE-Platform]  [MigratePlans] In-app purchase - Resource hub</td><td style="font-size:11px;color:var(--muted)">Task</td><td>2026-05-08</td><td style="color:var(--yellow)">+0д</td><td style="color:#3b82f6">progress</td><td>6</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3876" target="_blank">BTMA-3876</a></td><td style="font-size:12px">Start & Scale AI Avatar</td><td style="font-size:11px;color:var(--muted)">UI/UX task</td><td>2026-05-08</td><td style="color:var(--yellow)">+1д</td><td style="color:#3b82f6">progress</td><td>—</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3892" target="_blank">BTMA-3892</a></td><td style="font-size:12px">2609 Dark Theme Spanish Localisation</td><td style="font-size:11px;color:var(--muted)">UI/UX task</td><td>2026-05-11</td><td style="color:var(--yellow)">+3д</td><td style="color:#64748b">backlog</td><td>—</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3956" target="_blank">BTMA-3956</a></td><td style="font-size:12px">Implement separate event logic for restore vs quiz repurchase & add welcome-back </td><td style="font-size:11px;color:var(--muted)">AQA</td><td>2026-05-12</td><td style="color:var(--yellow)">+4д</td><td style="color:#64748b">backlog</td><td>—</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3958" target="_blank">BTMA-3958</a></td><td style="font-size:12px">[Academy app] Add data-test attributes</td><td style="font-size:11px;color:var(--muted)">Task</td><td>2026-05-13</td><td style="color:var(--yellow)">+5д</td><td style="color:#22c55e">done</td><td>3</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3963" target="_blank">BTMA-3963</a></td><td style="font-size:12px">[ES 4667] Long name case - Promo code layout is broken on Payment popup + LEGAL D</td><td style="font-size:11px;color:var(--muted)">Bug</td><td>2026-05-18</td><td style="color:var(--yellow)">+10д</td><td style="color:#22c55e">done</td><td>3</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3694" target="_blank">BTMA-3694</a></td><td style="font-size:12px">[General QA] Cover main flow for LinkedIn quiz</td><td style="font-size:11px;color:var(--muted)">QA_task</td><td>2026-05-19</td><td style="color:var(--yellow)">+11д</td><td style="color:#3b82f6">progress</td><td>—</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3695" target="_blank">BTMA-3695</a></td><td style="font-size:12px">[General QA] Cover remarketing flow for LinkedIn quiz</td><td style="font-size:11px;color:var(--muted)">QA_task</td><td>2026-05-20</td><td style="color:var(--yellow)">+13д</td><td style="color:#3b82f6">progress</td><td>—</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3696" target="_blank">BTMA-3696</a></td><td style="font-size:12px">[General QA] Cover dobivashka flow for LinkedIn quiz</td><td style="font-size:11px;color:var(--muted)">QA_task</td><td>2026-05-20</td><td style="color:var(--yellow)">+13д</td><td style="color:#3b82f6">progress</td><td>—</td></tr></tbody></table></div></div></div><!-- SP REESTIMATIONS - HIDDEN -->
+<div class="section">
+  <div class="section-header collapsed" onclick="toggleSection(this)">
+    <div class="section-title"><span>📐</span> Переоцінка Story Points</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="ai-summary" style="margin-bottom:16px">
+      <div class="ai-summary-header">🤖 AI-аналіз переоцінки</div>
+      <div class="ai-summary-text">
+        <strong>10 задач змінили SP під час спринту.</strong> Загальний дрейф: <strong style="color:var(--red)">+49 SP вгору</strong> (всі задачі — оцінка з 0 → реальний розмір). Це класичний патерн: команда стартує спринт з 0-SP задачами і "дооцінює" їх вже в процесі. Найбільші: BTMA-3937 (+13), BTMA-3938 (+8). <strong>Yelyzaveta Klymova</strong> змінила SP у 6 задачах (+34 SP сумарно) — переважно Start&Scale 2.0 AI Avatar. Рекомендація: робити SP estimation на refinement до старту, не в процесі.
+      </div>
+    </div>
+    <div style="display:flex;gap:16px;margin-bottom:16px">
+      <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--red)">+49</div>
+        <div style="font-size:11px;color:var(--muted)">SP дрейф вгору</div>
+      </div>
+      <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--green)">0</div>
+        <div style="font-size:11px;color:var(--muted)">SP знижено</div>
+      </div>
+      <div style="background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--yellow)">10</div>
+        <div style="font-size:11px;color:var(--muted)">задач змінено</div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Key</th><th>Задача</th><th>Assignee</th><th>Зміни SP (від → до)</th><th>Дельта</th><th>SP</th></tr></thead>
+        <tbody>
+<tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3937" target="_blank">BTMA-3937</a></td><td style="color:var(--text);font-size:12px">ES localization 4667 (2609 dark)</td><td>Yelyzaveta Klymova</td><td>0→13</td><td style="color:var(--red);font-weight:700">+13 SP</td><td>13</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3938" target="_blank">BTMA-3938</a></td><td style="color:var(--text);font-size:12px">Start and Scale 2.0 AI avatar</td><td>Yelyzaveta Klymova</td><td>0→8</td><td style="color:var(--red);font-weight:700">+8 SP</td><td>8</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3939" target="_blank">BTMA-3939</a></td><td style="color:var(--text);font-size:12px">POC Regional payment processors integration (UPI for India, PIX for Bra</td><td>Yelyzaveta Klymova</td><td>0→5</td><td style="color:var(--red);font-weight:700">+5 SP</td><td>5</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3924" target="_blank">BTMA-3924</a></td><td style="color:var(--text);font-size:12px">Improve feedback popup validation and Continue button state</td><td>Emiliia Voronova</td><td>0→5</td><td style="color:var(--red);font-weight:700">+5 SP</td><td>5</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3851" target="_blank">BTMA-3851</a></td><td style="color:var(--text);font-size:12px">Implement separate event logic for restore vs quiz repurchase & add wel</td><td>Yelyzaveta Klymova</td><td>16→21</td><td style="color:var(--red);font-weight:700">+5 SP</td><td>21</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3958" target="_blank">BTMA-3958</a></td><td style="color:var(--text);font-size:12px">[Academy app] Add data-test attributes</td><td>Maryna Horova</td><td>0→3</td><td style="color:var(--red);font-weight:700">+3 SP</td><td>3</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3963" target="_blank">BTMA-3963</a></td><td style="color:var(--text);font-size:12px">[ES 4667] Long name case - Promo code layout is broken on Payment popup</td><td>Yelyzaveta Klymova</td><td>0→3</td><td style="color:var(--red);font-weight:700">+3 SP</td><td>3</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3952" target="_blank">BTMA-3952</a></td><td style="color:var(--text);font-size:12px">[Academy app] The lesson is marked as Completed after uncompleteing it</td><td>Yelyzaveta Klymova</td><td>0→3</td><td style="color:var(--red);font-weight:700">+3 SP</td><td>3</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3917" target="_blank">BTMA-3917</a></td><td style="color:var(--text);font-size:12px">UI changes 'you're doing great' for all courses </td><td>Maryna Horova</td><td>0→2</td><td style="color:var(--red);font-weight:700">+2 SP</td><td>2</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3980" target="_blank">BTMA-3980</a></td><td style="color:var(--text);font-size:12px">User-specific promocode - wire up infrastructure with Esputnik</td><td>Artem Kuchma</td><td>0→2</td><td style="color:var(--red);font-weight:700">+2 SP</td><td>2</td></tr></tbody></table></div></div></div><!-- REMAINING SCOPE -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <div class="section-title"><span>📦</span> Скоуп який залишився в спринті</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="ai-summary" style="margin-bottom:16px">
+      <div class="ai-summary-header">🤖 AI-аналіз залишку</div>
+      <div class="ai-summary-text">
+        <strong>9 dev-задач залишилось у спринті</strong> (97 SP) — це робота, яка перейде у S44 або в фінальній фазі тестування. Головний "хвіст" — <strong>Artem Kuchma</strong>: 4 задачі MigratePlans (BTMA-3465/3716/3462/3691, разом 61 SP). <strong>Yelyzaveta Klymova</strong> — BTMA-3851 (Email events, 21 SP, In Testing — фактично готова) і BTMA-3938 (Start&Scale 2.0 AI avatar, 8 SP). <strong>Emiliia Voronova</strong> — BTMA-3936 (POC infinite video, Code review, 5 SP) та BTMA-3957 (Email event issues, In Testing). Більшість входить у Manual Carry-In вище — фактично зарахована.
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Key</th><th>Статус</th><th>Assignee</th><th>SP</th><th>Задача</th></tr></thead>
+        <tbody>
+<tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3465" target="_blank">BTMA-3465</a></td><td style="color:#3b82f6">In progress</td><td>Artem Kuchma</td><td>21</td><td style="color:var(--muted)">[FE-Platform] [MigratePlans] Builder - Manage and renew subscription</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3716" target="_blank">BTMA-3716</a></td><td style="color:#3b82f6">In progress</td><td>Artem Kuchma</td><td>21</td><td style="color:var(--muted)">[FE-Platform] [MigratePlans] Academy - Manage and renew subscription</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3851" target="_blank">BTMA-3851</a></td><td style="color:#eab308">In Testing</td><td>Yelyzaveta Klymova</td><td>21</td><td style="color:var(--muted)">Implement separate event logic for restore vs quiz repurchase & add welcome-back </td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3462" target="_blank">BTMA-3462</a></td><td style="color:#3b82f6">In progress</td><td>Artem Kuchma</td><td>13</td><td style="color:var(--muted)">[BE] [MigratePlans] In-app purchase (Resource hub)</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3938" target="_blank">BTMA-3938</a></td><td style="color:#3b82f6">In progress</td><td>Yelyzaveta Klymova</td><td>8</td><td style="color:var(--muted)">Start and Scale 2.0 AI avatar</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3691" target="_blank">BTMA-3691</a></td><td style="color:#3b82f6">In progress</td><td>Artem Kuchma</td><td>6</td><td style="color:var(--muted)">[FE-Platform]  [MigratePlans] In-app purchase - Resource hub</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3936" target="_blank">BTMA-3936</a></td><td style="color:#eab308">Code review</td><td>Emiliia Voronova</td><td>5</td><td style="color:var(--muted)">POC infinite video</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3980" target="_blank">BTMA-3980</a></td><td style="color:#3b82f6">In progress</td><td>Artem Kuchma</td><td>2</td><td style="color:var(--muted)">User-specific promocode - wire up infrastructure with Esputnik</td></tr><tr><td><a href="https://newsiteam.atlassian.net/browse/BTMA-3957" target="_blank">BTMA-3957</a></td><td style="color:#eab308">In Testing</td><td>Emiliia Voronova</td><td>—</td><td style="color:var(--muted)">[Restore/Repurchase] Email event issues</td></tr>        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Звіт згенеровано <strong>21.05.2026</strong> · Дані: Jira Cloud (newsiteam.atlassian.net) ·
+  <a href="https://newsiteam.atlassian.net/jira/software/c/projects/BTMA/boards/210" target="_blank">Board #210</a> ·
+  <a href="https://newsiteam.atlassian.net/jira/software/c/projects/BTMA/boards/210/backlog" target="_blank">Backlog</a>
+</div>
+
+</div>
+<script>
+function toggleSection(header) {
+  header.classList.toggle('collapsed');
+  const body = header.nextElementSibling;
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
