@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 21 травня 2026, оновлено 15:53 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 21 травня 2026, оновлено 16:47 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -903,6 +903,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-499":"2026-05-21",
   "REC-395":"2026-05-21",
   "REC-341":null,
   "REC-340":null,
@@ -1001,6 +1002,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-499":"Senior",
   "REC-395":"Middle",
   "REC-341":"Junior",
   "REC-340":"Junior",
@@ -1095,6 +1097,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-499",s:"Content Manager",st:"In progress",pr:"Medium",so:"Volodymyr Chayka",re:null,h:1,r:"Replacement",t:"Content",sb:null,cr:"2026-05-21"},
   {key:"REC-395",s:"UX Writer",st:"In progress",pr:"High",so:"Kateryna Mykytchenko",re:null,h:1,r:"Replacement",t:"Product",sb:"UX Research",cr:"2026-05-18"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-340",s:"Content Researcher",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-05-13"},
@@ -1191,6 +1194,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-499",s:"Content Manager",st:"In progress",pr:"Medium",sn:"Senior",rec:"Victoria Kotenko",src:"Anastasiia Melnyk",sd:"2026-05-21",h:1,t:"Content",sb:null,cr:"2026-05-21"},
   {key:"REC-395",s:"UX Writer",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-05-21",h:1,t:"Product",sb:"UX Research",cr:"2026-05-18"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-340",s:"Content Researcher",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Content",sb:null,cr:"2026-05-13"},
@@ -1239,6 +1243,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-499":"Victoria Kotenko",
   "REC-395":"Yaroslava Bondarchuk",
   "REC-331":"Darina Lavrenko",
   "REC-315":"Anastasiia Shapovalenko",
@@ -1327,6 +1332,7 @@ const RECR={
 };
 // Sourcer lookup (customfield_23510) — fresh from Jira
 const SRCR={
+  "REC-499":"Anastasiia Melnyk",
   "REC-395":"Anastasiia Melnyk",
   "REC-331":"Kateryna Yaremenko",
   "REC-195":"Alina Muravchyk",
