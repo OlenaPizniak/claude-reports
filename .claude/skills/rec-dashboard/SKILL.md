@@ -2839,3 +2839,305 @@ const totalHires = allActive.reduce((s, v) => s + v.h, 0);
 - Якщо повертає 3 — формула використовує `v.h` напряму (BUG)
 - Якщо повертає 4 — формула uses `subs.length+1` (правильно)
 
+---
+
+## Tab "Plan Vacancies" + новий KPI layout (додано 2026-05-22)
+
+### Що змінилось
+
+1. **Новий таб `📌 Plan Vacancies`** у головній панелі між Workload і Open Vacancies. Plan-related контент (KPI Plan + секція "Plan Vacancies per Department") винесений сюди з табу Open Vacancies.
+2. **KPI cards у кожному з табів Plan/Open** перероблені на 4 картки з розділенням Open Position vs Recruitment Assignment:
+   - 📂 **Vacancies** — count OP parents
+   - 🎯 **Hires needed** — sum OP slots (parents + sub-tasks)
+   - 📋 **Recruitment Assignments** — count RA parents
+   - 🎓 **Specialists needed** — sum RA slots (parents + sub-tasks)
+3. **Active Vacancies KPI прибрано** з Open Vacancies tab — замість нього показуються 4 нові картки.
+4. **Vacancy Dynamics block** (Closed Vacancies tab) переписаний з "Open vs Hired" на "Hired Breakdown by issue type" — обидва sub-card-и (Current vs Previous Week, All Time / Period) показують ті ж 4 категорії з фільтром Hired.
+5. **Картки Vacancy Dynamics клікабельні** → відкривають popup із списком вакансій за цією цифрою.
+
+### HTML структура — main-tab-bar (3 → 4 табів)
+
+```html
+<div class="main-tab-bar">
+  <div class="main-tab active" data-view="workload" onclick="switchView('workload')">👥 Workload</div>
+  <div class="main-tab" data-view="plan" onclick="switchView('plan')">📌 Plan Vacancies</div>
+  <div class="main-tab" data-view="dashboard" onclick="switchView('dashboard')">📂 Open Vacancies</div>
+  <div class="main-tab" data-view="closed" onclick="switchView('closed')">✅ Closed Vacancies</div>
+</div>
+```
+
+`switchView()` оновлено — додано `view-plan` блок (hide/show аналогічно іншим).
+
+### HTML — KPI cards Plan tab (4 картки)
+
+```html
+<div id="view-plan" style="display:none">
+  <div style="display:flex;align-items:stretch;gap:12px;margin-bottom:28px">
+    <div class="kpi-card blue" style="flex:1;justify-content:center">
+      <div class="kpi-icon">📂</div>
+      <div class="kpi-num" id="kn-plan-op">—</div>
+      <div class="kpi-label">Vacancies</div>
+    </div>
+    <div class="kpi-card blue" style="flex:1;justify-content:center">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-num" id="kn-plan-hires">—</div>
+      <div class="kpi-label">Hires needed</div>
+    </div>
+    <div class="kpi-card blue" style="flex:1;justify-content:center">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-num" id="kn-plan-ra">—</div>
+      <div class="kpi-label">Recruitment Assignments</div>
+    </div>
+    <div class="kpi-card blue" style="flex:1;justify-content:center">
+      <div class="kpi-icon">🎓</div>
+      <div class="kpi-num" id="kn-plan-spec">—</div>
+      <div class="kpi-label">Specialists needed</div>
+    </div>
+  </div>
+  <!-- Plan Vacancies per Department section (переміщена з view-dashboard) -->
+  <div class="section">
+    <div class="section-header" onclick="tog(this)">
+      <div class="section-icon">📌</div>
+      <h2>Plan Vacancies per Department</h2>
+      <span class="sec-badge" id="b3p"></span>
+      <div class="toggle-btn">−</div>
+    </div>
+    <div id="c3p" style="padding:0 4px 8px"></div>
+  </div>
+</div>
+```
+
+KPI cards у Open Vacancies tab (view-dashboard) мають таку саму структуру з IDs `kn-op`, `kn-hn`, `kn-ra`, `kn-spec` (orange + blue alternating).
+
+### JS — універсальні helpers для OP/RA класифікації
+
+```javascript
+// Class helpers — read `kind` field (set by Python script), fallback to `type`.
+function _isOPParent(v){ if(v.kind) return v.kind==='op'; return v.type!=='subtask'; }
+function _isOPany(v){ if(v.kind) return v.kind==='op'||v.kind==='op_sub'; return true; }
+function _isRAParent(v){ return v.kind==='ra'; }
+function _isRAany(v){ return v.kind==='ra' || v.kind==='ra_sub'; }
+
+// vacInStatus — для OP (parent.st OR active sub-task.st matches)
+function vacInStatus(v, status){
+  if(v.st===status) return true;
+  return ST.some(s=>s.pk===v.key && s.st!=='Hired' && s.st===status);
+}
+// raInStatus — для RA (parent.st OR active RAS sub-task.st matches)
+function raInStatus(v, status){
+  if(v.st===status) return true;
+  return RAS.some(s=>s.pk===v.key && s.st!=='Hired' && s.st===status);
+}
+// slotsInStatus — універсальна формула: parent (1 якщо матчить) + active subs які матчать
+function slotsInStatus(v, subs, status){
+  const matchingSubs=subs.filter(x=>x.st===status);
+  const parentMatch=v.st===status?1:0;
+  if(subs.length>0) return matchingSubs.length+parentMatch;
+  return v.st===status?(v.h||1):0;
+}
+```
+
+### JS — rKPI() рендерить 8 значень
+
+```javascript
+function rKPI(){
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _activeRAS=RAS.filter(s=>s.st!=='Hired');
+
+  // ── Open Vacancies tab (In progress) ─────────────────
+  const _activeOPs=OP.filter(v=>vacInStatus(v,'In progress'));
+  document.getElementById('kn-op').textContent=_activeOPs.length;
+  document.getElementById('kn-hn').textContent=_activeOPs.reduce((s,v)=>{
+    const subs=_activeST.filter(x=>x.pk===v.key);
+    return s+slotsInStatus(v,subs,'In progress');
+  },0);
+  const _activeRAs=RA.filter(v=>raInStatus(v,'In progress'));
+  document.getElementById('kn-ra').textContent=_activeRAs.length;
+  document.getElementById('kn-spec').textContent=_activeRAs.reduce((s,v)=>{
+    const subs=_activeRAS.filter(x=>x.pk===v.key);
+    return s+slotsInStatus(v,subs,'In progress');
+  },0);
+
+  // ── Plan Vacancies tab ──────────────────────────────
+  const _planOPs=OP.filter(v=>vacInStatus(v,'Plan'));
+  document.getElementById('kn-plan-op').textContent=_planOPs.length;
+  document.getElementById('kn-plan-hires').textContent=_planOPs.reduce((s,v)=>{
+    const subs=_activeST.filter(x=>x.pk===v.key);
+    return s+slotsInStatus(v,subs,'Plan');
+  },0);
+  const _planRAs=RA.filter(v=>raInStatus(v,'Plan'));
+  document.getElementById('kn-plan-ra').textContent=_planRAs.length;
+  document.getElementById('kn-plan-spec').textContent=_planRAs.reduce((s,v)=>{
+    const subs=_activeRAS.filter(x=>x.pk===v.key);
+    return s+slotsInStatus(v,subs,'Plan');
+  },0);
+}
+```
+
+### Vacancy Dynamics block (Closed Vacancies tab) — Hired Breakdown
+
+**Header** перейменовано:
+```html
+<h2>Vacancy Dynamics: Hired Breakdown<br>
+  <span style="color:#94a3b8;font-weight:400;font-size:11px">by issue type · Open Position vs Recruitment Assignment</span>
+</h2>
+<!-- badge bcv1 ВИДАЛЕНО -->
+```
+
+Два sub-cards (`cv-week-block`, `cv-alltime-block`) показують 4 Hired стати кожен.
+
+**Логіка `rCVDynamics()`** використовує buckets:
+
+```javascript
+let _vdThis={}, _vdAt={}, _vdAtLabel='', _vdWeekLabel='';
+
+function rCVDynamics(){
+  const wThis=cvWeekRange(0), wPrev=cvWeekRange(1);
+  const hiredItemsInWeek=w=>{
+    // ... dedup hw + ALL_VACS hired + ST hired in week
+    // Кожен елемент має v.kind (fallback 'op'/'op_sub' для legacy)
+  };
+  const hThisArr=hiredItemsInWeek(wThis), hPrevArr=hiredItemsInWeek(wPrev);
+  const slotsOf=v=>(v.type==='subtask'?1:(v.h||1));
+
+  const bucketize=arr=>({
+    opParents:arr.filter(_isOPParent),
+    opAll:arr.filter(_isOPany),
+    raParents:arr.filter(_isRAParent),
+    raAll:arr.filter(_isRAany),
+  });
+  const statsFromBucket=b=>({
+    opCount:b.opParents.length,
+    opSlots:b.opAll.reduce((s,v)=>s+slotsOf(v),0),
+    raCount:b.raParents.length,
+    raSlots:b.raAll.reduce((s,v)=>s+slotsOf(v),0),
+  });
+  _vdThis=bucketize(hThisArr);
+  const tw=statsFromBucket(_vdThis), pw=statsFromBucket(bucketize(hPrevArr));
+
+  // Render 4 stat-cards у cv-stat-grid (4 columns)
+  // Кожна card має onclick="openVDPopup('this','opCount')" і т.д.
+
+  // All Time / Period — _vdAt=bucketize(cvScope); cvScope=CV (all) або CV.filter(period)
+}
+```
+
+### Popup — клік на картці Vacancy Dynamics
+
+**Реюз HTML-елементу `s5popup` / `s5overlay`** (вже існує в дашборді). Розширено до `min(1320px, 96vw)`, `max-height:85vh`, `min-width:1180px` для таблиці.
+
+**Окремий sort state + render** (не міксувати з S5):
+
+```javascript
+let _vdPopupItems=[], _vdPopupSort={col:'h',dir:-1}, _vdPopupCols=[];
+
+const _vdColsOP=[
+  {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
+  {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
+  {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
+  {id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
+];
+const _vdColsRA=[ // БЕЗ Seniority
+  {id:'key',lbl:'Key'},{id:'s',lbl:'Recruitment Assignment'},
+  {id:'pr',lbl:'Priority'},
+  {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
+  {id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
+];
+
+function openVDPopup(period, popKey){
+  // period: 'this' | 'at'. popKey: 'opCount' | 'opSlots' | 'raCount' | 'raSlots'
+  const bucket = period==='this' ? _vdThis : _vdAt;
+  const periodLbl = period==='this' ? `This week (${_vdWeekLabel})` : _vdAtLabel;
+  let items, title, kind;
+  if(popKey==='opCount'){ items=bucket.opParents; title='Vacancies'; kind='op'; }
+  else if(popKey==='opSlots'){ items=bucket.opAll; title='Hires needed'; kind='op'; }
+  else if(popKey==='raCount'){ items=bucket.raParents; title='Recruitment Assignments'; kind='ra'; }
+  else { items=bucket.raAll; title='Specialists needed'; kind='ra'; }
+  _vdPopupItems=items.slice();
+  _vdPopupCols=kind==='ra'?_vdColsRA:_vdColsOP;
+  // Render popup
+}
+```
+
+**КРИТИЧНО — popup НЕ має колонки Status і Hires:**
+- Status — всі items в Hired, неінформативно
+- Hires — для subtasks завжди 1, для parents теж 1 (бо в popup ми вже розбили по slot-ам), неінформативно
+
+**Колонка Factual close date** (`fcd`) — з custom field `customfield_22878` (заповнюється рукою в Jira; часто null).
+**Колонка Hired transition date** (`hd`) — з Jira changelog (автоматично, через `fetch_hired_transition_date()` у Python скрипті).
+
+### Python script — нові поля у HW і CV
+
+```python
+F = {
+    # ... existing fields ...
+    'num_specialists': 'customfield_25663',  # RA: Number of specialists needed
+    'end_date':       'customfield_11232',  # End date (OP + RA)
+}
+
+# Map issuetype → dashboard kind (для розрізнення OP vs RA у Vacancy Dynamics)
+_KIND = {
+    'Open position': 'op',
+    'Vacancy sub-task': 'op_sub',
+    'Recruitment Assignment': 'ra',
+    'Recruitment Assignment sub-task': 'ra_sub',
+}
+
+# HW і CV — для кожного hired item додати:
+issuetype = (fld.get('issuetype') or {}).get('name')
+kind = _KIND.get(issuetype, 'op')
+typ = 'subtask' if kind in ('op_sub', 'ra_sub') else 'position'
+h_field = F['num_specialists'] if kind in ('ra', 'ra_sub') else F['num_hires']
+
+item = {
+    # ... existing fields ...
+    'kind': kind,           # 'op' | 'op_sub' | 'ra' | 'ra_sub'
+    'ed': fld.get(F['end_date']),    # End date
+    'pr': (fld.get('priority') or {}).get('name'),  # Priority (раніше тільки в HW)
+    'h': fld.get(h_field) or 1,      # use num_specialists для RA
+}
+```
+
+**ВАЖЛИВО:** до додавання `kind` поля Python script ставив `type='position'` для ВСЬОГО окрім Vacancy sub-task. Це означало що RA hired items (REC-201, REC-359 і т.д.) рахувались як OP. Після цього оновлення `kind` field розрізняє їх.
+
+Для legacy даних (без `kind`) — fallback у JS helpers:
+- `_isOPParent`: повертає true якщо `type!=='subtask'` (тобто рахується як OP parent)
+- `_isOPany`: повертає true завжди (всі legacy = OP)
+- `_isRAParent` / `_isRAany`: повертають false без `kind` (тому RA items до оновлення невидимі — ОК, бо їх все одно немає)
+
+### UI tweaks
+
+**Чіпси All time / Month / Quarter / Year + Custom date range — в одному рядку:**
+
+```html
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px">
+  <div class="dp-chips" style="display:flex;gap:4px;flex-shrink:0">
+    <button class="dp-chip cv-at-chip active" data-mode="all">All time</button>
+    <!-- ... -->
+  </div>
+  <span style="color:#cbd5e1;margin:0 2px">·</span>
+  <!-- Custom + dates + Apply ГРУПУЮТЬСЯ разом (nowrap) -->
+  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:nowrap">
+    <span style="color:#64748b;font-weight:600">Custom:</span>
+    <input type="date" id="cv-at-from" class="cv-input">
+    <span style="color:#94a3b8">—</span>
+    <input type="date" id="cv-at-to" class="cv-input">
+    <button onclick="cvSetAllTime('custom')" style="...flex-shrink:0">Apply</button>
+  </div>
+</div>
+```
+
+Apply кнопка ніколи не відрізняється від date inputs (через внутрішній `flex-wrap:nowrap`), а вся група рветься цілою.
+
+### Конвенції цього блоку
+
+1. **"Vacancies" / "Recruitment Assignments" count = ТІЛЬКИ parents.** Sub-tasks не рахуються як окремі вакансії.
+2. **"Hires needed" / "Specialists needed" = всі слоти.** Parent (якщо матчить статус) + sub-tasks які матчать статус. Subtask = завжди 1 слот.
+3. **`kind` field має пріоритет над `type`.** Перевіряти `v.kind` ПЕРШИМ, `v.type` тільки як legacy fallback.
+4. **Popup для Hired подій НЕ показує Status і Hires колонки.** Ці колонки в цьому контексті завжди однакові і неінформативні.
+
+### Файли, які змінювались
+
+- `reports/REC_recruitment_dashboard.html` — HTML structure (4-tab nav, 4-card KPIs, Vacancy Dynamics rewrite, popup, helpers)
+- `scripts/update_rec_dashboard.py` — додано `num_specialists`, `end_date`, `_KIND`, поля `kind`/`ed`/`pr` у HW/CV
+

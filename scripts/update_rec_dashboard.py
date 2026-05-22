@@ -45,6 +45,8 @@ F = {
     'team':           'customfield_23547',
     'cand_source':    'customfield_24344',
     'cand_source_other': 'customfield_25662',  # text field, filled when Candidate Source = Other
+    'num_specialists': 'customfield_25663',  # Recruitment Assignment: Number of specialists needed
+    'end_date':       'customfield_11232',  # End date (available on Open Position + RA)
 }
 
 ALL_FIELDS = ['summary', 'status', 'priority', 'issuetype', 'created',
@@ -368,12 +370,28 @@ def build_data():
             'sd': fld.get(F['start_date']),
         })
 
+    # Map Jira issuetype name → dashboard kind (used to split OP vs RA in Vacancy Dynamics).
+    # 'op'      = Open position
+    # 'op_sub'  = Vacancy sub-task
+    # 'ra'      = Recruitment Assignment
+    # 'ra_sub'  = Recruitment Assignment sub-task
+    _KIND = {
+        'Open position': 'op',
+        'Vacancy sub-task': 'op_sub',
+        'Recruitment Assignment': 'ra',
+        'Recruitment Assignment sub-task': 'ra_sub',
+    }
+
     # HW — Hired (compact format used by Workload Hired section)
     HW = []
     for issue in hired:
         fld = issue['fields']
         issuetype = (fld.get('issuetype') or {}).get('name')
-        typ = 'subtask' if issuetype == 'Vacancy sub-task' else 'position'
+        kind = _KIND.get(issuetype, 'op')
+        # Keep legacy `type` for backward-compat with existing HTML callers.
+        typ = 'subtask' if kind in ('op_sub', 'ra_sub') else 'position'
+        # For RA-specific items use customfield_25663 (Number of specialists needed) as hires count.
+        h_field = F['num_specialists'] if kind in ('ra', 'ra_sub') else F['num_hires']
         parent = fld.get('parent')
         pk = parent.get('key') if parent else None
         t, sb = get_team(fld.get(F['team']))
@@ -381,6 +399,7 @@ def build_data():
             'key': issue['key'],
             's': fld.get('summary'),
             'type': typ,
+            'kind': kind,
             'pr': (fld.get('priority') or {}).get('name'),
             'sn': get_option(fld.get(F['seniority'])),
             'rec': get_user(fld.get(F['recruiter'])),
@@ -388,8 +407,9 @@ def build_data():
             'fcd': fld.get(F['fcd']),
             'hd': hired_transition.get(issue['key']),
             'sd': fld.get(F['start_date']),
+            'ed': fld.get(F['end_date']),
             'fcd_c': fld.get(F['fcd_contact']),
-            'h': fld.get(F['num_hires']) or 1,
+            'h': fld.get(h_field) or 1,
             't': t,
             'sb': sb,
         }
@@ -402,15 +422,19 @@ def build_data():
     for issue in hired:
         fld = issue['fields']
         issuetype = (fld.get('issuetype') or {}).get('name')
-        typ = 'subtask' if issuetype == 'Vacancy sub-task' else 'position'
+        kind = _KIND.get(issuetype, 'op')
+        typ = 'subtask' if kind in ('op_sub', 'ra_sub') else 'position'
+        h_field = F['num_specialists'] if kind in ('ra', 'ra_sub') else F['num_hires']
         parent = fld.get('parent')
         pk = parent.get('key') if parent else None
         t, sb = get_team(fld.get(F['team']))
         CV.append({
             'key': issue['key'],
             'type': typ,
+            'kind': kind,
             's': fld.get('summary'),
             'sd': fld.get(F['start_date']),
+            'ed': fld.get(F['end_date']),
             'cr': get_date(fld.get('created')),
             'fcd': fld.get(F['fcd']),
             'hd': hired_transition.get(issue['key']),
@@ -418,7 +442,8 @@ def build_data():
             'sn': get_option(fld.get(F['seniority'])),
             'rec': get_user(fld.get(F['recruiter'])),
             'src': get_user(fld.get(F['sourcer'])),
-            'h': fld.get(F['num_hires']) or 1,
+            'pr': (fld.get('priority') or {}).get('name'),
+            'h': fld.get(h_field) or 1,
             't': t,
             'sb': sb,
             'cs': get_option(fld.get(F['cand_source'])),
