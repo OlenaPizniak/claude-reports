@@ -3141,3 +3141,227 @@ Apply кнопка ніколи не відрізняється від date inpu
 - `reports/REC_recruitment_dashboard.html` — HTML structure (4-tab nav, 4-card KPIs, Vacancy Dynamics rewrite, popup, helpers)
 - `scripts/update_rec_dashboard.py` — додано `num_specialists`, `end_date`, `_KIND`, поля `kind`/`ed`/`pr` у HW/CV
 
+---
+
+## Closed Vacancies tab refactor — clickable popups + type toggles (додано 2026-05-22)
+
+Великий пакет змін до Closed Vacancies табу, який зробив його повністю консистентним з Plan/Open Vacancies через `kind` field + єдину canonical date logic (`closeDate`).
+
+### Generic VD popup — реюз для ВСІХ блоків з list-of-hired-items
+
+Створено універсальну функцію `_showVDPopupGeneric(items, title, subtitle, kind)` яка реюзає `s5popup` HTML-елемент. Усі popup-вікна на Closed Vacancies tab тепер викликають її замість кастомного HTML.
+
+```javascript
+const _vdColsOP=[
+  {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
+  {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
+  {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
+  {id:'sd',lbl:'Start date'},{id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
+];
+const _vdColsRA=[ // БЕЗ Seniority — у RA немає такого поля
+  {id:'key',lbl:'Key'},{id:'s',lbl:'Recruitment Assignment'},
+  {id:'pr',lbl:'Priority'},
+  {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
+  {id:'sd',lbl:'Start date'},{id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
+];
+
+function _showVDPopupGeneric(items, title, subtitle, kind){
+  _vdPopupItems=items.slice();
+  _vdPopupCols=kind==='ra'?_vdColsRA:_vdColsOP;
+  _vdPopupSort={col:'fcd',dir:-1}; // default sort by Factual close date desc
+  document.getElementById('s5popup-title').textContent=title;
+  document.getElementById('s5popup-sub').textContent=subtitle;
+  _renderVDPopupHeaders();
+  document.getElementById('s5popup-tbody').innerHTML=_renderVDPopupRows();
+  document.getElementById('s5overlay').style.display='block';
+  document.getElementById('s5popup').style.display='flex';
+}
+```
+
+**Розмір popup** збільшено до `min(1320px, 96vw)`, `max-height:85vh`, `min-width:1180px` для таблиці — щоб всі 9 (OP) / 8 (RA) колонок вміщались без обрізки `HIRED TRANSITION DATE`.
+
+**КРИТИЧНО — popup НЕ має колонок Status і Hires:**
+- Status — всі items в Hired, неінформативно
+- Hires — для subtasks завжди 1, неінформативно
+
+**Колонки в порядку часової логіки** (зліва направо): Start date → Factual close date → Hired transition date — щоб TTF/TTH можна було порахувати очима.
+
+### HW enrichment lookup — для legacy CV items без kind/pr
+
+CV-items зі старих auto-update runs можуть не мати `kind`, `pr`, `sn` полів. HW завжди їх містить (після оновлення Python script). Тому додано lookup, що збагачує CV items відсутніми полями з HW.
+
+```javascript
+const _HW_BY_KEY={};
+HW.forEach(h=>{_HW_BY_KEY[h.key]=h;});
+function _enrichFromHW(v){
+  const hw=_HW_BY_KEY[v.key];
+  if(!hw) return v;
+  return {...v, pr:v.pr??hw.pr, kind:v.kind??hw.kind, sn:v.sn??hw.sn};
+}
+```
+
+`_enrichFromHW` викликається у `bucketize` (Vacancy Dynamics) і в `_cvByType` (TTF/TTH/Closed/Sources) — щоб popup і фільтри коректно працювали для всіх items.
+
+### Type toggle filter — окремий стан для кожного блоку
+
+Усі блоки на Closed Vacancies tab отримали toggle filter Vacancies / Rec Assign. **Кожен блок має ОКРЕМИЙ стан** — користувач може бачити, наприклад, TTF Vacancies + TTH Rec Assign + Closed Vacancies by Dept = Rec Assign одночасно.
+
+```javascript
+let _cvVfFilterTTF='vac', _cvVfFilterTTH='vac';  // TTF + TTH (незалежно)
+let _cvCntFilter='vac';                            // Closed Vacancies by Dept
+let _cvSrcFilter='vac';                            // Hiring Sources
+
+function _cvByType(mode){
+  const pred=mode==='ra'?_isRAany:_isOPany;
+  return CV.map(_enrichFromHW).filter(pred);
+}
+```
+
+**Setter pattern** (приклад для одного блоку):
+```javascript
+function setCvCntFilter(mode){
+  _cvCntFilter=mode;
+  const isVac=mode==='vac';
+  const a=document.getElementById('cvcnt-vac'), b=document.getElementById('cvcnt-ra');
+  if(a){a.style.background=isVac?'#f59e0b':'transparent';a.style.color=isVac?'#fff':'#64748b';}
+  if(b){b.style.background=!isVac?'#f59e0b':'transparent';b.style.color=!isVac?'#fff':'#64748b';}
+  rCVClosedCount();
+}
+```
+
+**Кольори active button узгоджуються з accent-кольором блоку:**
+| Блок | Active color | ID-prefix кнопок |
+|------|--------------|-------------------|
+| TTF  | `#3b6ef5` (blue) | `cvvf-vac` / `cvvf-ra` |
+| TTH  | `#10b981` (green) | `cvvf2-vac` / `cvvf2-ra` |
+| Closed Vacancies by Dept | `#f59e0b` (orange) | `cvcnt-vac` / `cvcnt-ra` |
+| Hiring Sources | `#ec4899` (pink) | `cvsrc-vac` / `cvsrc-ra` |
+
+**Toggle стиль** — однаковий для всіх (раніше у Closed Vacancies був ярчий, потім зменшений):
+```html
+<div onclick="event.stopPropagation()" style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
+  <button onclick="setCvXxxFilter('vac')" id="cvxxx-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#ACCENT;color:#fff">📂 Vacancies</button>
+  <button onclick="setCvXxxFilter('ra')" id="cvxxx-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
+</div>
+```
+
+### Clickable bars/cards → popup
+
+Усі charts на Closed Vacancies tab клікабельні — click на bar/card відкриває popup з deviceData:
+
+| Блок | Click target | Popup опеншер | Дані для popup |
+|------|--------------|---------------|----------------|
+| Vacancy Dynamics (4 cards) | KPI card | `openVDPopup('this'\|'at', popKey)` | `_vdThis` / `_vdAt` bucket |
+| Avg TTF chart | bar (dept) | `openCVMetricPopup('ttf', dept)` | `_cvByType` + dept + sd |
+| Avg TTH chart | bar (dept) | `openCVMetricPopup('tth', dept)` | `_cvByType` + dept + fcd_c |
+| Closed Vacancies by Dept | bar (dept) | `showCVDeptPopup(dept, vacs)` → `_showVDPopupGeneric` | `_cvCntDeptVacs[dept]` (filtered by type+period) |
+| Hiring Sources | bar (source) | `showCVSrcPopup(src, vacs, dept, sn)` → `_showVDPopupGeneric` | `_cvSrcVacsBySrc[src]` (filtered by type+dept+sn) |
+
+**Chart.js onClick + onHover pattern:**
+```javascript
+options:{
+  onClick:(evt,els)=>{
+    if(els.length) openCVMetricPopup('ttf', labels[els[0].index]);
+  },
+  onHover:(evt,els)=>{evt.native.target.style.cursor=els.length?'pointer':'default';},
+  plugins:{
+    tooltip:{callbacks:{label:ctx=>`Avg: ${ctx.parsed.x}d · Hires: ${e.n} · click to see list`}}
+  }
+}
+```
+
+### КОНВЕНЦІЯ: closeDate(v) = v.fcd || v.hd ВСЮДИ
+
+КРИТИЧНО: усі фільтри та агрегації по даті закриття використовують canonical helper `closeDate(v) = v.fcd || v.hd || null`. Це означає:
+- **fcd має пріоритет** — це бізнес-правда (recruiter manually entered)
+- **hd як fallback** — коли recruiter не заповнив fcd, беремо дату транзиту в статус Hired з changelog
+- **Single date per item** — запобігає double-counting (item з fcd у тижні A і hd у тижні B рахується ОДИН раз)
+
+Усі місця застосування:
+
+| Місце | Лінія | Helper |
+|---|---|---|
+| Hired This Week badge + table (r2) | 1658 | `inRange(closeDate(v))` |
+| Workload Hired (rWorkloadHired) | 2903–2910 | `closeDate(v)` |
+| Workload TT Overview (rWorkloadOverview) | 3110–3120 | `closeDate(v)` |
+| Vacancy Dynamics — Current/Prev Week | 3411 | `inR(closeDate(v))` |
+| Vacancy Dynamics — All Time/Period | 3488 | `inAtRange(closeDate(v))` |
+| Avg TTF/TTH popup | 3604 | `closeDate(v)` |
+| Avg TTF chart (rCVTTF) | 3644 | `closeDate(v)` |
+| Avg TTH chart (rCVTTH) | 3710 | `closeDate(v)` |
+| Closed Vacancies by Dept (rCVClosedCount) | 3815 | `cvInRange(closeDate(v),...)` |
+| Charts Hires Week (rChartHires) | 2512 | `closeDate(v)` |
+
+**Місця з прямим `v.fcd` або `v.hd`** — тільки для DISPLAY (НЕ фільтр):
+- Колонка "Close date" у Hired This Week table → `fcdCell(v.fcd)` — показує саме fcd
+- Колонки popup `Factual close date` і `Hired transition date` → показують окремо обидва поля
+- Workload Active `closeDate(v)||v.sd` → fallback на start date для active vacancies (інша семантика)
+
+**Тест-case REC-359** (RA sub-task hired): fcd="2026-05-08", hd="2026-05-15". У будь-якому періоді закриття рахується **за датою 05-08**. Якщо діапазон 05-11..05-17 — REC-359 НЕ потрапляє в жоден блок (consistent).
+
+### Hired This Week table — нова структура колонок
+
+Колонки тепер:
+- Key
+- **Type** (нова) — `<span>Vacancy</span>` (blue) або `<span>Rec Assign</span>` (purple), визначається через `_isRAany(v)`
+- Vacancy (summary)
+- Status
+- Priority
+- Seniority
+- Recruiter
+- Sourcer
+- **Close date** — з `v.fcd` (НЕ closeDate, тільки фактичне поле, як попросив user)
+- Dept / Team
+
+**Прибрана колонка** `Hires` — суб-таски завжди 1, неінформативно.
+
+**Sort buttons виправлено** — раніше `s2SortCol` оновлювався, але `positions.sort()` був hardcoded на priority. Тепер є generic comparator:
+
+```javascript
+const _s2cmp=(a,b,col)=>{
+  if(col==='pr')   return (pOrd[a.pr]??9)-(pOrd[b.pr]??9);
+  if(col==='type') return (_isRAany(a)?1:0)-(_isRAany(b)?1:0);
+  if(col==='dt')   { const av=[a.t,a.sb].filter(Boolean).join(' / '), bv=[b.t,b.sb].filter(Boolean).join(' / '); return av<bv?-1:av>bv?1:0; }
+  const av=a[col]??'', bv=b[col]??'';
+  return av<bv?-1:av>bv?1:0;
+};
+```
+
+**Badge "Hired This Week"** оновлено — показує 4 стати замість "N hires":
+```
+📂 N Vacancies · 🎯 N Hires needed · 📋 N Recruitment Assignments · 🎓 N Specialists needed
+```
+
+**Grey parent context row** тепер шукає parent в `ALL_VACS` АБО `RA` (з міткою `kind:'ra'`) — щоб RA sub-tasks показувались разом з parent context.
+
+### Vacancy Dynamics block — фінальна структура (без Open side, без bcv1 badge)
+
+- Header перейменовано: `Vacancy Dynamics: Hired Breakdown` + sub `by issue type · Open Position vs Recruitment Assignment`
+- **Badge `bcv1` ВИДАЛЕНО** — раніше показував "N hired this week · M all time", тепер зайвий
+- Trend chart code теж видалено (раніше викликав `openInWeek` яку я видалила при rewrite → ламав cascade)
+- Inline `All time / Month / Quarter / Year` chips + Custom range + Apply в один рядок (`flex-wrap:nowrap` для Custom-групи щоб Apply не відривався)
+
+### Hiring Sources — Seniority hide для RA
+
+RA items не мають Seniority field. Тому при перемиканні на `Rec Assign`:
+```javascript
+const snLbl=document.getElementById('cv-src-sn-lbl');
+const snSel=document.getElementById('cv-src-sn');
+if(snLbl) snLbl.style.display=isVac?'':'none';
+if(snSel){
+  snSel.style.display=isVac?'':'none';
+  if(!isVac) snSel.value=''; // reset stale OP-only seniority
+}
+```
+
+Також у `rCVSources` для RA-режиму пропускається requirement `v.sn` (інакше всі RA items відсіялись би через null sn):
+```javascript
+const baseItems=typeScope.filter(v=>v.cs&&v.t&&(_cvSrcFilter==='ra'||v.sn));
+```
+
+### Файли, які змінювались у цій сесії
+
+- `reports/REC_recruitment_dashboard.html` — popup стандартизація, type toggles у всі CV-блоки, closeDate всюди, Hired This Week table refactor, Vacancy Dynamics остаточна форма
+
+
+

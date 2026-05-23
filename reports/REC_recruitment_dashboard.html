@@ -786,6 +786,10 @@ function recTriggerRefresh(){
           <div class="section-icon" style="background:linear-gradient(135deg,#3b6ef5,#60a5fa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">⏱️</div>
           <h2>Avg TTF by Department<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Time to Fill = Factual close date − Start date</span></h2>
           <span class="sec-badge" id="bcv-ttf" style="background:#eff6ff;color:#1d4ed8;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
+          <div onclick="event.stopPropagation()" style="margin-left:auto;display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
+            <button onclick="setCvVfFilter('vac','ttf')" id="cvvf-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b6ef5;color:#fff">📂 Vacancies</button>
+            <button onclick="setCvVfFilter('ra','ttf')" id="cvvf-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
+          </div>
         </div>
         <div class="section-body">
           <div class="cv-canvas-wrap"><canvas id="cv-ttf-chart"></canvas></div>
@@ -796,6 +800,10 @@ function recTriggerRefresh(){
           <div class="section-icon" style="background:linear-gradient(135deg,#10b981,#34d399);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🎯</div>
           <h2>Avg TTH by Department<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Time to Hire = Factual close date − First contact date</span></h2>
           <span class="sec-badge" id="bcv-tth" style="background:#d1fae5;color:#065f46;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
+          <div onclick="event.stopPropagation()" style="margin-left:auto;display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
+            <button onclick="setCvVfFilter('vac','tth')" id="cvvf2-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#10b981;color:#fff">📂 Vacancies</button>
+            <button onclick="setCvVfFilter('ra','tth')" id="cvvf2-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
+          </div>
         </div>
         <div class="section-body">
           <div class="cv-canvas-wrap"><canvas id="cv-tth-chart"></canvas></div>
@@ -808,6 +816,11 @@ function recTriggerRefresh(){
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📦</div>
         <h2>Closed Vacancies by Department</h2>
+        <!-- Toggle: Vacancies / Rec Assign — same compact style as TTF/TTH -->
+        <div onclick="event.stopPropagation()" style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
+          <button onclick="setCvCntFilter('vac')" id="cvcnt-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#f59e0b;color:#fff">📂 Vacancies</button>
+          <button onclick="setCvCntFilter('ra')" id="cvcnt-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
+        </div>
         <span class="sec-badge" id="bcv-cnt" style="background:#fef3c7;color:#b45309;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
         <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">
           <div class="cv-mode-bar" id="cv-cnt-mode">
@@ -836,13 +849,18 @@ function recTriggerRefresh(){
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#ec4899,#f472b6);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🌍</div>
         <h2>Hiring Sources<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Candidate Source distribution · click bar to see vacancies</span></h2>
+        <!-- Type toggle: Vacancies / Rec Assign (pink accent to match section) -->
+        <div onclick="event.stopPropagation()" style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
+          <button onclick="setCvSrcFilter('vac')" id="cvsrc-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#ec4899;color:#fff">📂 Vacancies</button>
+          <button onclick="setCvSrcFilter('ra')" id="cvsrc-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
+        </div>
         <span class="sec-badge" id="bcv-src" style="background:#fce7f3;color:#9d174d;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
         <div style="display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">
           <span style="font-size:11px;color:#64748b;font-weight:600">Department:</span>
           <select id="cv-src-dept" class="cv-input" onchange="rCVSources()" style="min-width:140px">
             <option value="">All</option>
           </select>
-          <span style="font-size:11px;color:#64748b;font-weight:600">Seniority:</span>
+          <span id="cv-src-sn-lbl" style="font-size:11px;color:#64748b;font-weight:600">Seniority:</span>
           <select id="cv-src-sn" class="cv-input" onchange="rCVSources()" style="min-width:120px">
             <option value="">All</option>
           </select>
@@ -1638,10 +1656,11 @@ function r2(from,to){
   if(from!==undefined)s2From=from;
   if(to!==undefined)s2To=to;
 
-  // Hire-date for filtering = Factual close date OR transition-to-Hired date (from changelog)
-  // An item counts if EITHER date falls in the selected period.
+  // Hire-date for filtering = closeDate(v) (v.fcd || v.hd) — fcd is business truth,
+  // hd is fallback when fcd not entered. Single date per item, no double-counting.
+  // Consistent with Closed Vacancies by Dept and Vacancy Dynamics blocks.
   const inRange=d=>d&&d>=s2From&&d<=s2To;
-  const hwItems=HW.filter(v=>inRange(v.fcd)||inRange(v.hd));
+  const hwItems=HW.filter(v=>inRange(closeDate(v)));
   const hwKeys=new Set(hwItems.map(v=>v.key));
 
   // Source 2: ALL_VACS items with st='Hired' and sd in range (not already in HW)
@@ -1659,19 +1678,33 @@ function r2(from,to){
         h:1,t:par?.t||null,sb:par?.sb||null,st:v.st};
     });
 
-  // Annotate each item with effective close date (fcd || hd) for the table column
-  let items=[...hwItems,...avHired,...stHired].map(v=>({...v, fcd: v.fcd||v.hd||null}));
+  // Close date column shows ONLY Factual close date (customfield_22878) — no hd fallback.
+  // Enrich items with kind/pr from HW lookup so Type column renders correctly for legacy data.
+  let items=[...hwItems,...avHired,...stHired].map(v=>_enrichFromHW(v));
   const vacCount2=items.filter(v=>v.type!=='subtask').length;
   // Hires total: sub-task = 1 person hired (НЕ v.h — sub inherits parent.h, тому v.h=11/8 etc.)
   // Position (parent itself hired) = v.h
   const hiresTotal2=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
-  document.getElementById('b2').innerHTML=`<span class="bnum">${hiresTotal2}</span> hires`;
+
+  // Badge: 4-way breakdown by issuetype (Vacancies / Hires needed / RA / Specialists)
+  // Same logic as Vacancy Dynamics. Enrich items with kind from HW lookup for legacy data.
+  const _items2=items.map(_enrichFromHW);
+  const _slotsOf=v=>(v.type==='subtask'?1:(v.h||1));
+  const b2OP=_items2.filter(_isOPParent).length;
+  const b2Hires=_items2.filter(_isOPany).reduce((s,v)=>s+_slotsOf(v),0);
+  const b2RA=_items2.filter(_isRAParent).length;
+  const b2Spec=_items2.filter(_isRAany).reduce((s,v)=>s+_slotsOf(v),0);
+  document.getElementById('b2').innerHTML=
+    `<span style="margin-right:4px">📂</span><span class="bnum">${b2OP}</span> Vacancies` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">🎯</span><span class="bnum">${b2Hires}</span> Hires needed` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">📋</span><span class="bnum">${b2RA}</span> Recruitment Assignments` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">🎓</span><span class="bnum">${b2Spec}</span> Specialists needed`;
 
   const cols2=[
-    {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
+    {id:'key',lbl:'Key'},{id:'type',lbl:'Type'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
     {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
     {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
-    {id:'fcd',lbl:'Close date'},{id:'dt',lbl:'Dept / Team'},{id:'h',lbl:'Hires',c:1}
+    {id:'fcd',lbl:'Close date'},{id:'dt',lbl:'Dept / Team'}
   ];
   const ths2=cols2.map(c=>{
     const on=s2SortCol===c.id;
@@ -1685,8 +1718,19 @@ function r2(from,to){
   const byParent={};
   subtasks.forEach(v=>{if(!byParent[v.pk])byParent[v.pk]=[];byParent[v.pk].push(v);});
 
-  // Sort positions by priority
-  positions.sort((a,b)=>(pOrd[a.pr]??9)-(pOrd[b.pr]??9));
+  // Sort positions by selected column (s2SortCol/s2SortDir) — default to Priority.
+  const _s2cmp=(a,b,col)=>{
+    if(col==='pr')    return (pOrd[a.pr]??9)-(pOrd[b.pr]??9);
+    if(col==='type')  return (_isRAany(a)?1:0)-(_isRAany(b)?1:0);
+    if(col==='dt')    { const av=[a.t,a.sb].filter(Boolean).join(' / '), bv=[b.t,b.sb].filter(Boolean).join(' / '); return av<bv?-1:av>bv?1:0; }
+    const av=a[col]??'', bv=b[col]??'';
+    return av<bv?-1:av>bv?1:0;
+  };
+  if(s2SortCol){
+    positions.sort((a,b)=>_s2cmp(a,b,s2SortCol)*s2SortDir);
+  } else {
+    positions.sort((a,b)=>_s2cmp(a,b,'pr'));
+  }
 
   function snBadge(sn){
     return sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[sn]||'#374151'};background:${snColor[sn]?snColor[sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${sn}</span>`:'<span class="dash-val">—</span>';
@@ -1694,19 +1738,30 @@ function r2(from,to){
   function fcdCell(fcd){
     return fcd?`<span style="font-size:11px;color:var(--text2)">${fcd}</span>`:'<span class="dash-val">—</span>';
   }
+  // Type badge: Vacancy (OP / OP sub-task) vs Rec Assign (RA / RA sub-task).
+  function typeCell(v){
+    if(_isRAany(v)){
+      return `<span style="font-size:10.5px;font-weight:600;color:#7c3aed;background:#ede9fe;border-radius:4px;padding:2px 6px;white-space:nowrap">Rec Assign</span>`;
+    }
+    return `<span style="font-size:10.5px;font-weight:600;color:#0369a1;background:#dbeafe;border-radius:4px;padding:2px 6px;white-space:nowrap">Vacancy</span>`;
+  }
   function posRow(v){
     const dt=[v.t,v.sb].filter(Boolean).join(' / ');
-    return`<tr><td>${jl(v.key)}</td><td style="max-width:210px;font-size:12px">${v.s}</td><td>${sb2(v.st||'Hired')}</td><td>${pb(v.pr)}</td><td>${snBadge(v.sn)}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${fcdCell(v.fcd)}</td><td style="font-size:11px">${fv(dt)}</td><td style="text-align:center"><b style="color:#0f172a">${v.h}</b></td></tr>`;
+    return`<tr><td>${jl(v.key)}</td><td>${typeCell(v)}</td><td style="max-width:210px;font-size:12px">${v.s}</td><td>${sb2(v.st||'Hired')}</td><td>${pb(v.pr)}</td><td>${snBadge(v.sn)}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${fcdCell(v.fcd)}</td><td style="font-size:11px">${fv(dt)}</td></tr>`;
   }
 
   let rows2=positions.map(posRow).join('');
 
   // Render subtask groups
   Object.entries(byParent).forEach(([pk,subs])=>{
-    // Sort subs by fcd desc
-    subs.sort((a,b)=>b.fcd.localeCompare(a.fcd));
-    // Look up parent from ALL_VACS
-    const parent=ALL_VACS.find(v=>v.key===pk);
+    // Sort subs by fcd desc (use hd as fallback for sort key only; column still shows fcd-only)
+    subs.sort((a,b)=>(b.fcd||b.hd||'').localeCompare(a.fcd||a.hd||''));
+    // Look up parent from ALL_VACS (OP) or RA (Recruitment Assignment) — mark RA parents with kind='ra'.
+    let parent=ALL_VACS.find(v=>v.key===pk);
+    if(!parent){
+      const raPar=RA.find(v=>v.key===pk);
+      if(raPar) parent={...raPar, kind:'ra'};
+    }
     const pHired=parent&&parent.st==='Hired';
     if(parent&&!pHired){
       // Grey parent context row
@@ -1714,12 +1769,11 @@ function r2(from,to){
       const pSnBadge=parent.sn?`<span style="font-size:10.5px;font-weight:600;color:#94a3b8;background:#f1f5f9;border-radius:4px;padding:2px 6px">${parent.sn}</span>`:'<span class="dash-val">—</span>';
       const pRec=parent.rec||subs[0]?.rec||null;
       const pSrc=parent.src||subs[0]?.src||null;
-      rows2+=`<tr style="background:#f8fafc;color:#94a3b8"><td style="color:#94a3b8">${jl(pk)}</td><td style="max-width:210px;font-size:12px;color:#94a3b8">${parent.s}</td><td>${sb2(parent.st)}</td><td>${pb(parent.pr)}</td><td>${pSnBadge}</td><td style="font-size:11px;color:#94a3b8">${fv(pRec)}</td><td style="font-size:11px;color:#94a3b8">${fv(pSrc)}</td><td><span class="dash-val">—</span></td><td style="font-size:11px;color:#94a3b8">${fv(dt)}</td><td style="text-align:center;color:#94a3b8"><b>${parent.h}</b></td></tr>`;
+      rows2+=`<tr style="background:#f8fafc;color:#94a3b8"><td style="color:#94a3b8">${jl(pk)}</td><td>${typeCell(parent)}</td><td style="max-width:210px;font-size:12px;color:#94a3b8">${parent.s}</td><td>${sb2(parent.st)}</td><td>${pb(parent.pr)}</td><td>${pSnBadge}</td><td style="font-size:11px;color:#94a3b8">${fv(pRec)}</td><td style="font-size:11px;color:#94a3b8">${fv(pSrc)}</td><td><span class="dash-val">—</span></td><td style="font-size:11px;color:#94a3b8">${fv(dt)}</td></tr>`;
     }
     subs.forEach(v=>{
       const dt=[v.t,v.sb].filter(Boolean).join(' / ');
-      // Sub-task = 1 hire (parent.h не релевантне для sub)
-      rows2+=`<tr style="background:#f5f8ff"><td style="padding-left:18px;font-size:12px">↳ ${jl(v.key)}</td><td style="max-width:210px;font-size:11px">${v.s}</td><td>${sb2(v.st||'Hired')}</td><td>${pb(v.pr)}</td><td>${snBadge(v.sn)}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${fcdCell(v.fcd)}</td><td style="font-size:11px">${fv(dt)}</td><td style="text-align:center"><b style="color:#0f172a">1</b></td></tr>`;
+      rows2+=`<tr style="background:#f5f8ff"><td style="padding-left:18px;font-size:12px">↳ ${jl(v.key)}</td><td>${typeCell(v)}</td><td style="max-width:210px;font-size:11px">${v.s}</td><td>${sb2(v.st||'Hired')}</td><td>${pb(v.pr)}</td><td>${snBadge(v.sn)}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${fcdCell(v.fcd)}</td><td style="font-size:11px">${fv(dt)}</td></tr>`;
     });
   });
 
@@ -3342,14 +3396,24 @@ function _isOPParent(v){ if(v.kind) return v.kind==='op'; return v.type!=='subta
 function _isOPany(v){ if(v.kind) return v.kind==='op'||v.kind==='op_sub'; return true; }
 function _isRAParent(v){ return v.kind==='ra'; }
 function _isRAany(v){ return v.kind==='ra' || v.kind==='ra_sub'; }
+// HW lookup — enriches CV items with fields that older auto-update runs didn't store in CV
+// (pr, kind). HW always carries these because it's the source for Workload-Hired section.
+const _HW_BY_KEY={};
+HW.forEach(h=>{_HW_BY_KEY[h.key]=h;});
+function _enrichFromHW(v){
+  const hw=_HW_BY_KEY[v.key];
+  if(!hw) return v;
+  return {...v, pr:v.pr??hw.pr, kind:v.kind??hw.kind, sn:v.sn??hw.sn};
+}
 // Buckets cached for popup access.
 let _vdThis={}, _vdAt={}, _vdAtLabel='', _vdWeekLabel='';
 function rCVDynamics(){
   const wThis=cvWeekRange(0), wPrev=cvWeekRange(1);
-  // Hired this week / prev week: same dedup logic as r2 (Hired This Week table).
+  // Hired this week / prev week — use closeDate(v) (v.fcd||v.hd) for consistency with
+  // Closed Vacancies by Department block. Single date per item — no double counting.
   const hiredItemsInWeek=w=>{
     const inR=d=>d&&d>=w.start&&d<=w.end;
-    const hw=HW.filter(v=>inR(v.fcd)||inR(v.hd));
+    const hw=HW.filter(v=>inR(closeDate(v)));
     const hwKeys=new Set(hw.map(v=>v.key));
     const avH=ALL_VACS.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!hwKeys.has(v.key)).map(v=>({...v,type:'position',kind:v.kind||'op'}));
     const usedKeys=new Set([...hwKeys,...avH.map(v=>v.key)]);
@@ -3362,12 +3426,17 @@ function rCVDynamics(){
   const slotsOf=v=>(v.type==='subtask'?1:(v.h||1));
 
   // Bucket items by type — kept for popup; stats computed from buckets.
-  const bucketize=arr=>({
-    opParents:arr.filter(_isOPParent),
-    opAll:arr.filter(_isOPany),
-    raParents:arr.filter(_isRAParent),
-    raAll:arr.filter(_isRAany),
-  });
+  // Enrich each item with pr/kind/sn from HW lookup — fills gaps in legacy CV data
+  // that pre-dates the script update which added these fields to CV.
+  const bucketize=arr=>{
+    const enriched=arr.map(_enrichFromHW);
+    return {
+      opParents:enriched.filter(_isOPParent),
+      opAll:enriched.filter(_isOPany),
+      raParents:enriched.filter(_isRAParent),
+      raAll:enriched.filter(_isRAany),
+    };
+  };
   const statsFromBucket=b=>({
     opCount:b.opParents.length,
     opSlots:b.opAll.reduce((s,v)=>s+slotsOf(v),0),
@@ -3421,7 +3490,7 @@ function rCVDynamics(){
     subText='All time';
     _vdAtLabel='All time';
   } else {
-    cvScope=CV.filter(v=>inAtRange(v.hd||v.fcd));
+    cvScope=CV.filter(v=>inAtRange(closeDate(v)));
     const labelMap={month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
     subText=`${labelMap[_cvAtMode]||'Period'}: ${_cvAtFrom||'—'} → ${_cvAtTo||'—'}`;
     _vdAtLabel=subText;
@@ -3443,37 +3512,10 @@ function rCVDynamics(){
     </div>`;
   // Save week range for popup subtitle.
   _vdWeekLabel=`${wThis.start} → ${wThis.end}`;
-
-  // Weekly trend chart — last 12 weeks
-  const wks=[];
-  for(let i=11;i>=0;i--)wks.push(cvWeekRange(i));
-  const labels=wks.map(w=>{
-    const dt=new Date(w.start+'T00:00:00');
-    return `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
-  });
-  const opened=wks.map(w=>openInWeek(w));
-  const hired=wks.map(w=>hiredItemsInWeek(w).reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0));
-  if(_cvCharts.trend){_cvCharts.trend.destroy();_cvCharts.trend=null;}
-  _cvCharts.trend=new Chart(document.getElementById('cv-trend-chart').getContext('2d'),{
-    type:'bar',
-    data:{labels,datasets:[
-      {label:'Opened',data:opened,backgroundColor:'#60a5fa',hoverBackgroundColor:'#3b82f6',borderRadius:6,borderSkipped:false},
-      {label:'Hired',data:hired,backgroundColor:'#34d399',hoverBackgroundColor:'#10b981',borderRadius:6,borderSkipped:false},
-    ]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top',align:'end',labels:{font:{family:'Inter',size:11,weight:'500'},boxWidth:10,boxHeight:10,padding:14,usePointStyle:true,pointStyle:'rectRounded',color:'#475569'}},
-        tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',padding:{x:12,y:8},cornerRadius:8,
-          callbacks:{title:items=>`Week of ${wks[items[0].dataIndex].start}`}},
-        datalabels:false
-      },
-      scales:{
-        y:{beginAtZero:true,grid:{color:'#f1f5f9'},border:{display:false},ticks:{font:{family:'Inter',size:10},color:'#94a3b8',precision:0}},
-        x:{grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:10,weight:'500'},color:'#64748b'}}
-      }
-    }
-  });
+  // Weekly trend chart (cv-trend-chart) was hidden via display:none in the parent .cv-card
+  // and its render code is removed because it referenced openInWeek() which no longer exists
+  // (Open side was dropped from Vacancy Dynamics on 2026-05-22). If trend chart is ever
+  // restored — needs to be re-implemented for hired-only metrics.
 }
 
 // ── Vacancy Dynamics popup (reuses s5popup HTML element) ───
@@ -3482,13 +3524,13 @@ const _vdColsOP=[
   {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
   {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
   {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
-  {id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
+  {id:'sd',lbl:'Start date'},{id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
 ];
 const _vdColsRA=[
   {id:'key',lbl:'Key'},{id:'s',lbl:'Recruitment Assignment'},
   {id:'pr',lbl:'Priority'},
   {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
-  {id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
+  {id:'sd',lbl:'Start date'},{id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
 ];
 function vdPopupSort(col){
   if(_vdPopupSort.col===col)_vdPopupSort.dir*=-1;
@@ -3524,6 +3566,7 @@ function _renderVDPopupRows(){
       if(c.id==='sn')  return `<td style="padding:10px">${snHtml}</td>`;
       if(c.id==='rec') return `<td style="font-size:11px;padding:10px">${fv(v.rec)}</td>`;
       if(c.id==='src') return `<td style="font-size:11px;padding:10px">${fv(v.src)}</td>`;
+      if(c.id==='sd')  return `<td style="font-size:11px;padding:10px;white-space:nowrap;color:#475569">${fv(v.sd)}</td>`;
       if(c.id==='fcd') return `<td style="font-size:11px;padding:10px;white-space:nowrap;color:#475569">${fv(v.fcd)}</td>`;
       if(c.id==='hd')  return `<td style="font-size:11px;padding:10px;white-space:nowrap;color:#475569">${fv(v.hd)}</td>`;
       if(c.id==='h')   return `<td style="text-align:center;padding:10px"><b style="color:#0f172a">${isSub?1:(v.h||1)}</b></td>`;
@@ -3531,6 +3574,18 @@ function _renderVDPopupRows(){
     }).join('');
     return `<tr style="border-bottom:1px solid #f1f5f9">${cells}</tr>`;
   }).join('');
+}
+// Generic VD popup renderer — used by both Vacancy Dynamics cards and TTF/TTH chart bars.
+function _showVDPopupGeneric(items, title, subtitle, kind){
+  _vdPopupItems=items.slice();
+  _vdPopupCols=kind==='ra'?_vdColsRA:_vdColsOP;
+  _vdPopupSort={col:'fcd',dir:-1};
+  document.getElementById('s5popup-title').textContent=title;
+  document.getElementById('s5popup-sub').textContent=subtitle;
+  _renderVDPopupHeaders();
+  document.getElementById('s5popup-tbody').innerHTML=_renderVDPopupRows();
+  document.getElementById('s5overlay').style.display='block';
+  document.getElementById('s5popup').style.display='flex';
 }
 // Open popup for VD card. period: 'this' | 'at'. popKey: 'opCount' | 'opSlots' | 'raCount' | 'raSlots'.
 function openVDPopup(period, popKey){
@@ -3541,22 +3596,57 @@ function openVDPopup(period, popKey){
   else if(popKey==='opSlots'){ items=bucket.opAll; title='Hires needed'; kind='op'; }
   else if(popKey==='raCount'){ items=bucket.raParents; title='Recruitment Assignments'; kind='ra'; }
   else { items=bucket.raAll; title='Specialists needed'; kind='ra'; }
-  _vdPopupItems=items.slice();
-  _vdPopupCols=kind==='ra'?_vdColsRA:_vdColsOP;
-  _vdPopupSort={col:'h',dir:-1};
-  const totalSlots=_vdPopupItems.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
-  document.getElementById('s5popup-title').textContent=`${title} · Hired · ${periodLbl}`;
-  document.getElementById('s5popup-sub').textContent=`${_vdPopupItems.length} items · ${totalSlots} hires`;
-  _renderVDPopupHeaders();
-  document.getElementById('s5popup-tbody').innerHTML=_renderVDPopupRows();
-  document.getElementById('s5overlay').style.display='block';
-  document.getElementById('s5popup').style.display='flex';
+  const totalSlots=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
+  _showVDPopupGeneric(items, `${title} · Hired · ${periodLbl}`, `${items.length} items · ${totalSlots} hires`, kind);
+}
+// Open popup for TTF/TTH chart bar. metric: 'ttf' | 'tth'. dept: department name.
+// Filters CV by current type filter + dept + close date + (sd for TTF / fcd_c for TTH).
+function openCVMetricPopup(metric, dept){
+  const mode = metric==='ttf' ? _cvVfFilterTTF : _cvVfFilterTTH;
+  const typeLbl = mode==='ra' ? 'Rec Assign' : 'Vacancies';
+  const metricLbl = metric==='ttf' ? 'Avg TTF' : 'Avg TTH';
+  const dateField = metric==='ttf' ? 'sd' : 'fcd_c';
+  const items = _cvByType(mode).filter(v => v.t===dept && closeDate(v) && v[dateField]);
+  const days = items.map(v => diffDays(closeDate(v), v[dateField])).filter(d => d!=null);
+  const avg = days.length ? Math.round(days.reduce((a,b)=>a+b,0)/days.length) : 0;
+  _showVDPopupGeneric(items,
+    `${metricLbl} · ${dept} · ${typeLbl}`,
+    `${items.length} hires · avg ${avg}d`,
+    mode==='ra' ? 'ra' : 'op');
+}
+
+// ── CV: TTF/TTH type filter — independent toggles per chart. ──
+// КРИТИЧНО: НЕ сумувати — це різні типи з різними бізнес-процесами і термінами.
+// Each chart has its own state so users can compare e.g. TTF Vacancies vs TTH Rec Assign.
+let _cvVfFilterTTF='vac', _cvVfFilterTTH='vac';
+function setCvVfFilter(mode, target){
+  if(target==='ttf'){
+    _cvVfFilterTTF=mode;
+    const isVac=mode==='vac';
+    const a=document.getElementById('cvvf-vac'), b=document.getElementById('cvvf-ra');
+    if(a){a.style.background=isVac?'#3b6ef5':'transparent';a.style.color=isVac?'#fff':'#64748b';}
+    if(b){b.style.background=!isVac?'#3b6ef5':'transparent';b.style.color=!isVac?'#fff':'#64748b';}
+    rCVTTF();
+  } else {
+    _cvVfFilterTTH=mode;
+    const isVac=mode==='vac';
+    const a=document.getElementById('cvvf2-vac'), b=document.getElementById('cvvf2-ra');
+    if(a){a.style.background=isVac?'#10b981':'transparent';a.style.color=isVac?'#fff':'#64748b';}
+    if(b){b.style.background=!isVac?'#10b981':'transparent';b.style.color=!isVac?'#fff':'#64748b';}
+    rCVTTH();
+  }
+}
+// Filter CV by given type — uses enriched lookup (CV may lack `kind` for legacy items).
+function _cvByType(mode){
+  const pred=mode==='ra'?_isRAany:_isOPany;
+  return CV.map(_enrichFromHW).filter(pred);
 }
 
 // ── CV: Block 1 — Avg TTF by Department ────────────────────
 function rCVTTF(){
+  const scope=_cvByType(_cvVfFilterTTF);
   const byDept={};
-  CV.filter(v=>v.t&&closeDate(v)&&v.sd).forEach(v=>{
+  scope.filter(v=>v.t&&closeDate(v)&&v.sd).forEach(v=>{
     if(!byDept[v.t])byDept[v.t]=[];
     byDept[v.t].push(diffDays(closeDate(v),v.sd));
   });
@@ -3566,7 +3656,10 @@ function rCVTTF(){
   const data=entries.map(e=>Math.round(e.avg));
   const colors=entries.map(e=>cvColor(e.d));
   const overallAvg=Math.round(cvAvg(entries.flatMap(e=>byDept[e.d]))||0);
-  document.getElementById('bcv-ttf').textContent=`Overall avg ${overallAvg}d · ${entries.length} depts`;
+  const totalWithData=scope.filter(v=>closeDate(v)&&v.sd).length;
+  document.getElementById('bcv-ttf').textContent=
+    entries.length?`Overall avg ${overallAvg}d · based on ${totalWithData} hires`
+                  :`No data · Start date or close date not filled`;
   if(_cvCharts.ttf){_cvCharts.ttf.destroy();_cvCharts.ttf=null;}
   _cvCharts.ttf=new Chart(document.getElementById('cv-ttf-chart').getContext('2d'),{
     type:'bar',
@@ -3577,12 +3670,16 @@ function rCVTTF(){
     }]},
     options:{
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{
+        if(els.length) openCVMetricPopup('ttf', labels[els[0].index]);
+      },
+      onHover:(evt,els)=>{evt.native.target.style.cursor=els.length?'pointer':'default';},
       plugins:{
         legend:{display:false},
         tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',padding:{x:12,y:8},cornerRadius:8,
           callbacks:{label:ctx=>{
             const e=entries[ctx.dataIndex];
-            return `  Avg: ${ctx.parsed.x}d · Hires: ${e.n}`;
+            return `  Avg: ${ctx.parsed.x}d · Hires: ${e.n} · click to see list`;
           }}},
         datalabels:false
       },
@@ -3613,8 +3710,9 @@ function rCVTTF(){
 
 // ── CV: Block 2 — Avg TTH by Department ────────────────────
 function rCVTTH(){
+  const scope=_cvByType(_cvVfFilterTTH);
   const byDept={};
-  CV.filter(v=>v.t&&closeDate(v)&&v.fcd_c).forEach(v=>{
+  scope.filter(v=>v.t&&closeDate(v)&&v.fcd_c).forEach(v=>{
     if(!byDept[v.t])byDept[v.t]=[];
     byDept[v.t].push(diffDays(closeDate(v),v.fcd_c));
   });
@@ -3624,7 +3722,7 @@ function rCVTTH(){
   const data=entries.map(e=>Math.round(e.avg));
   const colors=entries.map(e=>cvColor(e.d));
   const overallAvg=entries.length?Math.round(cvAvg(entries.flatMap(e=>byDept[e.d]))):0;
-  const totalWithData=CV.filter(v=>closeDate(v)&&v.fcd_c).length;
+  const totalWithData=scope.filter(v=>closeDate(v)&&v.fcd_c).length;
   document.getElementById('bcv-tth').textContent=
     entries.length?`Overall avg ${overallAvg}d · based on ${totalWithData} hires`
                   :`No data · First contact date not filled`;
@@ -3645,10 +3743,14 @@ function rCVTTH(){
     }]},
     options:{
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{
+        if(els.length) openCVMetricPopup('tth', labels[els[0].index]);
+      },
+      onHover:(evt,els)=>{evt.native.target.style.cursor=els.length?'pointer':'default';},
       plugins:{
         legend:{display:false},
         tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',padding:{x:12,y:8},cornerRadius:8,
-          callbacks:{label:ctx=>{const e=entries[ctx.dataIndex];return `  Avg: ${ctx.parsed.x}d · Hires: ${e.n}`;}}},
+          callbacks:{label:ctx=>{const e=entries[ctx.dataIndex];return `  Avg: ${ctx.parsed.x}d · Hires: ${e.n} · click to see list`;}}},
         datalabels:false
       },
       scales:{
@@ -3678,6 +3780,15 @@ function rCVTTH(){
 
 // ── CV: Block 3 — Closed Vacancies by Department (vertical bars per dept) ─
 let _cvCntDeptVacs={};
+let _cvCntFilter='vac'; // 'vac' | 'ra' — separate from TTF/TTH filters
+function setCvCntFilter(mode){
+  _cvCntFilter=mode;
+  const isVac=mode==='vac';
+  const a=document.getElementById('cvcnt-vac'), b=document.getElementById('cvcnt-ra');
+  if(a){a.style.background=isVac?'#f59e0b':'transparent';a.style.color=isVac?'#fff':'#64748b';}
+  if(b){b.style.background=!isVac?'#f59e0b':'transparent';b.style.color=!isVac?'#fff':'#64748b';}
+  rCVClosedCount();
+}
 function cvSetMode(m){
   const t=new Date();
   const todayISO=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
@@ -3704,7 +3815,10 @@ function rCVClosedCount(){
       document.querySelectorAll('#cv-cnt-mode button').forEach(b=>b.classList.remove('active'));
     }
   }
-  const items=CV.filter(v=>closeDate(v)&&v.t).filter(v=>cvInRange(closeDate(v),_cvCntFrom,_cvCntTo));
+  // Filter by current type (Vacancies / Rec Assign) using enriched HW lookup for legacy CV.
+  const items=_cvByType(_cvCntFilter)
+    .filter(v=>closeDate(v)&&v.t)
+    .filter(v=>cvInRange(closeDate(v),_cvCntFrom,_cvCntTo));
   // Group vacancies by department, sort desc by count
   const byDept={};
   items.forEach(v=>{if(!byDept[v.t])byDept[v.t]=[];byDept[v.t].push(v);});
@@ -3713,11 +3827,12 @@ function rCVClosedCount(){
   const labels=entries.map(e=>e.d);
   const data=entries.map(e=>e.n);
   const colors=entries.map(e=>cvColor(e.d));
-  // Period text
+  // Period text + type label
   const labelMap={all:'All time',month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
   const periodTxt=_cvCntMode==='all'?'all time':`${labelMap[_cvCntMode]||'Custom'}: ${_cvCntFrom||'—'} → ${_cvCntTo||'—'}`;
+  const typeLbl=_cvCntFilter==='ra'?'Rec Assign':'Vacancies';
   document.getElementById('bcv-cnt').textContent=
-    `${items.length} closed · ${entries.length} depts · ${periodTxt}`;
+    `${items.length} closed · ${entries.length} depts · ${typeLbl} · ${periodTxt}`;
   if(_cvCharts.cnt){_cvCharts.cnt.destroy();_cvCharts.cnt=null;}
   if(!items.length){
     const ctx=document.getElementById('cv-cnt-chart').getContext('2d');
@@ -3771,48 +3886,35 @@ function rCVClosedCount(){
 }
 // Popup: list of closed vacancies for selected department
 function showCVDeptPopup(dept, vacs){
-  document.getElementById('s5popup-title').textContent=`Closed Vacancies — ${dept}`;
-  document.getElementById('s5popup-sub').textContent=`${vacs.length} закрито · period: ${_cvCntFrom||'—'} → ${_cvCntTo||'—'}`;
-  // Build CV-specific table (status, sd, fcd, recruiter, sourcer, dept, hires)
-  const rows=vacs.slice().sort((a,b)=>{
-    const da=closeDate(a)||'', db=closeDate(b)||'';
-    return db.localeCompare(da);
-  }).map(v=>{
-    const closeD=closeDate(v)||'—';
-    const snHtml=v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>';
-    const sb=[v.t,v.sb].filter(Boolean).join(' / ');
-    const isSub=v.type==='subtask';
-    return `<tr style="${isSub?'background:#f5f8ff':''}">
-      <td style="padding:8px 10px;font-size:12px${isSub?';padding-left:24px':''}">${isSub?'↳ ':''}${jl(v.key)}</td>
-      <td style="padding:8px 10px;font-size:12px;max-width:230px">${v.s||'—'}</td>
-      <td style="padding:8px 10px">${snHtml}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.rec||'—'}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.src||'—'}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.sd||'—'}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${closeD}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${sb||'—'}</td>
-    </tr>`;
-  }).join('');
-  const head=`<thead><tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Key</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Vacancy</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Seniority</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Recruiter</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Sourcer</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Start</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Closed</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Team</th>
-  </tr></thead>`;
-  // Replace the entire popup table content (keep id="s5popup-tbody" so other popups work too).
-  const popup=document.getElementById('s5popup');
-  const tbl=popup.querySelector('table');
-  if(tbl) tbl.innerHTML=`${head}<tbody id="s5popup-tbody">${rows}</tbody>`;
-  document.getElementById('s5overlay').style.display='block';
-  document.getElementById('s5popup').style.display='flex';
+  // Reuse standardized VD popup. Kind matches current type filter so columns/labels are consistent
+  // with TTF/TTH/Vacancy Dynamics popups (Key, Vacancy/RA, Priority, [Seniority], Recruiter, Sourcer,
+  // Start date, Factual close date, Hired transition date).
+  const kind=_cvCntFilter==='ra'?'ra':'op';
+  const typeLbl=kind==='ra'?'Rec Assign':'Vacancies';
+  const labelMap={all:'All time',month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
+  const periodLbl=_cvCntMode==='all'?'All time':`${labelMap[_cvCntMode]||'Period'}: ${_cvCntFrom||'—'} → ${_cvCntTo||'—'}`;
+  _showVDPopupGeneric(vacs, `Closed Vacancies · ${dept} · ${typeLbl}`, `${vacs.length} closed · ${periodLbl}`, kind);
 }
 
-// ── CV: Block 5 — Hiring Sources (filterable by Dept + Seniority) ─
+// ── CV: Block 5 — Hiring Sources (filterable by Dept + Seniority + Type) ─
 let _cvSrcVacsBySrc={};
+let _cvSrcFilter='vac'; // 'vac' | 'ra' — separate from other CV filters
+function setCvSrcFilter(mode){
+  _cvSrcFilter=mode;
+  const isVac=mode==='vac';
+  const a=document.getElementById('cvsrc-vac'), b=document.getElementById('cvsrc-ra');
+  if(a){a.style.background=isVac?'#ec4899':'transparent';a.style.color=isVac?'#fff':'#64748b';}
+  if(b){b.style.background=!isVac?'#ec4899':'transparent';b.style.color=!isVac?'#fff':'#64748b';}
+  // Seniority filter is irrelevant for RA (Recruitment Assignment) — hide and reset.
+  const snLbl=document.getElementById('cv-src-sn-lbl');
+  const snSel=document.getElementById('cv-src-sn');
+  if(snLbl) snLbl.style.display=isVac?'':'none';
+  if(snSel){
+    snSel.style.display=isVac?'':'none';
+    if(!isVac) snSel.value=''; // reset stale OP-only seniority when switching to RA
+  }
+  rCVSources();
+}
 function _populateCVSrcDropdowns(){
   // FULL list — departments union from CV + ALL_VACS, seniority — standard 6 levels.
   const allDepts=[...new Set([...CV,...ALL_VACS].map(v=>v.t).filter(Boolean))].sort();
@@ -3836,7 +3938,10 @@ function rCVSources(){
   _populateCVSrcDropdowns();
   const dept=document.getElementById('cv-src-dept')?.value||'';
   const sn=document.getElementById('cv-src-sn')?.value||'';
-  const baseItems=CV.filter(v=>v.cs&&v.t&&v.sn);
+  // Apply type filter (Vacancies / Rec Assign) first via enriched HW lookup.
+  // RA items often have null sn — drop `v.sn` requirement so they show in the chart.
+  const typeScope=_cvByType(_cvSrcFilter);
+  const baseItems=typeScope.filter(v=>v.cs&&v.t&&(_cvSrcFilter==='ra'||v.sn));
   const items=baseItems.filter(v=>(!dept||v.t===dept)&&(!sn||v.sn===sn));
   const empty=document.getElementById('cv-src-empty');
   const canvas=document.getElementById('cv-src-chart');
@@ -3893,9 +3998,10 @@ function rCVSources(){
   const palette=['#ec4899','#a855f7','#6366f1','#3b6ef5','#06b6d4','#10b981','#f59e0b','#ef4444','#8b5cf6','#0ea5e9','#14b8a6','#84cc16'];
   const colors=labels.map((_,i)=>palette[i%palette.length]);
 
+  const typeLbl=_cvSrcFilter==='ra'?'Rec Assign':'Vacancies';
   const filterTxt=[dept&&`Dept: ${dept}`, sn&&`Seniority: ${sn}`].filter(Boolean).join(' · ')||'All';
   document.getElementById('bcv-src').textContent=
-    `${items.length} hires · ${entries.length} sources · ${filterTxt}`;
+    `${items.length} hires · ${entries.length} sources · ${typeLbl} · ${filterTxt}`;
   if(_cvCharts.src){_cvCharts.src.destroy();_cvCharts.src=null;}
   _cvCharts.src=new Chart(canvas.getContext('2d'),{
     type:'bar',
@@ -3940,53 +4046,16 @@ function rCVSources(){
     }}]
   });
 }
-// Popup: list of hires from selected source (with current dept/seniority filter applied)
+// Popup: list of hires from selected source (with current type / dept / seniority filter applied).
+// Reuses standardized _showVDPopupGeneric for column/style consistency with other popups.
 function showCVSrcPopup(src, vacs, dept, sn){
+  const kind=_cvSrcFilter==='ra'?'ra':'op';
+  const typeLbl=kind==='ra'?'Rec Assign':'Vacancies';
   const filter=[dept&&`Dept: ${dept}`, sn&&`Seniority: ${sn}`].filter(Boolean).join(' · ');
-  document.getElementById('s5popup-title').textContent=`Hiring Source — ${src}`;
-  document.getElementById('s5popup-sub').textContent=`${vacs.length} hires${filter?` · ${filter}`:''}`;
-  // Show free-text column ONLY for Other-related bars (src is "Other" or "Other: <text>")
-  const isOther = typeof src === 'string' && src.startsWith('Other');
-  const rows=vacs.slice().sort((a,b)=>{
-    const da=closeDate(a)||'', db=closeDate(b)||'';
-    return db.localeCompare(da);
-  }).map(v=>{
-    const closeD=closeDate(v)||'—';
-    const snHtml=v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>';
-    const tt=[v.t,v.sb].filter(Boolean).join(' / ');
-    const isSub=v.type==='subtask';
-    const otherCell = isOther
-      ? `<td style="padding:8px 10px;font-size:11px;color:${v.cs_other?'#0f172a':'#cbd5e1'};font-weight:${v.cs_other?'600':'400'};font-style:${v.cs_other?'normal':'italic'}">${v.cs_other||'—'}</td>`
-      : '';
-    return `<tr style="${isSub?'background:#f5f8ff':''}">
-      <td style="padding:8px 10px;font-size:12px${isSub?';padding-left:24px':''}">${isSub?'↳ ':''}${jl(v.key)}</td>
-      <td style="padding:8px 10px;font-size:12px;max-width:230px">${v.s||'—'}</td>
-      <td style="padding:8px 10px">${snHtml}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.rec||'—'}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${v.src||'—'}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${closeD}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#64748b">${tt||'—'}</td>
-      ${otherCell}
-    </tr>`;
-  }).join('');
-  const otherHead = isOther
-    ? `<th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Other source</th>`
-    : '';
-  const head=`<thead><tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Key</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Vacancy</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Seniority</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Recruiter</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Sourcer</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Closed</th>
-    <th style="padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b">Team</th>
-    ${otherHead}
-  </tr></thead>`;
-  const popup=document.getElementById('s5popup');
-  const tbl=popup.querySelector('table');
-  if(tbl) tbl.innerHTML=`${head}<tbody id="s5popup-tbody">${rows}</tbody>`;
-  document.getElementById('s5overlay').style.display='block';
-  document.getElementById('s5popup').style.display='flex';
+  _showVDPopupGeneric(vacs,
+    `Hiring Source · ${src} · ${typeLbl}`,
+    `${vacs.length} hires${filter?` · ${filter}`:''}`,
+    kind);
 }
 
 function rCV(){rCVDynamics();rCVTTF();rCVTTH();rCVClosedCount();rCVSources();}
