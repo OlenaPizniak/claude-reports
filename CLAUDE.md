@@ -45,6 +45,5 @@ Use the rec-dashboard skill to [task]
 - Скрипт: `scripts/update_rec_dashboard.py` — фетчить дані з Jira і замінює AUTO-маркери в HTML
 - Secrets: `JIRA_EMAIL`, `JIRA_API_TOKEN` (Settings → Secrets → Actions)
 
-## Зв'язаний репозиторій
-Story Points + OKR аналітика (PLAT project) знаходиться в окремому репо:
-<https://github.com/OlenaPizniak/okr-report>
+## Зв'язані репозиторії
+- **OKR Episode Dashboard** (публічний, з паролем): <https://github.com/OlenaPizniak/btma-plat-okr> · Live: <https://olenapizniak.github.io/btma-plat-okr/BTMA_PLAT_OKR_Episode_Dashboard.html>

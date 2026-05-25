@@ -126,4 +126,4 @@ claude
 
 ## Зв'язані репозиторії
 
-- [okr-report](https://github.com/OlenaPizniak/okr-report) — Story Points + OKR аналітика для PLAT project (раніше було в цьому ж репо, винесено окремо)
+- [btma-plat-okr](https://github.com/OlenaPizniak/btma-plat-okr) — OKR Episode Dashboard (BTMA + PLAT), публічний, з паролем. Live: <https://olenapizniak.github.io/btma-plat-okr/BTMA_PLAT_OKR_Episode_Dashboard.html>

@@ -36,7 +36,7 @@ between `// <<<AUTO_*_START>>>` / `// <<<AUTO_*_END>>>` markers, then commits & 
      - `JIRA_EMAIL` — your Atlassian email
      - `JIRA_API_TOKEN` — the token from step 1
 
-3. **GitHub Pages is already enabled** for this repo (from `OKR Dashboard`)
+3. **GitHub Pages is enabled** for this repo
    - Public URL: `https://olenapizniak.github.io/claude-reports/reports/REC_recruitment_dashboard.html`
    - No action needed — it picks up the new file automatically after each push
 
