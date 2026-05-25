@@ -3501,6 +3501,109 @@ const baseItems=typeScope.filter(v=>v.cs&&v.t&&(_cvSrcFilter==='ra'||v.sn));
 
 - `reports/REC_recruitment_dashboard.html` — major refactor of Open Vacancies tab, Plan Vacancies tab, Workload-Active block; popup standardization across all blocks; closeDate convention enforced; RA support throughout
 
+---
+
+## Workload-Active — revert до таблиці + filter-aware columns (додано 2026-05-25, commit 726fadf)
+
+User повернувся до табличного layout (cards були незручні для перегляду). Збережено всі enhanced features: icon+count badge, RA filter, names dropdown.
+
+### Layout: CARDS → TABLE (revert)
+
+Збережена попередня структура колонок з розширенням:
+**RECRUITER · ROLE · PRIORITY · SENIORITY · VACANCIES · REC ASSIGN · TASKS · HIRES · TEAM / SUBTEAM · DAYS OPEN** (10 колонок)
+
+- Default sort: `hires` desc
+- Recruiter row clickable → toggles vacancy/RA/task rows (`togWL(did)`)
+- Vacancy row має `+`/`−` btn для розгортання sub-tasks (`togWLSubs(did, key)`)
+- Sub-tasks приховані за замовчуванням всередині розгорнутих vacancy/RA рядків
+
+### Filter-aware column visibility (КРИТИЧНО)
+
+Реалізовано через `_colVis` map + `_hidden(col)` helper, який повертає `'display:none;'` або порожній рядок. Застосовується inline на `<th>` і кожному `<td>`.
+
+```javascript
+const _colVis={
+  sn:    _wlFilterType==='all'||_wlFilterType==='vac',
+  vac:   _wlFilterType==='all'||_wlFilterType==='vac',
+  ra:    _wlFilterType==='all'||_wlFilterType==='ra',
+  tasks: _wlFilterType==='all'||_wlFilterType==='task',
+  hires: _wlFilterType!=='task',
+  team:  _wlFilterType!=='task',
+};
+const _hidden=c=>_colVis[c]===false?'display:none;':'';
+```
+
+**Видимість колонок по фільтрах:**
+
+| Filter | Видимі колонки |
+|--------|----------------|
+| **All** | всі 10 |
+| **Vacancies** | RECRUITER · ROLE · PRIORITY · **SENIORITY** · **VACANCIES** · HIRES · TEAM · DAYS OPEN (сховано REC ASSIGN + TASKS) |
+| **Rec Assign** | RECRUITER · ROLE · PRIORITY · **REC ASSIGN** · HIRES · TEAM · DAYS OPEN (сховано SENIORITY + VACANCIES + TASKS) |
+| **Tasks** | RECRUITER · ROLE · PRIORITY · **TASKS** · DAYS OPEN (сховано все інше: SENIORITY, VACANCIES, REC ASSIGN, HIRES, TEAM) |
+
+**Чому SENIORITY ховається для RA**: у Recruitment Assignment Jira не має поля Seniority (це поле тільки для Open position). Тому видавати порожні комірки безглуздо.
+
+**Чому TASKS колонка = STATUS у task-mode**: у Tasks немає окремої статус-колонки. У розгорнутих рядках tasks їхній статус (`sb2(t.st)`) рендериться у TASKS клітинці. Тому при `filter=task` ця колонка фактично виступає колонкою статусу.
+
+### REC ASSIGN — нова колонка (фіолетовий accent)
+
+Окрема count-колонка для RA items, між VACANCIES і TASKS.
+- Recruiter row: count `m.raItems.length` (фіолетовий `#8b5cf6`)
+- Розгорнуті RA рядки: status badge (`sb2(v.st)`) у цій клітинці
+- OP розгорнуті рядки: status у VACANCIES, REC ASSIGN порожня
+- Task рядки: status у TASKS, обидві (VACANCIES + REC ASSIGN) порожні
+
+**Routing статусу за `_kind`**:
+```javascript
+const _vacCell =v._kind==='op' ?sb2(v.st):'';
+const _raCell  =v._kind==='ra' ?sb2(v.st):'';
+const _taskCell=v._role==='Task'?sb2(v.st):'';
+```
+Для sub-tasks береться `v._kind` (з parent), бо у самого ST/RAS `_kind` немає — успадковуємо від parent.
+
+### Badge — icon+count + filter-aware
+
+Той самий патерн що з cards-варіанту (kept на revert):
+```javascript
+const badgeParts=[];
+if(showVac)  badgeParts.push(`📂 ${totalVacItems} Vacancies`);
+if(showVac)  badgeParts.push(`🎯 ${totalHires} Hires needed`);
+if(showRA)   badgeParts.push(`📋 ${totalRAItems} Recruitment Assignments`);
+if(showRA)   badgeParts.push(`🎓 ${totalSpecs} Specialists needed`);
+if(showTask) badgeParts.push(`✅ ${totalTaskItems} Tasks`);
+```
+
+### Type toggle — 4 кнопки
+
+`All / 📂 Vacancies / 📋 Rec Assign / ✅ Tasks`. Кнопки оновлюються через `wlFilterType(t)` → масив `['all','vac','ra','task']`.
+
+### Names dropdown — multi-select
+
+Right-side dropdown з Select all/Clear. State `_wlSelectedNames` (Set). Filter застосовується ПІСЛЯ генерації members:
+```javascript
+const filteredMembers=_wlSelectedNames.size===0
+  ? members
+  : members.filter(m=>_wlSelectedNames.has(m.name));
+```
+
+### НЕ ТРЕБА робити в табличному варіанті
+
+- ❌ НЕ використовувати period filter (`_wlAtMode`/`_wlAtFrom`/`_wlAtTo`) — він був у cards-варіанті, у revert його прибрали. Якщо знадобиться повернути — `cr || sd` період.
+- ❌ НЕ викликати `openWLPopup` — popup був у cards-варіанті. У table версії розгортання in-place через `togWL` / `togWLSubs`.
+- ❌ НЕ показувати `m.allVacs.length` у VACANCIES колонці — це включає і OP, і RA (комбіноване). Треба `m.opItems.length` (тільки OP) для семантичної консистентності з колонкою REC ASSIGN.
+- ❌ НЕ забути `_kind` тегування у opItems/raItems при map — без нього routing статусу у розгорнутих рядках працює неправильно.
+
+### Sort cases (важливо)
+
+`wlSort` має окремі case-и для нових колонок:
+```javascript
+if(_wlSortCol==='vac')   return (a.opItems.length-b.opItems.length)*_wlSortDir;
+if(_wlSortCol==='ra')    return (a.raItems.length-b.raItems.length)*_wlSortDir;
+if(_wlSortCol==='tasks') return (a.taskItems.length-b.taskItems.length)*_wlSortDir;
+```
+Раніше `vac` сортувало `allVacs.length` — після додавання RA це б давало misleading order (OP+RA сумарно).
+
 
 
 
