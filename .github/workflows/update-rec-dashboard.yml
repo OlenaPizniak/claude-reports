@@ -48,7 +48,7 @@ jobs:
             # Retry push with rebase up to 3 times — handles race conditions
             # when a human (or another bot run) pushes while this job runs.
             for i in 1 2 3; do
-              if git push 2>/dev/null; then
+              if git push; then
                 echo "✓ Dashboard updated and pushed (attempt $i)."
                 exit 0
               fi
