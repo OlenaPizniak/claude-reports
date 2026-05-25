@@ -593,27 +593,44 @@ function recTriggerRefresh(){
 
   <!-- ── Dashboard view (hidden by default) ── -->
   <div id="view-dashboard" style="display:none">
-  <!-- KPI — single row: Vacancies + Hires needed (OP) | Recruitment Assignments + Specialists needed (RA) -->
-  <div style="display:flex;align-items:stretch;gap:12px;margin-bottom:28px">
-    <div class="kpi-card blue" style="flex:1;justify-content:center">
-      <div class="kpi-icon">📂</div>
-      <div class="kpi-num" id="kn-op">—</div>
-      <div class="kpi-label">Vacancies</div>
+  <!-- KPI row removed 2026-05-22 — same data now lives in Vacancy Dynamics: In Progress Breakdown below
+       (with added Current vs Previous Week comparison + Period filter + clickable popups). -->
+
+  <!-- Vacancy Dynamics: In Progress Breakdown — mirrors Closed Vacancies version but for In Progress items -->
+  <div class="section">
+    <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
+      <div class="section-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📊</div>
+      <h2>Vacancy Dynamics: In Progress Breakdown<br><span style="color:#94a3b8;font-weight:400;font-size:11px">by issue type · Open Position vs Recruitment Assignment</span></h2>
     </div>
-    <div class="kpi-card orange" style="flex:1;justify-content:center">
-      <div class="kpi-icon">🎯</div>
-      <div class="kpi-num" id="kn-hn">—</div>
-      <div class="kpi-label">Hires needed</div>
-    </div>
-    <div class="kpi-card blue" style="flex:1;justify-content:center">
-      <div class="kpi-icon">📋</div>
-      <div class="kpi-num" id="kn-ra">—</div>
-      <div class="kpi-label">Recruitment Assignments</div>
-    </div>
-    <div class="kpi-card orange" style="flex:1;justify-content:center">
-      <div class="kpi-icon">🎓</div>
-      <div class="kpi-num" id="kn-spec">—</div>
-      <div class="kpi-label">Specialists needed</div>
+    <div class="section-body">
+      <div class="cv-row">
+        <div class="cv-card">
+          <div class="cv-card-title">📅 Current vs Previous Week</div>
+          <div class="cv-card-sub" id="id-week-range"></div>
+          <div id="id-week-block"></div>
+        </div>
+        <div class="cv-card">
+          <div class="cv-card-title">🌐 All Time / Period</div>
+          <div class="cv-card-sub" id="id-at-sub"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;font-size:12px">
+            <div class="dp-chips" style="display:flex;gap:4px;flex-shrink:0">
+              <button type="button" class="dp-chip id-at-chip active" data-mode="all" onclick="idSetAllTime('all')">All time</button>
+              <button type="button" class="dp-chip id-at-chip" data-mode="month" onclick="idSetAllTime('month')">Month</button>
+              <button type="button" class="dp-chip id-at-chip" data-mode="quarter" onclick="idSetAllTime('quarter')">Quarter</button>
+              <button type="button" class="dp-chip id-at-chip" data-mode="year" onclick="idSetAllTime('year')">Year</button>
+            </div>
+            <span style="color:#cbd5e1;margin:0 2px">·</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:nowrap">
+              <span style="color:#64748b;font-weight:600">Custom:</span>
+              <input type="date" id="id-at-from" class="cv-input">
+              <span style="color:#94a3b8">—</span>
+              <input type="date" id="id-at-to" class="cv-input">
+              <button onclick="idSetAllTime('custom')" style="padding:4px 10px;font-size:11px;background:#3b6ef5;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0">Apply</button>
+            </div>
+          </div>
+          <div id="id-alltime-block"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -680,6 +697,9 @@ function recTriggerRefresh(){
     </div>
     <div class="section-body" id="sb1"><div id="c1"></div></div>
   </div>
+
+  <!-- S1-style global filter is removed in favor of inline Type toggle rendered inside r1(). -->
+
 
   <!-- S3 -->
   <div class="section">
@@ -1514,27 +1534,7 @@ function rKPI(){
   const _activeST=ST.filter(s=>s.st!=='Hired');
   const _activeRAS=RAS.filter(s=>s.st!=='Hired');
 
-  // ── Open Vacancies tab ─────────────────────────────────────
-  // Open Positions (count) — OPs in In progress (parent or via sub-task).
-  const _activeOPs=OP.filter(v=>vacInStatus(v,'In progress'));
-  document.getElementById('kn-op').textContent=_activeOPs.length;
-
-  // Number of hires (OP) — sum of OP slots in In progress.
-  document.getElementById('kn-hn').textContent=_activeOPs.reduce((s,v)=>{
-    const subs=_activeST.filter(x=>x.pk===v.key);
-    return s+slotsInStatus(v,subs,'In progress');
-  },0);
-
-  // Recruitment Assignments (count) — RAs in In progress.
-  const _activeRAs=RA.filter(v=>raInStatus(v,'In progress'));
-  document.getElementById('kn-ra').textContent=_activeRAs.length;
-
-  // Number of specialists (RA) — sum of RA slots in In progress.
-  document.getElementById('kn-spec').textContent=_activeRAs.reduce((s,v)=>{
-    const subs=_activeRAS.filter(x=>x.pk===v.key);
-    return s+slotsInStatus(v,subs,'In progress');
-  },0);
-
+  // ── Open Vacancies tab — KPI row removed 2026-05-22 (data moved to Vacancy Dynamics: In Progress Breakdown).
   // ── Plan Vacancies tab ─────────────────────────────────────
   // Open Positions (count, Plan).
   const _planOPs=OP.filter(v=>vacInStatus(v,'Plan'));
@@ -1581,71 +1581,145 @@ function toggleST(k){
 function r1(from,to){
   if(from!==undefined)s1From=from;
   if(to!==undefined)s1To=to;
-  // "Opened in period" = Created date (always set) || Start date as fallback
   const opened=v=>v.cr||v.sd||null;
-  let items=ALL_VACS.filter(v=>{const d=opened(v);return d&&d>=s1From&&d<=s1To&&v.st==='In progress';});
-  if(s1SortCol){
-    items=[...items].sort((a,b)=>{
-      if(s1SortCol==='pr') return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*s1SortDir;
-      if(s1SortCol==='h')  return (a.h-b.h)*s1SortDir;
-      const av=a[s1SortCol]??'', bv=b[s1SortCol]??'';
-      return (av<bv?-1:av>bv?1:0)*s1SortDir;
-    });
-  } else {
-    items=[...items].sort((a,b)=>(pOrd[a.pr]??9)-(pOrd[b.pr]??9));
-  }
-  const total=items.reduce((s,v)=>s+v.h,0);
-  document.getElementById('b1').innerHTML=
-    `<span class="bnum">${items.length}</span> vacancy &nbsp;·&nbsp; <span class="bnum">${total}</span> hires`;
+  const inRange=d=>d&&d>=s1From&&d<=s1To;
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _activeRAS=RAS.filter(s=>s.st!=='Hired');
 
-  const cols=[
-    {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
-    {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},{id:'rec',lbl:'Recruiter'},
-    {id:'src',lbl:'Sourcer'},{id:'sd',lbl:'Start date'},{id:'dt',lbl:'Dept / Team'},
-    {id:'h',lbl:'Hires',c:1}
+  // Collect items opened in period AND currently In progress (parent or via sub-task).
+  // Both OPs (ALL_VACS) and RAs.
+  const opParents=ALL_VACS.filter(v=>vacInStatus(v,'In progress')&&inRange(opened(v)))
+    .map(v=>({...v,kind:v.kind||'op'}));
+  const raParents=RA.filter(v=>raInStatus(v,'In progress')&&inRange(opened(v)))
+    .map(v=>({...v,kind:'ra'}));
+
+  // 4-way badge stats (same convention as Hired This Week badge): parents-only count, slots-sum hires.
+  const slotsFor=(p,subSrc)=>{const subs=subSrc.filter(s=>s.pk===p.key);return slotsInStatus(p,subs,'In progress');};
+  const b1OP=opParents.length;
+  const b1Hires=opParents.reduce((s,p)=>s+slotsFor(p,_activeST),0);
+  const b1RA=raParents.length;
+  const b1Spec=raParents.reduce((s,p)=>s+slotsFor(p,_activeRAS),0);
+  document.getElementById('b1').innerHTML=
+    `<span style="margin-right:4px">📂</span><span class="bnum">${b1OP}</span> Vacancies` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">🎯</span><span class="bnum">${b1Hires}</span> Hires needed` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">📋</span><span class="bnum">${b1RA}</span> Recruitment Assignments` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">🎓</span><span class="bnum">${b1Spec}</span> Specialists needed`;
+
+  // Type filter: 'all' shows both OP+RA (default), 'vac' only OPs, 'ra' only RAs.
+  // Build items list — parents + their active sub-tasks (subs inherit fields from parent).
+  const buildRows=(parents, subSrc)=>{
+    const list=[];
+    parents.forEach(parent=>{
+      list.push({...parent, _isSub:false});
+      const subs=subSrc.filter(s=>s.pk===parent.key&&s.st!=='Hired');
+      subs.forEach(s=>list.push({
+        ...s, kind:s.kind||(parent.kind==='ra'?'ra_sub':'op_sub'),
+        type:'subtask', _isSub:true, _parent:parent.key,
+        t:s.t||parent.t, sb:s.sb||parent.sb,
+        pr:s.pr||parent.pr, sn:s.sn||parent.sn, h:s.h!=null?s.h:1,
+      }));
+    });
+    return list;
+  };
+
+  let items;
+  if(_s1Filter==='vac') items=buildRows(opParents,_activeST);
+  else if(_s1Filter==='ra') items=buildRows(raParents,_activeRAS);
+  else items=[...buildRows(opParents,_activeST), ...buildRows(raParents,_activeRAS)];
+
+  // Cols — same shape as Hired This Week (no Hires column; Type column; Open date instead of Close date).
+  // For Rec Assign filter — drop Seniority column (RA items don't have Seniority field in Jira).
+  const colsAll=[
+    {id:'key',lbl:'Key'},{id:'type',lbl:'Type'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
+    {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
+    {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
+    {id:'od',lbl:'Open date'},{id:'dt',lbl:'Dept / Team'}
   ];
+  const cols=_s1Filter==='ra'?colsAll.filter(c=>c.id!=='sn'):colsAll;
   const ths=cols.map(c=>{
     const on=s1SortCol===c.id;
     const arr=on?(s1SortDir===1?'▴':'▾'):'⇅';
-    return`<th onclick="s1sort('${c.id}')" style="cursor:pointer;user-select:none${c.c?';text-align:center':''}">${c.lbl}&thinsp;<span style="color:${on?'#3b6ef5':'#c8d2e0'};font-size:9px">${arr}</span></th>`;
+    return`<th onclick="s1sort('${c.id}')" style="cursor:pointer;user-select:none">${c.lbl}&thinsp;<span style="color:${on?'#3b6ef5':'#c8d2e0'};font-size:9px">${arr}</span></th>`;
   }).join('');
 
-  const rows=items.map(v=>{
-    const dt=[v.t,v.sb].filter(Boolean).join(' / ');
-    const snHtml=v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>';
-    const sdHtml=v.sd?`<span style="font-size:11px;color:var(--text2)">${v.sd}</span>`:'<span class="dash-val">—</span>';
+  // Sort positions/parents only; subs follow their parent in the output order.
+  const _s1cmp=(a,b,col)=>{
+    if(col==='pr')   return (pOrd[a.pr]??9)-(pOrd[b.pr]??9);
+    if(col==='type') return (_isRAany(a)?1:0)-(_isRAany(b)?1:0);
+    if(col==='dt')   { const av=[a.t,a.sb].filter(Boolean).join(' / '), bv=[b.t,b.sb].filter(Boolean).join(' / '); return av<bv?-1:av>bv?1:0; }
+    if(col==='od')   { const av=opened(a)||'', bv=opened(b)||''; return av<bv?-1:av>bv?1:0; }
+    const av=a[col]??'', bv=b[col]??'';
+    return av<bv?-1:av>bv?1:0;
+  };
+  // Split items into [parent, ...its subs] groups, sort group-leaders, then flatten.
+  const groups=[];
+  items.forEach(it=>{
+    if(!it._isSub) groups.push([it]);
+    else if(groups.length) groups[groups.length-1].push(it);
+  });
+  groups.sort((g1,g2)=>{
+    if(s1SortCol) return _s1cmp(g1[0],g2[0],s1SortCol)*s1SortDir;
+    return (pOrd[g1[0].pr]??9)-(pOrd[g2[0].pr]??9);
+  });
+  const sortedItems=groups.flat();
 
-    // Subtasks: sd in range OR sd=null (not set yet), exclude Hired
-    const subs=ST.filter(s=>s.pk===v.key&&s.st!=='Hired'&&(!s.sd||(s.sd>=s1From&&s.sd<=s1To)));
+  // Type badge (same as Hired This Week).
+  function typeCellS1(v){
+    if(_isRAany(v)){
+      return `<span style="font-size:10.5px;font-weight:600;color:#7c3aed;background:#ede9fe;border-radius:4px;padding:2px 6px;white-space:nowrap">Rec Assign</span>`;
+    }
+    return `<span style="font-size:10.5px;font-weight:600;color:#0369a1;background:#dbeafe;border-radius:4px;padding:2px 6px;white-space:nowrap">Vacancy</span>`;
+  }
+  function odCell(d){return d?`<span style="font-size:11px;color:var(--text2)">${d}</span>`:'<span class="dash-val">—</span>';}
 
-    const parentRow=`<tr><td style="white-space:nowrap">${jl(v.key)}</td><td style="max-width:210px;font-size:12px">${v.s}</td><td>${sb2(v.st)}</td><td>${pb(v.pr)}</td><td>${snHtml}</td><td style="font-size:11px">${fv(v.rec)}</td><td style="font-size:11px">${fv(v.src)}</td><td>${sdHtml}</td><td style="font-size:11px">${fv(dt)}</td><td style="text-align:center"><b style="color:#0f172a">${v.h}</b></td></tr>`;
-
-    const subRows=subs.map(s=>{
-      const ssdHtml=s.sd?`<span style="font-size:11px;color:var(--text2)">${s.sd}</span>`:'<span class="dash-val">—</span>';
-      const sdt=[s.t||v.t,s.sb||v.sb].filter(Boolean).join(' / ');
-      const sPr=s.pr||v.pr;
-      const sSn=s.sn||v.sn;
-      const sSnHtml=sSn?`<span style="font-size:11px;font-weight:500;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:'<span class="dash-val">—</span>';
-      const sHires=s.h!=null?s.h:1;
-      return`<tr style="background:#f5f8ff"><td style="padding-left:18px;font-size:12px">↳ ${jl(s.key)}</td><td style="font-size:11px">${s.s}</td><td>${sb2(s.st)}</td><td>${pb(sPr)}</td><td>${sSnHtml}</td><td style="font-size:11px">${fv(s.rec)}</td><td style="font-size:11px">${fv(s.src)}</td><td>${ssdHtml}</td><td style="font-size:11px">${fv(sdt)}</td><td style="text-align:center"><b style="color:#0f172a">${sHires}</b></td></tr>`;
-    }).join('');
-
-    return parentRow+subRows;
+  // Render rows dynamically by cols array — so column hide (e.g. Seniority for RA) works correctly.
+  const renderCellS1=(v,c)=>{
+    if(c.id==='key'){
+      return v._isSub
+        ? `<td style="padding-left:18px;font-size:12px">↳ ${jl(v.key)}</td>`
+        : `<td style="white-space:nowrap">${jl(v.key)}</td>`;
+    }
+    if(c.id==='type') return `<td>${typeCellS1(v)}</td>`;
+    if(c.id==='s')    return `<td style="font-size:${v._isSub?11:12}px;max-width:210px">${v.s||'—'}</td>`;
+    if(c.id==='st')   return `<td>${sb2(v.st)}</td>`;
+    if(c.id==='pr')   return `<td>${pb(v.pr)}</td>`;
+    if(c.id==='sn')   return `<td>${v.sn?`<span style="font-size:10.5px;font-weight:700;color:${snColor[v.sn]||'#374151'};background:${snColor[v.sn]?snColor[v.sn]+'18':'#f3f4f6'};border-radius:4px;padding:2px 6px">${v.sn}</span>`:'<span class="dash-val">—</span>'}</td>`;
+    if(c.id==='rec')  return `<td style="font-size:11px">${fv(v.rec)}</td>`;
+    if(c.id==='src')  return `<td style="font-size:11px">${fv(v.src)}</td>`;
+    if(c.id==='od')   return `<td>${odCell(opened(v))}</td>`;
+    if(c.id==='dt')   return `<td style="font-size:11px">${fv([v.t,v.sb].filter(Boolean).join(' / '))}</td>`;
+    return '<td></td>';
+  };
+  const rows=sortedItems.map(v=>{
+    const trStyle=v._isSub?' style="background:#f5f8ff"':'';
+    return `<tr${trStyle}>${cols.map(c=>renderCellS1(v,c)).join('')}</tr>`;
   }).join('');
+
+  // Render — period filter row + toggle filter + table.
+  const tglBtn=(mode,label,active)=>`<button onclick="setS1Filter('${mode}')" id="s1f-${mode}" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:${active?'#3b6ef5':'transparent'};color:${active?'#fff':'#64748b'}">${label}</button>`;
 
   document.getElementById('c1').innerHTML=`
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 14px;background:var(--slate-l);border-radius:9px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--slate-l);border-radius:9px;flex-wrap:wrap">
       <span style="font-size:12px;color:var(--text2);font-weight:500">Period:</span>
       <input type="date" id="s1from" value="${s1From}" style="padding:4px 8px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;background:#fff">
       <span style="color:var(--slate);font-size:13px">—</span>
       <input type="date" id="s1to" value="${s1To}" style="padding:4px 8px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;background:#fff">
       <button onclick="r1(document.getElementById('s1from').value,document.getElementById('s1to').value)" class="upd-btn" style="padding:5px 14px;font-size:12px">Apply</button>
       ${dpChips('s1from','s1to','r1')}
+      <span style="margin-left:auto;display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
+        ${tglBtn('all','All',_s1Filter==='all')}
+        ${tglBtn('vac','📂 Vacancies',_s1Filter==='vac')}
+        ${tglBtn('ra','📋 Rec Assign',_s1Filter==='ra')}
+      </span>
     </div>
     ${items.length
       ?`<div class="tbl-wrap"><table class="tbl-compact"><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table></div>`
       :`<div class="empty"><div class="ico">📭</div><p>No vacancies for this period</p></div>`}`;
 }
+
+// Type filter for S1 (Open Vacancies This Week)
+let _s1Filter='all';
+function setS1Filter(mode){_s1Filter=mode;r1();}
 
 // S2
 let s2From=WS, s2To=WE, s2SortCol=null, s2SortDir=1;
@@ -3521,6 +3595,185 @@ function rCVDynamics(){
   // restored — needs to be re-implemented for hired-only metrics.
 }
 
+// ── In Progress Dynamics block (Open Vacancies tab) — mirror of rCVDynamics but for active items ──
+// Filters by openedDate (v.cr || v.sd) for period scoping. Items must be currently In progress
+// (parent.st OR any active sub-task in IP state). Uses same _showVDPopupGeneric for popups.
+let _idAtMode='all', _idAtFrom=null, _idAtTo=null;
+let _idThis={}, _idAt={}, _idAtLabel='', _idWeekLabel='';
+
+function idSetAllTime(mode){
+  const t=new Date();
+  const todayISO=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  if(mode==='all'){_idAtFrom=null;_idAtTo=null;}
+  else if(mode==='month'){_idAtFrom=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-01`;_idAtTo=todayISO;}
+  else if(mode==='quarter'){const qm=Math.floor(t.getMonth()/3)*3;_idAtFrom=`${t.getFullYear()}-${String(qm+1).padStart(2,'0')}-01`;_idAtTo=todayISO;}
+  else if(mode==='year'){_idAtFrom=`${t.getFullYear()}-01-01`;_idAtTo=todayISO;}
+  else if(mode==='custom'){
+    _idAtFrom=document.getElementById('id-at-from').value||null;
+    _idAtTo=document.getElementById('id-at-to').value||null;
+  }
+  _idAtMode=mode;
+  if(mode!=='custom'){
+    const fi=document.getElementById('id-at-from'); if(fi) fi.value=_idAtFrom||'';
+    const ti=document.getElementById('id-at-to'); if(ti) ti.value=_idAtTo||'';
+  }
+  document.querySelectorAll('.id-at-chip').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  rOPDynamics();
+}
+
+function rOPDynamics(){
+  const wThis=cvWeekRange(0), wPrev=cvWeekRange(1);
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _activeRAS=RAS.filter(s=>s.st!=='Hired');
+  const openedDate=v=>v.cr||v.sd||null;
+
+  // Build list of items (parents + active subs) within scope. Each item already has kind.
+  // parentsSrc — ALL_VACS (merged with full fields) for OP, RA array for RA.
+  // subTaskSrc — corresponding sub-task array (ST or RAS).
+  const buildList=(parentsSrc, subTaskSrc, parentKind, subKind, inScope)=>{
+    const parents=parentsSrc.filter(v=>vacInStatusGeneric(v, subTaskSrc, 'In progress') && (!inScope || inScope(v)));
+    const items=[];
+    parents.forEach(parent=>{
+      // Parent (only if itself is In progress — otherwise it's "via sub" without its own slot)
+      if(parent.st==='In progress'){
+        items.push({...parent, kind:parent.kind||parentKind});
+      }
+      // Active in-progress sub-tasks under this parent
+      const subs=subTaskSrc.filter(s=>s.pk===parent.key&&s.st==='In progress');
+      subs.forEach(s=>{
+        items.push({...s, kind:s.kind||subKind, type:'subtask',
+                    t:s.t||parent.t, sb:s.sb||parent.sb,
+                    pr:s.pr||parent.pr, sn:s.sn||parent.sn, h:1});
+      });
+    });
+    return {parents, items};
+  };
+
+  // vacInStatus / raInStatus differ in sub-task array — use generic.
+  function vacInStatusGeneric(v, subs, status){
+    if(v.st===status) return true;
+    return subs.some(s=>s.pk===v.key && s.st!=='Hired' && s.st===status);
+  }
+
+  // Snapshot for given inScope predicate (or no predicate for "all").
+  // Use ALL_VACS (not OP) — it's the merged version with sn/rec/src/sd for popup display.
+  const snapshot=(inScope)=>{
+    const op=buildList(ALL_VACS, _activeST, 'op', 'op_sub', inScope);
+    const ra=buildList(RA, _activeRAS, 'ra', 'ra_sub', inScope);
+    return {
+      opParents: op.parents.map(v=>({...v, kind:v.kind||'op'})),
+      opAll: op.items,
+      raParents: ra.parents.map(v=>({...v, kind:'ra'})),
+      raAll: ra.items,
+    };
+  };
+  // Slot count per parent — matches KPI formula (slotsInStatus): parent + subs that are IP,
+  // or v.h if no subs. Ensures KPI total = sum of slots in this card.
+  const slotsForParent=(parent, subTaskSrc)=>{
+    const subs=subTaskSrc.filter(s=>s.pk===parent.key);
+    return slotsInStatus(parent, subs, 'In progress');
+  };
+  const statsFromBucket=b=>({
+    opCount:b.opParents.length,
+    opSlots:b.opParents.reduce((s,p)=>s+slotsForParent(p,_activeST),0),
+    raCount:b.raParents.length,
+    raSlots:b.raParents.reduce((s,p)=>s+slotsForParent(p,_activeRAS),0),
+  });
+
+  // Current vs Previous Week — items opened in week, currently in progress.
+  const inWeek=w=>v=>{const d=openedDate(v);return d&&d>=w.start&&d<=w.end;};
+  _idThis=snapshot(inWeek(wThis));
+  const _idPrev=snapshot(inWeek(wPrev));
+  const tw=statsFromBucket(_idThis), pw=statsFromBucket(_idPrev);
+
+  document.getElementById('id-week-range').textContent=
+    `This week: ${wThis.start} → ${wThis.end} · Prev week: ${wPrev.start} → ${wPrev.end}`;
+  _idWeekLabel=`${wThis.start} → ${wThis.end}`;
+
+  const delta=(cur,prev)=>{
+    if(prev===0&&cur===0)return `<span class="cv-stat-delta flat">→ no change</span>`;
+    if(prev===0)return `<span class="cv-stat-delta up">▲ +${cur}</span>`;
+    const d=cur-prev, pct=Math.round(d/prev*100);
+    if(d>0)return `<span class="cv-stat-delta up">▲ +${d} (${pct>0?'+':''}${pct}%)</span>`;
+    if(d<0)return `<span class="cv-stat-delta down">▼ ${d} (${pct}%)</span>`;
+    return `<span class="cv-stat-delta flat">→ no change</span>`;
+  };
+  const stat=(icon,lbl,num,prev,color,popKey)=>`
+    <div class="cv-stat" style="border-left:3px solid ${color};cursor:pointer;transition:transform .12s,box-shadow .12s" onmouseenter="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(15,23,42,0.08)'" onmouseleave="this.style.transform='';this.style.boxShadow=''" onclick="openIDPopup('this','${popKey}')">
+      <div class="cv-stat-lbl"><span style="margin-right:4px">${icon}</span>${lbl}</div>
+      <div class="cv-stat-num" style="color:${color}">${num}</div>
+      ${delta(num,prev)}
+      <div style="font-size:11px;color:#94a3b8;margin-top:2px">Prev week: <b>${prev}</b></div>
+    </div>`;
+  document.getElementById('id-week-block').innerHTML=`
+    <div class="cv-stat-grid" style="grid-template-columns:repeat(4,1fr);gap:10px">
+      ${stat('📂','Vacancies',tw.opCount,pw.opCount,'#3b6ef5','opCount')}
+      ${stat('🎯','Hires needed',tw.opSlots,pw.opSlots,'#f59e0b','opSlots')}
+      ${stat('📋','Recruitment Assignments',tw.raCount,pw.raCount,'#8b5cf6','raCount')}
+      ${stat('🎓','Specialists needed',tw.raSlots,pw.raSlots,'#10b981','raSlots')}
+    </div>`;
+
+  // All Time / Period — current state OR opened-in-period (still in progress)
+  let subText;
+  if(_idAtMode==='all'){
+    _idAt=snapshot(null); // no filter — current snapshot of all in-progress
+    subText='All time · current snapshot';
+    _idAtLabel='All time';
+  } else {
+    const inAtRange=v=>{const d=openedDate(v);if(!d)return false;if(_idAtFrom&&d<_idAtFrom)return false;if(_idAtTo&&d>_idAtTo)return false;return true;};
+    _idAt=snapshot(inAtRange);
+    const labelMap={month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
+    subText=`${labelMap[_idAtMode]||'Period'}: ${_idAtFrom||'—'} → ${_idAtTo||'—'}`;
+    _idAtLabel=subText;
+  }
+  const at=statsFromBucket(_idAt);
+  const sub=document.getElementById('id-at-sub'); if(sub) sub.textContent=subText;
+  const atStat=(icon,lbl,num,color,popKey)=>`
+    <div class="cv-stat" style="border-left:3px solid ${color};cursor:pointer;transition:transform .12s,box-shadow .12s" onmouseenter="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(15,23,42,0.08)'" onmouseleave="this.style.transform='';this.style.boxShadow=''" onclick="openIDPopup('at','${popKey}')">
+      <div class="cv-stat-lbl"><span style="margin-right:4px">${icon}</span>${lbl}</div>
+      <div class="cv-stat-num" style="color:${color}">${num}</div>
+    </div>`;
+  document.getElementById('id-alltime-block').innerHTML=`
+    <div class="cv-stat-grid" style="grid-template-columns:repeat(4,1fr);gap:10px">
+      ${atStat('📂','Vacancies',at.opCount,'#3b6ef5','opCount')}
+      ${atStat('🎯','Hires needed',at.opSlots,'#f59e0b','opSlots')}
+      ${atStat('📋','Recruitment Assignments',at.raCount,'#8b5cf6','raCount')}
+      ${atStat('🎓','Specialists needed',at.raSlots,'#10b981','raSlots')}
+    </div>`;
+}
+
+// Click handler for In Progress Dynamics cards — opens popup with the items behind that number.
+// In Progress popups drop fcd/hd columns (always empty for non-hired items).
+function openIDPopup(period, popKey){
+  const bucket = period==='this' ? _idThis : _idAt;
+  const periodLbl = period==='this' ? `This week (${_idWeekLabel})` : _idAtLabel;
+  const _activeST=ST.filter(s=>s.st!=='Hired');
+  const _activeRAS=RAS.filter(s=>s.st!=='Hired');
+  let items, title, kind, slotsTotal;
+  if(popKey==='opCount'){
+    items=bucket.opParents; title='Vacancies'; kind='op';
+    slotsTotal=bucket.opParents.reduce((s,p)=>{const subs=_activeST.filter(x=>x.pk===p.key);return s+slotsInStatus(p,subs,'In progress');},0);
+  } else if(popKey==='opSlots'){
+    items=bucket.opAll; title='Hires needed'; kind='op';
+    slotsTotal=bucket.opParents.reduce((s,p)=>{const subs=_activeST.filter(x=>x.pk===p.key);return s+slotsInStatus(p,subs,'In progress');},0);
+  } else if(popKey==='raCount'){
+    items=bucket.raParents; title='Recruitment Assignments'; kind='ra';
+    slotsTotal=bucket.raParents.reduce((s,p)=>{const subs=_activeRAS.filter(x=>x.pk===p.key);return s+slotsInStatus(p,subs,'In progress');},0);
+  } else {
+    items=bucket.raAll; title='Specialists needed'; kind='ra';
+    slotsTotal=bucket.raParents.reduce((s,p)=>{const subs=_activeRAS.filter(x=>x.pk===p.key);return s+slotsInStatus(p,subs,'In progress');},0);
+  }
+  // Drop fcd/hd columns — items are In progress, not Hired.
+  const baseCols=kind==='ra'?_vdColsRA:_vdColsOP;
+  const ipCols=baseCols.filter(c=>c.id!=='fcd'&&c.id!=='hd');
+  const slotsLabel=kind==='ra'?'specialists':'hires';
+  _showVDPopupGeneric(items,
+    `${title} · In Progress · ${periodLbl}`,
+    `${items.length} items · ${slotsTotal} ${slotsLabel} needed`,
+    kind,
+    ipCols);
+}
+
 // ── Vacancy Dynamics popup (reuses s5popup HTML element) ───
 let _vdPopupItems=[], _vdPopupSort={col:'h',dir:-1}, _vdPopupCols=[];
 const _vdColsOP=[
@@ -3579,9 +3832,11 @@ function _renderVDPopupRows(){
   }).join('');
 }
 // Generic VD popup renderer — used by both Vacancy Dynamics cards and TTF/TTH chart bars.
-function _showVDPopupGeneric(items, title, subtitle, kind){
+// customCols (optional) overrides default OP/RA column sets — used by In Progress popups
+// which drop fcd/hd columns (those items aren't hired yet so dates are always empty).
+function _showVDPopupGeneric(items, title, subtitle, kind, customCols){
   _vdPopupItems=items.slice();
-  _vdPopupCols=kind==='ra'?_vdColsRA:_vdColsOP;
+  _vdPopupCols=customCols || (kind==='ra'?_vdColsRA:_vdColsOP);
   _vdPopupSort={col:'fcd',dir:-1};
   document.getElementById('s5popup-title').textContent=title;
   document.getElementById('s5popup-sub').textContent=subtitle;
@@ -4063,7 +4318,7 @@ function showCVSrcPopup(src, vacs, dept, sn){
 
 function rCV(){rCVDynamics();rCVTTF();rCVTTH();rCVClosedCount();rCVSources();}
 
-rKPI(); r1(); r2(); r3(); r3plan(); r4(); r5(); rWorkload(); rWorkloadHired(); rWorkloadOverview();
+rKPI(); r1(); r2(); r3(); r3plan(); r4(); r5(); rWorkload(); rWorkloadHired(); rWorkloadOverview(); rOPDynamics();
 </script>
 </body>
 </html>
