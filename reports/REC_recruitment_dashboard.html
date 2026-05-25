@@ -461,30 +461,23 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
 </div>
 <script>
 function recTriggerRefresh(){
-  // Open the workflow Run page in a new tab — user clicks "Run workflow" there.
-  window.open('https://github.com/OlenaPizniak/claude-reports/actions/workflows/update-rec-dashboard.yml','_blank','noopener');
-  // Spin the icon while waiting
+  // Do NOT auto-open GitHub — only users with repo write access can actually trigger
+  // the workflow. Instead, show a toast with a manual link; non-collaborators just
+  // see the info and wait for the scheduled cron refresh.
   const icon=document.getElementById('rec-refresh-icon');
   if(icon){icon.style.animation='rec-spin 1.2s linear infinite';}
-  // Toast with auto-reload countdown
   const old=document.getElementById('rec-refresh-toast'); if(old) old.remove();
   const toast=document.createElement('div');
   toast.id='rec-refresh-toast';
-  toast.style.cssText='position:fixed;top:80px;right:24px;background:#1e293b;color:#e2e8f0;padding:18px 22px;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,0.3);z-index:99998;max-width:360px;font-size:13px;line-height:1.55;font-family:Inter,Segoe UI,sans-serif;border:1px solid #334155';
-  toast.innerHTML='<div style="font-weight:700;margin-bottom:6px;color:#fff;font-size:14px">🔄 Запит на оновлення</div>'+
-    '<div style="color:#cbd5e1">У новій вкладці натисни <b style="color:#60a5fa">Run workflow</b> → <b style="color:#60a5fa">Run workflow</b>.<br>Дашборд автооновиться через <span id="rec-refresh-countdown" style="font-weight:700;color:#fbbf24">90</span> сек.</div>'+
-    '<div style="margin-top:12px;display:flex;gap:8px">'+
+  toast.style.cssText='position:fixed;top:80px;right:24px;background:#1e293b;color:#e2e8f0;padding:18px 22px;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,0.3);z-index:99998;max-width:380px;font-size:13px;line-height:1.55;font-family:Inter,Segoe UI,sans-serif;border:1px solid #334155';
+  toast.innerHTML='<div style="font-weight:700;margin-bottom:6px;color:#fff;font-size:14px">🔄 Оновлення дашборду</div>'+
+    '<div style="color:#cbd5e1">Дашборд автооновлюється кожні 30 хв з Jira.<br><br>'+
+    'Якщо маєш доступ до GitHub — <a href="https://github.com/OlenaPizniak/claude-reports/actions/workflows/update-rec-dashboard.yml" target="_blank" rel="noopener" style="color:#60a5fa;font-weight:700;text-decoration:underline">відкрий workflow</a> і натисни <b style="color:#60a5fa">Run workflow</b>, щоб запустити негайно (~90 сек).</div>'+
+    '<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">'+
       '<button onclick="document.getElementById(\'rec-refresh-toast\').remove();const i=document.getElementById(\'rec-refresh-icon\');if(i)i.style.animation=\'\';" style="background:transparent;border:1px solid #334155;color:#94a3b8;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;font-weight:600">Закрити</button>'+
-      '<button onclick="window.location.reload()" style="background:#3b6ef5;border:none;color:#fff;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit">Оновити зараз</button>'+
+      '<button onclick="window.location.reload()" style="background:#3b6ef5;border:none;color:#fff;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit">Перезавантажити сторінку</button>'+
     '</div>';
   document.body.appendChild(toast);
-  let secs=90;
-  const tick=setInterval(()=>{
-    secs--;
-    const el=document.getElementById('rec-refresh-countdown');
-    if(el) el.textContent=secs;
-    if(secs<=0){clearInterval(tick);window.location.reload();}
-  },1000);
 }
 (function(){const s=document.createElement('style');s.textContent='@keyframes rec-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}';document.head.appendChild(s);})();
 </script>
