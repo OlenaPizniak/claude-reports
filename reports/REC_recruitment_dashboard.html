@@ -517,25 +517,9 @@ function recTriggerRefresh(){
         </div>
       </div>
       <div class="section-body">
-        <!-- Period filter + Name filter (multi-select dropdown right side) -->
-        <div id="wl-period-bar" style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;font-size:12px">
-          <span style="color:#64748b;font-weight:600">Period:</span>
-          <div class="dp-chips" style="display:flex;gap:4px;flex-shrink:0">
-            <button type="button" class="dp-chip wl-at-chip active" data-mode="all" onclick="wlSetAllTime('all')">All time</button>
-            <button type="button" class="dp-chip wl-at-chip" data-mode="month" onclick="wlSetAllTime('month')">Month</button>
-            <button type="button" class="dp-chip wl-at-chip" data-mode="quarter" onclick="wlSetAllTime('quarter')">Quarter</button>
-            <button type="button" class="dp-chip wl-at-chip" data-mode="year" onclick="wlSetAllTime('year')">Year</button>
-          </div>
-          <span style="color:#cbd5e1;margin:0 2px">·</span>
-          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:nowrap">
-            <span style="color:#64748b;font-weight:600">Custom:</span>
-            <input type="date" id="wl-at-from" class="cv-input">
-            <span style="color:#94a3b8">—</span>
-            <input type="date" id="wl-at-to" class="cv-input">
-            <button onclick="wlSetAllTime('custom')" style="padding:4px 10px;font-size:11px;background:#3b6ef5;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0">Apply</button>
-          </div>
-          <!-- Name multi-select filter (right side) -->
-          <div style="margin-left:auto;position:relative" onclick="event.stopPropagation()">
+        <!-- Name multi-select filter (right side) -->
+        <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:14px;font-size:12px">
+          <div style="position:relative" onclick="event.stopPropagation()">
             <button id="wl-names-btn" onclick="wlToggleNamesDropdown()" style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:12px;font-weight:600;background:#fff;border:1px solid #cbd5e1;border-radius:7px;cursor:pointer;color:#475569">
               <span>👤</span><span id="wl-names-label">All names</span><span style="color:#94a3b8;font-size:10px">▾</span>
             </button>
@@ -3003,27 +2987,7 @@ function wlFilterType(t){
   });
   rWorkload();
 }
-// Period filter — opened date (cr || sd) within range
-let _wlAtMode='all', _wlAtFrom=null, _wlAtTo=null;
-function wlSetAllTime(mode){
-  const t=new Date();
-  const todayISO=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
-  if(mode==='all'){_wlAtFrom=null;_wlAtTo=null;}
-  else if(mode==='month'){_wlAtFrom=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-01`;_wlAtTo=todayISO;}
-  else if(mode==='quarter'){const qm=Math.floor(t.getMonth()/3)*3;_wlAtFrom=`${t.getFullYear()}-${String(qm+1).padStart(2,'0')}-01`;_wlAtTo=todayISO;}
-  else if(mode==='year'){_wlAtFrom=`${t.getFullYear()}-01-01`;_wlAtTo=todayISO;}
-  else if(mode==='custom'){
-    _wlAtFrom=document.getElementById('wl-at-from').value||null;
-    _wlAtTo=document.getElementById('wl-at-to').value||null;
-  }
-  _wlAtMode=mode;
-  if(mode!=='custom'){
-    const fi=document.getElementById('wl-at-from'); if(fi) fi.value=_wlAtFrom||'';
-    const ti=document.getElementById('wl-at-to'); if(ti) ti.value=_wlAtTo||'';
-  }
-  document.querySelectorAll('.wl-at-chip').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
-  rWorkload();
-}
+
 // Name multi-select filter — Set of selected names (empty = show all).
 const _wlSelectedNames=new Set();
 function wlToggleNamesDropdown(){
@@ -3069,25 +3033,14 @@ document.addEventListener('click',e=>{
   if(!dd||!btn) return;
   if(!dd.contains(e.target)&&!btn.contains(e.target)) dd.style.display='none';
 });
-
-// Per-member data cache for popups — populated by rWorkload, read by openWLPopup.
-const _wlMemberData={};
 function rWorkload(){
-  // Period filter helper — items pass if no period set, or opened date (cr || sd) is in range.
-  const _inPeriod=v=>{
-    if(!_wlAtFrom && !_wlAtTo) return true;
-    const d=v.cr||v.sd||null;
-    if(!d) return false;
-    if(_wlAtFrom && d<_wlAtFrom) return false;
-    if(_wlAtTo && d>_wlAtTo) return false;
-    return true;
-  };
-  const activeVacs=ALL_VACS.filter(v=>v.st!=='Hired'&&_inPeriod(v));
+  const activeVacs=ALL_VACS.filter(v=>v.st!=='Hired');
   const activeST=ST.filter(s=>s.st!=='Hired');
-  const activeRA=RA.filter(v=>v.st!=='Hired'&&_inPeriod(v));
+  const activeRA=RA.filter(v=>v.st!=='Hired');
   const activeRAS=RAS.filter(s=>s.st!=='Hired');
 
-  // Vacancy passes status filter if its own status matches OR any of its active sub-tasks has matching status.
+  // Vacancy passes status filter if its own status matches OR any of its active
+  // sub-tasks has matching status (e.g. parent='In progress', sub='Plan' like REC-228/REC-229).
   const _vacMatchesSt=v=>{
     if(_wlFilterSt.has(v.st)) return true;
     const subs=activeST.filter(s=>s.pk===v.key);
@@ -3099,56 +3052,102 @@ function rWorkload(){
     return subs.some(s=>_wlFilterSt.has(s.st));
   };
 
+  const showVac =_wlFilterType==='all'||_wlFilterType==='vac';
+  const showRA  =_wlFilterType==='all'||_wlFilterType==='ra';
+  const showTask=_wlFilterType==='all'||_wlFilterType==='task';
+
   const members=TEAM_ALL.map(name=>{
-    // OPs assigned to this person (recruiter or sourcer)
-    const recVacs=activeVacs.filter(v=>(v.rec===name||(v.rec==null&&WP.find(w=>w.key===v.key)?.rec===name))&&_vacMatchesSt(v));
-    const srcVacs=activeVacs.filter(v=>v.src===name&&v.rec!==name&&!recVacs.some(r=>r.key===v.key)&&_vacMatchesSt(v));
-    // Sub-tasks (ST) where this person is recruiter or sourcer (independent of parent assignment).
-    // Inherit parent's t/sb/pr/sn if missing on sub.
-    const _opParents=[...recVacs,...srcVacs];
-    const opSubs=activeST.filter(s=>(s.rec===name||s.src===name)&&_wlFilterSt.has(s.st)).map(s=>{
-      const par=ALL_VACS.find(p=>p.key===s.pk);
-      return {...s, _isSub:true, _role:s.rec===name?'Full-cycle':'Sourcing', kind:s.kind||'op_sub',
-              t:s.t||par?.t, sb:s.sb||par?.sb, pr:s.pr||par?.pr, sn:s.sn||par?.sn, h:1};
-    });
+    // OP items
+    const recVacs=showVac?activeVacs.filter(v=>(v.rec===name||(v.rec==null&&WP.find(w=>w.key===v.key)?.rec===name))&&_vacMatchesSt(v)):[];
+    const srcVacs=showVac?activeVacs.filter(v=>v.src===name&&v.rec!==name&&!recVacs.some(r=>r.key===v.key)&&_vacMatchesSt(v)):[];
     const opItems=[
-      ...recVacs.map(v=>({...v,_role:v.src?'Interviewing':'Full-cycle',kind:v.kind||'op',_isSub:false})),
-      ...srcVacs.map(v=>({...v,_role:'Sourcing',kind:v.kind||'op',_isSub:false})),
-      ...opSubs
+      ...recVacs.map(v=>({...v,_role:v.src?'Interviewing':'Full-cycle',_kind:'op'})),
+      ...srcVacs.map(v=>({...v,_role:'Sourcing',_kind:'op'}))
     ];
-    // RA items assigned to this person (parents + RAS sub-tasks)
-    const recRAs=activeRA.filter(v=>v.rec===name&&_raMatchesSt(v));
-    const srcRAs=activeRA.filter(v=>v.src===name&&v.rec!==name&&!recRAs.some(r=>r.key===v.key)&&_raMatchesSt(v));
-    const raSubs=activeRAS.filter(s=>(s.rec===name||s.src===name)&&_wlFilterSt.has(s.st)).map(s=>{
-      const par=RA.find(p=>p.key===s.pk);
-      return {...s, _isSub:true, _role:s.rec===name?'Full-cycle':'Sourcing', kind:'ra_sub',
-              t:s.t||par?.t, sb:s.sb||par?.sb, pr:s.pr||par?.pr, sn:s.sn||par?.sn, h:1};
-    });
+    // RA items (parents only — sub-tasks handled separately as table rows of own)
+    const recRAs=showRA?activeRA.filter(v=>v.rec===name&&_raMatchesSt(v)):[];
+    const srcRAs=showRA?activeRA.filter(v=>v.src===name&&v.rec!==name&&!recRAs.some(r=>r.key===v.key)&&_raMatchesSt(v)):[];
     const raItems=[
-      ...recRAs.map(v=>({...v,_role:v.src?'Interviewing':'Full-cycle',kind:'ra',_isSub:false})),
-      ...srcRAs.map(v=>({...v,_role:'Sourcing',kind:'ra',_isSub:false})),
-      ...raSubs
+      ...recRAs.map(v=>({...v,_role:v.src?'Interviewing':'Full-cycle',_kind:'ra'})),
+      ...srcRAs.map(v=>({...v,_role:'Sourcing',_kind:'ra'}))
     ];
-    // Tasks assigned to this person (period filter applies via sd — tasks don't have cr).
-    const taskItems=TASKS.filter(t=>t.asgn===name&&_wlFilterSt.has(t.st)&&_inPeriod(t)).map(t=>({...t,_role:'Task',kind:'task',h:0,sn:null,t:null,sb:null}));
+    // Combined allVacs depends on filter
+    const allVacs=[...opItems,...raItems];
+    const taskItems=showTask?TASKS.filter(t=>t.asgn===name&&_wlFilterSt.has(t.st)).map(t=>({...t,_role:'Task',_kind:'task',h:0,sn:null,t:null,sb:null})):[];
 
-    // Slot counts (Hires / Specialists) — only iterate parents (sub items are counted via parent's slotsInStatus).
-    // Orphan subs (sub assigned to person but parent not) — fallback to 1 slot per matching sub.
-    const hires=opItems.filter(v=>!v._isSub).reduce((s,v)=>{
+    // Hires (OP slots) — status-filter-aware
+    const hires=opItems.reduce((s,v)=>{
       const subs=activeST.filter(x=>x.pk===v.key);
-      return s+[..._wlFilterSt].reduce((ss,st)=>ss+slotsInStatus(v,subs,st),0);
-    },0) + opItems.filter(v=>v._isSub && !opItems.some(p=>!p._isSub && p.key===v.pk)).filter(v=>_wlFilterSt.has(v.st)).length;
-    const specs=raItems.filter(v=>!v._isSub).reduce((s,v)=>{
+      if(subs.length>0){
+        const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
+        const parentMatching=_wlFilterSt.has(v.st)?1:0;
+        return s+subsMatching+parentMatching;
+      }
+      return s+(_wlFilterSt.has(v.st)?v.h:0);
+    },0);
+    // Specs (RA slots)
+    const specs=raItems.reduce((s,v)=>{
       const subs=activeRAS.filter(x=>x.pk===v.key);
-      return s+[..._wlFilterSt].reduce((ss,st)=>ss+slotsInStatus(v,subs,st),0);
-    },0) + raItems.filter(v=>v._isSub && !raItems.some(p=>!p._isSub && p.key===v.pk)).filter(v=>_wlFilterSt.has(v.st)).length;
+      if(subs.length>0){
+        const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
+        const parentMatching=_wlFilterSt.has(v.st)?1:0;
+        return s+subsMatching+parentMatching;
+      }
+      return s+(_wlFilterSt.has(v.st)?(v.h||1):0);
+    },0);
 
-    return {name, opItems, raItems, taskItems, hires, specs};
+    const hiresTotal=hires+specs;
+    const highCount=[...recVacs,...recRAs].filter(v=>v.pr==='High').length;
+    const seniorCount=recVacs.filter(v=>['Senior','Lead','Expert'].includes(v.sn)).length;
+    const maxDays=[...recVacs,...recRAs].filter(v=>v.sd).reduce((m,v)=>Math.max(m,dag(v.sd)),0);
+    return{name,recVacs,srcVacs,opItems,raItems,allVacs,taskItems,hires:hiresTotal,opHires:hires,raSpecs:specs,highCount,seniorCount,maxDays};
   });
 
-  // Cache per-member data for popup access.
-  members.forEach(m=>{_wlMemberData[m.name]=m;});
-  // Render as card-per-person grid. Cards highlight counts based on active filter.
+  // Apply name filter (empty Set = show all).
+  const filteredMembers=_wlSelectedNames.size===0
+    ? members
+    : members.filter(m=>_wlSelectedNames.has(m.name));
+
+  // Sort (members with no vacancies always at bottom)
+  filteredMembers.sort((a,b)=>{
+    const aE=!a.allVacs.length&&!a.taskItems.length;
+    const bE=!b.allVacs.length&&!b.taskItems.length;
+    if(aE&&!bE)return 1; if(!aE&&bE)return -1;
+    if(_wlSortCol==='name')  return a.name.localeCompare(b.name)*_wlSortDir;
+    if(_wlSortCol==='pr')    return (a.highCount-b.highCount)*_wlSortDir;
+    if(_wlSortCol==='sn')    return (a.seniorCount-b.seniorCount)*_wlSortDir;
+    if(_wlSortCol==='vac')   return (a.opItems.length-b.opItems.length)*_wlSortDir;
+    if(_wlSortCol==='ra')    return (a.raItems.length-b.raItems.length)*_wlSortDir;
+    if(_wlSortCol==='tasks') return (a.taskItems.length-b.taskItems.length)*_wlSortDir;
+    if(_wlSortCol==='hires') return (a.hires-b.hires)*_wlSortDir;
+    if(_wlSortCol==='wl')    return ((a.hires+a.taskItems.length)-(b.hires+b.taskItems.length))*_wlSortDir;
+    if(_wlSortCol==='days')  return (a.maxDays-b.maxDays)*_wlSortDir;
+    return (a.hires-b.hires)*_wlSortDir;
+  });
+
+  // Totals for header badge — computed from filteredMembers (de-duped by key).
+  const _uniqByKey=arr=>{const s=new Set();const out=[];arr.forEach(v=>{if(!s.has(v.key)){s.add(v.key);out.push(v);}});return out;};
+  const allOpFromShown=_uniqByKey(filteredMembers.flatMap(m=>m.opItems));
+  const allRAFromShown=_uniqByKey(filteredMembers.flatMap(m=>m.raItems));
+  const allTaskFromShown=_uniqByKey(filteredMembers.flatMap(m=>m.taskItems));
+  const totalVacItems=allOpFromShown.length;
+  const totalRAItems=allRAFromShown.length;
+  const totalTaskItems=allTaskFromShown.length;
+  // Slot totals — sum per-parent slotsInStatus across all _wlFilterSt statuses
+  const _sumSlots=(items,subSrc)=>items.reduce((s,v)=>{
+    const subs=subSrc.filter(x=>x.pk===v.key);
+    if(subs.length>0){
+      const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
+      const parentMatching=_wlFilterSt.has(v.st)?1:0;
+      return s+subsMatching+parentMatching;
+    }
+    return s+(_wlFilterSt.has(v.st)?(v.h||1):0);
+  },0);
+  const totalHires=_sumSlots(allOpFromShown,activeST);
+  const totalSpecs=_sumSlots(allRAFromShown,activeRAS);
+  const maxLoad=Math.max(...filteredMembers.map(m=>m.hires+m.taskItems.length),1);
+  // Alias for table rendering loop below.
+  const members_=filteredMembers;
   const avatarColors=[
     ['#3b6ef5','#6366f1'],['#10b981','#34d399'],['#f59e0b','#fbbf24'],
     ['#ef4444','#f87171'],['#8b5cf6','#a78bfa'],['#0891b2','#22d3ee'],
@@ -3158,69 +3157,139 @@ function rWorkload(){
     ['#166534','#86efac']
   ];
 
-  // Visibility per filter: which stats to show on the card.
-  const showVac =_wlFilterType==='all'||_wlFilterType==='vac';
-  const showRA  =_wlFilterType==='all'||_wlFilterType==='ra';
-  const showTask=_wlFilterType==='all'||_wlFilterType==='task';
-
-  // Sort alphabetically by name (locale-aware).
-  members.sort((a,b)=>a.name.localeCompare(b.name));
-
-  // Apply name filter — keep only selected names (or all if none selected).
-  const filteredMembers=_wlSelectedNames.size===0
-    ? members
-    : members.filter(m=>_wlSelectedNames.has(m.name));
-
-  // Totals for header badge — computed from filteredMembers (reflect what's shown on cards).
-  // De-dupe by key so same item assigned to multiple people (recruiter + sourcer) counts ONCE.
-  const _uniqByKey=arr=>{const s=new Set();const out=[];arr.forEach(v=>{if(!s.has(v.key)){s.add(v.key);out.push(v);}});return out;};
-  const allOpFromShown=_uniqByKey(filteredMembers.flatMap(m=>m.opItems));
-  const allRAFromShown=_uniqByKey(filteredMembers.flatMap(m=>m.raItems));
-  const allTaskFromShown=_uniqByKey(filteredMembers.flatMap(m=>m.taskItems));
-  const totalVacItems=allOpFromShown.length;
-  const totalRAItems =allRAFromShown.length;
-  const totalTaskItems=allTaskFromShown.length;
-  // Slots: iterate unique PARENTS only (slotsInStatus already includes their subs).
-  // Orphan subs (parent not in shown set) — fallback to 1 slot per matching sub.
-  const _sumSlots=(items,subSrc)=>{
-    const parents=items.filter(v=>!v._isSub);
-    const orphanSubs=items.filter(v=>v._isSub && !parents.some(p=>p.key===v.pk));
-    const parentSlots=parents.reduce((s,v)=>{
-      const subs=subSrc.filter(x=>x.pk===v.key);
-      return s+[..._wlFilterSt].reduce((ss,st)=>ss+slotsInStatus(v,subs,st),0);
-    },0);
-    const orphanSlots=orphanSubs.filter(v=>_wlFilterSt.has(v.st)).length;
-    return parentSlots+orphanSlots;
+  // Sort arrow helpers
+  const arw=col=>_wlSortCol===col?(_wlSortDir===1?'▴':'▾'):'⇅';
+  const arwC=col=>_wlSortCol===col?'#3b6ef5':'#c8d2e0';
+  const roleBadge=r=>r==='Full-cycle'
+    ?`<span style="font-size:10px;font-weight:600;color:#0e7490;background:#ecfeff;border-radius:4px;padding:2px 6px">Full-cycle</span>`
+    :r==='Interviewing'
+    ?`<span style="font-size:10px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:4px;padding:2px 6px">Interviewing</span>`
+    :r==='Sourcing'
+    ?`<span style="font-size:10px;font-weight:600;color:#8b5cf6;background:#f5f3ff;border-radius:4px;padding:2px 6px">Sourcing</span>`
+    :r==='Task'
+    ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">Owner</span>`
+    :'<span class="dash-val">—</span>';
+  // Column visibility per active type filter.
+  // - vac: hide REC ASSIGN + TASKS
+  // - ra:  hide SENIORITY + VACANCIES + TASKS
+  // - task: hide SENIORITY + VACANCIES + REC ASSIGN + HIRES + TEAM/SUBTEAM
+  const _colVis={
+    sn:    _wlFilterType==='all'||_wlFilterType==='vac',
+    vac:   _wlFilterType==='all'||_wlFilterType==='vac',
+    ra:    _wlFilterType==='all'||_wlFilterType==='ra',
+    tasks: _wlFilterType==='all'||_wlFilterType==='task',
+    hires: _wlFilterType!=='task',
+    team:  _wlFilterType!=='task',
   };
-  const totalHires=_sumSlots(allOpFromShown,activeST);
-  const totalSpecs=_sumSlots(allRAFromShown,activeRAS);
+  const _hidden=c=>_colVis[c]===false?'display:none;':'';
+  const mkTh=(col,lbl,align,w,visKey)=>
+    `<th onclick="wlSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};`:''};${visKey?_hidden(visKey):''}white-space:nowrap;user-select:none">
+      ${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span>
+    </th>`;
 
-  // Build card grid — all cards regular color even when counts are zero.
-  const cards=filteredMembers.map((m,idx)=>{
+  let rows='';
+  members_.forEach((m,idx)=>{
     const [c1,c2]=avatarColors[idx%avatarColors.length];
     const initials=m.name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
-    const stat=(icon,lbl,num,color,popKey,visible)=>{
-      if(!visible) return '';
-      const isZero=num===0;
-      return `<div onclick="event.stopPropagation();${isZero?'':`openWLPopup('${m.name.replace(/'/g,"\\'")}','${popKey}')`}" style="flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px;border-left:2px solid ${color};cursor:${isZero?'default':'pointer'};transition:background .12s" onmouseenter="if(!${isZero})this.style.background='#f1f5f9'" onmouseleave="this.style.background=''">
-        <div style="font-size:22px;font-weight:800;color:${color};line-height:1.1">${num}</div>
-        <div style="font-size:10.5px;color:#64748b;font-weight:600;letter-spacing:0.03em;margin-top:3px;text-transform:uppercase">${icon} ${lbl}</div>
-      </div>`;
-    };
-    return `<div class="wl-card" style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="wl-avatar" style="background:linear-gradient(135deg,${c1},${c2});width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">${initials}</div>
-        <div style="font-weight:600;font-size:14px;color:#0f172a;line-height:1.2;flex:1;min-width:0">${m.name}</div>
-      </div>
-      <div style="display:flex;align-items:stretch;gap:0;background:#fafbfd;border-radius:8px;overflow:hidden">
-        ${stat('📂','Vacancies',m.opItems.length,'#3b6ef5','vac',showVac)}
-        ${stat('📋','Rec Assign',m.raItems.length,'#8b5cf6','ra',showRA)}
-        ${stat('✅','Tasks',m.taskItems.length,'#0891b2','task',showTask)}
-      </div>
-    </div>`;
-  }).join('');
+    const load=m.hires+m.taskItems.length;
+    const pct=maxLoad>0?Math.round(load/maxLoad*100):0;
+    const hasVacs=m.allVacs.length+m.taskItems.length>0;
+    if(!hasVacs) return; // hide empty rows after filtering
+    const did='wl_'+m.name.replace(/\s+/g,'_');
 
-  // Badge — same icon+label style as Vacancy Dynamics blocks.
+    // Recruiter row — separate counts per kind. Visibility per _colVis.
+    const _dash=`<span style="color:#cbd5e1;font-size:14px">—</span>`;
+    rows+=`<tr onclick="${hasVacs?`togWL('${did}')`:''}" style="border-bottom:1px solid #f1f5f9;${hasVacs?'cursor:pointer;':''}">
+      <td style="padding:10px 16px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="wl-avatar" style="background:linear-gradient(135deg,${c1},${c2})">${initials}</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;color:#0f172a;line-height:1.2">${m.name}</div>
+
+          </div>
+          ${hasVacs?`<span id="arr-${did}" style="color:#94a3b8;font-size:11px;margin-left:auto;flex-shrink:0">+</span>`:''}
+        </div>
+      </td>
+      <td></td>
+      <td></td>
+      <td style="${_hidden('sn')}"></td>
+      <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a;${_hidden('vac')}">${m.opItems.length||_dash}</td>
+      <td style="text-align:center;font-size:17px;font-weight:700;color:#8b5cf6;${_hidden('ra')}">${m.raItems.length||_dash}</td>
+      <td style="text-align:center;font-size:17px;font-weight:700;color:#0891b2;${_hidden('tasks')}">${m.taskItems.length||_dash}</td>
+      <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a;${_hidden('hires')}">${m.hires||_dash}</td>
+      <td style="${_hidden('team')}"></td>
+      <td></td>
+    </tr>`;
+
+    // Expanded vacancy rows: Priority=badge, Seniority=badge, Vacancies=status, Hires=count, Team/Subteam=dept/team, Days=number
+    if(hasVacs){
+      const _snOrd={Expert:0,Lead:1,Senior:2,Middle:3,Junior:4,Intern:5};
+      const _stOrd={'In progress':0,'Plan':1};
+      const sortedVacs=[...m.allVacs,...m.taskItems].sort((a,b)=>{
+        if(_wlSortCol==='pr')   return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*_wlSortDir;
+        if(_wlSortCol==='sn')   return ((_snOrd[a.sn]??9)-(_snOrd[b.sn]??9))*_wlSortDir;
+        if(_wlSortCol==='vac')  return ((_stOrd[a.st]??9)-(_stOrd[b.st]??9))*_wlSortDir;
+        if(_wlSortCol==='hires'||_wlSortCol==='wl') return (a.h-b.h)*_wlSortDir;
+        if(_wlSortCol==='days') return ((a.sd?dag(a.sd):0)-(b.sd?dag(b.sd):0))*_wlSortDir;
+        if(_wlSortCol==='role') return (a._role||'').localeCompare(b._role||'')*_wlSortDir;
+        if(_wlSortCol==='name') return a.s.localeCompare(b.s)*_wlSortDir;
+        return (a.h-b.h)*_wlSortDir;
+      });
+      sortedVacs.forEach(v=>{
+        const _subSrc=v._kind==='ra'?activeRAS:activeST;
+        const vSubs=_subSrc.filter(s=>s.pk===v.key);
+        const dt=[v.t,v.sb].filter(Boolean).join(' / ');
+        const snHtml=v.sn?`<span style="font-size:11px;font-weight:600;color:${snColor[v.sn]||'#475569'}">${v.sn}</span>`:'<span class="dash-val">—</span>';
+        const hasSubToggle=vSubs.length>0;
+        const subBtn=hasSubToggle
+          ?`<button id="wlsb-${did}-${v.key}" onclick="event.stopPropagation();togWLSubs('${did}','${v.key}')" style="background:none;border:1px solid #c8d2e0;border-radius:4px;cursor:pointer;font-size:9px;padding:1px 4px;color:#64748b;margin-right:4px;line-height:1">+</button>`
+          :'';
+        const activeHires=vSubs.length>0?vSubs.length+1:v.h;
+        const vDays=(closeDate(v)||v.sd)?dag(closeDate(v)||v.sd):null;
+        const vDaysBadge=vDays!=null?`<span class="${vDays>=45?'db45':vDays>=30?'db30':'dbnorm'}">${vDays}</span>`:'<span class="dash-val">—</span>';
+        // Route status badge to its kind's column (vac / ra / tasks).
+        const _vacCell =v._kind==='op' ?sb2(v.st):'';
+        const _raCell  =v._kind==='ra' ?sb2(v.st):'';
+        const _taskCell=v._role==='Task'?sb2(v.st):'';
+        rows+=`<tr data-wl="${did}" style="display:none;background:#f0f4ff;border-bottom:1px solid #e8eef8">
+          <td style="padding:8px 16px 8px 38px;font-size:12px">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:6px;white-space:normal">${v.s}</span></td>
+          <td style="text-align:center">${roleBadge(v._role)}</td>
+          <td style="text-align:center">${pb(v.pr)}</td>
+          <td style="text-align:center;${_hidden('sn')}">${snHtml}</td>
+          <td style="text-align:center;${_hidden('vac')}">${_vacCell}</td>
+          <td style="text-align:center;${_hidden('ra')}">${_raCell}</td>
+          <td style="text-align:center;${_hidden('tasks')}">${_taskCell}</td>
+          <td style="text-align:center;font-size:12px;font-weight:700;color:#0f172a;${_hidden('hires')}">${activeHires}</td>
+          <td style="padding:8px 20px 8px 10px;font-size:11px;color:#64748b;${_hidden('team')}">${fv(dt)}</td>
+          <td style="text-align:center">${vDaysBadge}</td>
+        </tr>`;
+        // Sub-task rows — route status by parent kind.
+        vSubs.forEach(s=>{
+          const sSn=s.sn||v.sn;
+          const sSnHtml=sSn?`<span style="font-size:11px;font-weight:600;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:'<span class="dash-val">—</span>';
+          const sdt=[s.t||v.t,s.sb||v.sb].filter(Boolean).join(' / ');
+          const sDays=(s.sd||v.sd)?dag(s.sd||v.sd):null;
+          const sDaysBadge=sDays!=null?`<span class="${sDays>=45?'db45':sDays>=30?'db30':'dbnorm'}">${sDays}</span>`:'<span class="dash-val">—</span>';
+          const _sVacCell=v._kind==='op'?sb2(s.st):'';
+          const _sRaCell =v._kind==='ra'?sb2(s.st):'';
+          rows+=`<tr data-wl="${did}" data-wlsub="${did}-${v.key}" style="display:none;background:#e8f0ff;border-bottom:1px solid #dde8f8">
+            <td style="padding:6px 16px 6px 58px;font-size:11px">↳ ${jl(s.key)} <span style="color:#374151;font-weight:500;margin-left:6px">${s.s}</span></td>
+            <td style="text-align:center">${roleBadge(v._role)}</td>
+            <td style="text-align:center">${pb(s.pr||v.pr)}</td>
+            <td style="text-align:center;${_hidden('sn')}">${sSnHtml}</td>
+            <td style="text-align:center;${_hidden('vac')}">${_sVacCell}</td>
+            <td style="text-align:center;${_hidden('ra')}">${_sRaCell}</td>
+            <td style="text-align:center;${_hidden('tasks')}"></td>
+            <td style="text-align:center;font-size:11px;font-weight:600;color:#64748b;${_hidden('hires')}">1</td>
+            <td style="padding:6px 20px 6px 10px;font-size:11px;color:#64748b;${_hidden('team')}">${fv(sdt)}</td>
+            <td style="text-align:center">${sDaysBadge}</td>
+          </tr>`;
+        });
+      });
+    }
+  });
+
+  // Badge — icon+count style, filter-aware segments.
   // Order: 📂 Vacancies · 🎯 Hires needed · 📋 Recruitment Assignments · 🎓 Specialists needed · ✅ Tasks
   const badgeParts=[];
   if(showVac)  badgeParts.push(`<span style="margin-right:4px">📂</span><span class="bnum">${totalVacItems}</span> Vacancies`);
@@ -3229,127 +3298,31 @@ function rWorkload(){
   if(showRA)   badgeParts.push(`<span style="margin-right:4px">🎓</span><span class="bnum">${totalSpecs}</span> Specialists needed`);
   if(showTask) badgeParts.push(`<span style="margin-right:4px">✅</span><span class="bnum">${totalTaskItems}</span> Tasks`);
   document.getElementById('bw').innerHTML=badgeParts.join(' &nbsp;·&nbsp; ');
-
-  // Dynamic grid columns based on filtered count:
-  // 1 selected → 1 col (full width), 2+ or unfiltered → 2 cols (default).
-  const cardCount=filteredMembers.length;
-  const cols=cardCount===1?1:2;
-  document.getElementById('c-workload').innerHTML=`
-    <div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:14px;padding:6px 2px">
-      ${cards}
-    </div>`;
+  document.getElementById('c-workload').innerHTML=`<div class="tbl-wrap"><table>
+    <thead><tr>
+      ${mkTh('name','RECRUITER','left','200px')}
+      ${mkTh('role','ROLE')}
+      ${mkTh('pr','PRIORITY')}
+      ${mkTh('sn','SENIORITY',null,null,'sn')}
+      ${mkTh('vac','VACANCIES',null,null,'vac')}
+      ${mkTh('ra','REC ASSIGN',null,null,'ra')}
+      ${mkTh('tasks','TASKS',null,null,'tasks')}
+      ${mkTh('hires','HIRES',null,null,'hires')}
+      ${mkTh('team','TEAM / SUBTEAM','left','160px','team')}
+      ${mkTh('days','DAYS OPEN')}
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
 }
 
-// Open popup with detailed list for a member. popKey: 'vac' | 'ra' | 'task' (matches filter type).
-function openWLPopup(memberName, popKey){
-  const m=_wlMemberData[memberName];
-  if(!m) return;
-  let items, title, kind, customCols;
-  // For 'all' filter — show items of the clicked category. popKey arrives from stat click.
-  if(popKey==='vac'){
-    items=m.opItems;
-    title=`${memberName} · Vacancies`;
-    kind='op';
-    // OP popup cols: Key, Vacancy, Role, Priority, Status, Seniority, Recruiter, Sourcer, Days Open, Dept
-    customCols=[
-      {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
-      {id:'role',lbl:'Role'},{id:'pr',lbl:'Priority'},{id:'st',lbl:'Status'},{id:'sn',lbl:'Seniority'},
-      {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
-      {id:'days',lbl:'Days Open'},{id:'dept',lbl:'Dept / Team'}
-    ];
-  } else if(popKey==='ra'){
-    items=m.raItems;
-    title=`${memberName} · Recruitment Assignments`;
-    kind='ra';
-    // RA popup cols: Key, Recruitment Assignment, Role, Priority, Status, Recruiter, Sourcer, Days Open, Dept (no Seniority)
-    customCols=[
-      {id:'key',lbl:'Key'},{id:'s',lbl:'Recruitment Assignment'},
-      {id:'role',lbl:'Role'},{id:'pr',lbl:'Priority'},{id:'st',lbl:'Status'},
-      {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
-      {id:'days',lbl:'Days Open'},{id:'dept',lbl:'Dept / Team'}
-    ];
-  } else {
-    items=m.taskItems;
-    title=`${memberName} · Tasks`;
-    kind='task';
-    // Task popup cols: Key, Task, Role, Priority, Status, Days Open
-    customCols=[
-      {id:'key',lbl:'Key'},{id:'s',lbl:'Task'},
-      {id:'role',lbl:'Role'},{id:'pr',lbl:'Priority'},
-      {id:'st',lbl:'Status'},{id:'days',lbl:'Days Open'}
-    ];
-  }
-  // Enrich items with computed fields for popup renderer.
-  const enriched=items.map(v=>({
-    ...v,
-    _days:v.sd?dag(v.sd):null,
-    _dept:[v.t,v.sb].filter(Boolean).join(' / '),
-  }));
-  _wlPopupItems=enriched.slice();
-  _wlPopupCols=customCols;
-  _wlPopupSort={col:'pr',dir:1};
-  document.getElementById('s5popup-title').textContent=title;
-  document.getElementById('s5popup-sub').textContent=`${items.length} ${popKey==='task'?'tasks':popKey==='ra'?'rec assignments':'vacancies'}`;
-  _renderWLPopupHeaders();
-  document.getElementById('s5popup-tbody').innerHTML=_renderWLPopupRows();
-  document.getElementById('s5overlay').style.display='block';
-  document.getElementById('s5popup').style.display='flex';
+function togWLSubs(did,key){
+  const uid=did+'-'+key;
+  const rows=document.querySelectorAll(`[data-wlsub="${uid}"]`);
+  const btn=document.getElementById('wlsb-'+uid);
+  const hidden=!rows[0]||rows[0].style.display==='none';
+  rows.forEach(r=>r.style.display=hidden?'table-row':'none');
+  if(btn)btn.textContent=hidden?'−':'+';
 }
-
-let _wlPopupItems=[], _wlPopupSort={col:'pr',dir:1}, _wlPopupCols=[];
-function wlPopupSort(col){
-  if(_wlPopupSort.col===col)_wlPopupSort.dir*=-1;
-  else{_wlPopupSort.col=col;_wlPopupSort.dir=1;}
-  _renderWLPopupHeaders();
-  document.getElementById('s5popup-tbody').innerHTML=_renderWLPopupRows();
-}
-function _renderWLPopupHeaders(){
-  document.getElementById('s5popup-thead').innerHTML=_wlPopupCols.map(c=>{
-    const on=_wlPopupSort.col===c.id;
-    const arr=on?(_wlPopupSort.dir===1?'▴':'▾'):'⇅';
-    return`<th onclick="wlPopupSort('${c.id}')" style="cursor:pointer;user-select:none;padding:10px;text-align:left;font-size:10px;text-transform:uppercase;color:#64748b;font-weight:700;letter-spacing:.06em;white-space:nowrap">${c.lbl}&thinsp;<span style="color:${on?'#3b6ef5':'#c8d2e0'};font-size:9px">${arr}</span></th>`;
-  }).join('');
-}
-function _renderWLPopupRows(){
-  if(!_wlPopupItems.length){
-    return `<tr><td colspan="${_wlPopupCols.length}" style="padding:24px;text-align:center;color:#94a3b8;font-style:italic">Немає елементів у цій вибірці</td></tr>`;
-  }
-  const {col,dir}=_wlPopupSort;
-  const sorted=[..._wlPopupItems].sort((a,b)=>{
-    if(col==='pr') return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*dir;
-    if(col==='days') return ((a._days??-1)-(b._days??-1))*dir;
-    if(col==='role') return (a._role||'').localeCompare(b._role||'')*dir;
-    if(col==='dept') return (a._dept||'').localeCompare(b._dept||'')*dir;
-    const av=a[col]??'', bv=b[col]??'';
-    return (av<bv?-1:av>bv?1:0)*dir;
-  });
-  const roleBadge=r=>r==='Full-cycle'?`<span style="font-size:10px;font-weight:600;color:#0e7490;background:#ecfeff;border-radius:4px;padding:2px 6px">Full-cycle</span>`
-    :r==='Interviewing'?`<span style="font-size:10px;font-weight:600;color:#3b6ef5;background:#eff6ff;border-radius:4px;padding:2px 6px">Interviewing</span>`
-    :r==='Sourcing'?`<span style="font-size:10px;font-weight:600;color:#8b5cf6;background:#f5f3ff;border-radius:4px;padding:2px 6px">Sourcing</span>`
-    :r==='Task'?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">Owner</span>`
-    :'<span class="dash-val">—</span>';
-  const dayBadge=d=>d!=null?`<span class="${d>=45?'db45':d>=30?'db30':'dbnorm'}">${d}</span>`:'<span class="dash-val">—</span>';
-  return sorted.map(v=>{
-    const subBadge=v._isSub&&v.pk?`<br><span style="font-size:10px;color:#94a3b8">↳ sub of ${jl(v.pk)}</span>`:'';
-    const cells=_wlPopupCols.map(c=>{
-      if(c.id==='key')  return `<td style="white-space:nowrap;padding:10px">${jl(v.key)}${subBadge}</td>`;
-      if(c.id==='s')    return `<td style="font-size:12px;max-width:260px;padding:10px">${v.s||'—'}</td>`;
-      if(c.id==='role') return `<td style="padding:10px">${roleBadge(v._role)}</td>`;
-      if(c.id==='pr')   return `<td style="padding:10px">${pb(v.pr)}</td>`;
-      if(c.id==='sn')   return `<td style="padding:10px">${v.sn?`<span style="font-size:11px;font-weight:500;color:${snColor[v.sn]||'#475569'}">${v.sn}</span>`:'<span class="dash-val">—</span>'}</td>`;
-      if(c.id==='st')   return `<td style="padding:10px">${sb2(v.st)}</td>`;
-      if(c.id==='rec')  return `<td style="font-size:11px;padding:10px">${fv(v.rec)}</td>`;
-      if(c.id==='src')  return `<td style="font-size:11px;padding:10px">${fv(v.src)}</td>`;
-      if(c.id==='days') return `<td style="padding:10px;text-align:center">${dayBadge(v._days)}</td>`;
-      if(c.id==='dept') return `<td style="font-size:11px;padding:10px">${fv(v._dept)}</td>`;
-      return '<td></td>';
-    }).join('');
-    return `<tr style="border-bottom:1px solid #f1f5f9">${cells}</tr>`;
-  }).join('');
-}
-
-// Legacy togWL/togWLSubs kept as no-ops in case any inline handler still references them.
-function togWLSubs(did,key){/* deprecated — popup replaces inline expansion */}
 
 // ── Workload Hired ───────────────────────────────────────
 function togHW(did){
