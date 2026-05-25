@@ -368,7 +368,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
 .wl-bar { border-radius: 6px; height: 10px; transition: width .4s; }
 .wl-overloaded { background: #fef2f2; color: #b91c1c; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; border: 1px solid #fecaca; white-space: nowrap; }
 .wl-warn { background: #fff7ed; color: #c2410c; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; border: 1px solid #fed7aa; white-space: nowrap; }
-#bw { font-size: 13px; padding: 5px 16px; gap: 4px; display: inline-flex; align-items: center; }
+#bw { font-size: 13px; padding: 7px 22px; gap: 6px; display: inline-flex; align-items: center; flex-wrap: wrap; }
 #bw .bnum { font-size: 17px; font-weight: 800; color: var(--blue); line-height: 1; }
 
 /* ── CLOSED VACANCIES VIEW ────────────────────────────────── */
@@ -496,7 +496,7 @@ function recTriggerRefresh(){
     <div class="section">
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#3b6ef5,#6366f1);font-size:18px;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">👥</div>
-        <h2>Workload - Active &nbsp;<span style="color:#94a3b8;font-weight:400;font-size:12px">team workload · active positions</span></h2>
+        <h2>Workload - Active</h2>
         <span class="sec-badge" style="background:#eff6ff;color:#1d4ed8;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px" id="bw"></span>
         <div style="display:flex;align-items:center;gap:8px;margin-left:auto" onclick="event.stopPropagation()">
 
@@ -3289,12 +3289,10 @@ function rWorkload(){
   // Badge — icon+count style, filter-aware segments.
   // Order: 📂 Vacancies · 🎯 Hires needed · 📋 Recruitment Assignments · 🎓 Specialists needed · ✅ Tasks
   const badgeParts=[];
-  if(showVac)  badgeParts.push(`<span style="margin-right:4px">📂</span><span class="bnum">${totalVacItems}</span> Vacancies`);
-  if(showVac)  badgeParts.push(`<span style="margin-right:4px">🎯</span><span class="bnum">${totalHires}</span> Hires needed`);
-  if(showRA)   badgeParts.push(`<span style="margin-right:4px">📋</span><span class="bnum">${totalRAItems}</span> Recruitment Assignments`);
-  if(showRA)   badgeParts.push(`<span style="margin-right:4px">🎓</span><span class="bnum">${totalSpecs}</span> Specialists needed`);
+  if(showVac)  badgeParts.push(`<span style="margin-right:4px">📂</span><span class="bnum">${totalVacItems}</span> Vacancies &nbsp;·&nbsp; <span class="bnum">${totalHires}</span> Hires needed`);
+  if(showRA)   badgeParts.push(`<span style="margin-right:4px">📋</span><span class="bnum">${totalRAItems}</span> Recruitment Assignments &nbsp;·&nbsp; <span class="bnum">${totalSpecs}</span> Specialists needed`);
   if(showTask) badgeParts.push(`<span style="margin-right:4px">✅</span><span class="bnum">${totalTaskItems}</span> Tasks`);
-  document.getElementById('bw').innerHTML=badgeParts.join(' &nbsp;·&nbsp; ');
+  document.getElementById('bw').innerHTML=badgeParts.join(',&nbsp; ');
   document.getElementById('c-workload').innerHTML=`<div class="tbl-wrap"><table>
     <thead><tr>
       ${mkTh('name','RECRUITER','left','200px')}
