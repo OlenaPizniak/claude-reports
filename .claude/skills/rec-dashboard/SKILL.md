@@ -3363,5 +3363,144 @@ const baseItems=typeScope.filter(v=>v.cs&&v.t&&(_cvSrcFilter==='ra'||v.sn));
 
 - `reports/REC_recruitment_dashboard.html` — popup стандартизація, type toggles у всі CV-блоки, closeDate всюди, Hired This Week table refactor, Vacancy Dynamics остаточна форма
 
+---
+
+## In Progress + Plan Dynamics blocks + S1/S4/S5 RA support + Workload cards (додано 2026-05-25)
+
+Велика хвиля змін на табах Open Vacancies, Plan Vacancies, Workload — щоб усі блоки використовували consistent патерн (cards/popups/toggle), включали RA support, і виглядали як Closed Vacancies tab.
+
+### Open Vacancies tab — повна реструктуризація
+
+**Прибрано:** KPI row (4 cards). Дані тепер у Vacancy Dynamics: In Progress Breakdown.
+
+**Додано блок "Vacancy Dynamics: In Progress Breakdown"** — дзеркало Closed Vacancies Hired Breakdown:
+- 📅 Current vs Previous Week — items opened in week + currently In progress
+- 🌐 All Time / Period — поточний snapshot або opened-in-period (still In progress)
+- 4 категорії (Vacancies / Hires needed / Recruitment Assignments / Specialists needed)
+- Click cards → popup без fcd/hd колонок (items не hired)
+
+**Додано блок "Open Vacancies by Department" (chart)** перед S3 (table):
+- Bar chart per dept (як Closed Vacancies by Department але для IP)
+- Type toggle (Vacancies / Rec Assign), Period chips, Custom date range
+- Click bar → popup з items dept-а
+
+**S1 "Open Vacancies This Week" — повний refactor:**
+- 4-stat badge: `📂 N Vacancies · 🎯 N Hires needed · 📋 N Recruitment Assignments · 🎓 N Specialists needed`
+- Type toggle (All / 📂 Vacancies / 📋 Rec Assign) у filter row
+- Колонки: Key, **Type** (Vacancy/Rec Assign badge), Vacancy, Priority, [Seniority], Recruiter, Sourcer, **Open date** (заміна Start date), Dept/Team
+- Seniority column прибирається при Rec Assign filter
+- RA items включаються (parents + RAS sub-tasks) — як `↳ sub of`
+- Sort через generic comparator (підтримує type, od, dt тощо)
+- Status column прибрано (всі items за визначенням In progress)
+
+**S4 "Roles by Days Open" — RA support + Type toggle:**
+- Toggle: All / 📂 Vacancies / 📋 Rec Assign (з red accent)
+- Type column додано
+- Seniority hides при Rec Assign
+- Включає RA items
+- Sort comparator з type/dt підтримкою
+
+**S5 "Open Roles by Hiring Reason & Team" — canonical fix:**
+- Filter: `vacInStatus(v, 'In progress')` замість `v.st === 'In progress'` (consistency з KPI)
+- Hires count: `slotsInStatus(v, subs, 'In progress')` замість самописної формули
+- Усуває розходження з KPI (раніше було 31 vs 30 hires)
+- Popup переписано на `_showVDPopupGeneric` (без fcd/hd для IP items)
+- Toggle Vacancies/Rec Assign експериментально додано і потім ПРИБРАНО (бо RA items мають порожній cf_cooperation у даних)
+
+### Plan Vacancies tab — повна реструктуризація
+
+**Прибрано:** Simple KPI row (4 cards).
+
+**Додано блок "Vacancy Dynamics: Plan Breakdown"** — дзеркало In Progress Breakdown але для Plan статусу:
+- Логіка та сама, але `slotsInStatus(p, subs, 'Plan')`
+- Окремий state: `_plAtMode`, `_plAtFrom`, `_plAtTo`, `_plThis`, `_plAt`, etc
+- Функції: `rPlanDynamics()`, `plSetAllTime()`, `openPLPopup()`
+- Plan popups мають ОСОБЛИВУ конфігурацію колонок: **drop fcd/hd AND drop sd** (Plan items рідко мають Start date; sub-tasks показуються окремо тож per-parent h тут оманливе)
+
+**Додано блок "Plan Vacancies This Week"** — дзеркало S1 (Open Vacancies This Week) але filter='Plan':
+- Окремий state: `s1pFrom`, `s1pTo`, `_s1pFilter`, etc
+- Функції: `r1plan()`, `s1psort()`, `setS1pFilter()`
+- Замість Open date — колонка **Hires** (Plan items мають h заповнений, sd — рідко)
+- `dpApply` отримав kind 'r1plan' (раніше chip-кнопки не працювали — бо handler був відсутній)
+
+**Додано блок "Plan Vacancies by Department" (chart):**
+- Дзеркало Open Vacancies by Department але filter='Plan'
+- Окремий state: `_planCntMode`, `_planCntFilter`, etc
+- Функції: `rPlanCount()`, `planSetMode()`, `setPlanCntFilter()`, `showPlanDeptPopup()`
+
+### Workload-Active — повний рефакторинг (cards + popup)
+
+**Прибрано:**
+- Inline expandable table з togWL toggle rows
+- `Violetta Strelchenko` з `TEAM_ALL` (звільнена 2026-05-25, тепер 15 людей)
+
+**Layout змінено: TABLE → CARDS:**
+- Grid 2 колонки за замовчуванням (16→15 людей × 2 = 8 рядів)
+- 1 ім'я обране → 1 колонка (full width)
+- 2+ обрано → 2 колонки
+- Avatar (initials + gradient color), name, 3 mini-stats (📂 Vacancies / 📋 Rec Assign / ✅ Tasks)
+- Click на mini-stat → popup з detail табликою
+- Картки з 0 — звичайного кольору (не dimmed)
+
+**Type toggle:** All / 📂 Vacancies / 📋 Rec Assign / ✅ Tasks
+- Filter-aware: показує тільки relevant mini-stat на картці
+- 'all': всі 3 stats; 'vac': тільки Vacancies stat; 'ra': тільки RA; 'task': тільки Tasks
+
+**Period filter** (новий рядок під header):
+- All time / Month / Quarter / Year chips + Custom date range
+- Filters items by `cr || sd` (opened date)
+- Окремий state: `_wlAtMode`, `_wlAtFrom`, `_wlAtTo`
+- Tasks filtered by `sd` (немає cr)
+
+**Name multi-select dropdown** (правий бік filter row):
+- Custom dropdown з checkboxes (TEAM_ALL alphabetical)
+- Select all / Clear buttons
+- Max-height 560px — всі імена вміщаються
+- Closes on outside click
+- Label: "All names" / "1 selected" / "{name}" / "N selected"
+- State: `_wlSelectedNames` (Set)
+
+**Badge у новому стилі** (consistent з іншими блоками):
+- `📂 N Vacancies · 🎯 N Hires needed · 📋 N Recruitment Assignments · 🎓 N Specialists needed · ✅ N Tasks`
+- Filter-aware: показує тільки відповідні категорії
+- Totals по `filteredMembers` (не по всіх 15) — відображає що видно
+- De-duplication через `_uniqByKey` — item призначений recruiter+sourcer рахується ОДИН раз
+
+**Status filter:**
+- `_wlFilterSt = new Set(['In progress', 'Plan'])` — обидва статуси (Active = не Hired)
+- Раніше було тільки IP, що ховало Plan sub-tasks
+
+**RA support:**
+- Per-member `recRAs` / `srcRAs` — RA items призначені цій людині
+- `raItems` = parents + `raSubs` (RAS sub-tasks де s.rec/s.src === name)
+- `specs` count — sum RA slots через canonical `slotsInStatus`
+
+**Sub-tasks у popup:**
+- Sub-tasks (ST / RAS) які мають власний `rec` або `src` === name додаються в opItems/raItems з `_isSub:true`
+- Наслідують `t`, `sb`, `pr`, `sn` від parent якщо null
+- У popup показуються рядком з badge `↳ sub of REC-XXX` під key
+- Slot count: orphan subs (parent не у цієї людини) рахуються +1 each; parent subs включаються через `slotsInStatus` (без double-count)
+
+**Popup колонки:**
+- **Vacancies popup**: Key, Vacancy, Role, Priority, **Status** (нова), Seniority, Recruiter, Sourcer, Days Open, Dept / Team
+- **RA popup**: Key, Recruitment Assignment, Role, Priority, **Status**, Recruiter, Sourcer, Days Open, Dept / Team (без Seniority)
+- **Tasks popup**: Key, Task, Role, Priority, Status, Days Open
+
+**Sort:** alphabetical по name (locale-aware). Раніше було за load.
+
+### Convention оновлено
+
+1. **closeDate(v) = v.fcd || v.hd** — використовується ВСЮДИ для дат закриття
+2. **slotsInStatus(parent, subs, status)** — канонічна формула slot count, узгоджена між KPI/Workload/Dynamics блоками
+3. **_uniqByKey** — для badge totals, щоб items призначені кільком людям рахувались один раз
+4. **_isSub flag** на items — для popup рендера `↳ sub of` badge і для exclude-from-parent-slot-calc
+5. **Plan popups drop sd + h** (subtasks shown as separate rows; per-parent h misleading)
+6. **In Progress popups drop fcd/hd** (items not hired yet)
+
+### Файли, що змінились у цій сесії
+
+- `reports/REC_recruitment_dashboard.html` — major refactor of Open Vacancies tab, Plan Vacancies tab, Workload-Active block; popup standardization across all blocks; closeDate convention enforced; RA support throughout
+
+
 
 
