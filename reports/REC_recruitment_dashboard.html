@@ -746,6 +746,17 @@ function recTriggerRefresh(){
     </div>
     <div class="section-body" id="sb5"><div id="c5"></div></div>
   </div>
+
+  <!-- S6 — Recruitment Assignments by Type of Cooperation -->
+  <div class="section">
+    <div class="section-header" onclick="tog(this)">
+      <div class="section-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">🤝</div>
+      <h2>Recruitment Assignments by Type of Cooperation</h2>
+      <span class="sec-badge" id="b6" style="background:#f3e8ff;color:#7c3aed;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
+      <div class="toggle-btn">−</div>
+    </div>
+    <div class="section-body" id="sb6"><div id="c6"></div></div>
+  </div>
   </div><!-- /view-dashboard -->
 
   <!-- ── Closed Vacancies view (hidden by default) ── -->
@@ -2702,6 +2713,82 @@ function r5(){
               c.textBaseline='bottom';
               c.fillText(v,props.x,props.y-3);
             }
+            c.restore();
+          });
+        });
+      }
+    }]
+  });
+}
+
+// S6 — Recruitment Assignments by Type of Cooperation
+let _s6chart=null;
+function r6(){
+  const allRa=RA.filter(v=>v.st==='In progress');
+  const totalSlots=allRa.reduce((s,v)=>s+slotsFor(v,_activeRAS),0);
+  document.getElementById('b6').innerHTML=`<span class="bnum">${allRa.length}</span> assignments &nbsp;·&nbsp; <span class="bnum">${totalSlots}</span> specialists needed`;
+
+  const teamSet=new Set();
+  allRa.forEach(v=>{if(v.t)teamSet.add(v.t);});
+  const teams=[...teamSet].sort();
+
+  const coopCfg=[
+    {key:'Consulting call(s)', label:'Consulting call(s)', bg:'#60a5fa', hover:'#3b82f6'},
+    {key:'Part-time',          label:'Part-time',          bg:'#a78bfa', hover:'#8b5cf6'},
+    {key:'Project-based',      label:'Project-based',      bg:'#f59e0b', hover:'#d97706'},
+    {key:'Freelance',          label:'Freelance',          bg:'#34d399', hover:'#10b981'},
+    {key:'Other',              label:'Other',              bg:'#f87171', hover:'#ef4444'},
+    {key:null,                 label:'Not specified',      bg:'#94a3b8', hover:'#64748b'},
+  ];
+
+  const datasets=coopCfg.map(cc=>{
+    const data=teams.map(t=>allRa.filter(v=>{
+      const val=v.cf_cooperation||null;
+      return (cc.key===null?val===null:val===cc.key)&&v.t===t;
+    }).length);
+    return data.some(d=>d>0)?{
+      label:cc.label,data,
+      backgroundColor:cc.bg,hoverBackgroundColor:cc.hover,
+      borderColor:'transparent',borderWidth:0,borderRadius:7,borderSkipped:false
+    }:null;
+  }).filter(Boolean);
+
+  document.getElementById('c6').innerHTML=`<div style="padding:20px 24px 12px"><div style="position:relative;height:380px"><canvas id="s6chart" style="cursor:pointer"></canvas></div></div>`;
+  if(_s6chart){_s6chart.destroy();_s6chart=null;}
+  const ctx=document.getElementById('s6chart').getContext('2d');
+  _s6chart=new Chart(ctx,{
+    type:'bar',
+    data:{labels:teams,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      animation:{duration:500,easing:'easeOutQuart'},
+      barPercentage:0.82,categoryPercentage:0.88,
+      plugins:{
+        legend:{position:'top',align:'center',labels:{font:{family:'Inter',size:12,weight:'500'},padding:18,boxWidth:9,boxHeight:9,usePointStyle:true,pointStyle:'rectRounded',color:'#475569'}},
+        tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',borderColor:'#334155',borderWidth:1,padding:{x:14,y:10},cornerRadius:10,callbacks:{title:items=>`${items[0].label}`,label:item=>`  ${item.dataset.label}: ${item.raw}`}},
+        datalabels:false
+      },
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:11,weight:'500'},color:'#64748b',maxRotation:25,minRotation:0}},
+        y:{beginAtZero:true,border:{display:false,dash:[3,3]},grid:{color:'#f1f5f9',lineWidth:1},ticks:{font:{family:'Inter',size:11},color:'#94a3b8',stepSize:1,precision:0}}
+      },
+      interaction:{mode:'index',intersect:false}
+    },
+    plugins:[{
+      id:'datalabelsInline',
+      afterDatasetsDraw(chart){
+        const {ctx:c,data}=chart;
+        chart.data.datasets.forEach((ds,di)=>{
+          const meta=chart.getDatasetMeta(di);
+          if(meta.hidden)return;
+          meta.data.forEach((bar,i)=>{
+            const v=ds.data[i];if(!v)return;
+            const props=bar.getProps(['x','y','base'],true);
+            const barH=props.base-props.y;
+            c.save();c.font='bold 11px Inter,sans-serif';
+            c.textAlign='center';c.textBaseline='middle';
+            if(barH>=18){c.fillStyle='#fff';c.fillText(v,props.x,props.y+barH/2);}
+            else{c.fillStyle=ds.backgroundColor||'#374151';c.textBaseline='bottom';c.fillText(v,props.x,props.y-3);}
             c.restore();
           });
         });
@@ -5030,7 +5117,7 @@ function showCVSrcPopup(src, vacs, dept, sn){
 
 function rCV(){rCVDynamics();rCVTTF();rCVTTH();rCVClosedCount();rCVSources();}
 
-rKPI(); r1(); r1plan(); r2(); r3(); r3plan(); r4(); r5(); rWorkload(); rWorkloadHired(); rWorkloadOverview(); rOPDynamics(); rOPCount(); rPlanDynamics(); rPlanCount();
+rKPI(); r1(); r1plan(); r2(); r3(); r3plan(); r4(); r5(); r6(); rWorkload(); rWorkloadHired(); rWorkloadOverview(); rOPDynamics(); rOPCount(); rPlanDynamics(); rPlanCount();
 </script>
 </body>
 </html>
