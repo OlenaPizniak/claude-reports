@@ -49,8 +49,21 @@ F = {
     'end_date':       'customfield_11232',  # End date (available on Open Position + RA)
 }
 
+RA_EXTRA_FIELDS = [
+    'customfield_25664',  # cf_cooperation (Type of cooperation)
+    'customfield_25665',  # cf_cooperation_other
+    'customfield_25666',  # cf_core_req
+    'customfield_25667',  # cf_nice_req
+    'customfield_25668',  # cf_duration
+    'customfield_25669',  # cf_legal
+    'customfield_25670',  # cf_nda
+    'customfield_25671',  # cf_marketing
+    'customfield_25672',  # cf_budget
+    'customfield_25673',  # cf_payment
+    'customfield_25674',  # cf_stages
+]
 ALL_FIELDS = ['summary', 'status', 'priority', 'issuetype', 'created',
-              'parent', 'assignee'] + list(F.values())
+              'parent', 'assignee'] + list(F.values()) + RA_EXTRA_FIELDS
 
 # Ukrainian month names for header date
 UA_MONTHS = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
