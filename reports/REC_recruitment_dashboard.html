@@ -567,43 +567,6 @@ function recTriggerRefresh(){
   <!-- ── Plan Vacancies view (hidden by default) ── -->
   <div id="view-plan" style="display:none">
 
-    <!-- Vacancy Dynamics: Plan Breakdown — mirrors In Progress Breakdown but for Plan status items -->
-    <div class="section">
-      <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
-        <div class="section-icon" style="background:linear-gradient(135deg,#64748b,#94a3b8);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📊</div>
-        <h2>Vacancy Dynamics: Plan Breakdown<br><span style="color:#94a3b8;font-weight:400;font-size:11px">by issue type · Open Position vs Recruitment Assignment</span></h2>
-      </div>
-      <div class="section-body">
-        <div class="cv-row">
-          <div class="cv-card">
-            <div class="cv-card-title">📅 Current vs Previous Week</div>
-            <div class="cv-card-sub" id="pl-week-range"></div>
-            <div id="pl-week-block"></div>
-          </div>
-          <div class="cv-card">
-            <div class="cv-card-title">🌐 All Time / Period</div>
-            <div class="cv-card-sub" id="pl-at-sub"></div>
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;font-size:12px">
-              <div class="dp-chips" style="display:flex;gap:4px;flex-shrink:0">
-                <button type="button" class="dp-chip pl-at-chip active" data-mode="all" onclick="plSetAllTime('all')">All time</button>
-                <button type="button" class="dp-chip pl-at-chip" data-mode="month" onclick="plSetAllTime('month')">Month</button>
-                <button type="button" class="dp-chip pl-at-chip" data-mode="quarter" onclick="plSetAllTime('quarter')">Quarter</button>
-                <button type="button" class="dp-chip pl-at-chip" data-mode="year" onclick="plSetAllTime('year')">Year</button>
-              </div>
-              <span style="color:#cbd5e1;margin:0 2px">·</span>
-              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:nowrap">
-                <span style="color:#64748b;font-weight:600">Custom:</span>
-                <input type="date" id="pl-at-from" class="cv-input">
-                <span style="color:#94a3b8">—</span>
-                <input type="date" id="pl-at-to" class="cv-input">
-                <button onclick="plSetAllTime('custom')" style="padding:4px 10px;font-size:11px;background:#64748b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0">Apply</button>
-              </div>
-            </div>
-            <div id="pl-alltime-block"></div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Plan Vacancies This Week — mirror of S1 (Open Vacancies This Week) but filtered by Plan status -->
     <div class="section">
