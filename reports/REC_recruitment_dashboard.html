@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 26 травня 2026, оновлено 12:10 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 26 травня 2026, оновлено 19:28 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -995,6 +995,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-543":null,
   "REC-539":null,
   "REC-500":"2026-05-21",
   "REC-499":"2026-05-21",
@@ -1099,6 +1100,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-543":"Senior",
   "REC-539":"Junior",
   "REC-500":"Middle",
   "REC-499":"Senior",
@@ -1197,6 +1199,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-543",s:"Full Stack Engineer + AI / AI Tooling",st:"In progress",pr:"Medium",so:"Constantine Chernenko",re:null,h:1,r:"Extention",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Junior Legal Counsel",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Replacement",t:"Legal",sb:null,cr:"2026-05-25"},
   {key:"REC-500",s:"Creator Affiliate Manager",st:"In progress",pr:"High",so:"Nataly Lytvyn",re:null,h:1,r:"Extention",t:"Brand Communications",sb:"Brand Communications",cr:"2026-05-22"},
   {key:"REC-499",s:"Content Manager",st:"In progress",pr:"Medium",so:"Volodymyr Chayka",re:null,h:1,r:"Replacement",t:"Content",sb:null,cr:"2026-05-21"},
@@ -1300,6 +1303,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-543",s:"Full Stack Engineer + AI / AI Tooling",st:"In progress",pr:"Medium",sn:"Senior",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:null,h:1,t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Junior Legal Counsel",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Legal",sb:null,cr:"2026-05-25"},
   {key:"REC-500",s:"Creator Affiliate Manager",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Hodyna",src:"Kateryna Yaremenko",sd:"2026-05-21",h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-05-22"},
   {key:"REC-499",s:"Content Manager",st:"In progress",pr:"Medium",sn:"Senior",rec:"Victoria Kotenko",src:"Anastasiia Melnyk",sd:"2026-05-21",h:1,t:"Content",sb:null,cr:"2026-05-21"},
@@ -1350,6 +1354,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-543":"Veronika Khovrina",
   "REC-500":"Anastasiia Hodyna",
   "REC-499":"Victoria Kotenko",
   "REC-395":"Yaroslava Bondarchuk",
@@ -1443,6 +1448,7 @@ const RECR={
 };
 // Sourcer lookup (customfield_23510) — fresh from Jira
 const SRCR={
+  "REC-543":"Alina Muravchyk",
   "REC-500":"Kateryna Yaremenko",
   "REC-499":"Anastasiia Melnyk",
   "REC-395":"Anastasiia Melnyk",
@@ -3772,7 +3778,7 @@ const RA=[
   {key:"REC-272",s:"Walk & Run for mental health",st:"In progress",pr:"Low",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:2,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-271",s:"Pilates Instructor (Reformer)",st:"In progress",pr:"Medium",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-245",s:"TaiChi Instructor ",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-184",s:"Gym Trainer - female",st:"In progress",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-02",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-184",s:"Gym Trainer - female",st:"In progress",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-02",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-141",s:"Calisthenics Expert (male)",st:"In progress",pr:"High",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",ed:null,fcd_c:null,h:3,t:"Content",sb:null,cr:"2026-03-27",cf_cooperation:null,cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
 ];
 // Recruitment Assignment sub-tasks (issuetype=Recruitment Assignment sub-task, not Hired)
