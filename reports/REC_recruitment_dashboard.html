@@ -2726,7 +2726,10 @@ let _s6chart=null;
 function r6(){
   const _activeRAS=RAS.filter(s=>s.st!=='Hired');
   const allRa=RA.filter(v=>v.st==='In progress');
-  const totalSlots=allRa.reduce((s,v)=>s+slotsFor(v,_activeRAS),0);
+  const totalSlots=allRa.reduce((s,v)=>{
+    const subs=_activeRAS.filter(x=>x.pk===v.key);
+    return s+slotsInStatus(v,subs,'In progress');
+  },0);
   document.getElementById('b6').innerHTML=`<span class="bnum">${allRa.length}</span> assignments &nbsp;·&nbsp; <span class="bnum">${totalSlots}</span> specialists needed`;
 
   const teamSet=new Set();
