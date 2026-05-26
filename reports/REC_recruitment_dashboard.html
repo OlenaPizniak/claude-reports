@@ -2722,10 +2722,10 @@ function r5(){
 }
 
 // S6 — Recruitment Assignments by Type of Cooperation
-let _s6chart=null;
+let _s6chart=null, _s6allRa=[], _s6coopCfg=[];
 function r6(){
   const _activeRAS=RAS.filter(s=>s.st!=='Hired');
-  const allRa=RA.filter(v=>v.st==='In progress');
+  const allRa=_s6allRa=RA.filter(v=>v.st==='In progress');
   const totalSlots=allRa.reduce((s,v)=>{
     const subs=_activeRAS.filter(x=>x.pk===v.key);
     return s+slotsInStatus(v,subs,'In progress');
@@ -2736,7 +2736,7 @@ function r6(){
   allRa.forEach(v=>{if(v.t)teamSet.add(v.t);});
   const teams=[...teamSet].sort();
 
-  const coopCfg=[
+  _s6coopCfg=[
     {key:'Consulting call(s)', label:'Consulting call(s)', bg:'#60a5fa', hover:'#3b82f6'},
     {key:'Part-time',          label:'Part-time',          bg:'#a78bfa', hover:'#8b5cf6'},
     {key:'Project-based',      label:'Project-based',      bg:'#f59e0b', hover:'#d97706'},
@@ -2745,7 +2745,7 @@ function r6(){
     {key:null,                 label:'Not specified',      bg:'#94a3b8', hover:'#64748b'},
   ];
 
-  const datasets=coopCfg.map(cc=>{
+  const datasets=_s6coopCfg.map(cc=>{
     const data=teams.map(t=>allRa.filter(v=>{
       const val=v.cf_cooperation||null;
       return (cc.key===null?val===null:val===cc.key)&&v.t===t;
@@ -2769,14 +2769,37 @@ function r6(){
       barPercentage:0.82,categoryPercentage:0.88,
       plugins:{
         legend:{position:'top',align:'center',labels:{font:{family:'Inter',size:12,weight:'500'},padding:18,boxWidth:9,boxHeight:9,usePointStyle:true,pointStyle:'rectRounded',color:'#475569'}},
-        tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',borderColor:'#334155',borderWidth:1,padding:{x:14,y:10},cornerRadius:10,callbacks:{title:items=>`${items[0].label}`,label:item=>`  ${item.dataset.label}: ${item.raw}`}},
+        tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',borderColor:'#334155',borderWidth:1,padding:{x:14,y:10},cornerRadius:10,callbacks:{
+          title:items=>`${items[0].label}`,
+          label:item=>`  ${item.dataset.label}: ${item.raw}`,
+          footer:()=>'Click to open →'
+        },footerColor:'#60a5fa',footerFont:{size:10,style:'italic'},footerMarginTop:6},
         datalabels:false
       },
       scales:{
         x:{grid:{display:false},border:{display:false},ticks:{font:{family:'Inter',size:11,weight:'500'},color:'#64748b',maxRotation:25,minRotation:0}},
         y:{beginAtZero:true,border:{display:false,dash:[3,3]},grid:{color:'#f1f5f9',lineWidth:1},ticks:{font:{family:'Inter',size:11},color:'#94a3b8',stepSize:1,precision:0}}
       },
-      interaction:{mode:'index',intersect:false}
+      interaction:{mode:'index',intersect:false},
+      onClick(evt,elements,chart){
+        const pts=chart.getElementsAtEventForMode(evt.native,'nearest',{intersect:true},true);
+        if(!pts.length)return;
+        const el=pts[0];
+        const dept=chart.data.labels[el.index];
+        const coopLabel=chart.data.datasets[el.datasetIndex].label;
+        const coopKey=(_s6coopCfg.find(c=>c.label===coopLabel)||{}).key;
+        const vacs=_s6allRa.filter(v=>{
+          const val=v.cf_cooperation||null;
+          return v.t===dept&&(coopKey===undefined?false:(coopKey===null?val===null:val===coopKey));
+        });
+        if(vacs.length){
+          const raCols=_vdColsRA.filter(c=>c.id!=='fcd'&&c.id!=='hd');
+          _showVDPopupGeneric(vacs,
+            `Recruitment Assignments · ${dept} · ${coopLabel}`,
+            `${vacs.length} assignment${vacs.length>1?'s':''} · Type: ${coopLabel}`,
+            'ra', raCols);
+        }
+      }
     },
     plugins:[{
       id:'datalabelsInline',
