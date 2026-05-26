@@ -616,38 +616,6 @@ function recTriggerRefresh(){
       <div class="section-body" id="sb1p"><div id="c1p"></div></div>
     </div>
 
-    <!-- Plan Vacancies by Department (chart) — mirror of Open Vacancies by Department but filtered by Plan -->
-    <div class="section">
-      <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
-        <div class="section-icon" style="background:linear-gradient(135deg,#64748b,#94a3b8);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📂</div>
-        <h2>Plan Vacancies by Department</h2>
-        <!-- Type toggle: Vacancies / Rec Assign -->
-        <div onclick="event.stopPropagation()" style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
-          <button onclick="setPlanCntFilter('vac')" id="plcnt-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#64748b;color:#fff">📂 Vacancies</button>
-          <button onclick="setPlanCntFilter('ra')" id="plcnt-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
-        </div>
-        <span class="sec-badge" id="bpl-cnt" style="background:#f1f5f9;color:#475569;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
-        <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">
-          <div class="cv-mode-bar" id="pl-cnt-mode">
-            <button data-mode="all" class="active" onclick="planSetMode('all')">All time</button>
-            <button data-mode="month" onclick="planSetMode('month')">Month</button>
-            <button data-mode="quarter" onclick="planSetMode('quarter')">Quarter</button>
-            <button data-mode="year" onclick="planSetMode('year')">Year</button>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;background:#f1f5f9;border-radius:8px;padding:4px 10px;font-size:12px;color:#64748b">
-            <span style="font-weight:600;color:#475569">Period:</span>
-            <input type="date" id="pl-cnt-from" class="cv-input">
-            <span style="color:#94a3b8">—</span>
-            <input type="date" id="pl-cnt-to" class="cv-input">
-            <button onclick="rPlanCount()" style="background:#64748b;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Apply</button>
-            <button onclick="planResetCntPeriod()" style="background:transparent;color:#64748b;border:1px solid #cbd5e1;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Reset</button>
-          </div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="cv-canvas-wrap" style="height:320px"><canvas id="pl-cnt-chart"></canvas></div>
-      </div>
-    </div>
 
     <!-- S3 Plan-only mirror -->
     <div class="section">
@@ -770,38 +738,6 @@ function recTriggerRefresh(){
 
   <!-- S1-style global filter is removed in favor of inline Type toggle rendered inside r1(). -->
 
-  <!-- Open Vacancies by Department (chart) — mirrors Closed Vacancies by Department block but for In progress -->
-  <div class="section">
-    <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
-      <div class="section-icon" style="background:linear-gradient(135deg,#3b6ef5,#60a5fa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📂</div>
-      <h2>Open Vacancies by Department</h2>
-      <!-- Type toggle: Vacancies / Rec Assign (compact, same style as TTF/TTH) -->
-      <div onclick="event.stopPropagation()" style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
-        <button onclick="setOpCntFilter('vac')" id="opcnt-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b6ef5;color:#fff">📂 Vacancies</button>
-        <button onclick="setOpCntFilter('ra')" id="opcnt-ra" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b">📋 Rec Assign</button>
-      </div>
-      <span class="sec-badge" id="bop-cnt" style="background:#eff6ff;color:#1d4ed8;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
-      <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">
-        <div class="cv-mode-bar" id="op-cnt-mode">
-          <button data-mode="all" class="active" onclick="opSetMode('all')">All time</button>
-          <button data-mode="month" onclick="opSetMode('month')">Month</button>
-          <button data-mode="quarter" onclick="opSetMode('quarter')">Quarter</button>
-          <button data-mode="year" onclick="opSetMode('year')">Year</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;background:#f1f5f9;border-radius:8px;padding:4px 10px;font-size:12px;color:#64748b">
-          <span style="font-weight:600;color:#475569">Period:</span>
-          <input type="date" id="op-cnt-from" class="cv-input">
-          <span style="color:#94a3b8">—</span>
-          <input type="date" id="op-cnt-to" class="cv-input">
-          <button onclick="rOPCount()" style="background:#3b6ef5;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Apply</button>
-          <button onclick="opResetCntPeriod()" style="background:transparent;color:#64748b;border:1px solid #cbd5e1;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div class="cv-canvas-wrap" style="height:320px"><canvas id="op-cnt-chart"></canvas></div>
-    </div>
-  </div>
 
   <!-- S3 -->
   <div class="section">
