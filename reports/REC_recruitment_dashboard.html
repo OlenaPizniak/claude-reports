@@ -5344,9 +5344,26 @@ function _populateCVSrcDropdowns(){
     allSns.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sEl.appendChild(o);});
   }
 }
+// Source name normalization — unify variants coming from Jira vs historical Excel data
+const _srcNorm={
+  'Dou':'DOU','dou':'DOU','DOU':'DOU',
+  'Linkedin':'LinkedIn Sourced','linkedin':'LinkedIn Sourced',
+  'LinkedIn':'LinkedIn Sourced',
+  'Djinni ':'Djinni',
+  'Work':'Work.ua','work':'Work.ua',
+  'Robota':'Robota.ua',
+  'internal remote employee':'Internal Remote Employee',
+  'vakansiatv':'Vakansiatv','Vakansiatv':'Vakansiatv',
+  'workado':'Workado',
+  'law_events':'Law_events',
+  'Перехід Genesis':'Genesis Transfer',
+  'Recommendation':'Internal Referral',
+  'Employee':'Internal Referral',
+};
+const _normSrc=s=>s?(_srcNorm[s]||s):s;
 // Source label helper — for "Other" use free-text value from customfield_25662 (v.cs_other)
 // so each user-typed source becomes its own bucket. Falls back to plain "Other" if empty.
-const _srcLabel=v=>v.cs==='Other'?(v.cs_other?`Other: ${v.cs_other}`:'Other'):v.cs;
+const _srcLabel=v=>v.cs==='Other'?(v.cs_other?`Other: ${v.cs_other}`:'Other'):_normSrc(v.cs);
 function rCVSources(){
   _populateCVSrcDropdowns();
   const dept=document.getElementById('cv-src-dept')?.value||'';
