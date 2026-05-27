@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 27 травня 2026, оновлено 17:41 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 27 травня 2026, оновлено 19:44 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -995,6 +995,8 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-545":"2026-05-27",
+  "REC-544":"2026-05-27",
   "REC-543":null,
   "REC-539":null,
   "REC-500":"2026-05-21",
@@ -1100,6 +1102,8 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-545":"Middle",
+  "REC-544":"Middle",
   "REC-543":"Senior",
   "REC-539":"Junior",
   "REC-500":"Middle",
@@ -1199,6 +1203,8 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-545",s:"Automation QA Engineer",st:"In progress",pr:"High",so:"Daryna Varycheva",re:null,h:1,r:"Extention",t:"Engineering",sb:"QA Core",cr:"2026-05-27"},
+  {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",so:"Serhii Pidlypaiev",re:null,h:1,r:"Replacement",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
   {key:"REC-543",s:"Full Stack Engineer + AI / AI Tooling",st:"In progress",pr:"Medium",so:"Constantine Chernenko",re:null,h:1,r:"Extention",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Junior Legal Counsel",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Replacement",t:"Legal",sb:null,cr:"2026-05-25"},
   {key:"REC-500",s:"Creator Affiliate Manager",st:"In progress",pr:"High",so:"Nataly Lytvyn",re:null,h:1,r:"Extention",t:"Brand Communications",sb:"Brand Communications",cr:"2026-05-22"},
@@ -1218,17 +1224,17 @@ const OP=[
   {key:"REC-315",s:"Product Designer",st:"In progress",pr:"Medium",so:"Alex Minieieva",re:null,h:1,r:"Replacement",t:"Product",sb:"Design",cr:"2026-05-05"},
   {key:"REC-296",s:"Influencer Marketing Specialist BetterMe Store",st:"In progress",pr:"High",so:"Kateryna Danyliuk (Lead); Kateryna Krotik (для equipment); Kateryna Muzychuk (для sportswear)",re:null,h:2,r:"Extention",t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-04"},
   {key:"REC-289",s:"Marketing Automation Engineer",st:"In progress",pr:"Medium",so:"Pavlo Boiko",re:null,h:1,r:"Replacement",t:"Analytics",sb:"Analytics",cr:"2026-04-27"},
-  {key:"REC-249",s:"AI Creative Designer",st:"In progress",pr:"Medium",so:"Oleksandr Honcharuk",re:null,h:2,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-21"},
+  {key:"REC-249",s:"AI Creative Designer",st:"Canceled",pr:"Medium",so:"Oleksandr Honcharuk",re:null,h:2,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-21"},
   {key:"REC-242",s:"Junior Creative Specialist",st:"In progress",pr:"Low",so:"Olexandra Mozgova",re:null,h:1,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-09"},
   {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"High",so:"( Kateryna Hrabynska), Olena Povzun,Maryna Svieshnikova,Ivan Buchaka",re:null,h:3,r:"Extention",t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
   {key:"REC-236",s:"Treasury Specialist",st:"In progress",pr:"High",so:"Valeriya Kravchenko",re:null,h:1,r:"Extention",t:"Finance",sb:"Finance",cr:"2026-04-06"},
   {key:"REC-222",s:"Manual QA Engineer (Android) ",st:"Canceled",pr:"Medium",so:"-",re:null,h:1,r:"Extention",t:"Engineering",sb:"Coach Android",cr:"2026-04-03"},
-  {key:"REC-221",s:"QA Engineer (Backend)",st:"In progress",pr:"High",so:"-",re:null,h:1,r:"Extention",t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
+  {key:"REC-221",s:"QA Engineer (Backend)",st:"Canceled",pr:"High",so:"-",re:null,h:1,r:"Extention",t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
   {key:"REC-213",s:"Junior Creative Marketing Specialist",st:"In progress",pr:"Medium",so:"Olexandra Mozgova",re:null,h:1,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-03"},
-  {key:"REC-211",s:"Graphic Designer",st:"In progress",pr:"Medium",so:"Masha Kolomiiets",re:null,h:2,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-02"},
+  {key:"REC-211",s:"Graphic Designer",st:"Canceled",pr:"Medium",so:"Masha Kolomiiets",re:null,h:2,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-210",s:"Financial Controller",st:"In progress",pr:"Low",so:"Julia Korneewa",re:null,h:1,r:"Extention",t:"Finance",sb:"Finance",cr:"2026-04-02"},
   {key:"REC-205",s:"Graphic Designer",st:"Canceled",pr:"High",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-02"},
-  {key:"REC-198",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:1,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-02"},
+  {key:"REC-198",s:"Motion Designer/Video Editor",st:"Canceled",pr:"Medium",so:"Kate Tsykalo",re:null,h:1,r:"Extention",t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-197",s:"Instructional Designer / Methodologist",st:"Canceled",pr:"Medium",so:"Olya Pyrozhenko",re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-196",s:"Educational Content Producer",st:"Canceled",pr:"Low",so:"Olya Pyrozhenko",re:null,h:1,r:"Extention",t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-195",s:"Backend Engineer Core Team (GoLang + PHP)",st:"In progress",pr:"Medium",so:"Daryna Varycheva",re:null,h:1,r:"Extention",t:"Engineering",sb:"Backend Core",cr:"2026-04-02"},
@@ -1303,6 +1309,8 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-545",s:"Automation QA Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-05-27",h:1,t:"Engineering",sb:"QA Core",cr:"2026-05-27"},
+  {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-27",h:1,t:"Engineering",sb:"IT support",cr:"2026-05-27"},
   {key:"REC-543",s:"Full Stack Engineer + AI / AI Tooling",st:"In progress",pr:"Medium",sn:"Senior",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:null,h:1,t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Junior Legal Counsel",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,t:"Legal",sb:null,cr:"2026-05-25"},
   {key:"REC-500",s:"Creator Affiliate Manager",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Hodyna",src:"Kateryna Yaremenko",sd:"2026-05-21",h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-05-22"},
@@ -1322,17 +1330,17 @@ const WP=[
   {key:"REC-315",s:"Product Designer",st:"In progress",pr:"Medium",sn:"Senior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-05-05",h:1,t:"Product",sb:"Design",cr:"2026-05-05"},
   {key:"REC-296",s:"Influencer Marketing Specialist BetterMe Store",st:"In progress",pr:"High",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-04-24",h:2,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-04"},
   {key:"REC-289",s:"Marketing Automation Engineer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Veronika Khovrina",src:null,sd:"2026-04-02",h:1,t:"Analytics",sb:"Analytics",cr:"2026-04-27"},
-  {key:"REC-249",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-12",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-21"},
+  {key:"REC-249",s:"AI Creative Designer",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-12",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-21"},
   {key:"REC-242",s:"Junior Creative Specialist",st:"In progress",pr:"Low",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-04-08",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-09"},
   {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-02-03",h:3,t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
   {key:"REC-236",s:"Treasury Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-31",h:1,t:"Finance",sb:"Finance",cr:"2026-04-06"},
   {key:"REC-222",s:"Manual QA Engineer (Android) ",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Former user",src:null,sd:"2026-01-28",h:1,t:"Engineering",sb:"Coach Android",cr:"2026-04-03"},
-  {key:"REC-221",s:"QA Engineer (Backend)",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-18",h:1,t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
+  {key:"REC-221",s:"QA Engineer (Backend)",st:"Canceled",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-18",h:1,t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
   {key:"REC-213",s:"Junior Creative Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-03-19",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-03"},
-  {key:"REC-211",s:"Graphic Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-03-25",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
+  {key:"REC-211",s:"Graphic Designer",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-03-25",h:2,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-210",s:"Financial Controller",st:"In progress",pr:"Low",sn:"Middle",rec:"Victoria Kotenko",src:null,sd:"2026-03-31",h:1,t:"Finance",sb:"Finance",cr:"2026-04-02"},
   {key:"REC-205",s:"Graphic Designer",st:"Canceled",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-03-11",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
-  {key:"REC-198",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-01-05",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
+  {key:"REC-198",s:"Motion Designer/Video Editor",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-01-05",h:1,t:"Marketing",sb:"Creative",cr:"2026-04-02"},
   {key:"REC-197",s:"Instructional Designer / Methodologist",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-196",s:"Educational Content Producer",st:"Canceled",pr:"Low",sn:"Middle",rec:"Veronika Khovrina",src:null,sd:"2026-04-02",h:1,t:"Content",sb:null,cr:"2026-04-02"},
   {key:"REC-195",s:"Backend Engineer Core Team (GoLang + PHP)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Veronika Khovrina",src:"Alina Muravchyk",sd:"2026-04-02",h:1,t:"Engineering",sb:"Backend Core",cr:"2026-04-02"},
@@ -1347,13 +1355,15 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
-  {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"In progress",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
+  {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"Canceled",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
   {key:"REC-217",pk:"REC-213",s:"Junior Creative Marketing Specialist",st:"In progress",sd:"2026-04-03",rec:"Alina Muravchyk",src:null},
   {key:"REC-216",pk:"REC-213",s:"Junior Creative Marketing Specialist",st:"Canceled",sd:"2026-04-03",rec:"Alina Muravchyk",src:null},
-  {key:"REC-212",pk:"REC-211",s:"Graphic Designer",st:"In progress",sd:"2026-03-25",rec:"Mariia Salabai",src:null},
+  {key:"REC-212",pk:"REC-211",s:"Graphic Designer",st:"Canceled",sd:"2026-03-25",rec:"Mariia Salabai",src:null},
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-545":"Anastasiia Shapovalenko",
+  "REC-544":"Mariia Salabai",
   "REC-543":"Veronika Khovrina",
   "REC-500":"Anastasiia Hodyna",
   "REC-499":"Victoria Kotenko",
