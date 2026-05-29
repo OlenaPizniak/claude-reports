@@ -762,11 +762,11 @@ function recTriggerRefresh(){
   <!-- ── Closed Vacancies view (hidden by default) ── -->
   <div id="view-closed" style="display:none">
 
-    <!-- Block 4: Vacancy Dynamics — Hired Breakdown by type (OP / RA) -->
+    <!-- Block 4: Vacancy Dynamics — Closed Breakdown by type (OP / RA / Done) -->
     <div class="section">
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📊</div>
-        <h2>Vacancy Dynamics: Hired Breakdown<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Open Position vs Recruitment Assignment</span></h2>
+        <h2>Vacancy Dynamics: Closed Breakdown<br><span style="color:#94a3b8;font-weight:400;font-size:11px">Hired vacancies/RA + Done items (tasks completed without specific hire)</span></h2>
       </div>
       <div class="section-body">
         <div class="cv-row">
@@ -810,7 +810,7 @@ function recTriggerRefresh(){
     <div class="section">
       <div class="section-header" onclick="tog(this)">
         <div class="section-icon" style="background:linear-gradient(135deg,#10b981,#34d399);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">✅</div>
-        <h2>Hired This Week</h2>
+        <h2 id="cv-htw-title">Hired This Week</h2>
         <span class="sec-badge" id="b2" style="background:#d1fae5;color:#065f46;font-weight:700;border-radius:20px;padding:4px 12px;font-size:12px"></span>
         <div class="toggle-btn">−</div>
       </div>
@@ -853,7 +853,7 @@ function recTriggerRefresh(){
     <div class="section">
       <div class="section-header" style="cursor:default;flex-wrap:wrap;gap:8px">
         <div class="section-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px">📦</div>
-        <h2>Closed Vacancies by Department</h2>
+        <h2 id="cv-cvd-title">Closed Vacancies by Department</h2>
         <!-- Toggle: Vacancies / Rec Assign — same compact style as TTF/TTH -->
         <div onclick="event.stopPropagation()" style="display:flex;align-items:center;background:#f1f5f9;border-radius:8px;overflow:hidden;font-size:12px">
           <button onclick="setCvCntFilter('vac')" id="cvcnt-vac" style="padding:5px 12px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#f59e0b;color:#fff">📂 Vacancies</button>
@@ -1902,10 +1902,11 @@ function r2(from,to){
   // hd is fallback when fcd not entered. Single date per item, no double-counting.
   // Consistent with Closed Vacancies by Dept and Vacancy Dynamics blocks.
   const inRange=d=>d&&d>=s2From&&d<=s2To;
+  // Include all closed items (Hired + Done) from HW.
   const hwItems=HW.filter(v=>inRange(closeDate(v)));
   const hwKeys=new Set(hwItems.map(v=>v.key));
 
-  // Source 2: ALL_VACS items with st='Hired' and sd in range (not already in HW)
+  // Source 2: ALL_VACS items with st='Hired' and sd in range.
   const avHired=ALL_VACS.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=s2From&&v.sd<=s2To&&!hwKeys.has(v.key))
     .map(v=>({...v,fcd:v.sd,type:'position'}));
 
@@ -1928,7 +1929,7 @@ function r2(from,to){
   // Position (parent itself hired) = v.h
   const hiresTotal2=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
 
-  // Badge: 4-way breakdown by issuetype (Vacancies / Hires needed / RA / Specialists)
+  // Badge: 5-way breakdown by issuetype (Vacancies / Hires needed / RA / Specialists / Done)
   // Same logic as Vacancy Dynamics. Enrich items with kind from HW lookup for legacy data.
   const _items2=items.map(_enrichFromHW);
   const _slotsOf=v=>(v.type==='subtask'?1:(v.h||1));
@@ -1936,11 +1937,13 @@ function r2(from,to){
   const b2Hires=_items2.filter(_isOPany).reduce((s,v)=>s+_slotsOf(v),0);
   const b2RA=_items2.filter(_isRAParent).length;
   const b2Spec=_items2.filter(_isRAany).reduce((s,v)=>s+_slotsOf(v),0);
+  const b2Done=_items2.filter(v=>(v.st||'Hired')==='Done').length;
   document.getElementById('b2').innerHTML=
     `<span style="margin-right:4px">📂</span><span class="bnum">${b2OP}</span> Vacancies` +
     ` &nbsp;·&nbsp; <span style="margin-right:4px">🎯</span><span class="bnum">${b2Hires}</span> Hires needed` +
     ` &nbsp;·&nbsp; <span style="margin-right:4px">📋</span><span class="bnum">${b2RA}</span> Recruitment Assignments` +
-    ` &nbsp;·&nbsp; <span style="margin-right:4px">🎓</span><span class="bnum">${b2Spec}</span> Specialists needed`;
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">🎓</span><span class="bnum">${b2Spec}</span> Specialists needed` +
+    ` &nbsp;·&nbsp; <span style="margin-right:4px">🏁</span><span class="bnum">${b2Done}</span> Done`;
 
   const cols2=[
     {id:'key',lbl:'Key'},{id:'type',lbl:'Type'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
@@ -4221,14 +4224,19 @@ function _isOPParent(v){ if(v.kind) return v.kind==='op'; return v.type!=='subta
 function _isOPany(v){ if(v.kind) return v.kind==='op'||v.kind==='op_sub'; return true; }
 function _isRAParent(v){ return v.kind==='ra'; }
 function _isRAany(v){ return v.kind==='ra' || v.kind==='ra_sub'; }
+
+// ── Status helper for Closed Vacancies tab ──
+// Closed items include BOTH Hired and Done statuses. Items keep `st` field for badge display
+// (Hired = successful hire · Done = task completed without specific hire, e.g. consulting calls).
+function _itemStatus(v){ return v.st || 'Hired'; } // backward-compat for items pre-status-tracking
 // HW lookup — enriches CV items with fields that older auto-update runs didn't store in CV
-// (pr, kind). HW always carries these because it's the source for Workload-Hired section.
+// (pr, kind, st). HW always carries these because it's the source for Workload-Hired section.
 const _HW_BY_KEY={};
 HW.forEach(h=>{_HW_BY_KEY[h.key]=h;});
 function _enrichFromHW(v){
   const hw=_HW_BY_KEY[v.key];
   if(!hw) return v;
-  return {...v, pr:v.pr??hw.pr, kind:v.kind??hw.kind, sn:v.sn??hw.sn};
+  return {...v, pr:v.pr??hw.pr, kind:v.kind??hw.kind, sn:v.sn??hw.sn, st:v.st??hw.st};
 }
 // Buckets cached for popup access.
 let _vdThis={}, _vdAt={}, _vdAtLabel='', _vdWeekLabel='';
@@ -4238,11 +4246,12 @@ function rCVDynamics(){
   // Closed Vacancies by Department block. Single date per item — no double counting.
   const hiredItemsInWeek=w=>{
     const inR=d=>d&&d>=w.start&&d<=w.end;
+    // Include all closed items (Hired + Done) from HW.
     const hw=HW.filter(v=>inR(closeDate(v)));
     const hwKeys=new Set(hw.map(v=>v.key));
-    const avH=ALL_VACS.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!hwKeys.has(v.key)).map(v=>({...v,type:'position',kind:v.kind||'op'}));
+    const avH=ALL_VACS.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!hwKeys.has(v.key)).map(v=>({...v,type:'position',kind:v.kind||'op',st:'Hired'}));
     const usedKeys=new Set([...hwKeys,...avH.map(v=>v.key)]);
-    const stH=ST.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!usedKeys.has(v.key)).map(v=>({...v,type:'subtask',kind:v.kind||'op_sub'}));
+    const stH=ST.filter(v=>v.st==='Hired'&&v.sd&&v.sd>=w.start&&v.sd<=w.end&&!usedKeys.has(v.key)).map(v=>({...v,type:'subtask',kind:v.kind||'op_sub',st:'Hired'}));
     return [...hw,...avH,...stH];
   };
   const hThisArr=hiredItemsInWeek(wThis), hPrevArr=hiredItemsInWeek(wPrev);
@@ -4260,6 +4269,8 @@ function rCVDynamics(){
       opAll:enriched.filter(_isOPany),
       raParents:enriched.filter(_isRAParent),
       raAll:enriched.filter(_isRAany),
+      // Done bucket — items with status=Done (Tasks completed without hire, RA Done, etc.)
+      done:enriched.filter(v=>(v.st||'Hired')==='Done'),
     };
   };
   const statsFromBucket=b=>({
@@ -4267,6 +4278,7 @@ function rCVDynamics(){
     opSlots:b.opAll.reduce((s,v)=>s+slotsOf(v),0),
     raCount:b.raParents.length,
     raSlots:b.raAll.reduce((s,v)=>s+slotsOf(v),0),
+    doneCount:b.done.length,
   });
   _vdThis=bucketize(hThisArr);
   const _vdPrev=bucketize(hPrevArr);
@@ -4295,11 +4307,12 @@ function rCVDynamics(){
       <div style="font-size:11px;color:#94a3b8;margin-top:2px">Prev week: <b>${prev}</b></div>
     </div>`;
   document.getElementById('cv-week-block').innerHTML=`
-    <div class="cv-stat-grid" style="grid-template-columns:repeat(4,1fr);gap:10px">
+    <div class="cv-stat-grid" style="grid-template-columns:repeat(5,1fr);gap:10px">
       ${stat('📂','Vacancies',tw.opCount,pw.opCount,'#3b6ef5','opCount')}
       ${stat('🎯','Hires needed',tw.opSlots,pw.opSlots,'#f59e0b','opSlots')}
       ${stat('📋','Recruitment Assignments',tw.raCount,pw.raCount,'#8b5cf6','raCount')}
       ${stat('🎓','Specialists needed',tw.raSlots,pw.raSlots,'#10b981','raSlots')}
+      ${stat('🏁','Done',tw.doneCount,pw.doneCount,'#1d4ed8','done')}
     </div>`;
 
   // All time / Period block — applies _cvAtFrom / _cvAtTo filter to Hired items only.
@@ -4329,11 +4342,12 @@ function rCVDynamics(){
       <div class="cv-stat-num" style="color:${color}">${num}</div>
     </div>`;
   document.getElementById('cv-alltime-block').innerHTML=`
-    <div class="cv-stat-grid" style="grid-template-columns:repeat(4,1fr);gap:10px">
+    <div class="cv-stat-grid" style="grid-template-columns:repeat(5,1fr);gap:10px">
       ${atStat('📂','Vacancies',at.opCount,'#3b6ef5','opCount')}
       ${atStat('🎯','Hires needed',at.opSlots,'#f59e0b','opSlots')}
       ${atStat('📋','Recruitment Assignments',at.raCount,'#8b5cf6','raCount')}
       ${atStat('🎓','Specialists needed',at.raSlots,'#10b981','raSlots')}
+      ${atStat('🏁','Done',at.doneCount,'#1d4ed8','done')}
     </div>`;
   // Save week range for popup subtitle.
   _vdWeekLabel=`${wThis.start} → ${wThis.end}`;
@@ -4698,13 +4712,13 @@ function openPLPopup(period, popKey){
 let _vdPopupItems=[], _vdPopupSort={col:'h',dir:-1}, _vdPopupCols=[];
 const _vdColsOP=[
   {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
-  {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
+  {id:'pr',lbl:'Priority'},{id:'st',lbl:'Status'},{id:'sn',lbl:'Seniority'},
   {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
   {id:'sd',lbl:'Start date'},{id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
 ];
 const _vdColsRA=[
   {id:'key',lbl:'Key'},{id:'s',lbl:'Recruitment Assignment'},
-  {id:'pr',lbl:'Priority'},
+  {id:'pr',lbl:'Priority'},{id:'st',lbl:'Status'},
   {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
   {id:'sd',lbl:'Start date'},{id:'fcd',lbl:'Factual close date'},{id:'hd',lbl:'Hired transition date'}
 ];
@@ -4735,10 +4749,16 @@ function _renderVDPopupRows(){
     const isSub=v.type==='subtask';
     const subBadge=isSub&&v.pk?`<br><span style="font-size:10px;color:#94a3b8">↳ sub of ${jl(v.pk)}</span>`:'';
     const snHtml=v.sn?`<span style="font-size:11px;font-weight:500;color:${snColor[v.sn]||'#475569'}">${v.sn}</span>`:'<span class="dash-val">—</span>';
+    // Status badge — Hired (green) or Done (blue). Defaults to Hired for legacy items.
+    const stVal=v.st||'Hired';
+    const stBadge=stVal==='Done'
+      ? `<span style="font-size:10.5px;font-weight:600;color:#1d4ed8;background:#dbeafe;border-radius:4px;padding:2px 6px;white-space:nowrap">🏁 Done</span>`
+      : `<span style="font-size:10.5px;font-weight:600;color:#065f46;background:#d1fae5;border-radius:4px;padding:2px 6px;white-space:nowrap">✅ Hired</span>`;
     const cells=_vdPopupCols.map(c=>{
       if(c.id==='key') return `<td style="white-space:nowrap;padding:10px">${jl(v.key)}${subBadge}</td>`;
       if(c.id==='s')   return `<td style="font-size:12px;max-width:260px;padding:10px">${v.s||'—'}</td>`;
       if(c.id==='pr')  return `<td style="padding:10px">${pb(v.pr)}</td>`;
+      if(c.id==='st')  return `<td style="padding:10px">${stBadge}</td>`;
       if(c.id==='sn')  return `<td style="padding:10px">${snHtml}</td>`;
       if(c.id==='rec') return `<td style="font-size:11px;padding:10px">${fv(v.rec)}</td>`;
       if(c.id==='src') return `<td style="font-size:11px;padding:10px">${fv(v.src)}</td>`;
@@ -4765,7 +4785,7 @@ function _showVDPopupGeneric(items, title, subtitle, kind, customCols){
   document.getElementById('s5overlay').style.display='block';
   document.getElementById('s5popup').style.display='flex';
 }
-// Open popup for VD card. period: 'this' | 'at'. popKey: 'opCount' | 'opSlots' | 'raCount' | 'raSlots'.
+// Open popup for VD card. period: 'this' | 'at'. popKey: 'opCount' | 'opSlots' | 'raCount' | 'raSlots' | 'done'.
 function openVDPopup(period, popKey){
   const bucket = period==='this' ? _vdThis : _vdAt;
   const periodLbl = period==='this' ? `This week (${_vdWeekLabel})` : _vdAtLabel;
@@ -4773,9 +4793,10 @@ function openVDPopup(period, popKey){
   if(popKey==='opCount'){ items=bucket.opParents; title='Vacancies'; kind='op'; }
   else if(popKey==='opSlots'){ items=bucket.opAll; title='Hires needed'; kind='op'; }
   else if(popKey==='raCount'){ items=bucket.raParents; title='Recruitment Assignments'; kind='ra'; }
-  else { items=bucket.raAll; title='Specialists needed'; kind='ra'; }
+  else if(popKey==='raSlots'){ items=bucket.raAll; title='Specialists needed'; kind='ra'; }
+  else if(popKey==='done'){ items=bucket.done; title='Done'; kind='op'; } // mixed types — show OP-style cols
   const totalSlots=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
-  _showVDPopupGeneric(items, `${title} · Hired · ${periodLbl}`, `${items.length} items · ${totalSlots} hires`, kind);
+  _showVDPopupGeneric(items, `${title} · Closed · ${periodLbl}`, `${items.length} items · ${totalSlots} ${popKey==='done'?'completed':'hires'}`, kind);
 }
 // Open popup for TTF/TTH chart bar. metric: 'ttf' | 'tth'. dept: department name.
 // Filters CV by current type filter + dept + close date + (sd for TTF / fcd_c for TTH).

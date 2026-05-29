@@ -276,21 +276,27 @@ def build_data():
     )
     print(f"  got {len(ras_active)} active RA sub-tasks")
 
-    print("→ Fetching all hired (positions + sub-tasks)...")
+    # Closed items = status in (Hired, Done). Done was added to RA workflow on 2026-05-28
+    # for tasks completed without a specific hire (e.g. consulting calls). Tasks always
+    # had Done as the natural completion state but were previously excluded.
+    print("→ Fetching all closed items (Hired + Done, positions + sub-tasks + RA + RA-sub + Tasks)...")
     hired = jira_search(
-        f'project = {PROJECT} AND status = Hired ORDER BY key DESC',
+        f'project = {PROJECT} AND status in (Hired, Done) ORDER BY key DESC',
         ALL_FIELDS,
     )
-    print(f"  got {len(hired)} hired items")
+    print(f"  got {len(hired)} closed items (Hired+Done combined)")
 
-    print("→ Fetching changelog for each hired item (transition-to-Hired date)...")
+    print("→ Fetching changelog for each closed item (transition-to-Hired date)...")
     hired_transition = {}
     for issue in hired:
         key = issue['key']
-        hd = fetch_hired_transition_date(key)
-        hired_transition[key] = hd
+        # Only fetch transition for items currently Hired — Done items don't have hired-transition
+        status_name = (issue.get('fields', {}).get('status') or {}).get('name')
+        if status_name == 'Hired':
+            hd = fetch_hired_transition_date(key)
+            hired_transition[key] = hd
     have_hd = sum(1 for v in hired_transition.values() if v)
-    print(f"  got transition date for {have_hd}/{len(hired)} hired items")
+    print(f"  got transition date for {have_hd} Hired items")
 
     # Build lookups
     SD, SN, RECR, SRCR = {}, {}, {}, {}
@@ -388,19 +394,22 @@ def build_data():
     # 'op_sub'  = Vacancy sub-task
     # 'ra'      = Recruitment Assignment
     # 'ra_sub'  = Recruitment Assignment sub-task
+    # 'task'    = Task (only Done status from this fetch — active tasks come via tasks query)
     _KIND = {
         'Open position': 'op',
         'Vacancy sub-task': 'op_sub',
         'Recruitment Assignment': 'ra',
         'Recruitment Assignment sub-task': 'ra_sub',
+        'Task': 'task',
     }
 
-    # HW — Hired (compact format used by Workload Hired section)
+    # HW — Closed items (Hired + Done) compact format used by Workload Hired section
     HW = []
     for issue in hired:
         fld = issue['fields']
         issuetype = (fld.get('issuetype') or {}).get('name')
         kind = _KIND.get(issuetype, 'op')
+        status_name = (fld.get('status') or {}).get('name')  # 'Hired' or 'Done'
         # Keep legacy `type` for backward-compat with existing HTML callers.
         typ = 'subtask' if kind in ('op_sub', 'ra_sub') else 'position'
         # For RA-specific items use customfield_25663 (Number of specialists needed) as hires count.
@@ -413,6 +422,7 @@ def build_data():
             's': fld.get('summary'),
             'type': typ,
             'kind': kind,
+            'st': status_name,  # 'Hired' or 'Done' — for status filter in dashboard
             'pr': (fld.get('priority') or {}).get('name'),
             'sn': get_option(fld.get(F['seniority'])),
             'rec': get_user(fld.get(F['recruiter'])),
@@ -430,12 +440,13 @@ def build_data():
             item['pk'] = pk
         HW.append(item)
 
-    # CV — all Hired with full schema (Closed Vacancies tab)
+    # CV — all closed items (Hired + Done) with full schema (Closed Vacancies tab)
     CV = []
     for issue in hired:
         fld = issue['fields']
         issuetype = (fld.get('issuetype') or {}).get('name')
         kind = _KIND.get(issuetype, 'op')
+        status_name = (fld.get('status') or {}).get('name')
         typ = 'subtask' if kind in ('op_sub', 'ra_sub') else 'position'
         h_field = F['num_specialists'] if kind in ('ra', 'ra_sub') else F['num_hires']
         parent = fld.get('parent')
@@ -445,6 +456,7 @@ def build_data():
             'key': issue['key'],
             'type': typ,
             'kind': kind,
+            'st': status_name,  # 'Hired' or 'Done'
             's': fld.get('summary'),
             'sd': fld.get(F['start_date']),
             'ed': fld.get(F['end_date']),

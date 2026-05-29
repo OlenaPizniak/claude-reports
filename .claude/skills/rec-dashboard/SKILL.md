@@ -3604,6 +3604,163 @@ if(_wlSortCol==='tasks') return (a.taskItems.length-b.taskItems.length)*_wlSortD
 ```
 Раніше `vac` сортувало `allVacs.length` — після додавання RA це б давало misleading order (OP+RA сумарно).
 
+---
+
+## Done status support — Closed Vacancies tab (додано 2026-05-28)
+
+### Контекст: новий workflow
+
+У Jira REC проєкті змінений workflow:
+- **Open position** (id 16298): Plan → In Progress → Hired → Canceled (без Done)
+- **Recruitment Assignment** (id 17332): Plan → In Progress → Hired → Canceled → **Done** (Done доданий)
+- **Task** (id 3): завжди мав Done як термінальний стан
+
+**Семантика статусів:**
+- `Hired` — успішний найм (на цій позиції найняли людину)
+- `Done` — задача виконана **без найму** (наприклад, RA для консалтингу — консультація відбулась, але не наймали окрему людину; Task — задача виконана)
+
+### Python script (`scripts/update_rec_dashboard.py`)
+
+**Зміни:**
+1. Запит на закриті items: `status = Hired` → **`status in (Hired, Done)`**
+2. `_KIND` map отримала `'Task': 'task'` запис (для Done Tasks)
+3. У HW і CV items додано поле **`st`** — `'Hired'` або `'Done'` (раніше неявне)
+4. `fetch_hired_transition_date` викликається тільки для items зі `status === 'Hired'` (Done items не мають hired-transition)
+
+```python
+hired = jira_search(
+    f'project = {PROJECT} AND status in (Hired, Done) ORDER BY key DESC',
+    ALL_FIELDS,
+)
+# ...
+hired_transition = {}
+for issue in hired:
+    status_name = (issue['fields'].get('status') or {}).get('name')
+    if status_name == 'Hired':
+        hd = fetch_hired_transition_date(issue['key'])
+        hired_transition[issue['key']] = hd
+```
+
+```python
+HW.append({
+    'key': issue['key'],
+    # ...
+    'st': status_name,  # 'Hired' or 'Done'
+    # ...
+})
+```
+
+### JS: helper для статусу
+
+```javascript
+// Closed items включають BOTH Hired and Done. Items зберігають `st` для badge display.
+function _itemStatus(v){ return v.st || 'Hired'; } // backward-compat для items без st
+```
+
+`_enrichFromHW` тепер також копіює `st` з HW lookup (для legacy CV items без st).
+
+### Vacancy Dynamics блок — переіменовано і +Done card
+
+**Title:** `Vacancy Dynamics: Hired Breakdown` → **`Vacancy Dynamics: Closed Breakdown`**
+**Sub:** `by issue type · Open Position vs Recruitment Assignment` → `Hired vacancies/RA + Done items (tasks completed without specific hire)`
+
+**Cards** тепер 5 (раніше 4) у обох sub-блоках (Current vs Prev Week + All Time/Period):
+- 📂 Vacancies (OP parents count)
+- 🎯 Hires needed (OP slots)
+- 📋 Recruitment Assignments (RA parents count)
+- 🎓 Specialists needed (RA slots)
+- **🏁 Done** (count items зі статусом Done)
+
+Grid: `repeat(5,1fr)` замість `repeat(4,1fr)`.
+
+**Bucketize** додає `done` bucket:
+```javascript
+const bucketize=arr=>{
+  const enriched=arr.map(_enrichFromHW);
+  return {
+    opParents:enriched.filter(_isOPParent),
+    opAll:enriched.filter(_isOPany),
+    raParents:enriched.filter(_isRAParent),
+    raAll:enriched.filter(_isRAany),
+    done:enriched.filter(v=>(v.st||'Hired')==='Done'),  // NEW
+  };
+};
+const statsFromBucket=b=>({
+  opCount:b.opParents.length,
+  opSlots:b.opAll.reduce((s,v)=>s+slotsOf(v),0),
+  raCount:b.raParents.length,
+  raSlots:b.raAll.reduce((s,v)=>s+slotsOf(v),0),
+  doneCount:b.done.length,  // NEW
+});
+```
+
+**Click Done card → popup** з усіма Done items.
+
+`openVDPopup` обробляє `popKey === 'done'`:
+```javascript
+else if(popKey==='done'){ items=bucket.done; title='Done'; kind='op'; }
+// title in popup: '{name} · Closed · {period}'
+// subtitle: 'N items · M completed' (для done) або 'N items · M hires' (для інших)
+```
+
+### Hired This Week badge — +Done
+
+Колонка `b2Done` додана:
+```javascript
+const b2Done=_items2.filter(v=>(v.st||'Hired')==='Done').length;
+document.getElementById('b2').innerHTML=
+  `... 4 інші categories ... &nbsp;·&nbsp; 🏁 ${b2Done} Done`;
+```
+
+Badge тепер 5-way (раніше 4-way): Vacancies · Hires needed · RA · Specialists needed · Done.
+
+**Назва блоку залишається "Hired This Week"** — таблиця показує items за period, включаючи Done. Renaming на "Closed This Week" — не зроблено (можна додати якщо user попросить).
+
+### Status badge у popups
+
+Колонка `Status` додана у `_vdColsOP` і `_vdColsRA` (після Priority, перед Seniority):
+```javascript
+const _vdColsOP=[
+  {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
+  {id:'pr',lbl:'Priority'},{id:'st',lbl:'Status'},{id:'sn',lbl:'Seniority'},
+  // ...
+];
+```
+
+Renderer `_renderVDPopupRows` має case для `c.id === 'st'`:
+```javascript
+const stVal=v.st||'Hired';
+const stBadge=stVal==='Done'
+  ? `<span ...color:#1d4ed8;background:#dbeafe...">🏁 Done</span>`
+  : `<span ...color:#065f46;background:#d1fae5...">✅ Hired</span>`;
+```
+
+### Що ВИКЛЮЧЕНО з Done підтримки
+
+1. **Hiring Sources block** — Done items природно фільтруються через `v.cs && v.t && v.sn` (Done зазвичай не має Candidate Source)
+2. **Avg TTF / TTH** — закриті items (Hired + Done) обидва мають closeDate, тож обидва включаються в аналіз тривалості
+3. **Open Vacancies tab** — Done не релевантний (це закрит item, не "open")
+4. **Plan Vacancies tab** — те ж саме
+5. **Workload-Active** — Active = не закриті (Plan + In progress)
+
+### Конвенції
+
+- `_itemStatus(v) = v.st || 'Hired'` — для backward-compat з даними до Python script update
+- `bucket.done` включає items зі `st === 'Done'`, мікс типів (Task, RA Done, etc.)
+- Popup для Done показує `op`-style columns (універсальний набір, бо Done може бути будь-який kind)
+- Status badge кольори: Hired = green `#10b981` / Done = blue `#1d4ed8`
+
+### Iteration history
+
+1. **First iteration:** глобальний Hired/Done/All Closed toggle на верху Closed Vacancies tab + dynamic title swap
+2. **Final iteration** (after user feedback): toggle ВИДАЛЕНО, замість нього **Done = окрема картка** серед існуючих 4. Items завжди показуються разом (Hired + Done), статус видно через badge у popup.
+
+### Файли, що змінились
+
+- `scripts/update_rec_dashboard.py` — fetch Done, додати `st` поле
+- `reports/REC_recruitment_dashboard.html` — 5-cards layout, Done bucket, Status column, status badge renderer
+
+
 
 
 
