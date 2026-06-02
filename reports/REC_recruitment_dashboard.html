@@ -2160,9 +2160,6 @@ function r3(){
       <td style="padding:11px 10px"></td>
       <td style="padding:11px 10px;${_h(showVac)}"></td>
       <td style="padding:11px 10px;${_h(showVac)}"></td>
-      <td style="text-align:center;padding:11px 10px;${_h(showVac)}">
-        <span style="background:#eff6ff;color:#1d4ed8;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600">${ip}</span>
-      </td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a;${_h(showVac)}">${vacs.length||'<span style="color:#cbd5e1">—</span>'}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#8b5cf6;${_h(showRA)}">${dra||'<span style="color:#cbd5e1;font-size:13px">—</span>'}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${(()=>{const v=showVac?dh:0,r=showRA?dspecs:0;const t=v+r;return t||('<span style="color:#cbd5e1">—</span>');})()} </td>
@@ -2185,7 +2182,6 @@ function r3(){
           <td style="text-align:center;padding:8px 10px">${vSn}</td>
           <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="text-align:center;padding:8px 10px">${isIp?sb2(v.st):''}</td>
-          <td style="padding:8px 10px"></td>
           <td style="padding:8px 10px;${_h(showRA)}"></td>
           <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${_vacHires(v)}</td>
         </tr>`;
@@ -2198,7 +2194,6 @@ function r3(){
             <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
             <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
             <td style="text-align:center;padding:6px 10px">${s.st==='In progress'?sb2(s.st):''}</td>
-            <td style="padding:6px 10px"></td>
             <td style="padding:6px 10px;${_h(showRA)}"></td>
             <td style="text-align:center;padding:6px 10px;font-size:11px;color:#64748b;font-weight:600">1</td>
           </tr>`;
@@ -2212,11 +2207,10 @@ function r3(){
         tbody+=`<tr data-dept3="${did}" style="display:none;background:#faf5ff;border-bottom:1px solid #ede9fe">
           <td style="padding:8px 16px 8px 36px;font-size:12px">${jl(v.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${v.s}</span><span style="margin-left:6px;font-size:10px;color:#8b5cf6;background:#f3e8ff;border-radius:4px;padding:1px 5px">RA</span></td>
           <td style="text-align:center;padding:8px 10px">${_coopBadge(v.cf_cooperation)}</td>
-          <td style="padding:8px 10px;${_h(showVac)}"></td>
+          <td style="text-align:center;padding:8px 10px;${_h(showVac)}"><span style="color:#94a3b8">—</span></td>
           <td style="padding:8px 10px;font-size:11px;color:#475569;${_h(showVac)}">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="padding:8px 10px;${_h(showVac)}"></td>
-          <td style="padding:8px 10px;${_h(showVac)}"></td>
-          <td style="text-align:center;padding:8px 10px">${sb2(v.st)}</td>
+          <td style="padding:8px 10px;${_h(showRA)}"></td>
           <td style="text-align:center;padding:8px 10px;font-size:12px;font-weight:700;color:#8b5cf6">${sp||'<span style="color:#cbd5e1">—</span>'}</td>
         </tr>`;
       });
@@ -2229,7 +2223,6 @@ function r3(){
     <td style="padding:11px 10px"></td>
     <td style="padding:11px 10px;${_h(showVac)}"></td>
     <td style="padding:11px 10px;${_h(showVac)}"></td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#1d4ed8;font-size:14px;${_h(showVac)}">${_activeVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px;${_h(showVac)}">${_activeVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#8b5cf6;font-size:14px;${_h(showRA)}">${totalRA||'—'}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${(showVac?totalH:0)+(showRA?totalSpecs:0)||'—'}</td>
@@ -2243,7 +2236,6 @@ function r3(){
           <th style="${thCss}">Type</th>
           <th style="${thCss};${_h(showVac)}">Seniority</th>
           <th style="${thCss};${_h(showVac)}">Teams</th>
-          <th onclick="s3Sort('ip')"   style="${thCss};${_h(showVac)}">In Progress${thArrSpan('ip')}</th>
           <th onclick="s3Sort('vac')"  style="${thCss};${_h(showVac)}">Vacancies${thArrSpan('vac')}</th>
           <th onclick="s3Sort('ra')"   style="${thCss};color:#8b5cf6;${_h(showRA)}">Rec Assign${thArrSpan('ra')}</th>
           <th onclick="s3Sort('h')"    style="${thCss}">${_s3FilterType==='all'?'Hires / Specialists':(showVac?'Hires':'Specialists')}${thArrSpan('h')}</th>
@@ -2333,9 +2325,6 @@ function r3plan(){
       <td style="padding:11px 10px"></td>
       <td style="padding:11px 10px;${_h(showVac)}"></td>
       <td style="padding:11px 10px;${_h(showVac)}"></td>
-      <td style="text-align:center;padding:11px 10px;${_h(showVac)}">
-        <span style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600">${pl}</span>
-      </td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a;${_h(showVac)}">${vacs.length||'<span style="color:#cbd5e1">—</span>'}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#8b5cf6;${_h(showRA)}">${dra||'<span style="color:#cbd5e1;font-size:13px">—</span>'}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${(()=>{const v=showVac?dh:0,r=showRA?dspecs:0;const t=v+r;return t||('<span style="color:#cbd5e1">—</span>');})()} </td>
@@ -2357,7 +2346,6 @@ function r3plan(){
           <td style="text-align:center;padding:8px 10px">${vSn}</td>
           <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="text-align:center;padding:8px 10px">${isPl?sb2(v.st):`<span style="color:#cbd5e1;font-size:11px">via sub</span>`}</td>
-          <td style="padding:8px 10px"></td>
           <td style="padding:8px 10px;${_h(showRA)}"></td>
           <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${_vacHires(v)}</td>
         </tr>`;
@@ -2370,7 +2358,6 @@ function r3plan(){
             <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
             <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
             <td style="text-align:center;padding:6px 10px">${s.st==='Plan'?sb2(s.st):''}</td>
-            <td style="padding:6px 10px"></td>
             <td style="padding:6px 10px;${_h(showRA)}"></td>
             <td style="text-align:center;padding:6px 10px;font-size:11px;color:#64748b;font-weight:600">1</td>
           </tr>`;
@@ -2384,11 +2371,10 @@ function r3plan(){
         tbody+=`<tr data-dept3p="${did}" style="display:none;background:#faf5ff;border-bottom:1px solid #ede9fe">
           <td style="padding:8px 16px 8px 36px;font-size:12px">${jl(v.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${v.s}</span><span style="margin-left:6px;font-size:10px;color:#8b5cf6;background:#f3e8ff;border-radius:4px;padding:1px 5px">RA</span></td>
           <td style="text-align:center;padding:8px 10px">${_coopBadge(v.cf_cooperation)}</td>
-          <td style="padding:8px 10px;${_h(showVac)}"></td>
+          <td style="text-align:center;padding:8px 10px;${_h(showVac)}"><span style="color:#94a3b8">—</span></td>
           <td style="padding:8px 10px;font-size:11px;color:#475569;${_h(showVac)}">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="padding:8px 10px;${_h(showVac)}"></td>
-          <td style="padding:8px 10px;${_h(showVac)}"></td>
-          <td style="text-align:center;padding:8px 10px">${sb2(v.st)}</td>
+          <td style="padding:8px 10px;${_h(showRA)}"></td>
           <td style="text-align:center;padding:8px 10px;font-size:12px;font-weight:700;color:#8b5cf6">${sp||'<span style="color:#cbd5e1">—</span>'}</td>
         </tr>`;
       });
@@ -2401,7 +2387,6 @@ function r3plan(){
     <td style="padding:11px 10px"></td>
     <td style="padding:11px 10px;${_h(showVac)}"></td>
     <td style="padding:11px 10px;${_h(showVac)}"></td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#475569;font-size:14px;${_h(showVac)}">${_planVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px;${_h(showVac)}">${_planVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#8b5cf6;font-size:14px;${_h(showRA)}">${totalRA||'—'}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${(showVac?totalH:0)+(showRA?totalSpecs:0)||'—'}</td>
@@ -2415,7 +2400,6 @@ function r3plan(){
           <th style="${thCss}">Type</th>
           <th style="${thCss};${_h(showVac)}">Seniority</th>
           <th style="${thCss};${_h(showVac)}">Teams</th>
-          <th onclick="s3pSort('pl')"   style="${thCss};${_h(showVac)}">Plan${thArrSpan('pl')}</th>
           <th onclick="s3pSort('vac')"  style="${thCss};${_h(showVac)}">Vacancies${thArrSpan('vac')}</th>
           <th onclick="s3pSort('ra')"   style="${thCss};color:#8b5cf6;${_h(showRA)}">Rec Assign${thArrSpan('ra')}</th>
           <th onclick="s3pSort('h')"    style="${thCss}">${_s3pFilterType==='all'?'Hires / Specialists':(showVac?'Hires':'Specialists')}${thArrSpan('h')}</th>
@@ -3249,25 +3233,25 @@ function rWorkload(){
     const allVacs=[...opItems,...raItems];
     const taskItems=showTask?TASKS.filter(t=>t.asgn===name&&_wlFilterSt.has(t.st)).map(t=>({...t,_role:'Task',_kind:'task',h:0,sn:null,t:null,sb:null})):[];
 
-    // Hires (OP slots) — status-filter-aware
+    // Hires (OP slots) — In progress only
     const hires=opItems.reduce((s,v)=>{
       const subs=activeST.filter(x=>x.pk===v.key);
       if(subs.length>0){
-        const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
-        const parentMatching=_wlFilterSt.has(v.st)?1:0;
-        return s+subsMatching+parentMatching;
+        const subsIp=subs.filter(x=>x.st==='In progress').length;
+        const parentIp=v.st==='In progress'?1:0;
+        return s+subsIp+parentIp;
       }
-      return s+(_wlFilterSt.has(v.st)?v.h:0);
+      return s+(v.st==='In progress'?v.h:0);
     },0);
-    // Specs (RA slots)
+    // Specs (RA slots) — In progress only
     const specs=raItems.reduce((s,v)=>{
       const subs=activeRAS.filter(x=>x.pk===v.key);
       if(subs.length>0){
-        const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
-        const parentMatching=_wlFilterSt.has(v.st)?1:0;
-        return s+subsMatching+parentMatching;
+        const subsIp=subs.filter(x=>x.st==='In progress').length;
+        const parentIp=v.st==='In progress'?1:0;
+        return s+subsIp+parentIp;
       }
-      return s+(_wlFilterSt.has(v.st)?(v.h||1):0);
+      return s+(v.st==='In progress'?(v.h||1):0);
     },0);
 
     const hiresTotal=hires+specs;
@@ -3307,15 +3291,15 @@ function rWorkload(){
   const totalVacItems=allOpFromShown.length;
   const totalRAItems=allRAFromShown.length;
   const totalTaskItems=allTaskFromShown.length;
-  // Slot totals — sum per-parent slotsInStatus across all _wlFilterSt statuses
+  // Slot totals — In progress only
   const _sumSlots=(items,subSrc)=>items.reduce((s,v)=>{
     const subs=subSrc.filter(x=>x.pk===v.key);
     if(subs.length>0){
-      const subsMatching=subs.filter(x=>_wlFilterSt.has(x.st)).length;
-      const parentMatching=_wlFilterSt.has(v.st)?1:0;
-      return s+subsMatching+parentMatching;
+      const subsIp=subs.filter(x=>x.st==='In progress').length;
+      const parentIp=v.st==='In progress'?1:0;
+      return s+subsIp+parentIp;
     }
-    return s+(_wlFilterSt.has(v.st)?(v.h||1):0);
+    return s+(v.st==='In progress'?(v.h||1):0);
   },0);
   const totalHires=_sumSlots(allOpFromShown,activeST);
   const totalSpecs=_sumSlots(allRAFromShown,activeRAS);
