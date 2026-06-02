@@ -2165,7 +2165,7 @@ function r3(){
       </td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a;${_h(showVac)}">${vacs.length||'<span style="color:#cbd5e1">—</span>'}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#8b5cf6;${_h(showRA)}">${dra||'<span style="color:#cbd5e1;font-size:13px">—</span>'}</td>
-      <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${showVac&&dh?dh:(showRA&&dspecs?dspecs:'<span style="color:#cbd5e1">—</span>')}</td>
+      <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${(()=>{const v=showVac?dh:0,r=showRA?dspecs:0;const t=v+r;return t||('<span style="color:#cbd5e1">—</span>');})()} </td>
     </tr>`;
 
     // Vacancy expanded rows
@@ -2232,7 +2232,7 @@ function r3(){
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#1d4ed8;font-size:14px;${_h(showVac)}">${_activeVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px;${_h(showVac)}">${_activeVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#8b5cf6;font-size:14px;${_h(showRA)}">${totalRA||'—'}</td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${showVac?totalH:(showRA?totalSpecs:'—')}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${(showVac?totalH:0)+(showRA?totalSpecs:0)||'—'}</td>
   </tr>`;
 
   document.getElementById('c3').innerHTML=`
@@ -2246,7 +2246,7 @@ function r3(){
           <th onclick="s3Sort('ip')"   style="${thCss};${_h(showVac)}">In Progress${thArrSpan('ip')}</th>
           <th onclick="s3Sort('vac')"  style="${thCss};${_h(showVac)}">Vacancies${thArrSpan('vac')}</th>
           <th onclick="s3Sort('ra')"   style="${thCss};color:#8b5cf6;${_h(showRA)}">Rec Assign${thArrSpan('ra')}</th>
-          <th onclick="s3Sort('h')"    style="${thCss}">${showVac?'Hires':'Specialists'}${thArrSpan('h')}</th>
+          <th onclick="s3Sort('h')"    style="${thCss}">${_s3FilterType==='all'?'Hires / Specialists':(showVac?'Hires':'Specialists')}${thArrSpan('h')}</th>
         </tr>
       </thead>
       <tbody>${tbody}</tbody>
@@ -2338,7 +2338,7 @@ function r3plan(){
       </td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a;${_h(showVac)}">${vacs.length||'<span style="color:#cbd5e1">—</span>'}</td>
       <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#8b5cf6;${_h(showRA)}">${dra||'<span style="color:#cbd5e1;font-size:13px">—</span>'}</td>
-      <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${showVac&&dh?dh:(showRA&&dspecs?dspecs:'<span style="color:#cbd5e1">—</span>')}</td>
+      <td style="text-align:center;padding:11px 10px;font-size:14px;font-weight:700;color:#0f172a">${(()=>{const v=showVac?dh:0,r=showRA?dspecs:0;const t=v+r;return t||('<span style="color:#cbd5e1">—</span>');})()} </td>
     </tr>`;
     // Vacancy expanded rows
     if(showVac){
@@ -2404,7 +2404,7 @@ function r3plan(){
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#475569;font-size:14px;${_h(showVac)}">${_planVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px;${_h(showVac)}">${_planVacs.length}</td>
     <td style="text-align:center;padding:11px 10px;font-weight:700;color:#8b5cf6;font-size:14px;${_h(showRA)}">${totalRA||'—'}</td>
-    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${showVac?totalH:(showRA?totalSpecs:'—')}</td>
+    <td style="text-align:center;padding:11px 10px;font-weight:700;color:#0f172a;font-size:14px">${(showVac?totalH:0)+(showRA?totalSpecs:0)||'—'}</td>
   </tr>`;
 
   document.getElementById('c3p').innerHTML=`
@@ -2418,7 +2418,7 @@ function r3plan(){
           <th onclick="s3pSort('pl')"   style="${thCss};${_h(showVac)}">Plan${thArrSpan('pl')}</th>
           <th onclick="s3pSort('vac')"  style="${thCss};${_h(showVac)}">Vacancies${thArrSpan('vac')}</th>
           <th onclick="s3pSort('ra')"   style="${thCss};color:#8b5cf6;${_h(showRA)}">Rec Assign${thArrSpan('ra')}</th>
-          <th onclick="s3pSort('h')"    style="${thCss}">${showVac?'Hires':'Specialists'}${thArrSpan('h')}</th>
+          <th onclick="s3pSort('h')"    style="${thCss}">${_s3pFilterType==='all'?'Hires / Specialists':(showVac?'Hires':'Specialists')}${thArrSpan('h')}</th>
         </tr>
       </thead>
       <tbody>${tbody}</tbody>
