@@ -3193,9 +3193,9 @@ document.addEventListener('click',e=>{
 });
 function rWorkload(){
   const activeVacs=ALL_VACS.filter(v=>v.st!=='Hired');
-  const activeST=ST.filter(s=>s.st!=='Hired'&&s.st!=='Canceled');
+  const activeST=ST.filter(s=>s.st!=='Hired'&&s.st!=='Canceled'&&s.st!=='Done');
   const activeRA=RA.filter(v=>v.st!=='Hired');
-  const activeRAS=RAS.filter(s=>s.st!=='Hired'&&s.st!=='Canceled');
+  const activeRAS=RAS.filter(s=>s.st!=='Hired'&&s.st!=='Canceled'&&s.st!=='Done');
 
   // Vacancy passes status filter if its own status matches OR any of its active
   // sub-tasks has matching status (e.g. parent='In progress', sub='Plan' like REC-228/REC-229).
