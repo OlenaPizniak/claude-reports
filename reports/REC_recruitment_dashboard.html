@@ -3120,7 +3120,7 @@ function togWL(did){
   if(arr)arr.textContent=hidden?'−':'+';
 }
 
-let _wlSortCol='hires',_wlSortDir=-1;
+let _wlSortCol='default',_wlSortDir=1;
 function wlSort(col){
   // Save which recruiter sections are currently open
   const openDids=[...new Set(
@@ -3268,7 +3268,7 @@ function rWorkload(){
     ? members
     : members.filter(m=>_wlSelectedNames.has(m.name));
 
-  // Sort (members with no vacancies always at bottom)
+  // Sort recruiters: default = by hires descending; column click overrides
   filteredMembers.sort((a,b)=>{
     const aE=!a.allVacs.length&&!a.taskItems.length;
     const bE=!b.allVacs.length&&!b.taskItems.length;
@@ -3282,7 +3282,8 @@ function rWorkload(){
     if(_wlSortCol==='hires') return (a.hires-b.hires)*_wlSortDir;
     if(_wlSortCol==='wl')    return ((a.hires+a.taskItems.length)-(b.hires+b.taskItems.length))*_wlSortDir;
     if(_wlSortCol==='days')  return (a.maxDays-b.maxDays)*_wlSortDir;
-    return (a.hires-b.hires)*_wlSortDir;
+    // Default: hires descending
+    return b.hires-a.hires;
   });
 
   // Totals for header badge — computed from filteredMembers (de-duped by key).
@@ -3329,149 +3330,136 @@ function rWorkload(){
     :r==='Task'
     ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">Owner</span>`
     :'<span class="dash-val">—</span>';
-  // Column visibility per active type filter.
-  // - vac: hide REC ASSIGN + TASKS
-  // - ra:  hide SENIORITY + VACANCIES + TASKS
-  // - task: hide SENIORITY + VACANCIES + REC ASSIGN + HIRES + TEAM/SUBTEAM
-  const _colVis={
-    sn:    _wlFilterType==='all'||_wlFilterType==='vac',
-    vac:   _wlFilterType==='all'||_wlFilterType==='vac',
-    ra:    _wlFilterType==='all'||_wlFilterType==='ra',
-    tasks: _wlFilterType==='all'||_wlFilterType==='task',
-    hires: _wlFilterType!=='task',
-    team:  _wlFilterType!=='task',
-  };
-  const _hidden=c=>_colVis[c]===false?'display:none;':'';
-  const mkTh=(col,lbl,align,w,visKey)=>
-    `<th onclick="wlSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};`:''};${visKey?_hidden(visKey):''}white-space:nowrap;user-select:none">
+  const mkTh=(col,lbl,align,w)=>
+    `<th onclick="wlSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};max-width:${w};`:''}white-space:nowrap;user-select:none;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;padding:10px 8px">
       ${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span>
     </th>`;
+
+  const _dash=`<span style="color:#cbd5e1;font-size:14px">—</span>`;
+  // VAC/REC ASSIGN summary cell: "X/Y" combined
+  const _vacRaCell=(vac,ra)=>{
+    const vs=vac>0?`<span style="font-size:17px;font-weight:700;color:#0f172a">${vac}</span>`:_dash;
+    const rs=ra>0?`<span style="font-size:17px;font-weight:700;color:#8b5cf6">${ra}</span>`:_dash;
+    if(!vac&&!ra) return _dash;
+    return `${vs}<span style="color:#cbd5e1;font-size:13px;margin:0 3px">/</span>${rs}`;
+  };
 
   let rows='';
   members_.forEach((m,idx)=>{
     const [c1,c2]=avatarColors[idx%avatarColors.length];
     const initials=m.name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
-    const load=m.hires+m.taskItems.length;
-    const pct=maxLoad>0?Math.round(load/maxLoad*100):0;
     const hasVacs=m.allVacs.length+m.taskItems.length>0;
-    if(!hasVacs) return; // hide empty rows after filtering
+    if(!hasVacs) return;
     const did='wl_'+m.name.replace(/\s+/g,'_');
 
-    // Recruiter row — separate counts per kind. Visibility per _colVis.
-    const _dash=`<span style="color:#cbd5e1;font-size:14px">—</span>`;
+    // ── Recruiter summary row ──
     rows+=`<tr onclick="${hasVacs?`togWL('${did}')`:''}" style="border-bottom:1px solid #f1f5f9;${hasVacs?'cursor:pointer;':''}">
-      <td style="padding:10px 16px">
+      <td style="padding:10px 12px">
         <div style="display:flex;align-items:center;gap:10px">
           <div class="wl-avatar" style="background:linear-gradient(135deg,${c1},${c2})">${initials}</div>
-          <div>
-            <div style="font-weight:600;font-size:13px;color:#0f172a;line-height:1.2">${m.name}</div>
-
-          </div>
+          <div style="font-weight:600;font-size:13px;color:#0f172a;line-height:1.2;white-space:nowrap">${m.name}</div>
           ${hasVacs?`<span id="arr-${did}" style="color:#94a3b8;font-size:11px;margin-left:auto;flex-shrink:0">+</span>`:''}
         </div>
       </td>
       <td></td>
-      <td></td>
-      <td></td>
-      <td style="${_hidden('sn')}"></td>
-      <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a;${_hidden('vac')}">${m.opItems.length||_dash}</td>
-      <td style="text-align:center;font-size:17px;font-weight:700;color:#8b5cf6;${_hidden('ra')}">${m.raItems.length||_dash}</td>
-      <td style="text-align:center;font-size:17px;font-weight:700;color:#0891b2;${_hidden('tasks')}">${m.taskItems.length||_dash}</td>
-      <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a;${_hidden('hires')}">${m.hires||_dash}</td>
-      <td style="${_hidden('team')}"></td>
-      <td></td>
+      <td style="text-align:center">${_vacRaCell(m.opItems.length,m.raItems.length)}</td>
+      <td style="text-align:center;font-size:17px;font-weight:700;color:#0f172a">${m.hires||_dash}</td>
+      <td style="text-align:center;font-size:17px;font-weight:700;color:#0891b2">${m.taskItems.length||_dash}</td>
+      <td></td><td></td><td></td><td></td>
     </tr>`;
 
-    // Expanded vacancy rows: Priority=badge, Seniority=badge, Vacancies=status, Hires=count, Team/Subteam=dept/team, Days=number
+    // ── Expanded item rows ──
     if(hasVacs){
       const _snOrd={Expert:0,Lead:1,Senior:2,Middle:3,Junior:4,Intern:5};
-      const _stOrd={'In progress':0,'Plan':1};
+      // Type group: Staff(op)=0, Non-staff(ra)=1, Task=2
+      const _typeOrd=v=>v._role==='Task'?2:(v._kind==='op'?0:1);
+      // Default sort: Staff → Non-staff → Tasks, within group by priority
+      const _defaultSort=(a,b)=>{
+        const tDiff=_typeOrd(a)-_typeOrd(b);
+        if(tDiff!==0) return tDiff;
+        return (pOrd[a.pr]??9)-(pOrd[b.pr]??9);
+      };
       const sortedVacs=[...m.allVacs,...m.taskItems].sort((a,b)=>{
-        if(_wlSortCol==='pr')   return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*_wlSortDir;
-        if(_wlSortCol==='sn')   return ((_snOrd[a.sn]??9)-(_snOrd[b.sn]??9))*_wlSortDir;
-        if(_wlSortCol==='vac')  return ((_stOrd[a.st]??9)-(_stOrd[b.st]??9))*_wlSortDir;
-        if(_wlSortCol==='hires'||_wlSortCol==='wl') return (a.h-b.h)*_wlSortDir;
-        if(_wlSortCol==='days') return ((a.sd?dag(a.sd):0)-(b.sd?dag(b.sd):0))*_wlSortDir;
-        if(_wlSortCol==='role') return (a._role||'').localeCompare(b._role||'')*_wlSortDir;
-        if(_wlSortCol==='name') return a.s.localeCompare(b.s)*_wlSortDir;
-        return (a.h-b.h)*_wlSortDir;
+        if(_wlSortCol==='default') return _defaultSort(a,b);
+        if(_wlSortCol==='pr')    return ((pOrd[a.pr]??9)-(pOrd[b.pr]??9))*_wlSortDir||_defaultSort(a,b);
+        if(_wlSortCol==='sn')    return ((_snOrd[a.sn]??9)-(_snOrd[b.sn]??9))*_wlSortDir||_defaultSort(a,b);
+        if(_wlSortCol==='hires'||_wlSortCol==='wl') return ((a.h||0)-(b.h||0))*_wlSortDir||_defaultSort(a,b);
+        if(_wlSortCol==='days')  return ((a.sd?dag(a.sd):0)-(b.sd?dag(b.sd):0))*_wlSortDir||_defaultSort(a,b);
+        if(_wlSortCol==='role')  return (a._role||'').localeCompare(b._role||'')*_wlSortDir||_defaultSort(a,b);
+        if(_wlSortCol==='name')  return a.s.localeCompare(b.s)*_wlSortDir||_defaultSort(a,b);
+        return _defaultSort(a,b);
       });
       sortedVacs.forEach(v=>{
+        const isTask=v._role==='Task';
         const _subSrc=v._kind==='ra'?activeRAS:activeST;
         const vSubs=_subSrc.filter(s=>s.pk===v.key);
         const dt=[v.t,v.sb].filter(Boolean).join(' / ');
         const snHtml=v.sn?`<span style="font-size:11px;font-weight:600;color:${snColor[v.sn]||'#475569'}">${v.sn}</span>`:'<span class="dash-val">—</span>';
         const hasSubToggle=vSubs.length>0;
         const subBtn=hasSubToggle
-          ?`<button id="wlsb-${did}-${v.key}" onclick="event.stopPropagation();togWLSubs('${did}','${v.key}')" style="background:none;border:1px solid #c8d2e0;border-radius:4px;cursor:pointer;font-size:9px;padding:1px 4px;color:#64748b;margin-right:4px;line-height:1">+</button>`
-          :'';
-        const activeHires=vSubs.length>0?vSubs.length+1:v.h;
+          ?`<button id="wlsb-${did}-${v.key}" onclick="event.stopPropagation();togWLSubs('${did}','${v.key}')" style="background:none;border:1px solid #c8d2e0;border-radius:4px;cursor:pointer;font-size:9px;padding:1px 4px;color:#64748b;margin-right:4px;line-height:1">+</button>`:'';
+        const ipHires=vSubs.length>0
+          ?(vSubs.filter(s=>s.st==='In progress').length+(v.st==='In progress'?1:0))
+          :(v.st==='In progress'?(v.h||1):0);
         const vDays=(closeDate(v)||v.sd)?dag(closeDate(v)||v.sd):null;
         const vDaysBadge=vDays!=null?`<span class="${vDays>=45?'db45':vDays>=30?'db30':'dbnorm'}">${vDays}</span>`:'<span class="dash-val">—</span>';
-        // Route status badge to its kind's column (vac / ra / tasks).
-        const _vacCell =v._kind==='op' ?sb2(v.st):'';
-        const _raCell  =v._kind==='ra' ?sb2(v.st):'';
-        const _taskCell=v._role==='Task'?sb2(v.st):'';
+        // VAC/REC ASSIGN col in expanded rows: TYPE badge (or empty for tasks)
+        const vacRaExpCell=isTask?'':(v._role!=='Task'?_typeBadge(v):'');
+        // HIRES col: count for vac/RA, dash for tasks
+        const hiresCell=isTask?_dash:`<span style="font-size:12px;font-weight:700;color:#0f172a">${ipHires||_dash}</span>`;
+        // TASKS col: status for tasks, dash for vac/RA
+        const taskCell=isTask?sb2(v.st):'<span class="dash-val">—</span>';
         rows+=`<tr data-wl="${did}" style="display:none;background:#f0f4ff;border-bottom:1px solid #e8eef8">
-          <td style="padding:8px 16px 8px 38px;font-size:12px">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:6px;white-space:normal">${v.s}</span></td>
-          <td style="text-align:center">${roleBadge(v._role)}</td>
-          <td style="text-align:center">${v._role!=='Task'?_typeBadge(v):''}</td>
-          <td style="text-align:center">${pb(v.pr)}</td>
-          <td style="text-align:center;${_hidden('sn')}">${snHtml}</td>
-          <td style="text-align:center;${_hidden('vac')}">${_vacCell}</td>
-          <td style="text-align:center;${_hidden('ra')}">${_raCell}</td>
-          <td style="text-align:center;${_hidden('tasks')}">${_taskCell}</td>
-          <td style="text-align:center;font-size:12px;font-weight:700;color:#0f172a;${_hidden('hires')}">${activeHires}</td>
-          <td style="padding:8px 20px 8px 10px;font-size:11px;color:#64748b;${_hidden('team')}">${fv(dt)}</td>
-          <td style="text-align:center">${vDaysBadge}</td>
+          <td style="padding:8px 12px 8px 36px;font-size:12px;white-space:nowrap">${subBtn}${jl(v.key)} <span style="color:#374151;font-weight:500;margin-left:4px">${v.s}</span></td>
+          <td style="text-align:center;padding:8px 6px">${roleBadge(v._role)}</td>
+          <td style="text-align:center;padding:8px 6px">${vacRaExpCell}</td>
+          <td style="text-align:center;padding:8px 6px">${hiresCell}</td>
+          <td style="text-align:center;padding:8px 6px">${taskCell}</td>
+          <td style="text-align:center;padding:8px 6px">${snHtml}</td>
+          <td style="text-align:center;padding:8px 6px">${pb(v.pr)}</td>
+          <td style="text-align:center;padding:8px 6px">${vDaysBadge}</td>
+          <td style="padding:8px 12px 8px 6px;font-size:11px;color:#64748b">${fv(dt)}</td>
         </tr>`;
-        // Sub-task rows — route status by parent kind.
+        // Sub-task rows
         vSubs.forEach(s=>{
           const sSn=s.sn||v.sn;
           const sSnHtml=sSn?`<span style="font-size:11px;font-weight:600;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:'<span class="dash-val">—</span>';
           const sdt=[s.t||v.t,s.sb||v.sb].filter(Boolean).join(' / ');
           const sDays=(s.sd||v.sd)?dag(s.sd||v.sd):null;
           const sDaysBadge=sDays!=null?`<span class="${sDays>=45?'db45':sDays>=30?'db30':'dbnorm'}">${sDays}</span>`:'<span class="dash-val">—</span>';
-          const _sVacCell=v._kind==='op'?sb2(s.st):'';
-          const _sRaCell =v._kind==='ra'?sb2(s.st):'';
           rows+=`<tr data-wl="${did}" data-wlsub="${did}-${v.key}" style="display:none;background:#e8f0ff;border-bottom:1px solid #dde8f8">
-            <td style="padding:6px 16px 6px 58px;font-size:11px">↳ ${jl(s.key)} <span style="color:#374151;font-weight:500;margin-left:6px">${s.s}</span></td>
-            <td style="text-align:center">${roleBadge(v._role)}</td>
-            <td style="text-align:center">${_typeBadge(v)}</td>
-            <td style="text-align:center">${pb(s.pr||v.pr)}</td>
-            <td style="text-align:center;${_hidden('sn')}">${sSnHtml}</td>
-            <td style="text-align:center;${_hidden('vac')}">${_sVacCell}</td>
-            <td style="text-align:center;${_hidden('ra')}">${_sRaCell}</td>
-            <td style="text-align:center;${_hidden('tasks')}"></td>
-            <td style="text-align:center;font-size:11px;font-weight:600;color:#64748b;${_hidden('hires')}">1</td>
-            <td style="padding:6px 20px 6px 10px;font-size:11px;color:#64748b;${_hidden('team')}">${fv(sdt)}</td>
-            <td style="text-align:center">${sDaysBadge}</td>
+            <td style="padding:6px 12px 6px 56px;font-size:11px;white-space:nowrap">↳ ${jl(s.key)} <span style="color:#374151;font-weight:500;margin-left:4px">${s.s}</span></td>
+            <td style="text-align:center;padding:6px 6px">${roleBadge(v._role)}</td>
+            <td style="text-align:center;padding:6px 6px">${_typeBadge(v)}</td>
+            <td style="text-align:center;padding:6px 6px;font-size:11px;font-weight:600;color:#64748b">1</td>
+            <td style="text-align:center;padding:6px 6px"><span class="dash-val">—</span></td>
+            <td style="text-align:center;padding:6px 6px">${sSnHtml}</td>
+            <td style="text-align:center;padding:6px 6px">${pb(s.pr||v.pr)}</td>
+            <td style="text-align:center;padding:6px 6px">${sDaysBadge}</td>
+            <td style="padding:6px 12px 6px 6px;font-size:11px;color:#64748b">${fv(sdt)}</td>
           </tr>`;
         });
       });
     }
   });
 
-  // Badge — icon+count style, filter-aware segments.
-  // Order: 📂 Vacancies · 🎯 Hires needed · 📋 Recruitment Assignments · 🎓 Specialists needed · ✅ Tasks
+  // Badge
   const badgeParts=[];
   if(showVac)  badgeParts.push(`<span style="margin-right:4px">📂</span><span class="bnum">${totalVacItems}</span> Vacancies &nbsp;·&nbsp; <span class="bnum">${totalHires}</span> Hires needed`);
   if(showRA)   badgeParts.push(`<span style="margin-right:4px">📋</span><span class="bnum">${totalRAItems}</span> Recruitment Assignments &nbsp;·&nbsp; <span class="bnum">${totalSpecs}</span> Specialists needed`);
   if(showTask) badgeParts.push(`<span style="margin-right:4px">✅</span><span class="bnum">${totalTaskItems}</span> Tasks`);
   document.getElementById('bw').innerHTML=badgeParts.join(',&nbsp; ');
-  document.getElementById('c-workload').innerHTML=`<div class="tbl-wrap"><table>
+  document.getElementById('c-workload').innerHTML=`<div class="tbl-wrap"><table style="table-layout:auto;width:100%">
     <thead><tr>
-      ${mkTh('name','RECRUITER','left','200px')}
-      ${mkTh('role','ROLE')}
-      ${mkTh('type','TYPE')}
-      ${mkTh('pr','PRIORITY')}
-      ${mkTh('sn','SENIORITY',null,null,'sn')}
-      ${mkTh('vac','VACANCIES',null,null,'vac')}
-      ${mkTh('ra','REC ASSIGN',null,null,'ra')}
-      ${mkTh('tasks','TASKS',null,null,'tasks')}
-      ${mkTh('hires','HIRES',null,null,'hires')}
-      ${mkTh('team','TEAM / SUBTEAM','left','160px','team')}
-      ${mkTh('days','DAYS OPEN')}
+      ${mkTh('name','RECRUITER / ROLE','left','280px')}
+      ${mkTh('role','ROLE',null,'90px')}
+      ${mkTh('vac','VAC / REC ASSIGN',null,'110px')}
+      ${mkTh('hires','HIRES',null,'60px')}
+      ${mkTh('tasks','TASKS',null,'90px')}
+      ${mkTh('sn','SENIORITY',null,'90px')}
+      ${mkTh('pr','PRIORITY',null,'80px')}
+      ${mkTh('days','DAYS OPEN',null,'80px')}
+      ${mkTh('team','TEAM / SUBTEAM','left',null)}
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`;
