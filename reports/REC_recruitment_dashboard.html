@@ -1566,6 +1566,7 @@ const _coopColors={'Consulting call(s)':{bg:'#dbeafe',tx:'#1d4ed8'},'Project-bas
 function _coopBadge(coop){if(!coop)return `<span class="dash-val">—</span>`;const c=_coopColors[coop]||{bg:'#f1f5f9',tx:'#64748b'};const lbl=coop==='Consulting call(s)'?'Consulting':coop;return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${lbl}</span>`;}
 const _esColors={'Staff':{bg:'#f0fdf4',tx:'#166534'},'Non-staff':{bg:'#fff7ed',tx:'#9a3412'},'Expert':{bg:'#fdf4ff',tx:'#7e22ce'}};
 function _esBadge(es){const e=es||'Staff';const c=_esColors[e]||{bg:'#f1f5f9',tx:'#64748b'};return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${e}</span>`;}
+const _staffBadge=()=>_esBadge('Staff');
 function _typeBadge(v){return v&&(v._kind==='ra'||v.cf_cooperation)?_coopBadge(v.cf_cooperation):_esBadge(v&&v.es);}
 function dag(d){
   if(!d) return null;
