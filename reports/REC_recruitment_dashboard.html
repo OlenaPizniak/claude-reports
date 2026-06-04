@@ -1556,16 +1556,17 @@ const ALL_VACS=OP.map(v=>{
   const wp=WP.find(w=>w.key===v.key);
   const rec=RECR[v.key]||null;
   const src=SRCR[v.key]||(wp?.src)||v.re||null;
-  if(wp)return{...wp,rec,src,r:v.r||null};
-  return{key:v.key,s:v.s,st:v.st,pr:v.pr,sn:SN[v.key]||null,rec,src,sd:SD[v.key]||null,h:v.h,t:v.t,sb:v.sb,r:v.r,cr:v.cr};
+  if(wp)return{...wp,rec,src,r:v.r||null,es:wp.es||v.es||null};
+  return{key:v.key,s:v.s,st:v.st,pr:v.pr,sn:SN[v.key]||null,rec,src,sd:SD[v.key]||null,h:v.h,t:v.t,sb:v.sb,r:v.r,es:v.es||null,cr:v.cr};
 });
 
 // Calendar-day diff between TODAY (local midnight) and date string 'YYYY-MM-DD' (parsed as local).
 // Avoids UTC vs local timezone offset that produced off-by-one days (e.g. '2026-04-30' showed as 4 instead of 5).
 const _coopColors={'Consulting call(s)':{bg:'#dbeafe',tx:'#1d4ed8'},'Project-based':{bg:'#fef3c7',tx:'#92400e'},'Freelance':{bg:'#d1fae5',tx:'#065f46'},'Other':{bg:'#f3e8ff',tx:'#7c3aed'}};
 function _coopBadge(coop){if(!coop)return `<span class="dash-val">—</span>`;const c=_coopColors[coop]||{bg:'#f1f5f9',tx:'#64748b'};const lbl=coop==='Consulting call(s)'?'Consulting':coop;return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${lbl}</span>`;}
-const _staffBadge=()=>`<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:#f0fdf4;color:#166534">Staff</span>`;
-function _typeBadge(v){return v&&(v._kind==='ra'||v.cf_cooperation)?_coopBadge(v.cf_cooperation):_staffBadge();}
+const _esColors={'Staff':{bg:'#f0fdf4',tx:'#166534'},'Non-staff':{bg:'#fff7ed',tx:'#9a3412'},'Expert':{bg:'#fdf4ff',tx:'#7e22ce'}};
+function _esBadge(es){const e=es||'Staff';const c=_esColors[e]||{bg:'#f1f5f9',tx:'#64748b'};return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${e}</span>`;}
+function _typeBadge(v){return v&&(v._kind==='ra'||v.cf_cooperation)?_coopBadge(v.cf_cooperation):_esBadge(v&&v.es);}
 function dag(d){
   if(!d) return null;
   const parts=String(d).split('-').map(Number);

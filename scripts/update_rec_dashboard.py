@@ -47,6 +47,7 @@ F = {
     'cand_source_other': 'customfield_25662',  # text field, filled when Candidate Source = Other
     'num_specialists': 'customfield_25663',  # Recruitment Assignment: Number of specialists needed
     'end_date':       'customfield_11232',  # End date (available on Open Position + RA)
+    'employee_status': 'customfield_23581',  # Staff / Non-staff / Expert
 }
 
 RA_EXTRA_FIELDS = [
@@ -333,6 +334,7 @@ def build_data():
             're': None,
             'h': fld.get(F['num_hires']),
             'r': get_option(fld.get(F['reason'])),
+            'es': get_option(fld.get(F['employee_status'])),
             't': t,
             'sb': sb,
             'cr': get_date(fld.get('created')),
@@ -353,6 +355,7 @@ def build_data():
             'src': get_user(fld.get(F['sourcer'])),
             'sd': fld.get(F['start_date']),
             'h': fld.get(F['num_hires']),
+            'es': get_option(fld.get(F['employee_status'])),
             't': t,
             'sb': sb,
             'cr': get_date(fld.get('created')),
