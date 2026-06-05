@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 5 червня 2026, оновлено 08:00 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 5 червня 2026, оновлено 11:50 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1050,6 +1050,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-558":"2026-04-15",
   "REC-549":"2026-03-23",
   "REC-547":"2026-02-03",
   "REC-498":"2026-04-17",
@@ -1272,6 +1273,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-558",s:"Line Producer (China)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-04",hd:null,sd:"2026-04-15",ed:null,fcd_c:"2026-04-17",h:1,t:"Content",sb:"Content Production",pk:"REC-495"},
   {key:"REC-549",s:"AI Creative Designer ",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:null,fcd:"2026-05-29",hd:"2026-05-29",sd:"2026-03-23",ed:null,fcd_c:"2026-05-05",h:1,t:"Marketing",sb:"Creative"},
   {key:"REC-547",s:"Junior Digital Marketing Specialist",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,fcd:"2026-05-28",hd:"2026-06-01",sd:"2026-02-03",ed:null,fcd_c:"2026-05-18",h:2,t:"Marketing",sb:null,pk:"REC-237"},
   {key:"REC-498",s:"Line Producer (China)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-27",hd:null,sd:"2026-04-17",ed:null,fcd_c:"2026-05-20",h:1,t:"Content",sb:"Content Production",pk:"REC-495"},
@@ -1430,6 +1432,7 @@ const RECR={
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
+  "REC-558":"Yaroslava Bondarchuk",
   "REC-549":"Mariia Salabai",
   "REC-547":"Alina Muravchyk",
   "REC-498":"Yaroslava Bondarchuk",
@@ -1544,7 +1547,6 @@ const TASKS=[
   {key:"REC-344",s:"Актуалізація Confluence",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
   {key:"REC-235",s:"Рісьорч ATS  систем",st:"In progress",pr:"High",asgn:"Nadiia Brusova",sd:"2026-04-06"},
   {key:"REC-232",s:"Дослідження AI інструментів для сорсингу та ректурингу",st:"In progress",pr:"High",asgn:"Nadiia Brusova",sd:"2026-03-19"},
-  {key:"REC-225",s:"Уніфікація назв позицій та команд в таблиці Recruitment Status",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:null},
   {key:"REC-223",s:"Організація виходів штатних співробітників",st:"In progress",pr:"High",asgn:"Nadiia Brusova",sd:null},
   {key:"REC-149",s:"TASK: Create Jira Project",st:"In progress",pr:"High",asgn:"Yaroslava Bondarchuk",sd:"2026-03-27"},
 ];
@@ -3830,6 +3832,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-558",type:"subtask",kind:"ra_sub",st:"Done",s:"Line Producer (China)",sd:"2026-04-15",ed:null,cr:"2026-06-05",fcd:"2026-06-04",hd:null,fcd_c:"2026-04-17",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Content",sb:"Content Production",cs:"WeChat",cs_other:null,pk:"REC-495"},
   {key:"REC-549",type:"position",kind:"op",st:"Hired",s:"AI Creative Designer ",sd:"2026-03-23",ed:null,cr:"2026-05-29",fcd:"2026-05-29",hd:"2026-05-29",fcd_c:"2026-05-05",sn:"Junior",rec:"Mariia Salabai",src:null,pr:"Medium",h:1,t:"Marketing",sb:"Creative",cs:"Djinni",cs_other:null,pk:null},
   {key:"REC-547",type:"subtask",kind:"op_sub",st:"Hired",s:"Junior Digital Marketing Specialist",sd:"2026-02-03",ed:null,cr:"2026-05-28",fcd:"2026-05-28",hd:"2026-06-01",fcd_c:"2026-05-18",sn:"Junior",rec:"Alina Muravchyk",src:null,pr:"Medium",h:2,t:"Marketing",sb:null,cs:"Work.ua",cs_other:null,pk:"REC-237"},
   {key:"REC-498",type:"subtask",kind:"ra_sub",st:"Done",s:"Line Producer (China)",sd:"2026-04-17",ed:null,cr:"2026-05-21",fcd:"2026-05-27",hd:null,fcd_c:"2026-05-20",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Content",sb:"Content Production",cs:"WeChat",cs_other:null,pk:"REC-495"},
@@ -4251,6 +4254,7 @@ const RA=[
 ];
 // Recruitment Assignment sub-tasks (issuetype=Recruitment Assignment sub-task, not Hired)
 const RAS=[
+  {key:"REC-558",pk:"REC-495",s:"Line Producer (China)",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-15",t:"Content",sb:"Content Production",cf_cooperation:"Freelance"},
   {key:"REC-542",pk:"REC-540",s:"Gym Trainer - male",st:"In progress",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-05-25",t:"Content",sb:"Workout Content",cf_cooperation:"Freelance"},
   {key:"REC-541",pk:"REC-540",s:"Gym Trainer - male",st:"In progress",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-05-25",t:"Content",sb:"Workout Content",cf_cooperation:"Freelance"},
   {key:"REC-498",pk:"REC-495",s:"Line Producer (China)",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-17",t:"Content",sb:"Content Production",cf_cooperation:"Freelance"},
