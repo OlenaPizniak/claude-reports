@@ -3150,7 +3150,7 @@ function wlSort(col){
 }
 
 // Workload - Active includes BOTH In progress AND Plan items (anything not yet Hired).
-const _wlFilterSt=new Set(['In progress','Plan']);
+const _wlFilterSt=new Set(['In progress']);
 let _wlFilterType='all';
 function wlFilterSt(){ rWorkload(); }
 function wlFilterType(t){
@@ -3208,10 +3208,10 @@ document.addEventListener('click',e=>{
   if(!dd.contains(e.target)&&!btn.contains(e.target)) dd.style.display='none';
 });
 function rWorkload(){
-  const activeVacs=ALL_VACS.filter(v=>v.st!=='Hired');
-  const activeST=ST.filter(s=>s.st!=='Hired'&&s.st!=='Canceled'&&s.st!=='Done');
-  const activeRA=RA.filter(v=>v.st!=='Hired');
-  const activeRAS=RAS.filter(s=>s.st!=='Hired'&&s.st!=='Canceled'&&s.st!=='Done');
+  const activeVacs=ALL_VACS.filter(v=>vacInStatus(v,'In progress'));
+  const activeST=ST.filter(s=>s.st==='In progress');
+  const activeRA=RA.filter(v=>v.st==='In progress');
+  const activeRAS=RAS.filter(s=>s.st==='In progress');
 
   // Vacancy passes status filter if its own status matches OR any of its active
   // sub-tasks has matching status (e.g. parent='In progress', sub='Plan' like REC-228/REC-229).
