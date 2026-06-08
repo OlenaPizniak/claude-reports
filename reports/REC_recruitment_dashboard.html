@@ -1577,6 +1577,8 @@ function _coopBadge(coop){if(!coop)return `<span class="dash-val">—</span>`;co
 const _esColors={'Staff':{bg:'#f0fdf4',tx:'#166534'},'Non-staff':{bg:'#fff7ed',tx:'#9a3412'},'Expert':{bg:'#fdf4ff',tx:'#7e22ce'}};
 function _esBadge(es){const e=es||'Staff';const c=_esColors[e]||{bg:'#f1f5f9',tx:'#64748b'};return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${e}</span>`;}
 const _staffBadge=()=>_esBadge('Staff');
+const _reasonColors={'Replacement':{bg:'#fff1f2',tx:'#be123c'},'Extension':{bg:'#fffbeb',tx:'#b45309'},'Extention':{bg:'#fffbeb',tx:'#b45309'},'New role':{bg:'#f0fdf4',tx:'#166534'}};
+function _reasonBadge(r){if(!r)return `<span class="dash-val">—</span>`;const c=_reasonColors[r]||{bg:'#f1f5f9',tx:'#64748b'};const lbl=r==='Extention'?'Extension':r;return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${lbl}</span>`;}
 function _typeBadge(v){return v&&(v._kind==='ra'||v.cf_cooperation)?_coopBadge(v.cf_cooperation):_esBadge(v&&v.es);}
 function dag(d){
   if(!d) return null;
@@ -2200,7 +2202,7 @@ function r3(){
           <td style="text-align:center;padding:8px 10px">${_staffBadge()}</td>
           <td style="text-align:center;padding:8px 10px">${vSn}</td>
           <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
-          <td style="text-align:center;padding:8px 10px">${isIp?sb2(v.st):''}</td>
+          <td style="text-align:center;padding:8px 10px">${_reasonBadge(v.r)}</td>
           <td style="padding:8px 10px;${_h(showRA)}"></td>
           <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${_vacHires(v)}</td>
         </tr>`;
@@ -2212,7 +2214,7 @@ function r3(){
             <td style="text-align:center;padding:6px 10px">${_staffBadge()}</td>
             <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
             <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
-            <td style="text-align:center;padding:6px 10px">${s.st==='In progress'?sb2(s.st):''}</td>
+            <td style="text-align:center;padding:6px 10px">${_reasonBadge(v.r)}</td>
             <td style="padding:6px 10px;${_h(showRA)}"></td>
             <td style="text-align:center;padding:6px 10px;font-size:11px;color:#64748b;font-weight:600">1</td>
           </tr>`;
@@ -2255,7 +2257,7 @@ function r3(){
           <th style="${thCss}">Type</th>
           <th style="${thCss};${_h(showVac)}">Seniority</th>
           <th style="${thCss};${_h(showVac)}">Teams</th>
-          <th onclick="s3Sort('vac')"  style="${thCss};${_h(showVac)}">Vacancies${thArrSpan('vac')}</th>
+          <th onclick="s3Sort('vac')"  style="${thCss};${_h(showVac)}">Reason${thArrSpan('vac')}</th>
           <th onclick="s3Sort('ra')"   style="${thCss};color:#8b5cf6;${_h(showRA)}">Rec Assign${thArrSpan('ra')}</th>
           <th onclick="s3Sort('h')"    style="${thCss}">${_s3FilterType==='all'?'Hires / Specialists':(showVac?'Hires':'Specialists')}${thArrSpan('h')}</th>
         </tr>
@@ -2364,7 +2366,7 @@ function r3plan(){
           <td style="text-align:center;padding:8px 10px">${_staffBadge()}</td>
           <td style="text-align:center;padding:8px 10px">${vSn}</td>
           <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
-          <td style="text-align:center;padding:8px 10px">${isPl?sb2(v.st):`<span style="color:#cbd5e1;font-size:11px">via sub</span>`}</td>
+          <td style="text-align:center;padding:8px 10px">${_reasonBadge(v.r)}</td>
           <td style="padding:8px 10px;${_h(showRA)}"></td>
           <td style="text-align:center;padding:8px 10px;font-size:12px;color:#64748b;font-weight:600">${_vacHires(v)}</td>
         </tr>`;
@@ -2376,7 +2378,7 @@ function r3plan(){
             <td style="text-align:center;padding:6px 10px">${_staffBadge()}</td>
             <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
             <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
-            <td style="text-align:center;padding:6px 10px">${s.st==='Plan'?sb2(s.st):''}</td>
+            <td style="text-align:center;padding:6px 10px">${_reasonBadge(v.r)}</td>
             <td style="padding:6px 10px;${_h(showRA)}"></td>
             <td style="text-align:center;padding:6px 10px;font-size:11px;color:#64748b;font-weight:600">1</td>
           </tr>`;
@@ -2419,7 +2421,7 @@ function r3plan(){
           <th style="${thCss}">Type</th>
           <th style="${thCss};${_h(showVac)}">Seniority</th>
           <th style="${thCss};${_h(showVac)}">Teams</th>
-          <th onclick="s3pSort('vac')"  style="${thCss};${_h(showVac)}">Vacancies${thArrSpan('vac')}</th>
+          <th onclick="s3pSort('vac')"  style="${thCss};${_h(showVac)}">Reason${thArrSpan('vac')}</th>
           <th onclick="s3pSort('ra')"   style="${thCss};color:#8b5cf6;${_h(showRA)}">Rec Assign${thArrSpan('ra')}</th>
           <th onclick="s3pSort('h')"    style="${thCss}">${_s3pFilterType==='all'?'Hires / Specialists':(showVac?'Hires':'Specialists')}${thArrSpan('h')}</th>
         </tr>
@@ -2625,7 +2627,7 @@ function closeS5Popup(){
 }
 let _s5popupVacs=[], _s5popupSort={col:'h',dir:-1};
 const _s5popupCols=[
-  {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},{id:'st',lbl:'Status'},
+  {id:'key',lbl:'Key'},{id:'s',lbl:'Vacancy'},
   {id:'pr',lbl:'Priority'},{id:'sn',lbl:'Seniority'},
   {id:'rec',lbl:'Recruiter'},{id:'src',lbl:'Sourcer'},
   {id:'h',lbl:'Hires',c:1}
@@ -2689,7 +2691,7 @@ function renderS5PopupRows(){
 // Standardized popup — same columns/layout as Open Vacancies by Dept and other IP popups.
 // Drops fcd/hd columns (S5 items are In progress, not hired).
 function showS5Popup(dept,reasonLabel,reasonKey,vacs){
-  const ipCols=_vdColsOP.filter(c=>c.id!=='fcd'&&c.id!=='hd');
+  const ipCols=_vdColsOP.filter(c=>c.id!=='fcd'&&c.id!=='hd'&&c.id!=='st');
   _showVDPopupGeneric(vacs,
     `Open Vacancies · ${dept} · ${reasonLabel}`,
     `${vacs.length} open · Reason: ${reasonLabel}`,
@@ -2953,7 +2955,7 @@ function r6(){
           return v.t===dept&&(coopKey===undefined?false:(coopKey===null?val===null:val===coopKey));
         });
         if(vacs.length){
-          const raCols=_vdColsRA.filter(c=>c.id!=='fcd'&&c.id!=='hd');
+          const raCols=_vdColsRA.filter(c=>c.id!=='fcd'&&c.id!=='hd'&&c.id!=='st');
           _showVDPopupGeneric(vacs,
             `Recruitment Assignments · ${dept} · ${coopLabel}`,
             `${vacs.length} assignment${vacs.length>1?'s':''} · Type: ${coopLabel}`,
@@ -4679,7 +4681,7 @@ function openIDPopup(period, popKey){
   }
   // Drop fcd/hd columns — items are In progress, not Hired.
   const baseCols=kind==='ra'?_vdColsRA:_vdColsOP;
-  const ipCols=baseCols.filter(c=>c.id!=='fcd'&&c.id!=='hd');
+  const ipCols=baseCols.filter(c=>c.id!=='fcd'&&c.id!=='hd'&&c.id!=='st');
   const slotsLabel=kind==='ra'?'specialists':'hires';
   _showVDPopupGeneric(items,
     `${title} · In Progress · ${periodLbl}`,
@@ -4948,7 +4950,8 @@ function openVDPopup(period, popKey){
   else if(popKey==='raSlots'){ items=bucket.raAll; title='Specialists needed'; kind='ra'; }
   else if(popKey==='done'){ items=bucket.done; title='Done'; kind='op'; } // mixed types — show OP-style cols
   const totalSlots=items.reduce((s,v)=>s+(v.type==='subtask'?1:(v.h||1)),0);
-  _showVDPopupGeneric(items, `${title} · Closed · ${periodLbl}`, `${items.length} items · ${totalSlots} ${popKey==='done'?'completed':'hires'}`, kind);
+  const closedCols=(kind==='ra'?_vdColsRA:_vdColsOP).filter(c=>c.id!=='st');
+  _showVDPopupGeneric(items, `${title} · Closed · ${periodLbl}`, `${items.length} items · ${totalSlots} ${popKey==='done'?'completed':'hires'}`, kind, closedCols);
 }
 // Open popup for TTF/TTH chart bar. metric: 'ttf' | 'tth'. dept: department name.
 // Filters CV by current type filter + dept + close date + (sd for TTF / fcd_c for TTH).
@@ -4960,10 +4963,11 @@ function openCVMetricPopup(metric, dept){
   const items = _cvByType(mode).filter(v => v.t===dept && closeDate(v) && v[dateField]);
   const days = items.map(v => diffDays(closeDate(v), v[dateField])).filter(d => d!=null);
   const avg = days.length ? Math.round(days.reduce((a,b)=>a+b,0)/days.length) : 0;
+  const ttfCols=(mode==='ra'?_vdColsRA:_vdColsOP).filter(c=>c.id!=='st');
   _showVDPopupGeneric(items,
     `${metricLbl} · ${dept} · ${typeLbl}`,
     `${items.length} hires · avg ${avg}d`,
-    mode==='ra' ? 'ra' : 'op');
+    mode==='ra' ? 'ra' : 'op', ttfCols);
 }
 
 // ── CV: TTF/TTH type filter — independent toggles per chart. ──
@@ -5244,7 +5248,8 @@ function showCVDeptPopup(dept, vacs){
   const typeLbl=kind==='ra'?'Rec Assign':'Vacancies';
   const labelMap={all:'All time',month:'This month',quarter:'This quarter',year:'This year',custom:'Custom range'};
   const periodLbl=_cvCntMode==='all'?'All time':`${labelMap[_cvCntMode]||'Period'}: ${_cvCntFrom||'—'} → ${_cvCntTo||'—'}`;
-  _showVDPopupGeneric(vacs, `Closed Vacancies · ${dept} · ${typeLbl}`, `${vacs.length} closed · ${periodLbl}`, kind);
+  const cvCols=(kind==='ra'?_vdColsRA:_vdColsOP).filter(c=>c.id!=='st');
+  _showVDPopupGeneric(vacs, `Closed Vacancies · ${dept} · ${typeLbl}`, `${vacs.length} closed · ${periodLbl}`, kind, cvCols);
 }
 
 // ── Open Vacancies by Department (chart) — mirrors CV block 3 but for In Progress items ─
@@ -5668,10 +5673,11 @@ function showCVSrcPopup(src, vacs, dept, sn){
   const kind=_cvSrcFilter==='ra'?'ra':'op';
   const typeLbl=kind==='ra'?'Rec Assign':'Vacancies';
   const filter=[dept&&`Dept: ${dept}`, sn&&`Seniority: ${sn}`].filter(Boolean).join(' · ');
+  const srcCols=(kind==='ra'?_vdColsRA:_vdColsOP).filter(c=>c.id!=='st');
   _showVDPopupGeneric(vacs,
     `Hiring Source · ${src} · ${typeLbl}`,
     `${vacs.length} hires${filter?` · ${filter}`:''}`,
-    kind);
+    kind, srcCols);
 }
 
 function rCV(){rCVDynamics();rCVTTF();rCVTTH();rCVClosedCount();rCVSources();}
