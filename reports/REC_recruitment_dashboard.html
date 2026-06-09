@@ -1576,7 +1576,7 @@ const ALL_VACS=OP.map(v=>{
 const _coopColors={'Consulting call(s)':{bg:'#dbeafe',tx:'#1d4ed8'},'Project-based':{bg:'#fef3c7',tx:'#92400e'},'Freelance':{bg:'#d1fae5',tx:'#065f46'},'Other':{bg:'#f3e8ff',tx:'#7c3aed'}};
 function _coopBadge(coop){if(!coop)return `<span class="dash-val">—</span>`;const c=_coopColors[coop]||{bg:'#f1f5f9',tx:'#64748b'};const lbl=coop==='Consulting call(s)'?'Consulting':coop;return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${lbl}</span>`;}
 const _esColors={'Staff':{bg:'#f0fdf4',tx:'#166534'},'Non-staff':{bg:'#fff7ed',tx:'#9a3412'},'Expert':{bg:'#fdf4ff',tx:'#7e22ce'}};
-function _esBadge(es){const e=es||'Staff';const c=_esColors[e]||{bg:'#f1f5f9',tx:'#64748b'};return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${e}</span>`;}
+function _esBadge(es){if(!es)return `<span class="dash-val">—</span>`;const c=_esColors[es]||{bg:'#f1f5f9',tx:'#64748b'};return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${es}</span>`;}
 const _staffBadge=()=>_esBadge('Staff');
 const _reasonColors={'Replacement':{bg:'#fff1f2',tx:'#be123c'},'Extension':{bg:'#fffbeb',tx:'#b45309'},'Extention':{bg:'#fffbeb',tx:'#b45309'},'New role':{bg:'#f0fdf4',tx:'#166534'}};
 function _reasonBadge(r){if(!r)return `<span class="dash-val">—</span>`;const c=_reasonColors[r]||{bg:'#f1f5f9',tx:'#64748b'};const lbl=r==='Extention'?'Extension':r;return `<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;background:${c.bg};color:${c.tx}">${lbl}</span>`;}
@@ -2200,7 +2200,7 @@ function r3(){
           :'';
         tbody+=`<tr data-dept3="${did}" style="display:none;background:#f0f4ff;border-bottom:1px solid #e8eef8">
           <td style="padding:8px 16px 8px 36px;font-size:12px">${togBtn3}${jl(v.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${v.s}</span></td>
-          <td style="text-align:center;padding:8px 10px">${_staffBadge()}</td>
+          <td style="text-align:center;padding:8px 10px">${_typeBadge(v)}</td>
           <td style="text-align:center;padding:8px 10px">${vSn}</td>
           <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="text-align:center;padding:8px 10px">${_reasonBadge(v.r)}</td>
@@ -2212,7 +2212,7 @@ function r3(){
           const sSnTd=sSn?`<span style="font-size:11px;font-weight:500;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:`<span style="color:#94a3b8">—</span>`;
           tbody+=`<tr data-s3parent="${v.key}" style="display:none;background:#e8f0ff;border-bottom:1px solid #dde8f8">
             <td style="padding:6px 16px 6px 56px;font-size:11px">↳ ${jl(s.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${s.s}</span></td>
-            <td style="text-align:center;padding:6px 10px">${_staffBadge()}</td>
+            <td style="text-align:center;padding:6px 10px">${_typeBadge(v)}</td>
             <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
             <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
             <td style="text-align:center;padding:6px 10px">${_reasonBadge(v.r)}</td>
@@ -2364,7 +2364,7 @@ function r3plan(){
         const isPl=v.st==='Plan';
         tbody+=`<tr data-dept3p="${did}" style="display:none;background:#f8fafc;border-bottom:1px solid #eef2f7">
           <td style="padding:8px 16px 8px 36px;font-size:12px">${togBtn3}${jl(v.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${v.s}</span></td>
-          <td style="text-align:center;padding:8px 10px">${_staffBadge()}</td>
+          <td style="text-align:center;padding:8px 10px">${_typeBadge(v)}</td>
           <td style="text-align:center;padding:8px 10px">${vSn}</td>
           <td style="padding:8px 10px;font-size:11px;color:#475569">${v.sb||`<span style="color:#94a3b8">—</span>`}</td>
           <td style="text-align:center;padding:8px 10px">${_reasonBadge(v.r)}</td>
@@ -2376,7 +2376,7 @@ function r3plan(){
           const sSnTd=sSn?`<span style="font-size:11px;font-weight:500;color:${snColor[sSn]||'#475569'}">${sSn}</span>`:`<span style="color:#94a3b8">—</span>`;
           tbody+=`<tr data-s3pparent="${v.key}" style="display:none;background:#f1f5f9;border-bottom:1px solid #e2e8f0">
             <td style="padding:6px 16px 6px 56px;font-size:11px">↳ ${jl(s.key)}<span style="color:#374151;font-weight:500;margin-left:8px">${s.s}</span></td>
-            <td style="text-align:center;padding:6px 10px">${_staffBadge()}</td>
+            <td style="text-align:center;padding:6px 10px">${_typeBadge(v)}</td>
             <td style="text-align:center;padding:6px 10px">${sSnTd}</td>
             <td style="padding:6px 10px;font-size:11px;color:#475569">${s.sb||v.sb||`<span style="color:#94a3b8">—</span>`}</td>
             <td style="text-align:center;padding:6px 10px">${_reasonBadge(v.r)}</td>
