@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 16 червня 2026, оновлено 09:12 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 16 червня 2026, оновлено 14:30 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1058,6 +1058,8 @@ const SD={
   "REC-498":"2026-04-17",
   "REC-497":"2026-04-17",
   "REC-496":"2026-04-17",
+  "REC-487":"2026-05-17",
+  "REC-482":"2026-05-18",
   "REC-481":"2026-05-18",
   "REC-361":"2026-04-01",
   "REC-360":"2026-04-01",
@@ -1285,6 +1287,8 @@ const HW=[
   {key:"REC-498",s:"Line Producer (China)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-27",hd:null,sd:"2026-04-17",ed:null,fcd_c:"2026-05-20",h:1,t:"Content",sb:"Content Production",pk:"REC-495"},
   {key:"REC-497",s:"Line Producer (China)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-13",hd:null,sd:"2026-04-17",ed:"2026-05-13",fcd_c:"2026-04-27",h:1,t:"Content",sb:"Content Production",pk:"REC-495"},
   {key:"REC-496",s:"Line Producer (China)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-13",hd:null,sd:"2026-04-17",ed:"2026-05-13",fcd_c:"2026-04-27",h:1,t:"Content",sb:"Content Production",pk:"REC-495"},
+  {key:"REC-487",s:"Тестування нових АТС",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-05-17",ed:null,fcd_c:null,h:1,t:null,sb:null},
+  {key:"REC-482",s:"Тестування нових ATS",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-481",s:"Підготовка документу по стендах компаній Dou Day 2026",type:"position",kind:"task",st:"Done",pr:"Low",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-361",s:"Gym Trainer - male",type:"subtask",kind:"ra_sub",st:"Done",pr:"Low",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-25",hd:null,sd:"2026-04-01",ed:null,fcd_c:"2026-05-04",h:1,t:"Content",sb:"Content",pk:"REC-184"},
   {key:"REC-360",s:"REC-185  Gym Trainer - male",type:"subtask",kind:"ra_sub",st:"Hired",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-21",hd:"2026-05-25",sd:"2026-04-01",ed:null,fcd_c:"2026-05-07",h:1,t:"Content",sb:"Content",pk:"REC-184"},
@@ -1549,9 +1553,7 @@ const SRCR={
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
   {key:"REC-562",s:"Sourcing – PPC vacancy",st:"In progress",pr:"High",asgn:"Polina Serdiuk",sd:"2026-06-08"},
-  {key:"REC-487",s:"Тестування нових АТС",st:"In progress",pr:"Medium",asgn:"Anastasiia Melnyk",sd:"2026-05-17"},
   {key:"REC-485",s:"Тестування нових ATS ",st:"In progress",pr:"Medium",asgn:"Mariia Salabai",sd:"2026-05-18"},
-  {key:"REC-482",s:"Тестування нових ATS",st:"In progress",pr:"Medium",asgn:"Polina Serdiuk",sd:"2026-05-18"},
   {key:"REC-346",s:"Збір даних  та допомога з питаннями для Employer Brand команди",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
   {key:"REC-345",s:"Оновлення  презентації про компанію",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-05-11"},
   {key:"REC-344",s:"Актуалізація Confluence",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2026-04-27"},
@@ -3853,6 +3855,8 @@ const CV=[
   {key:"REC-498",type:"subtask",kind:"ra_sub",st:"Done",s:"Line Producer (China)",sd:"2026-04-17",ed:null,cr:"2026-05-21",fcd:"2026-05-27",hd:null,fcd_c:"2026-05-20",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Content",sb:"Content Production",cs:"WeChat",cs_other:null,pk:"REC-495"},
   {key:"REC-497",type:"subtask",kind:"ra_sub",st:"Done",s:"Line Producer (China)",sd:"2026-04-17",ed:"2026-05-13",cr:"2026-05-21",fcd:"2026-05-13",hd:null,fcd_c:"2026-04-27",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Content",sb:"Content Production",cs:"WeChat",cs_other:null,pk:"REC-495"},
   {key:"REC-496",type:"subtask",kind:"ra_sub",st:"Done",s:"Line Producer (China)",sd:"2026-04-17",ed:"2026-05-13",cr:"2026-05-21",fcd:"2026-05-13",hd:null,fcd_c:"2026-04-27",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Content",sb:"Content Production",cs:"WeChat",cs_other:null,pk:"REC-495"},
+  {key:"REC-487",type:"position",kind:"task",st:"Done",s:"Тестування нових АТС",sd:"2026-05-17",ed:null,cr:"2026-05-20",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
+  {key:"REC-482",type:"position",kind:"task",st:"Done",s:"Тестування нових ATS",sd:"2026-05-18",ed:null,cr:"2026-05-19",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-481",type:"position",kind:"task",st:"Done",s:"Підготовка документу по стендах компаній Dou Day 2026",sd:"2026-05-18",ed:null,cr:"2026-05-19",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Low",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-361",type:"subtask",kind:"ra_sub",st:"Done",s:"Gym Trainer - male",sd:"2026-04-01",ed:null,cr:"2026-05-15",fcd:"2026-05-25",hd:null,fcd_c:"2026-05-04",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Low",h:1,t:"Content",sb:"Content",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-184"},
   {key:"REC-360",type:"subtask",kind:"ra_sub",st:"Hired",s:"REC-185  Gym Trainer - male",sd:"2026-04-01",ed:null,cr:"2026-05-15",fcd:"2026-05-21",hd:"2026-05-25",fcd_c:"2026-05-07",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"Content",sb:"Content",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-184"},
