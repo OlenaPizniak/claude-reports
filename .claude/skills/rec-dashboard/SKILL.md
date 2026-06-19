@@ -22,7 +22,7 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 - **Issue types** (5):
   - `"Open position"` (id `16298`) — основні вакансії (FTE / Staff hire) → масиви `OP`, `WP`
   - `"Vacancy sub-task"` (id `16698`) — авто-створюється при `Number of hires > 1`, parent: Open position → масив `ST`
-  - `"Recruitment Assignment"` (id `17332`) — **парадигма консультантів/контрактників** (Part-time / Project-based / Freelance / Consulting calls). Має 12 додаткових полів — див. секцію "Recruitment Assignment structure" нижче. Додано 2026-05-18.
+  - `"Recruitment Assignment"` (id `17332`) — **парадигма консультантів/контрактників** (Consulting calls / Talent Pool Building / Part-time / Project-based / Freelance). Має 12 додаткових полів — див. секцію "Recruitment Assignment structure" нижче. Додано 2026-05-18.
   - `"Recruitment Assignment sub-task"` (id `17365`) — авто-створюється при `Number of specialists needed > 1`, parent: Recruitment Assignment.
   - `"Task"` (id `3`) — внутрішні задачі команди (research, операційні) → масив `TASKS`
 
@@ -51,7 +51,7 @@ allowed-tools: Read, Write, Bash, Edit, Glob, Grep, mcp__9d92ed01-04ea-45ee-8a28
 | Поле | Field ID | Тип | Примітки |
 |------|----------|-----|----------|
 | **Number of specialists needed** | `customfield_25663` | number (float) | Аналог `Number of hires` для консультантів. Тригер для авто-створення sub-task'ів. |
-| **Type of cooperation** | `customfield_25664` | option | Consulting call(s) / Part-time / Project-based / Freelance / Other |
+| **Type of cooperation** | `customfield_25664` | option | Consulting call(s) / **Talent Pool Building** / Part-time / Project-based / Freelance / Other (Talent Pool Building додано 2026-05-26) |
 | **Type of cooperation [Other]** | `customfield_25665` | textfield | Free-text коли обрано "Other" |
 | **Core requirements** | `customfield_25666` | textarea | Multi-line вимоги |
 | **Nice-to-have requirements** | `customfield_25667` | textarea | Має пробіл наприкінці назви: `"Nice-to-have requirements "` |
@@ -213,6 +213,7 @@ Insights cards (Total Hires / Sources / Top Source) і click-to-popup також
 
 **Парадигма консультантів/контрактників** — паралельна до Open position. Використовується для:
 - Consulting call(s)
+- Talent Pool Building (додано 2026-05-26)
 - Part-time
 - Project-based
 - Freelance
@@ -3759,6 +3760,46 @@ const stBadge=stVal==='Done'
 
 - `scripts/update_rec_dashboard.py` — fetch Done, додати `st` поле
 - `reports/REC_recruitment_dashboard.html` — 5-cards layout, Done bucket, Status column, status badge renderer
+
+---
+
+## S6 chart — "Recruitment Assignments by Type of Cooperation" (додано 2026-05-26)
+
+Stacked bar chart за департаментами, кожен сегмент = `cf_cooperation` option. Канвас `#s6chart`, render `rS6()`, config `_s6coopCfg`.
+
+### Конфіг кольорів — ОБОВ'ЯЗКОВО оновлювати при зміні опцій у Jira
+
+Один-єдиний джерело істини для labels+colors:
+```javascript
+_s6coopCfg=[
+  {key:'Consulting call(s)',  label:'Consulting call(s)',  bg:'#60a5fa', hover:'#3b82f6'},  // blue
+  {key:'Talent Pool Building',label:'Talent Pool Building',bg:'#2dd4bf', hover:'#14b8a6'},  // teal
+  {key:'Part-time',           label:'Part-time',           bg:'#a78bfa', hover:'#8b5cf6'},  // purple
+  {key:'Project-based',       label:'Project-based',       bg:'#f59e0b', hover:'#d97706'},  // orange
+  {key:'Freelance',           label:'Freelance',           bg:'#34d399', hover:'#10b981'},  // green
+  {key:'Other',               label:'Other',               bg:'#f87171', hover:'#ef4444'},  // red
+  {key:null,                  label:'Not specified',       bg:'#94a3b8', hover:'#64748b'},  // slate
+];
+```
+
+**Якщо адмін Jira додасть нову опцію до Custom Field `Type of cooperation` (customfield_25664)** — обов'язково додати її сюди:
+- `key` має точно збігатись з value у Jira (case-sensitive)
+- Колір вибирати з відсутніх у палітрі (щоб не змішувати з існуючими)
+- Порядок у масиві = порядок легенди на графіку (бажано тримати той самий що в Jira)
+- Без оновлення цього масиву → нова опція потрапить у "Not specified" (key=null), що неправильно бо `v.cf_cooperation` буде не null
+
+### Click-to-drill-down
+
+Click на бар → popup зі списком RA для (dept × coop type). Реюзить `_showVDPopupGeneric` з `_vdColsRA` мінус `fcd`/`hd` (RA items не Hired).
+
+### Як перевірити після оновлення
+
+1. Reload дашборд
+2. Перейти на Open Vacancies tab → блок "Recruitment Assignments by Type of Cooperation"
+3. Перевірити що:
+   - У легенді є нова опція з обраним кольором
+   - На барах присутні сегменти нового типу (якщо вже є RA з цим cooperation type)
+   - Click на сегмент відкриває popup з правильним заголовком (`${dept} · ${coopLabel}`)
 
 
 
