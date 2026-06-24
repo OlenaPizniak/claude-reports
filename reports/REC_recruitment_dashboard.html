@@ -450,7 +450,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 24 червня 2026, оновлено 18:21 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 24 червня 2026, оновлено 20:12 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1005,6 +1005,8 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-567":null,
+  "REC-566":null,
   "REC-556":"2026-06-04",
   "REC-545":"2026-05-27",
   "REC-544":"2026-05-27",
@@ -1131,6 +1133,8 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-567":"Junior",
+  "REC-566":"Junior",
   "REC-556":"Junior",
   "REC-545":"Middle",
   "REC-544":"Middle",
@@ -1237,6 +1241,8 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-567",s:"Writer / Copywriter",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
+  {key:"REC-566",s:"Content Operations Specialist",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Replacement",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-556",s:"Junior Creative Marketing Specialist (Fashion)",st:"In progress",pr:"Medium",so:"Anna Mishura",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative Marketing",cr:"2026-06-04"},
   {key:"REC-545",s:"Automation QA Engineer",st:"In progress",pr:"High",so:"Daryna Varycheva",re:null,h:1,r:"Extention",es:"Staff",t:"Engineering",sb:"QA Core",cr:"2026-05-27"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",so:"Serhii Pidlypaiev",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
@@ -1363,6 +1369,8 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-567",s:"Writer / Copywriter",st:"Plan",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:null,h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
+  {key:"REC-566",s:"Content Operations Specialist",st:"Plan",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:null,h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-556",s:"Junior Creative Marketing Specialist (Fashion)",st:"In progress",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-06-04",h:1,es:"Non-staff",t:"Marketing",sb:"Creative Marketing",cr:"2026-06-04"},
   {key:"REC-545",s:"Automation QA Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-05-27",h:1,es:"Staff",t:"Engineering",sb:"QA Core",cr:"2026-05-27"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-27",h:1,es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
@@ -1410,6 +1418,8 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-567":"Alina Muravchyk",
+  "REC-566":"Alina Muravchyk",
   "REC-556":"Alina Muravchyk",
   "REC-545":"Anastasiia Shapovalenko",
   "REC-544":"Mariia Salabai",
