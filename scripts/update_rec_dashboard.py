@@ -66,6 +66,48 @@ RA_EXTRA_FIELDS = [
 ALL_FIELDS = ['summary', 'status', 'priority', 'issuetype', 'created',
               'parent', 'assignee'] + list(F.values()) + RA_EXTRA_FIELDS
 
+# ── "On hold" status (workflow addition, 2026-06) ────────────
+# Jira added an "On hold" status to ALL Recruitment issue types (Open position,
+# Recruitment Assignment, Task, and their sub-tasks). It is naturally captured by
+# the existing active queries (`status != Hired` / `statusCategory != Done`), so
+# On-hold issues would otherwise flow into the OP/WP/ST/TASKS/RA/RAS arrays.
+#
+# The dashboard does NOT yet render this status. To keep things safe and stable,
+# On-hold issues are DROPPED from the active data arrays by default — nothing on
+# the dashboard changes and nothing breaks. The data layer is the single, clean
+# on/off switch for the whole feature (the HTML render code is left untouched).
+#
+# To SURFACE "On hold" on the dashboard, a contributor must:
+#   1. enable capture here — set env REC_SHOW_ON_HOLD=1 (or flip SHOW_ON_HOLD
+#      below to True) and re-run this updater so On-hold issues enter the arrays;
+#   2. follow the HTML checklist — search "ON HOLD INFRA" in
+#      reports/REC_recruitment_dashboard.html (badge styling is already in place;
+#      add the status to filter chips / counters as desired).
+# Closed items (Hired / Done) are never affected — On hold is not a closed state.
+HIDDEN_STATUSES = {'On hold'}
+SHOW_ON_HOLD = os.environ.get('REC_SHOW_ON_HOLD', '').strip().lower() in ('1', 'true', 'yes')
+
+
+def drop_hidden(issues, label=''):
+    """Filter out issues whose status is hidden (On hold) unless SHOW_ON_HOLD.
+
+    No-op when SHOW_ON_HOLD is set — capture everything for rendering.
+    """
+    if SHOW_ON_HOLD:
+        return issues
+    kept = []
+    dropped = 0
+    for it in issues:
+        st = ((it.get('fields') or {}).get('status') or {}).get('name')
+        if st in HIDDEN_STATUSES:
+            dropped += 1
+            continue
+        kept.append(it)
+    if dropped:
+        print(f"  (dropped {dropped} On-hold {label} — hidden by default, "
+              f"set REC_SHOW_ON_HOLD=1 to include)")
+    return kept
+
 # Ukrainian month names for header date
 UA_MONTHS = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
              'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня']
@@ -244,6 +286,7 @@ def build_data():
         f'project = {PROJECT} AND issuetype = "Open position" AND status != Hired ORDER BY key DESC',
         ALL_FIELDS,
     )
+    open_pos = drop_hidden(open_pos, 'open positions')
     print(f"  got {len(open_pos)} open positions")
 
     print("→ Fetching active sub-tasks...")
@@ -251,6 +294,7 @@ def build_data():
         f'project = {PROJECT} AND issuetype = "Vacancy sub-task" AND status != Hired ORDER BY key DESC',
         ALL_FIELDS,
     )
+    sub_tasks = drop_hidden(sub_tasks, 'sub-tasks')
     print(f"  got {len(sub_tasks)} active sub-tasks")
 
     print("→ Fetching active tasks...")
@@ -258,6 +302,7 @@ def build_data():
         f'project = {PROJECT} AND issuetype = Task AND statusCategory != Done ORDER BY key DESC',
         ALL_FIELDS,
     )
+    tasks = drop_hidden(tasks, 'tasks')
     print(f"  got {len(tasks)} active tasks")
 
     # ── Recruitment Assignment + RA sub-task (issuetypes 17332 / 17365) ──
@@ -268,6 +313,7 @@ def build_data():
         f'project = {PROJECT} AND issuetype = "Recruitment Assignment" AND status != Hired ORDER BY key DESC',
         ALL_FIELDS,
     )
+    ra_active = drop_hidden(ra_active, 'recruitment assignments')
     print(f"  got {len(ra_active)} active recruitment assignments")
 
     print("→ Fetching active RA sub-tasks...")
@@ -275,6 +321,7 @@ def build_data():
         f'project = {PROJECT} AND issuetype = "Recruitment Assignment sub-task" AND status != Hired ORDER BY key DESC',
         ALL_FIELDS,
     )
+    ras_active = drop_hidden(ras_active, 'RA sub-tasks')
     print(f"  got {len(ras_active)} active RA sub-tasks")
 
     # Closed items = status in (Hired, Done). Done was added to RA workflow on 2026-05-28

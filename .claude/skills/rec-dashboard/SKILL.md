@@ -321,6 +321,39 @@ fields: ["summary","status","priority","customfield_11223","customfield_13935","
          "customfield_25663","customfield_25664"]
 ```
 
+---
+
+## Статус "On hold" (інфраструктура, додано 2026-06)
+
+Jira додав статус **On hold** до ВСІХ типів задач Recruitment (Open position,
+Recruitment Assignment, Task + їхні sub-tasks). На дашборді цей статус **поки НЕ
+відображається** — але інфраструктура для нього вже підготовлена.
+
+**Як працює приховування (один безпечний вимикач — на рівні даних):**
+- `scripts/update_rec_dashboard.py` має `HIDDEN_STATUSES = {'On hold'}` і прапорець
+  `SHOW_ON_HOLD` (env `REC_SHOW_ON_HOLD`, default off). Функція `drop_hidden()`
+  **відсікає On-hold задачі** з активних фетчів (open_pos, sub_tasks, tasks,
+  ra_active, ras_active) ще до запису в масиви `OP/WP/ST/TASKS/RA/RAS`.
+- Тобто On-hold елементи **взагалі не потрапляють у дані** → жоден render-шлях їх
+  не показує, жоден лічильник (навіть `OP.length`-патерни) не спотворюється.
+- Закриті задачі (Hired/Done) НЕ зачіпаються — On hold не є closed-статусом.
+- HTML render-логіка **не змінювалась** (нульовий ризик): усі секції й так
+  фільтрують за позитивними статусами (`'In progress'`/`'Plan'`/`'Hired'`/`'Done'`).
+
+**Render-готовність у HTML (дрімає, безпечно):**
+- CSS `.sho` — amber-бейдж "On hold".
+- `sb2()` маппить `'On hold' → 'sho'`.
+- JS-константа `SHOW_ON_HOLD = false` + великий коментар-чеклист `ON HOLD INFRA`
+  на початку `<script>`.
+
+**Щоб ПОЧАТИ показувати On hold:**
+1. **Дані** — запустити updater з `REC_SHOW_ON_HOLD=1` (або flip `SHOW_ON_HOLD`
+   у скрипті), щоб On-hold задачі зайшли в масиви.
+2. **Workload** — додати `'On hold'` у `_wlFilterSt` Set + чіп статусу у фільтр.
+3. **Views** — за потреби додати окрему секцію/view за зразком Plan
+   (`view-plan` / `r1plan` / `r3plan`).
+4. Шукати маркер `ON HOLD INFRA` в HTML — там повний чеклист.
+
 ### Обробка великих результатів JQL через Bash
 
 ```bash
