@@ -453,7 +453,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 2 липня 2026, оновлено 14:40 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 2 липня 2026, оновлено 15:30 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1040,6 +1040,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-586":"2026-07-02",
   "REC-580":"2026-07-02",
   "REC-578":"2026-06-30",
   "REC-569":null,
@@ -1178,6 +1179,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-586":"Middle",
   "REC-580":"Middle",
   "REC-578":"Senior",
   "REC-569":"Junior",
@@ -1290,6 +1292,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",so:"Kate Tsykalo",re:null,h:1,r:"Extention",es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",so:null,re:null,h:1,r:"Extention",es:null,t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"Plan",pr:"Low",so:"Max Kovalenko",re:null,h:1,r:"Extention",es:null,t:"Marketing",sb:"Creative",cr:"2026-06-29"},
@@ -1427,6 +1430,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-07-02",h:1,es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:null,t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"Plan",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:null,h:1,es:null,t:"Marketing",sb:"Creative",cr:"2026-06-29"},
@@ -1477,6 +1481,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-586":"Mariia Salabai",
   "REC-580":"Polina Serdiuk",
   "REC-578":"Darina Lavrenko",
   "REC-569":"Anastasiia Shapovalenko",
@@ -4384,7 +4389,7 @@ const RA=[
   {key:"REC-559",s:"WhatsApp Expert",st:"In progress",pr:"High",sn:null,rec:"Anastasiia Hodyna",src:"Kateryna Yaremenko",sd:"2026-06-04",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-06-05",cf_cooperation:"Other",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-540",s:"Gym Trainer - male",st:"In progress",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-05-25",ed:null,fcd_c:null,h:3,t:"Content",sb:"Workout Content",cr:"2026-05-25",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"bulletList",content:[{type:"listItem",attrs:{localId:"59a583411281"},content:[{type:"paragraph",content:[{type:"text",text:"База",marks:[{type:"em"},{type:"strong"}]},{type:"text",text:": міжнародний Certified Personal Trainer (CPT) від топових організацій: NASM, ACE, ACSM, NSCA, ISSA Європа - EREPS, level 3+"}],attrs:{localId:"a34f99d9859f"}}]},{type:"listItem",attrs:{localId:"4f141b2dfa60"},content:[{type:"paragraph",content:[{type:"text",text:"Додатково:",marks:[{type:"em"},{type:"strong"}]},{type:"text",text:" (чим більше, тим краще):"}],attrs:{localId:"1ff145766a29"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"6af22234f767"},content:[{type:"paragraph",content:[{type:"text",text:"просунуті сертифікації від топових організацій: NASM CES/PES, СSCS NSCA gym-спеціалізації: окремі кваліфікації в силі/техніці/програмуванні"}],attrs:{localId:"9f0fb609b50b"}}]},{type:"listItem",attrs:{localId:"64121d41b6f7"},content:[{type:"paragraph",content:[{type:"text",text:"nice to have: додаткові курси з анатомії/фізіології"}],attrs:{localId:"61a7760d90c1"}}]},{type:"listItem",attrs:{localId:"b8f043cd14ef"},content:[{type:"paragraph",content:[{type:"text",text:"освіта: бакалавр/магістр/науковий ступінь у сферах кінезіології, фізіології, відновлення/реабілітації, фізичної культури"}],attrs:{localId:"cbdfc67a485d"}}]}],attrs:{localId:"106b72107050"}}]}],attrs:{localId:"72d4b4f34b1b"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"Yes",cf_nda:"Yes",cf_marketing:"TBD",cf_budget:null,cf_payment:"Fixed project fee",cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Certificates Check - Test Task "}],attrs:{localId:"3d08d39424b2"}}]}},
   {key:"REC-495",s:"Line Producer (China)",st:"In progress",pr:"Low",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-17",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content Production",cr:"2026-05-21",cf_cooperation:"Talent Pool Building",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:"No",cf_marketing:"No",cf_budget:"TBD",cf_payment:"Fixed project fee",cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Profile Screen - Call (Hordash&Petrenko)"}],attrs:{localId:"b9e2453b8983"}}]}},
-  {key:"REC-484",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-05-12",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"Creative",cr:"2026-05-19",cf_cooperation:"Project-based",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:"3 місяці з можливим продовженням",cf_legal:"Yes",cf_nda:"Yes",cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Процес відбору складається з таких етапів:",marks:[{type:"strong"}]}],attrs:{localId:"59b86c88cc36"}},{type:"orderedList",attrs:{order:1,localId:"be470b7efeb2"},content:[{type:"listItem",attrs:{localId:"fe580097a093"},content:[{type:"paragraph",content:[{type:"text",text:"тестове завдання;"}],attrs:{localId:"72a4ef0b4b56"}}]}]},{type:"orderedList",attrs:{order:2,localId:"09843929a978"},content:[{type:"listItem",attrs:{localId:"ca4ae709e982"},content:[{type:"paragraph",content:[{type:"text",text:"HR-інтерв’ю;"}],attrs:{localId:"3a9aa39a0e12"}}]}]},{type:"orderedList",attrs:{order:3,localId:"6ad08e0c6306"},content:[{type:"listItem",attrs:{localId:"48091906d072"},content:[{type:"paragraph",content:[{type:"text",text:"зустріч із Hiring Manager;"}],attrs:{localId:"99d06ab177c3"}}]}]},{type:"orderedList",attrs:{order:4,localId:"c120aa549fb2"},content:[{type:"listItem",attrs:{localId:"1d2af908c5c3"},content:[{type:"paragraph",content:[{type:"text",text:"оплачуваний тестовий тиждень."}],attrs:{localId:"4337c797745e"}}]}]}]}},
+  {key:"REC-484",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-05-12",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"Creative",cr:"2026-05-19",cf_cooperation:"Project-based",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:"3 місяці з можливим продовженням",cf_legal:"Yes",cf_nda:"Yes",cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Процес відбору складається з таких етапів:",marks:[{type:"strong"}]}],attrs:{localId:"59b86c88cc36"}},{type:"orderedList",attrs:{order:1,localId:"be470b7efeb2"},content:[{type:"listItem",attrs:{localId:"fe580097a093"},content:[{type:"paragraph",content:[{type:"text",text:"тестове завдання;"}],attrs:{localId:"72a4ef0b4b56"}}]}]},{type:"orderedList",attrs:{order:2,localId:"09843929a978"},content:[{type:"listItem",attrs:{localId:"ca4ae709e982"},content:[{type:"paragraph",content:[{type:"text",text:"HR-інтерв’ю;"}],attrs:{localId:"3a9aa39a0e12"}}]}]},{type:"orderedList",attrs:{order:3,localId:"6ad08e0c6306"},content:[{type:"listItem",attrs:{localId:"48091906d072"},content:[{type:"paragraph",content:[{type:"text",text:"зустріч із Hiring Manager;"}],attrs:{localId:"99d06ab177c3"}}]}]},{type:"orderedList",attrs:{order:4,localId:"c120aa549fb2"},content:[{type:"listItem",attrs:{localId:"1d2af908c5c3"},content:[{type:"paragraph",content:[{type:"text",text:"оплачуваний тестовий тиждень."}],attrs:{localId:"4337c797745e"}}]}]}]}},
   {key:"REC-351",s:"Influence Marketing Consultant ",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Melnyk",src:null,sd:"2026-04-07",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-350",s:"Content  Production Specialist",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Melnyk",src:null,sd:"2026-03-16",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-05-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-349",s:"Logistic Specialist",st:"Done",pr:"Medium",sn:"Expert",rec:"Anastasiia Hodyna",src:"Anastasiia Shapovalenko",sd:"2026-01-30",ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Non-tech",cr:"2026-05-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
