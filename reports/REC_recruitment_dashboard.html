@@ -453,7 +453,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 9 липня 2026, оновлено 14:15 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 9 липня 2026, оновлено 14:28 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1040,6 +1040,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-593":null,
   "REC-586":"2026-07-02",
   "REC-580":"2026-07-02",
   "REC-578":"2026-06-30",
@@ -1081,6 +1082,7 @@ const SD={
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
   "REC-40":"2026-04-30",
+  "REC-592":null,
   "REC-591":null,
   "REC-590":null,
   "REC-579":"2026-07-01",
@@ -1184,6 +1186,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-593":"Middle",
   "REC-586":"Middle",
   "REC-580":"Middle",
   "REC-578":"Senior",
@@ -1298,6 +1301,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Low",so:"Oleksandr Honcharuk",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
   {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",so:"Kate Tsykalo",re:null,h:1,r:"Extention",es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
@@ -1439,6 +1443,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Low",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:null,h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
   {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-07-02",h:1,es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
@@ -1483,6 +1488,7 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-592",pk:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-590",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-579",pk:"REC-539",s:"Legal Counsel",st:"In progress",sd:"2026-07-01",rec:"Yaroslava Bondarchuk",src:null},
@@ -1492,6 +1498,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-593":"Anastasiia Shapovalenko",
   "REC-586":"Mariia Salabai",
   "REC-580":"Polina Serdiuk",
   "REC-578":"Darina Lavrenko",
