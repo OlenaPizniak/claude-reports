@@ -453,7 +453,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 9 липня 2026, оновлено 11:08 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 9 липня 2026, оновлено 14:15 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1081,6 +1081,8 @@ const SD={
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
   "REC-40":"2026-04-30",
+  "REC-591":null,
+  "REC-590":null,
   "REC-579":"2026-07-01",
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
@@ -1300,7 +1302,7 @@ const OP=[
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Low",so:"Max Kovalenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
-  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",so:"Masha Kolomiiets",re:null,h:3,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-567",s:" Copywriter",st:"In progress",pr:"High",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-556",s:"Junior Creative Marketing Specialist (Fashion)",st:"In progress",pr:"Medium",so:"Anna Mishura",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative Marketing",cr:"2026-06-04"},
@@ -1441,7 +1443,7 @@ const WP=[
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-02",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
-  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-03",h:3,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-567",s:" Copywriter",st:"In progress",pr:"High",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-06-29",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-06-29",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-556",s:"Junior Creative Marketing Specialist (Fashion)",st:"In progress",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-06-04",h:1,es:"Non-staff",t:"Marketing",sb:"Creative Marketing",cr:"2026-06-04"},
@@ -1481,6 +1483,8 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
+  {key:"REC-590",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-579",pk:"REC-539",s:"Legal Counsel",st:"In progress",sd:"2026-07-01",rec:"Yaroslava Bondarchuk",src:null},
   {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"Canceled",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
   {key:"REC-216",pk:"REC-213",s:"Junior Creative Marketing Specialist",st:"Canceled",sd:"2026-04-03",rec:"Alina Muravchyk",src:null},
@@ -4418,7 +4422,7 @@ const RA=[
   {key:"REC-283",s:"Asian Pilates Instructor ",st:"Canceled",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-282",s:"Power Yoga Instructor ",st:"Canceled",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-271",s:"Pilates Instructor (Reformer)",st:"In progress",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-245",s:"TaiChi Instructor ",st:"In progress",pr:"High",sn:"Expert",rec:"Alina Muravchyk",src:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-245",s:"TaiChi Instructor ",st:"In progress",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-184",s:"Gym Trainer - female",st:"Done",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",ed:null,fcd_c:"2026-05-26",h:1,t:"Content",sb:"Workout Content",cr:"2026-04-02",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-141",s:"Calisthenics Expert (male)",st:"Done",pr:"Medium",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",ed:null,fcd_c:null,h:2,t:"Content",sb:"Workout Content",cr:"2026-03-27",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
 ];
