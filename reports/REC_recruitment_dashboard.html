@@ -453,7 +453,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 10 липня 2026, оновлено 10:48 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 10 липня 2026, оновлено 13:02 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1051,7 +1051,7 @@ const SD={
   "REC-556":"2026-06-04",
   "REC-544":"2026-05-27",
   "REC-543":"2026-05-26",
-  "REC-539":"2026-06-09",
+  "REC-539":"2026-07-01",
   "REC-499":"2026-05-21",
   "REC-395":"2026-05-21",
   "REC-341":null,
@@ -1085,10 +1085,10 @@ const SD={
   "REC-592":null,
   "REC-591":null,
   "REC-590":null,
-  "REC-579":"2026-07-01",
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-579":"2026-06-09",
   "REC-573":"2026-06-30",
   "REC-571":"2026-06-22",
   "REC-565":"2026-06-22",
@@ -1228,10 +1228,10 @@ const SN={
   "REC-182":"Middle",
   "REC-177":"Middle",
   "REC-40":"Middle",
-  "REC-579":"Junior",
   "REC-330":"Middle",
   "REC-216":"Junior",
   "REC-212":"Middle",
+  "REC-579":"Junior",
   "REC-549":"Junior",
   "REC-548":"Junior",
   "REC-547":"Junior",
@@ -1312,7 +1312,7 @@ const OP=[
   {key:"REC-556",s:"Junior Creative Marketing Specialist (Fashion)",st:"In progress",pr:"Medium",so:"Anna Mishura",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative Marketing",cr:"2026-06-04"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",so:"Serhii Pidlypaiev",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"In progress",pr:"Medium",so:"Constantine Chernenko",re:null,h:1,r:"Extention",es:"Staff",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
-  {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",so:"Iryna Savchuk",re:null,h:2,r:"Replacement",es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
+  {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",so:"Iryna Savchuk",re:null,h:1,r:"Replacement",es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
   {key:"REC-499",s:"Content Manager",st:"In progress",pr:"Medium",so:"Volodymyr Chayka",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Marketing",sb:null,cr:"2026-05-21"},
   {key:"REC-395",s:"UX Writer",st:"In progress",pr:"High",so:"Kateryna Mykytchenko",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Product",sb:"UX Research",cr:"2026-05-18"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",es:null,t:"Content",sb:null,cr:"2026-05-13"},
@@ -1346,6 +1346,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-579",s:"Legal Counsel",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-07-10",hd:"2026-07-10",sd:"2026-06-09",ed:null,fcd_c:"2026-06-17",h:1,t:"Legal",sb:"Legal",pk:"REC-539"},
   {key:"REC-573",s:"Пошук Google Ads спецалістів з Demand Gen",type:"position",kind:"task",st:"Done",pr:"High",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-06-30",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-571",s:"Supplements Industry Consultant",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-30",hd:null,sd:"2026-06-22",ed:null,fcd_c:"2026-06-24",h:2,t:"E-commerce",sb:"Supply",pk:"REC-565"},
   {key:"REC-565",s:"Supplements Industry Consultant",type:"position",kind:"ra",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-07-30",hd:null,sd:"2026-06-22",ed:null,fcd_c:"2026-06-24",h:2,t:"E-commerce",sb:"Supply"},
@@ -1454,7 +1455,7 @@ const WP=[
   {key:"REC-556",s:"Junior Creative Marketing Specialist (Fashion)",st:"In progress",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,sd:"2026-06-04",h:1,es:"Non-staff",t:"Marketing",sb:"Creative Marketing",cr:"2026-06-04"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-27",h:1,es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Nadiia Brusova",src:"Kateryna Yaremenko",sd:"2026-05-26",h:1,es:"Staff",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
-  {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-06-09",h:2,es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
+  {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-07-01",h:1,es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
   {key:"REC-499",s:"Content Manager",st:"In progress",pr:"Medium",sn:"Senior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-05-21",h:1,es:"Non-staff",t:"Marketing",sb:null,cr:"2026-05-21"},
   {key:"REC-395",s:"UX Writer",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-05-21",h:1,es:"Non-staff",t:"Product",sb:"UX Research",cr:"2026-05-18"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,es:null,t:"Content",sb:null,cr:"2026-05-13"},
@@ -1491,7 +1492,6 @@ const ST=[
   {key:"REC-592",pk:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-590",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
-  {key:"REC-579",pk:"REC-539",s:"Legal Counsel",st:"In progress",sd:"2026-07-01",rec:"Yaroslava Bondarchuk",src:null},
   {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"Canceled",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
   {key:"REC-216",pk:"REC-213",s:"Junior Creative Marketing Specialist",st:"Canceled",sd:"2026-04-03",rec:"Alina Muravchyk",src:null},
   {key:"REC-212",pk:"REC-211",s:"Graphic Designer",st:"Canceled",sd:"2026-03-25",rec:"Mariia Salabai",src:null},
@@ -1531,10 +1531,10 @@ const RECR={
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
   "REC-40":"Yaroslava Bondarchuk",
-  "REC-579":"Yaroslava Bondarchuk",
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
+  "REC-579":"Yaroslava Bondarchuk",
   "REC-571":"Yaroslava Bondarchuk",
   "REC-565":"Yaroslava Bondarchuk",
   "REC-563":"Yaroslava Bondarchuk",
@@ -3958,6 +3958,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-579",type:"subtask",kind:"op_sub",st:"Hired",s:"Legal Counsel",sd:"2026-06-09",ed:null,cr:"2026-07-01",fcd:"2026-07-10",hd:"2026-07-10",fcd_c:"2026-06-17",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Legal",sb:"Legal",cs:"Dou",cs_other:null,pk:"REC-539"},
   {key:"REC-573",type:"position",kind:"task",st:"Done",s:"Пошук Google Ads спецалістів з Demand Gen",sd:"2026-06-30",ed:null,cr:"2026-06-30",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"High",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-571",type:"subtask",kind:"ra_sub",st:"Done",s:"Supplements Industry Consultant",sd:"2026-06-22",ed:null,cr:"2026-06-30",fcd:"2026-06-30",hd:null,fcd_c:"2026-06-24",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:2,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-565"},
   {key:"REC-565",type:"position",kind:"ra",st:"Done",s:"Supplements Industry Consultant",sd:"2026-06-22",ed:null,cr:"2026-06-22",fcd:"2026-07-30",hd:null,fcd_c:"2026-06-24",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:2,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:null},
