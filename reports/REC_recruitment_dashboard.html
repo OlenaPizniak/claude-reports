@@ -453,7 +453,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 16 липня 2026, оновлено 14:20 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 16 липня 2026, оновлено 15:45 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1067,7 +1067,7 @@ const SD={
   "REC-315":"2026-05-05",
   "REC-296":"2026-04-24",
   "REC-249":"2026-05-12",
-  "REC-237":"2026-05-12",
+  "REC-237":"2026-07-07",
   "REC-236":"2026-03-31",
   "REC-222":"2026-01-28",
   "REC-221":"2026-03-18",
@@ -1088,7 +1088,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
-  "REC-592":null,
+  "REC-592":"2026-05-12",
   "REC-583":"2026-07-02",
   "REC-579":"2026-06-09",
   "REC-573":"2026-06-30",
@@ -1333,7 +1333,7 @@ const OP=[
   {key:"REC-315",s:"Product Designer",st:"In progress",pr:"High",so:"Anna Yasinkovska",re:null,h:1,r:"Replacement",es:"Staff",t:"Product",sb:"Design",cr:"2026-05-05"},
   {key:"REC-296",s:"Influencer Marketing Specialist BetterMe Store",st:"Canceled",pr:"High",so:"Kateryna Danyliuk (Lead); Kateryna Krotik (для equipment); Kateryna Muzychuk (для sportswear)",re:null,h:2,r:"Extention",es:"Staff",t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-04"},
   {key:"REC-249",s:"AI Creative Designer",st:"Canceled",pr:"Medium",so:"Oleksandr Honcharuk",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-04-21"},
-  {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska, Olena Povzun, Maryna Svieshnikova, Ivan Buchaka",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
+  {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
   {key:"REC-236",s:"Treasury Specialist",st:"Canceled",pr:"High",so:"Valeriya Kravchenko",re:null,h:1,r:"Extention",es:"Staff",t:"Finance",sb:"Finance",cr:"2026-04-06"},
   {key:"REC-222",s:"Manual QA Engineer (Android) ",st:"Canceled",pr:"Medium",so:"-",re:null,h:1,r:"Extention",es:"Staff",t:"Engineering",sb:"Coach Android",cr:"2026-04-03"},
   {key:"REC-221",s:"QA Engineer (Backend)",st:"Canceled",pr:"High",so:"-",re:null,h:1,r:"Extention",es:"Staff",t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
@@ -1352,7 +1352,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
-  {key:"REC-592",s:"Junior Digital Marketing Specialist",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Polina Serdiuk",fcd:null,hd:"2026-07-16",sd:null,ed:null,fcd_c:null,h:1,t:"Marketing",sb:"User Acquisition",pk:"REC-237"},
+  {key:"REC-592",s:"Junior Digital Marketing Specialist",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Polina Serdiuk",fcd:"2026-07-16",hd:"2026-07-16",sd:"2026-05-12",ed:null,fcd_c:"2026-07-01",h:1,t:"Marketing",sb:"User Acquisition",pk:"REC-237"},
   {key:"REC-583",s:"Створення командного спейсу в Claude",type:"position",kind:"task",st:"Done",pr:"High",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-579",s:"Legal Counsel",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-07-10",hd:"2026-07-10",sd:"2026-06-09",ed:null,fcd_c:"2026-06-17",h:1,t:"Legal",sb:"Legal",pk:"REC-539"},
   {key:"REC-573",s:"Пошук Google Ads спецалістів з Demand Gen",type:"position",kind:"task",st:"Done",pr:"High",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-06-30",ed:null,fcd_c:null,h:1,t:null,sb:null},
@@ -1480,7 +1480,7 @@ const WP=[
   {key:"REC-315",s:"Product Designer",st:"In progress",pr:"High",sn:"Senior",rec:"Anastasiia Shapovalenko",src:"Mariia Salabai",sd:"2026-05-05",h:1,es:"Staff",t:"Product",sb:"Design",cr:"2026-05-05"},
   {key:"REC-296",s:"Influencer Marketing Specialist BetterMe Store",st:"Canceled",pr:"High",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-04-24",h:2,es:"Staff",t:"Brand Communications",sb:"Influence marketing",cr:"2026-05-04"},
   {key:"REC-249",s:"AI Creative Designer",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-12",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-04-21"},
-  {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-05-12",h:1,es:"Non-staff",t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
+  {key:"REC-237",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-07-07",h:1,es:"Non-staff",t:"Marketing",sb:"User Acquisition",cr:"2026-04-07"},
   {key:"REC-236",s:"Treasury Specialist",st:"Canceled",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-31",h:1,es:"Staff",t:"Finance",sb:"Finance",cr:"2026-04-06"},
   {key:"REC-222",s:"Manual QA Engineer (Android) ",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Former user",src:null,sd:"2026-01-28",h:1,es:"Staff",t:"Engineering",sb:"Coach Android",cr:"2026-04-03"},
   {key:"REC-221",s:"QA Engineer (Backend)",st:"Canceled",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-18",h:1,es:"Staff",t:"Engineering",sb:"QA Core",cr:"2026-04-03"},
@@ -3972,7 +3972,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
-  {key:"REC-592",type:"subtask",kind:"op_sub",st:"Hired",s:"Junior Digital Marketing Specialist",sd:null,ed:null,cr:"2026-07-09",fcd:null,hd:"2026-07-16",fcd_c:null,sn:"Junior",rec:"Polina Serdiuk",src:"Polina Serdiuk",pr:"Medium",h:1,t:"Marketing",sb:"User Acquisition",cs:null,cs_other:null,pk:"REC-237"},
+  {key:"REC-592",type:"subtask",kind:"op_sub",st:"Hired",s:"Junior Digital Marketing Specialist",sd:"2026-05-12",ed:null,cr:"2026-07-09",fcd:"2026-07-16",hd:"2026-07-16",fcd_c:"2026-07-01",sn:"Junior",rec:"Polina Serdiuk",src:"Polina Serdiuk",pr:"Medium",h:1,t:"Marketing",sb:"User Acquisition",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-237"},
   {key:"REC-583",type:"position",kind:"task",st:"Done",s:"Створення командного спейсу в Claude",sd:"2026-07-02",ed:null,cr:"2026-07-02",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"High",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-579",type:"subtask",kind:"op_sub",st:"Hired",s:"Legal Counsel",sd:"2026-06-09",ed:null,cr:"2026-07-01",fcd:"2026-07-10",hd:"2026-07-10",fcd_c:"2026-06-17",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Legal",sb:"Legal",cs:"Dou",cs_other:null,pk:"REC-539"},
   {key:"REC-573",type:"position",kind:"task",st:"Done",s:"Пошук Google Ads спецалістів з Demand Gen",sd:"2026-06-30",ed:null,cr:"2026-06-30",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"High",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
