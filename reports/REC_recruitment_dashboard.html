@@ -453,7 +453,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 21 липня 2026, оновлено 18:23 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 21 липня 2026, оновлено 19:37 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1082,6 +1082,7 @@ const SD={
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
   "REC-40":"2026-04-30",
+  "REC-598":"2026-07-21",
   "REC-591":null,
   "REC-590":null,
   "REC-330":"2026-05-12",
@@ -1231,6 +1232,7 @@ const SN={
   "REC-182":"Middle",
   "REC-177":"Middle",
   "REC-40":"Middle",
+  "REC-598":"Middle",
   "REC-330":"Middle",
   "REC-216":"Junior",
   "REC-212":"Middle",
@@ -1308,7 +1310,7 @@ const SN={
 const OP=[
   {key:"REC-594",s:"Employee Experience Specialist",st:"In progress",pr:"Low",so:"Anna Malaniuk",re:null,h:1,r:"Replacement",es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
   {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Low",so:"Oleksandr Honcharuk",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
-  {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",so:"Kate Tsykalo",re:null,h:1,r:"Extention",es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
+  {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",so:"Kate Tsykalo",re:null,h:2,r:"Extention",es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Low",so:"Max Kovalenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
@@ -1455,7 +1457,7 @@ const HW=[
 const WP=[
   {key:"REC-594",s:"Employee Experience Specialist",st:"In progress",pr:"Low",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-07-10",h:1,es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
   {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Low",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:null,h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
-  {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-07-02",h:1,es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
+  {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Low",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-07-02",h:2,es:null,t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-02",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
@@ -1498,6 +1500,7 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-598",pk:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",sd:"2026-07-21",rec:"Mariia Salabai",src:null},
   {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-590",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:null,rec:null,src:null},
   {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"Canceled",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
@@ -1539,6 +1542,7 @@ const RECR={
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
   "REC-40":"Yaroslava Bondarchuk",
+  "REC-598":"Mariia Salabai",
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
