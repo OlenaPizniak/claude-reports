@@ -362,6 +362,9 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
 #c-hired .tbl-wrap { overflow: clip; }
 #c-hired thead th { position: sticky; top: 64px; z-index: 10; background: #f8fafc; box-shadow: 0 1px 0 #e2e8f0; }
 #c-workload thead th { position: sticky; top: 64px; z-index: 10; background: #f8fafc; box-shadow: 0 1px 0 #e2e8f0; }
+.col-info-btn{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#e2e8f0;color:#94a3b8;font-size:9px;font-weight:700;cursor:pointer;margin-left:4px;line-height:1;vertical-align:middle;flex-shrink:0;transition:background .15s}
+.col-info-btn:hover{background:#3b6ef5;color:#fff}
+#col-tooltip{position:fixed;z-index:9999;background:#1e293b;color:#e2e8f0;font-size:12px;line-height:1.5;padding:8px 12px;border-radius:8px;max-width:240px;pointer-events:none;display:none;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .wl-avatar {
   width: 34px; height: 34px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
@@ -930,6 +933,7 @@ function recTriggerRefresh(){
 </div>
 
 <!-- S5 Bar popup -->
+<div id="col-tooltip"></div>
 <div id="s5overlay" onclick="closeS5Popup()" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.45);z-index:1000;backdrop-filter:blur(2px)"></div>
 <div id="s5popup" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1001;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(15,23,42,0.18);width:min(1320px,96vw);max-height:85vh;overflow:hidden;display:none;flex-direction:column">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #e2e8f0">
@@ -3498,10 +3502,33 @@ function rWorkload(){
     :r==='Task'
     ?`<span style="font-size:10px;font-weight:600;color:#0891b2;background:#ecfeff;border-radius:4px;padding:2px 6px">Owner</span>`
     :'<span class="dash-val">—</span>';
-  const mkTh=(col,lbl,align,w)=>
-    `<th onclick="wlSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};max-width:${w};`:''}white-space:nowrap;user-select:none;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;padding:10px 8px">
-      ${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span>
+  const _colDesc={
+    name:'Recruiter name. Expand (+) to see all their active vacancies and assignments.',
+    role:'Full-cycle = owns full pipeline · Interviewing = interview stage only · Sourcing = sourcing only · Owner = task owner',
+    vac:'VAC — open positions (staff or non-staff employees). REC ASSIGN — freelance, consulting calls, or project-based engagements.',
+    days:'Calendar days open since the Start Date of the vacancy.',
+  };
+  const mkTh=(col,lbl,align,w)=>{
+    const desc=_colDesc[col]||'';
+    const safeDesc=desc.replace(/'/g,'&#39;');
+    const infoAttrs=`onmouseenter="showColTip(event,'${safeDesc}')" onmouseleave="hideColTip()" onclick="event.stopPropagation()"`;
+    let inner;
+    if(col==='name'&&desc){
+      // "i" centered above the "/" in RECRUITER / ROLE
+      inner=`<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <span class="col-info-btn" style="position:relative;left:12px" ${infoAttrs}>i</span>
+        <span style="white-space:nowrap">${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span></span>
+      </div>`;
+    } else if(desc){
+      // inline "i" to the right of sort arrow
+      inner=`<span style="white-space:nowrap;display:inline-flex;align-items:center;gap:2px">${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span><span class="col-info-btn" ${infoAttrs}>i</span></span>`;
+    } else {
+      inner=`<span style="white-space:nowrap">${lbl}&nbsp;<span style="color:${arwC(col)};font-size:9px">${arw(col)}</span></span>`;
+    }
+    return `<th onclick="wlSort('${col}')" style="cursor:pointer;text-align:${align||'center'};${w?`min-width:${w};max-width:${w};`:''}user-select:none;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;padding:10px 8px;vertical-align:bottom">
+      ${inner}
     </th>`;
+  };
 
   const _dash=`<span style="color:#cbd5e1;font-size:14px">—</span>`;
   // VAC/REC ASSIGN summary cell: "X/Y" combined
@@ -3633,6 +3660,15 @@ function rWorkload(){
   </table></div>`;
 }
 
+function showColTip(e,msg){
+  const t=document.getElementById('col-tooltip');
+  t.textContent=msg;
+  t.style.display='block';
+  const r=e.target.getBoundingClientRect();
+  t.style.left=Math.min(r.left,window.innerWidth-260)+'px';
+  t.style.top=(r.bottom+6)+'px';
+}
+function hideColTip(){document.getElementById('col-tooltip').style.display='none';}
 function togWLSubs(did,key){
   const uid=did+'-'+key;
   const rows=document.querySelectorAll(`[data-wlsub="${uid}"]`);
