@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 3 серпня 2026, оновлено 15:43 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 3 серпня 2026, оновлено 18:49 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,8 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-616":"2026-08-03",
+  "REC-614":"2026-08-03",
   "REC-607":"2026-07-28",
   "REC-606":"2026-07-29",
   "REC-603":"2026-07-29",
@@ -1086,6 +1088,7 @@ const SD={
   "REC-191":"2026-04-02",
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
+  "REC-615":"2026-08-03",
   "REC-602":"2026-07-22",
   "REC-598":"2026-07-21",
   "REC-591":null,
@@ -1209,6 +1212,8 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-616":"Junior",
+  "REC-614":"Middle",
   "REC-607":"Junior",
   "REC-606":"Junior",
   "REC-603":"Middle",
@@ -1251,6 +1256,7 @@ const SN={
   "REC-191":"Middle",
   "REC-182":"Middle",
   "REC-177":"Middle",
+  "REC-615":"Middle",
   "REC-602":"Middle",
   "REC-598":"Middle",
   "REC-590":"Junior",
@@ -1334,6 +1340,8 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-616",s:"Graphic Designer",st:"In progress",pr:"High",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
+  {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"High",so:"Masha Kolomiiets",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",so:"Maksym Kovalenko",re:null,h:5,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-606",s:"Admin Specialist",st:"In progress",pr:"Medium",so:"Alina Skoryk",re:null,h:1,r:"Extention",es:"Staff",t:"Content",sb:"Content",cr:"2026-07-30"},
   {key:"REC-603",s:"Fashion Operations Manager",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content",cr:"2026-07-29"},
@@ -1343,7 +1351,7 @@ const OP=[
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Medium",so:"Max Kovalenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
-  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",so:"Masha Kolomiiets",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"High",so:"Masha Kolomiiets",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-567",s:" Copywriter",st:"In progress",pr:"High",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",so:"Serhii Pidlypaiev",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
@@ -1392,7 +1400,7 @@ const HW=[
   {key:"REC-571",s:"Supplements Industry Consultant",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-30",hd:null,sd:"2026-06-22",ed:null,fcd_c:"2026-06-24",h:2,t:"E-commerce",sb:"Supply",pk:"REC-565"},
   {key:"REC-570",s:"Product Designer",type:"position",kind:"ra",st:"Done",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,fcd:"2026-07-27",hd:null,sd:"2026-06-30",ed:null,fcd_c:"2026-07-03",h:1,t:"Content",sb:"Content"},
   {key:"REC-565",s:"Supplements Industry Consultant",type:"position",kind:"ra",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-30",hd:null,sd:"2026-06-22",ed:null,fcd_c:"2026-06-24",h:2,t:"E-commerce",sb:"Supply"},
-  {key:"REC-564",s:"Beauty Consultant",type:"position",kind:"ra",st:"Done",pr:"High",sn:null,rec:"Kateryna Yaremenko",src:null,fcd:null,hd:null,sd:"2026-06-23",ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Supply"},
+  {key:"REC-564",s:"Beauty Consultant",type:"position",kind:"ra",st:"Done",pr:"High",sn:null,rec:"Kateryna Yaremenko",src:null,fcd:"2026-08-03",hd:null,sd:"2026-06-23",ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Supply"},
   {key:"REC-563",s:"Line Producer (China)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-18",hd:null,sd:"2026-04-17",ed:null,fcd_c:"2026-06-08",h:1,t:"Content",sb:"Content Production",pk:"REC-495"},
   {key:"REC-562",s:"Sourcing – PPC vacancy",type:"position",kind:"task",st:"Done",pr:"High",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-06-08",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-561",s:"Amazon Audit Consultant",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-05-20",ed:null,fcd_c:null,h:1,t:null,sb:null},
@@ -1495,6 +1503,8 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-616",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
+  {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",h:5,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-606",s:"Admin Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-07-29",h:1,es:"Staff",t:"Content",sb:"Content",cr:"2026-07-30"},
   {key:"REC-603",s:"Fashion Operations Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-29",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-07-29"},
@@ -1504,7 +1514,7 @@ const WP=[
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-02",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
-  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-567",s:" Copywriter",st:"In progress",pr:"High",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-06-29",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-07-31",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-27",h:1,es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
@@ -1540,6 +1550,7 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-615",pk:"REC-614",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-602",pk:"REC-593",s:"AI Creative Designer",st:"In progress",sd:"2026-07-22",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-598",pk:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",sd:"2026-07-21",rec:"Mariia Salabai",src:null},
   {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"Canceled",sd:null,rec:null,src:null},
@@ -1550,6 +1561,8 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-616":"Anastasiia Shapovalenko",
+  "REC-614":"Anastasiia Shapovalenko",
   "REC-607":"Mariia Salabai",
   "REC-606":"Anastasiia Shapovalenko",
   "REC-603":"Polina Serdiuk",
@@ -1584,6 +1597,7 @@ const RECR={
   "REC-191":"Yaroslava Bondarchuk",
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
+  "REC-615":"Anastasiia Shapovalenko",
   "REC-602":"Anastasiia Shapovalenko",
   "REC-598":"Mariia Salabai",
   "REC-590":"Anastasiia Shapovalenko",
@@ -1731,6 +1745,8 @@ const SRCR={
 
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
+  {key:"REC-617",s:" Оптимізація Breezy",st:"In progress",pr:"Low",asgn:"Nadiia Brusova",sd:"2026-07-28"},
+  {key:"REC-613",s:"Створення Slack Bot для опрацювання рекомендацій",st:"In progress",pr:"High",asgn:"Nadiia Brusova",sd:"2026-07-27"},
   {key:"REC-600",s:"Створення презентацій для окремих напрямків",st:"ToDo",pr:"Low",asgn:"Nadiia Brusova",sd:null},
   {key:"REC-587",s:"Sourcing Creative Producers / Media Buyers",st:"In progress",pr:"Medium",asgn:"Polina Serdiuk",sd:"2026-07-07"},
   {key:"REC-585",s:"Взаємодія з командою та сорсинг сесії",st:"In progress",pr:"Medium",asgn:"Nadiia Brusova",sd:"2025-05-05"},
@@ -4074,7 +4090,7 @@ const CV=[
   {key:"REC-571",type:"subtask",kind:"ra_sub",st:"Done",s:"Supplements Industry Consultant",sd:"2026-06-22",ed:null,cr:"2026-06-30",fcd:"2026-06-30",hd:null,fcd_c:"2026-06-24",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:2,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-565"},
   {key:"REC-570",type:"position",kind:"ra",st:"Done",s:"Product Designer",sd:"2026-06-30",ed:null,cr:"2026-06-30",fcd:"2026-07-27",hd:null,fcd_c:"2026-07-03",sn:null,rec:"Mariia Salabai",src:null,pr:"Medium",h:1,t:"Content",sb:"Content",cs:"Dou",cs_other:null,pk:null},
   {key:"REC-565",type:"position",kind:"ra",st:"Done",s:"Supplements Industry Consultant",sd:"2026-06-22",ed:null,cr:"2026-06-22",fcd:"2026-06-30",hd:null,fcd_c:"2026-06-24",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:2,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:null},
-  {key:"REC-564",type:"position",kind:"ra",st:"Done",s:"Beauty Consultant",sd:"2026-06-23",ed:null,cr:"2026-06-22",fcd:null,hd:null,fcd_c:null,sn:null,rec:"Kateryna Yaremenko",src:null,pr:"High",h:1,t:"E-commerce",sb:"Supply",cs:null,cs_other:null,pk:null},
+  {key:"REC-564",type:"position",kind:"ra",st:"Done",s:"Beauty Consultant",sd:"2026-06-23",ed:null,cr:"2026-06-22",fcd:"2026-08-03",hd:null,fcd_c:null,sn:null,rec:"Kateryna Yaremenko",src:null,pr:"High",h:1,t:"E-commerce",sb:"Supply",cs:null,cs_other:null,pk:null},
   {key:"REC-563",type:"subtask",kind:"ra_sub",st:"Done",s:"Line Producer (China)",sd:"2026-04-17",ed:null,cr:"2026-06-19",fcd:"2026-06-18",hd:null,fcd_c:"2026-06-08",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Content",sb:"Content Production",cs:"WeChat",cs_other:null,pk:"REC-495"},
   {key:"REC-562",type:"position",kind:"task",st:"Done",s:"Sourcing – PPC vacancy",sd:"2026-06-08",ed:null,cr:"2026-06-09",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"High",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-561",type:"position",kind:"task",st:"Done",s:"Amazon Audit Consultant",sd:"2026-05-20",ed:null,cr:"2026-06-08",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
@@ -4530,7 +4546,7 @@ CV.push(...HIST_CV);
 // Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track
 // Schema: see SKILL.md "Recruitment Assignment structure" section
 const RA=[
-  {key:"REC-601",s:"Marketing Expert",st:"In progress",pr:"High",sn:null,rec:null,src:"Kateryna Yaremenko",sd:"2026-07-23",ed:null,fcd_c:null,h:2,t:"Marketing",sb:"User Acquisition",cr:"2026-07-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-601",s:"Marketing Expert (Trendyol, Oner Active/DFYNE, Fashion Nova)",st:"In progress",pr:"High",sn:null,rec:null,src:"Kateryna Yaremenko",sd:"2026-07-23",ed:null,fcd_c:null,h:2,t:"Marketing",sb:"User Acquisition",cr:"2026-07-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-595",s:"First Sale Consultant",st:"Done",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-07-15",ed:null,fcd_c:"2026-07-16",h:1,t:"E-commerce",sb:"Non-tech",cr:"2026-07-15",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"orderedList",attrs:{order:1,localId:"1daf89f2ed14"},content:[{type:"listItem",attrs:{localId:"56cd88b373c2"},content:[{type:"paragraph",content:[{type:"text",text:"Мета консультації: перейняти практичний досвід з впровадження та операційного ведення supply операцій за моделлю first sale в США."},{type:"hardBreak"},{type:"text",text:"Питання:"}],attrs:{localId:"477ca90a9a15"}}]}]},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"1fe0c644eb7d"},content:[{type:"paragraph",content:[{type:"text",text:"Як компанія прийняла рішення рухати з first sale,"}],attrs:{localId:"8368b47286f0"}}]},{type:"listItem",attrs:{localId:"19dfa1e3abe2"},content:[{type:"paragraph",content:[{type:"text",text:"Чи компанія при цьому представлена з тією ж номенклатурою товарів на інших ринках, крім США?"}],attrs:{localId:"99ac2b8df764"}}]},{type:"listItem",attrs:{localId:"0d011bfd1239"},content:[{type:"paragraph",content:[{type:"text",text:"Як проходив процес погодження paper trail."}],attrs:{localId:"35f9a5ff5ccc"}}]},{type:"listItem",attrs:{localId:"a5a35a819646"},content:[{type:"paragraph",content:[{type:"text",text:"Як проходить митна перевірка документів, який пакет документів запитує на практиці митник?"}],attrs:{localId:"e3e83b8d7d91"}}]},{type:"listItem",attrs:{localId:"cdd7523e7670"},content:[{type:"paragraph",content:[{type:"text",text:"Чи були відмови в погодженні first sale?"}],attrs:{localId:"ce61c87843bc"}}]}],attrs:{localId:"518aa4923e4a"}},{type:"orderedList",attrs:{order:2,localId:"aa1c07597493"},content:[{type:"listItem",attrs:{localId:"6bcbf875a655"},content:[{type:"paragraph",content:[{type:"text",text:"Яка саме експертиза для нас є критичною?"}],attrs:{localId:"517b15143cfc"}}]}]},{type:"paragraph",content:[{type:"hardBreak"},{type:"text",text:"Чи потрібна людина, яка безпосередньо впроваджувала модель First Sale, чи також можемо розглядати спеціалістів із компаній, де ця модель вже використовувалася? - "},{type:"text",text:"обидва варіанти глобально ОК",marks:[{type:"code"}]},{type:"hardBreak"},{type:"text",text:"Також важливо зрозуміти, якою мала бути роль людини в цьому процесі:"},{type:"hardBreak"},{type:"text",text:"— приймала стратегічні рішення - "},{type:"text",text:"ОК",marks:[{type:"code"}]},{type:"hardBreak"},{type:"text",text:"— керувала імпортними процесами - "},{type:"text",text:"ОК",marks:[{type:"code"}]},{type:"hardBreak"},{type:"text",text:"— координувала митних брокерів і юридичних радників -"},{type:"text",text:"ОК",marks:[{type:"code"}]},{type:"hardBreak"},{type:"text",text:"— була залучена переважно на операційному рівні - найнижчий пріоритет для консультації."}],attrs:{localId:"4ce5b14d597a"}},{type:"orderedList",attrs:{order:3,localId:"fc560e00f79d"},content:[{type:"listItem",attrs:{localId:"c8c9b1839ef9"},content:[{type:"paragraph",content:[{type:"text",text:"Який пріоритет цього пошуку: high, middle чи low? - "},{type:"text",text:"high",marks:[{type:"code"}]}],attrs:{localId:"14a5612e0cae"}}]}]},{type:"orderedList",attrs:{order:4,localId:"ec184c3b524a"},content:[{type:"listItem",attrs:{localId:"259c65bce355"},content:[{type:"paragraph",content:[{type:"text",text:"Чи є бажані компанії або конкретні індустрії, з яких хотілося б залучити консультанта?  - high fashion, в першу чергу. Є інфо від провайдерів, що ці компанії активно користуються fisrt sale model."}],attrs:{localId:"1b2657b4f03a"}}]}]}]},cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:"Yes",cf_marketing:null,cf_budget:null,cf_payment:"Hourly",cf_stages:null},
   {key:"REC-588",s:"Google Ads Demand Gen Consultant",st:"Done",pr:"Medium",sn:null,rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-07-01",ed:null,fcd_c:null,h:2,t:"Marketing",sb:"PPC",cr:"2026-07-08",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-574",s:"Video Editor",st:"Done",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-06-30",ed:null,fcd_c:"2026-07-10",h:1,t:"Content",sb:"Content",cr:"2026-07-01",cf_cooperation:"Talent Pool Building",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:"No",cf_marketing:"No",cf_budget:null,cf_payment:"Fixed project fee",cf_stages:null},
