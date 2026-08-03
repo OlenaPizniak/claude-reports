@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 3 серпня 2026, оновлено 11:49 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 3 серпня 2026, оновлено 15:33 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1055,7 +1055,7 @@ const SD={
   "REC-569":"2026-07-02",
   "REC-568":"2026-07-03",
   "REC-567":"2026-06-29",
-  "REC-566":"2026-06-29",
+  "REC-566":"2026-07-31",
   "REC-544":"2026-05-27",
   "REC-543":"2026-05-26",
   "REC-539":"2026-07-01",
@@ -1093,6 +1093,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-612":"2026-06-29",
   "REC-599":"2026-06-30",
   "REC-597":"2026-07-15",
   "REC-595":"2026-07-15",
@@ -1130,6 +1131,7 @@ const SD={
   "REC-482":"2026-05-18",
   "REC-481":"2026-05-18",
   "REC-395":"2026-05-21",
+  "REC-362":"2026-03-05",
   "REC-361":"2026-04-01",
   "REC-360":"2026-04-01",
   "REC-359":"2026-04-02",
@@ -1255,6 +1257,7 @@ const SN={
   "REC-330":"Middle",
   "REC-216":"Junior",
   "REC-212":"Middle",
+  "REC-612":"Middle",
   "REC-599":"Junior",
   "REC-592":"Junior",
   "REC-579":"Junior",
@@ -1376,6 +1379,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-612",s:"Content Project Manager",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,fcd:"2026-08-03",hd:"2026-08-03",sd:"2026-06-29",ed:null,fcd_c:"2026-07-17",h:1,t:"Content",sb:"Workout Content",pk:"REC-566"},
   {key:"REC-599",s:"Junior Creative Marketing Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Alina Muravchyk",src:null,fcd:"2026-07-22",hd:"2026-07-22",sd:"2026-06-30",ed:null,fcd_c:"2026-06-30",h:1,t:"Marketing",sb:"Creative"},
   {key:"REC-597",s:"Sourcing Creative Specialist",type:"position",kind:"task",st:"Done",pr:"High",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-07-15",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-595",s:"First Sale Consultant",type:"position",kind:"ra",st:"Done",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-07-27",hd:null,sd:"2026-07-15",ed:null,fcd_c:"2026-07-16",h:1,t:"E-commerce",sb:"Non-tech"},
@@ -1413,6 +1417,7 @@ const HW=[
   {key:"REC-482",s:"Тестування нових ATS",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-481",s:"Підготовка документу по стендах компаній Dou Day 2026",type:"position",kind:"task",st:"Done",pr:"Low",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-05-18",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-395",s:"UX Writer",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-07-16",hd:"2026-07-16",sd:"2026-05-21",ed:null,fcd_c:"2026-05-21",h:1,t:"Product",sb:"UX Research"},
+  {key:"REC-362",s:"Calisthenics Expert (male)",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,fcd:null,hd:null,sd:"2026-03-05",ed:null,fcd_c:null,h:2,t:"Content",sb:"Content",pk:"REC-141"},
   {key:"REC-361",s:"Gym Trainer - male",type:"subtask",kind:"ra_sub",st:"Done",pr:"Low",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-25",hd:null,sd:"2026-04-01",ed:null,fcd_c:"2026-05-04",h:1,t:"Content",sb:"Content",pk:"REC-184"},
   {key:"REC-360",s:"REC-185  Gym Trainer - male",type:"subtask",kind:"ra_sub",st:"Hired",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-21",hd:"2026-05-25",sd:"2026-04-01",ed:null,fcd_c:"2026-05-07",h:1,t:"Content",sb:"Content",pk:"REC-184"},
   {key:"REC-359",s:"Gym Trainer - female",type:"subtask",kind:"ra_sub",st:"Hired",pr:"High",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-05-08",hd:"2026-05-15",sd:"2026-04-02",ed:"2026-05-08",fcd_c:"2026-04-07",h:1,t:"Content",sb:"Content",pk:"REC-184"},
@@ -1501,7 +1506,7 @@ const WP=[
   {key:"REC-569",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-02",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-567",s:" Copywriter",st:"In progress",pr:"High",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-06-29",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
-  {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-06-29",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
+  {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-07-31",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-544",s:"IT Support Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-05-27",h:1,es:"Staff",t:"Engineering",sb:"IT support",cr:"2026-05-27"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Nadiia Brusova",src:"Kateryna Yaremenko",sd:"2026-05-26",h:1,es:"Staff",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-07-01",h:1,es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
@@ -1585,6 +1590,7 @@ const RECR={
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
+  "REC-612":"Alina Muravchyk",
   "REC-599":"Alina Muravchyk",
   "REC-595":"Yaroslava Bondarchuk",
   "REC-592":"Polina Serdiuk",
@@ -1613,6 +1619,7 @@ const RECR={
   "REC-495":"Yaroslava Bondarchuk",
   "REC-484":"Mariia Salabai",
   "REC-395":"Yaroslava Bondarchuk",
+  "REC-362":"Anastasiia Shapovalenko",
   "REC-361":"Yaroslava Bondarchuk",
   "REC-360":"Yaroslava Bondarchuk",
   "REC-359":"Yaroslava Bondarchuk",
@@ -4054,6 +4061,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-612",type:"subtask",kind:"op_sub",st:"Hired",s:"Content Project Manager",sd:"2026-06-29",ed:null,cr:"2026-08-03",fcd:"2026-08-03",hd:"2026-08-03",fcd_c:"2026-07-17",sn:"Middle",rec:"Alina Muravchyk",src:null,pr:"Medium",h:1,t:"Content",sb:"Workout Content",cs:"Internal remote employee",cs_other:null,pk:"REC-566"},
   {key:"REC-599",type:"position",kind:"op",st:"Hired",s:"Junior Creative Marketing Specialist",sd:"2026-06-30",ed:null,cr:"2026-07-22",fcd:"2026-07-22",hd:"2026-07-22",fcd_c:"2026-06-30",sn:"Junior",rec:"Alina Muravchyk",src:null,pr:"Medium",h:1,t:"Marketing",sb:"Creative",cs:"Happy Monday",cs_other:null,pk:null},
   {key:"REC-597",type:"position",kind:"task",st:"Done",s:"Sourcing Creative Specialist",sd:"2026-07-15",ed:null,cr:"2026-07-15",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"High",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-595",type:"position",kind:"ra",st:"Done",s:"First Sale Consultant",sd:"2026-07-15",ed:null,cr:"2026-07-15",fcd:"2026-07-27",hd:null,fcd_c:"2026-07-16",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"E-commerce",sb:"Non-tech",cs:"LinkedIn Sourced",cs_other:null,pk:null},
@@ -4091,6 +4099,7 @@ const CV=[
   {key:"REC-482",type:"position",kind:"task",st:"Done",s:"Тестування нових ATS",sd:"2026-05-18",ed:null,cr:"2026-05-19",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-481",type:"position",kind:"task",st:"Done",s:"Підготовка документу по стендах компаній Dou Day 2026",sd:"2026-05-18",ed:null,cr:"2026-05-19",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Low",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-395",type:"position",kind:"op",st:"Hired",s:"UX Writer",sd:"2026-05-21",ed:null,cr:"2026-05-18",fcd:"2026-07-16",hd:"2026-07-16",fcd_c:"2026-05-21",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"Product",sb:"UX Research",cs:"Djinni",cs_other:null,pk:null},
+  {key:"REC-362",type:"subtask",kind:"ra_sub",st:"Done",s:"Calisthenics Expert (male)",sd:"2026-03-05",ed:null,cr:"2026-05-15",fcd:null,hd:null,fcd_c:null,sn:null,rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:2,t:"Content",sb:"Content",cs:null,cs_other:null,pk:"REC-141"},
   {key:"REC-361",type:"subtask",kind:"ra_sub",st:"Done",s:"Gym Trainer - male",sd:"2026-04-01",ed:null,cr:"2026-05-15",fcd:"2026-05-25",hd:null,fcd_c:"2026-05-04",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Low",h:1,t:"Content",sb:"Content",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-184"},
   {key:"REC-360",type:"subtask",kind:"ra_sub",st:"Hired",s:"REC-185  Gym Trainer - male",sd:"2026-04-01",ed:null,cr:"2026-05-15",fcd:"2026-05-21",hd:"2026-05-25",fcd_c:"2026-05-07",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"Content",sb:"Content",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-184"},
   {key:"REC-359",type:"subtask",kind:"ra_sub",st:"Hired",s:"Gym Trainer - female",sd:"2026-04-02",ed:"2026-05-08",cr:"2026-05-15",fcd:"2026-05-08",hd:"2026-05-15",fcd_c:"2026-04-07",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"Content",sb:"Content",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-184"},
@@ -4562,7 +4571,7 @@ const RAS=[
   {key:"REC-497",pk:"REC-495",s:"Line Producer (China)",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-17",t:"Content",sb:"Content Production",cf_cooperation:"Freelance"},
   {key:"REC-496",pk:"REC-495",s:"Line Producer (China)",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-17",t:"Content",sb:"Content Production",cf_cooperation:"Freelance"},
   {key:"REC-363",pk:"REC-141",s:"Calisthenics Expert (male)",st:"Canceled",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",t:"Content",sb:"Content",cf_cooperation:null},
-  {key:"REC-362",pk:"REC-141",s:"Calisthenics Expert (male)",st:"Canceled",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",t:"Content",sb:"Content",cf_cooperation:null},
+  {key:"REC-362",pk:"REC-141",s:"Calisthenics Expert (male)",st:"Done",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",t:"Content",sb:"Content",cf_cooperation:null},
   {key:"REC-361",pk:"REC-184",s:"Gym Trainer - male",st:"Done",pr:"Low",sn:null,rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-01",t:"Content",sb:"Content",cf_cooperation:null},
   {key:"REC-358",pk:"REC-228",s:"Calisthenics Expert (female)",st:"Canceled",pr:"Medium",sn:null,rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-23",t:"Content",sb:"Content",cf_cooperation:null},
   {key:"REC-355",pk:"REC-342",s:"E-com Consultants",st:"Plan",pr:"Medium",sn:null,rec:null,src:null,sd:null,t:"E-commerce",sb:"Non-tech",cf_cooperation:null},
