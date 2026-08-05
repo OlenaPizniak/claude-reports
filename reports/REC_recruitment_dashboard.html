@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 5 серпня 2026, оновлено 12:43 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 5 серпня 2026, оновлено 14:01 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-620":"2026-08-05",
   "REC-619":null,
   "REC-616":"2026-08-03",
   "REC-614":"2026-08-03",
@@ -1088,6 +1089,10 @@ const SD={
   "REC-191":"2026-04-02",
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
+  "REC-624":"2026-08-05",
+  "REC-623":"2026-08-05",
+  "REC-622":"2026-08-05",
+  "REC-621":"2026-08-05",
   "REC-615":"2026-08-03",
   "REC-602":"2026-07-22",
   "REC-598":"2026-07-21",
@@ -1213,6 +1218,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-620":"Junior",
   "REC-619":"Senior",
   "REC-616":"Junior",
   "REC-614":"Middle",
@@ -1257,6 +1263,10 @@ const SN={
   "REC-191":"Middle",
   "REC-182":"Middle",
   "REC-177":"Middle",
+  "REC-624":"Junior",
+  "REC-623":"Junior",
+  "REC-622":"Junior",
+  "REC-621":"Junior",
   "REC-615":"Middle",
   "REC-602":"Middle",
   "REC-598":"Middle",
@@ -1343,6 +1353,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",so:"Maksym Kovalenko",re:null,h:5,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
   {key:"REC-619",s:"DevOps Engineer",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"DevOps",cr:"2026-08-04"},
   {key:"REC-616",s:"Graphic Designer",st:"In progress",pr:"High",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"High",so:"Masha Kolomiiets",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
@@ -1507,6 +1518,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-05",h:5,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
   {key:"REC-619",s:"DevOps Engineer",st:"Plan",pr:"Medium",sn:"Senior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:null,h:1,es:"Staff",t:"Engineering",sb:"DevOps",cr:"2026-08-04"},
   {key:"REC-616",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
@@ -1554,6 +1566,10 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-624",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-623",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-622",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-621",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-615",pk:"REC-614",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-602",pk:"REC-593",s:"AI Creative Designer",st:"In progress",sd:"2026-07-22",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-598",pk:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",sd:"2026-07-21",rec:"Mariia Salabai",src:null},
@@ -1565,6 +1581,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-620":"Anastasiia Shapovalenko",
   "REC-619":"Polina Serdiuk",
   "REC-616":"Anastasiia Shapovalenko",
   "REC-614":"Anastasiia Shapovalenko",
@@ -1601,6 +1618,10 @@ const RECR={
   "REC-191":"Yaroslava Bondarchuk",
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
+  "REC-624":"Anastasiia Shapovalenko",
+  "REC-623":"Anastasiia Shapovalenko",
+  "REC-622":"Anastasiia Shapovalenko",
+  "REC-621":"Anastasiia Shapovalenko",
   "REC-615":"Anastasiia Shapovalenko",
   "REC-602":"Anastasiia Shapovalenko",
   "REC-598":"Mariia Salabai",
