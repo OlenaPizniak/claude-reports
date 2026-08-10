@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 10 серпня 2026, оновлено 11:58 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 10 серпня 2026, оновлено 13:25 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1094,6 +1094,10 @@ const SD={
   "REC-622":"2026-08-05",
   "REC-621":"2026-08-05",
   "REC-615":"2026-08-03",
+  "REC-611":"2026-07-28",
+  "REC-610":"2026-07-28",
+  "REC-609":"2026-07-28",
+  "REC-608":"2026-07-28",
   "REC-602":"2026-07-22",
   "REC-598":"2026-07-21",
   "REC-591":null,
@@ -1268,6 +1272,10 @@ const SN={
   "REC-622":"Junior",
   "REC-621":"Junior",
   "REC-615":"Middle",
+  "REC-611":"Junior",
+  "REC-610":"Junior",
+  "REC-609":"Junior",
+  "REC-608":"Junior",
   "REC-602":"Middle",
   "REC-598":"Middle",
   "REC-590":"Junior",
@@ -1580,6 +1588,10 @@ const ST=[
   {key:"REC-622",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-621",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-615",pk:"REC-614",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-611",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
+  {key:"REC-610",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
+  {key:"REC-609",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
+  {key:"REC-608",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
   {key:"REC-602",pk:"REC-593",s:"AI Creative Designer",st:"In progress",sd:"2026-07-22",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-598",pk:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",sd:"2026-07-21",rec:"Mariia Salabai",src:null},
   {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"Canceled",sd:null,rec:null,src:null},
@@ -1632,6 +1644,10 @@ const RECR={
   "REC-622":"Anastasiia Shapovalenko",
   "REC-621":"Anastasiia Shapovalenko",
   "REC-615":"Anastasiia Shapovalenko",
+  "REC-611":"Mariia Salabai",
+  "REC-610":"Mariia Salabai",
+  "REC-609":"Mariia Salabai",
+  "REC-608":"Mariia Salabai",
   "REC-602":"Anastasiia Shapovalenko",
   "REC-598":"Mariia Salabai",
   "REC-590":"Anastasiia Shapovalenko",
@@ -4609,10 +4625,6 @@ const RA=[
 ];
 // Recruitment Assignment sub-tasks (issuetype=Recruitment Assignment sub-task, not Hired)
 const RAS=[
-  {key:"REC-611",pk:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",t:"Marketing",sb:"Creative",cf_cooperation:"Project-based"},
-  {key:"REC-610",pk:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",t:"Marketing",sb:"Creative",cf_cooperation:"Project-based"},
-  {key:"REC-609",pk:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",t:"Marketing",sb:"Creative",cf_cooperation:"Project-based"},
-  {key:"REC-608",pk:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",t:"Marketing",sb:"Creative",cf_cooperation:"Project-based"},
   {key:"REC-577",pk:"REC-574",s:"Video Editor",st:"Canceled",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-06-30",t:"Content",sb:"Content",cf_cooperation:"Part-time"},
   {key:"REC-576",pk:"REC-574",s:"Video Editor",st:"Canceled",pr:"Medium",sn:null,rec:"Mariia Salabai",src:null,sd:"2026-06-30",t:"Content",sb:"Content",cf_cooperation:"Part-time"},
   {key:"REC-575",pk:"REC-574",s:"Video Editor",st:"Canceled",pr:"Medium",sn:null,rec:null,src:"Mariia Salabai",sd:"2026-06-30",t:"Content",sb:"Content",cf_cooperation:"Part-time"},
