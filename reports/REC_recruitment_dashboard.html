@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 20 серпня 2026, оновлено 11:50 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 20 серпня 2026, оновлено 12:07 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1104,6 +1104,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-633":null,
   "REC-621":"2026-08-05",
   "REC-612":"2026-06-29",
   "REC-608":"2026-07-28",
@@ -1285,6 +1286,7 @@ const SN={
   "REC-330":"Middle",
   "REC-216":"Junior",
   "REC-212":"Middle",
+  "REC-633":"Junior",
   "REC-621":"Junior",
   "REC-612":"Middle",
   "REC-608":"Junior",
@@ -1428,6 +1430,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-633",s:"AI Content & Growth Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-08-14",hd:"2026-08-20",sd:null,ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"SMM team"},
   {key:"REC-621",s:"AI Creative Designer ",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-08-12",hd:"2026-08-12",sd:"2026-08-05",ed:null,fcd_c:"2026-07-22",h:4,t:"Marketing",sb:"Creative",pk:"REC-620"},
   {key:"REC-612",s:"Content Project Manager",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,fcd:"2026-07-30",hd:"2026-08-03",sd:"2026-06-29",ed:null,fcd_c:"2026-07-17",h:1,t:"Content",sb:"Workout Content",pk:"REC-566"},
   {key:"REC-608",s:"2D Motion Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,fcd:"2026-08-12",hd:"2026-08-12",sd:"2026-07-28",ed:null,fcd_c:"2026-07-17",h:4,t:"Marketing",sb:"Creative",pk:"REC-607"},
@@ -1554,18 +1557,18 @@ const WP=[
   {key:"REC-630",s:" Business Analyst",st:"In progress",pr:"Medium",sn:"Senior",rec:"Nadiia Brusova",src:"Anastasiia Melnyk",sd:"2026-08-17",h:1,es:"Staff",t:"Product",sb:"Business Analysts",cr:"2026-08-17"},
   {key:"REC-628",s:"Google Ads Specialist (E-commerce)",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-08-14",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-08-14"},
   {key:"REC-626",s:"AI Engineer ",st:"In progress",pr:"High",sn:"Senior",rec:"Alina Muravchyk",src:"Anastasiia Melnyk",sd:"2026-08-10",h:1,es:"Staff",t:"Engineering",sb:null,cr:"2026-08-10"},
-  {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-08-05",h:4,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
+  {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-05",h:4,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
   {key:"REC-619",s:"DevOps Engineer",st:"Plan",pr:"Medium",sn:"Senior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:null,h:1,es:"Staff",t:"Engineering",sb:"DevOps",cr:"2026-08-04"},
-  {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-08-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
+  {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",h:4,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-606",s:"Admin Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-07-29",h:1,es:"Staff",t:"Content",sb:"Content",cr:"2026-07-30"},
   {key:"REC-603",s:"Fashion Operations Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-29",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-07-29"},
   {key:"REC-594",s:"Employee Experience Specialist",st:"In progress",pr:"Low",sn:"Junior",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-07-10",h:1,es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
-  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-07-09",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
+  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-09",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
   {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-07-02",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
-  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-07-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-07-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-07-31",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Alina Muravchyk",src:null,sd:"2026-05-26",h:1,es:"Staff",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-07-01",h:1,es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
@@ -1599,15 +1602,15 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
-  {key:"REC-625",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk"},
-  {key:"REC-624",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk"},
-  {key:"REC-623",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk"},
-  {key:"REC-622",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk"},
-  {key:"REC-615",pk:"REC-614",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk"},
+  {key:"REC-625",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-624",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-623",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-622",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
+  {key:"REC-615",pk:"REC-614",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-611",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
   {key:"REC-610",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
   {key:"REC-609",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
-  {key:"REC-602",pk:"REC-593",s:"AI Creative Designer",st:"In progress",sd:"2026-07-22",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk"},
+  {key:"REC-602",pk:"REC-593",s:"AI Creative Designer",st:"In progress",sd:"2026-07-22",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-598",pk:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",sd:"2026-07-21",rec:"Mariia Salabai",src:null},
   {key:"REC-591",pk:"REC-568",s:"Graphic Designer",st:"Canceled",sd:null,rec:null,src:null},
   {key:"REC-330",pk:"REC-249",s:"AI Creative Designer",st:"Canceled",sd:"2026-05-12",rec:"Mariia Salabai",src:null},
@@ -1667,6 +1670,7 @@ const RECR={
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
+  "REC-633":"Anastasiia Hodyna",
   "REC-621":"Anastasiia Shapovalenko",
   "REC-612":"Alina Muravchyk",
   "REC-608":"Mariia Salabai",
@@ -1775,23 +1779,13 @@ const SRCR={
   "REC-630":"Anastasiia Melnyk",
   "REC-628":"Kateryna Yaremenko",
   "REC-626":"Anastasiia Melnyk",
-  "REC-620":"Anastasiia Melnyk",
   "REC-619":"Anastasiia Melnyk",
-  "REC-614":"Anastasiia Melnyk",
   "REC-606":"Anastasiia Melnyk",
   "REC-594":"Anastasiia Melnyk",
-  "REC-593":"Anastasiia Melnyk",
   "REC-578":"Kateryna Yaremenko",
-  "REC-568":"Anastasiia Melnyk",
   "REC-315":"Mariia Salabai",
   "REC-193":"Alina Muravchyk",
   "REC-177":"Anastasiia Melnyk",
-  "REC-625":"Anastasiia Melnyk",
-  "REC-624":"Anastasiia Melnyk",
-  "REC-623":"Anastasiia Melnyk",
-  "REC-622":"Anastasiia Melnyk",
-  "REC-615":"Anastasiia Melnyk",
-  "REC-602":"Anastasiia Melnyk",
   "REC-592":"Polina Serdiuk",
   "REC-588":"Kateryna Yaremenko",
   "REC-500":"Kateryna Yaremenko",
@@ -4161,6 +4155,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-633",type:"position",kind:"op",st:"Hired",s:"AI Content & Growth Specialist",sd:null,ed:null,cr:"2026-08-20",fcd:"2026-08-14",hd:"2026-08-20",fcd_c:null,sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"SMM team",cs:"Other",cs_other:null,pk:null},
   {key:"REC-621",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer ",sd:"2026-08-05",ed:null,cr:"2026-08-05",fcd:"2026-08-12",hd:"2026-08-12",fcd_c:"2026-07-22",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:4,t:"Marketing",sb:"Creative",cs:"Dou",cs_other:null,pk:"REC-620"},
   {key:"REC-612",type:"subtask",kind:"op_sub",st:"Hired",s:"Content Project Manager",sd:"2026-06-29",ed:null,cr:"2026-08-03",fcd:"2026-07-30",hd:"2026-08-03",fcd_c:"2026-07-17",sn:"Middle",rec:"Alina Muravchyk",src:null,pr:"Medium",h:1,t:"Content",sb:"Workout Content",cs:"Internal remote employee",cs_other:null,pk:"REC-566"},
   {key:"REC-608",type:"subtask",kind:"op_sub",st:"Hired",s:"2D Motion Designer",sd:"2026-07-28",ed:null,cr:"2026-07-30",fcd:"2026-08-12",hd:"2026-08-12",fcd_c:"2026-07-17",sn:"Junior",rec:"Mariia Salabai",src:null,pr:"Low",h:4,t:"Marketing",sb:"Creative",cs:"Robota.ua",cs_other:null,pk:"REC-607"},
