@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 24 серпня 2026, оновлено 18:11 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 24 серпня 2026, оновлено 18:49 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1060,6 +1060,7 @@ const SD={
   "REC-586":"2026-07-02",
   "REC-580":"2026-07-02",
   "REC-578":"2026-06-30",
+  "REC-568":"2026-08-03",
   "REC-566":"2026-07-31",
   "REC-543":"2026-05-26",
   "REC-539":"2026-07-01",
@@ -1089,7 +1090,6 @@ const SD={
   "REC-191":"2026-04-02",
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
-  "REC-625":"2026-08-03",
   "REC-624":"2026-08-05",
   "REC-623":"2026-08-05",
   "REC-622":"2026-08-05",
@@ -1120,7 +1120,6 @@ const SD={
   "REC-571":"2026-06-22",
   "REC-570":"2026-06-30",
   "REC-569":"2026-07-02",
-  "REC-568":"2026-07-03",
   "REC-567":"2026-06-29",
   "REC-565":"2026-06-22",
   "REC-564":"2026-06-23",
@@ -1244,6 +1243,7 @@ const SN={
   "REC-586":"Middle",
   "REC-580":"Middle",
   "REC-578":"Senior",
+  "REC-568":"Junior",
   "REC-566":"Middle",
   "REC-543":"Senior",
   "REC-539":"Junior",
@@ -1273,7 +1273,6 @@ const SN={
   "REC-191":"Middle",
   "REC-182":"Middle",
   "REC-177":"Middle",
-  "REC-625":"Junior",
   "REC-624":"Junior",
   "REC-623":"Junior",
   "REC-622":"Junior",
@@ -1299,7 +1298,6 @@ const SN={
   "REC-574":"Expert",
   "REC-570":"Middle",
   "REC-569":"Junior",
-  "REC-568":"Middle",
   "REC-567":"Middle",
   "REC-565":"Expert",
   "REC-564":"Expert",
@@ -1399,6 +1397,7 @@ const OP=[
   {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"High",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"In progress",pr:"Medium",so:"Constantine Chernenko",re:null,h:1,r:"Extention",es:"Staff",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",so:"Iryna Savchuk",re:null,h:1,r:"Replacement",es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
@@ -1448,7 +1447,6 @@ const HW=[
   {key:"REC-571",s:"Supplements Industry Consultant",type:"subtask",kind:"ra_sub",st:"Done",pr:"Medium",sn:null,rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-30",hd:null,sd:"2026-06-22",ed:null,fcd_c:"2026-06-24",h:2,t:"E-commerce",sb:"Supply",pk:"REC-565"},
   {key:"REC-570",s:"Product Designer",type:"position",kind:"ra",st:"Done",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,fcd:"2026-07-27",hd:null,sd:"2026-06-30",ed:null,fcd_c:"2026-07-03",h:1,t:"Content",sb:"Content"},
   {key:"REC-569",s:"AI Creative Designer",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-08-04",hd:"2026-08-04",sd:"2026-07-02",ed:null,fcd_c:"2026-07-13",h:1,t:"Marketing",sb:"Creative"},
-  {key:"REC-568",s:"Graphic Designer",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-08-21",hd:"2026-08-21",sd:"2026-07-03",ed:null,fcd_c:"2026-08-04",h:1,t:"Marketing",sb:"Creative"},
   {key:"REC-567",s:" Copywriter",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Alina Muravchyk",src:null,fcd:"2026-08-18",hd:"2026-08-19",sd:"2026-06-29",ed:null,fcd_c:"2026-07-31",h:1,t:"Content",sb:"Workout Content"},
   {key:"REC-565",s:"Supplements Industry Consultant",type:"position",kind:"ra",st:"Done",pr:"Medium",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-06-30",hd:null,sd:"2026-06-22",ed:null,fcd_c:"2026-06-24",h:2,t:"E-commerce",sb:"Supply"},
   {key:"REC-564",s:"Beauty Consultant",type:"position",kind:"ra",st:"Done",pr:"High",sn:"Expert",rec:"Kateryna Yaremenko",src:null,fcd:"2026-08-04",hd:null,sd:"2026-06-23",ed:null,fcd_c:null,h:1,t:"E-commerce",sb:"Supply"},
@@ -1572,6 +1570,7 @@ const WP=[
   {key:"REC-586",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-07-02",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-02"},
   {key:"REC-580",s:"Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-07-02"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
+  {key:"REC-568",s:"Graphic Designer",st:"In progress",pr:"High",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-06-29"},
   {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-07-31",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"In progress",pr:"Medium",sn:"Senior",rec:"Alina Muravchyk",src:null,sd:"2026-05-26",h:1,es:"Staff",t:"Engineering",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-539",s:"Legal Counsel",st:"In progress",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-01",h:1,es:"Staff",t:"Legal",sb:null,cr:"2026-05-25"},
@@ -1604,7 +1603,6 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
-  {key:"REC-625",pk:"REC-568",s:"Graphic Designer",st:"In progress",sd:"2026-08-03",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-624",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-623",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-622",pk:"REC-620",s:"AI Creative Designer ",st:"In progress",sd:"2026-08-05",rec:"Anastasiia Shapovalenko",src:null},
@@ -1636,6 +1634,7 @@ const RECR={
   "REC-586":"Mariia Salabai",
   "REC-580":"Polina Serdiuk",
   "REC-578":"Darina Lavrenko",
+  "REC-568":"Anastasiia Shapovalenko",
   "REC-566":"Alina Muravchyk",
   "REC-543":"Alina Muravchyk",
   "REC-539":"Mariia Salabai",
@@ -1657,7 +1656,6 @@ const RECR={
   "REC-191":"Yaroslava Bondarchuk",
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
-  "REC-625":"Anastasiia Shapovalenko",
   "REC-624":"Anastasiia Shapovalenko",
   "REC-623":"Anastasiia Shapovalenko",
   "REC-622":"Anastasiia Shapovalenko",
@@ -1684,7 +1682,6 @@ const RECR={
   "REC-571":"Yaroslava Bondarchuk",
   "REC-570":"Mariia Salabai",
   "REC-569":"Anastasiia Shapovalenko",
-  "REC-568":"Anastasiia Shapovalenko",
   "REC-567":"Alina Muravchyk",
   "REC-565":"Yaroslava Bondarchuk",
   "REC-564":"Kateryna Yaremenko",
@@ -4175,7 +4172,6 @@ const CV=[
   {key:"REC-571",type:"subtask",kind:"ra_sub",st:"Done",s:"Supplements Industry Consultant",sd:"2026-06-22",ed:null,cr:"2026-06-30",fcd:"2026-06-30",hd:null,fcd_c:"2026-06-24",sn:null,rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:2,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:"REC-565"},
   {key:"REC-570",type:"position",kind:"ra",st:"Done",s:"Product Designer",sd:"2026-06-30",ed:null,cr:"2026-06-30",fcd:"2026-07-27",hd:null,fcd_c:"2026-07-03",sn:"Middle",rec:"Mariia Salabai",src:null,pr:"Medium",h:1,t:"Content",sb:"Content",cs:"Dou",cs_other:null,pk:null},
   {key:"REC-569",type:"position",kind:"op",st:"Hired",s:"AI Creative Designer",sd:"2026-07-02",ed:null,cr:"2026-06-29",fcd:"2026-08-04",hd:"2026-08-04",fcd_c:"2026-07-13",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:1,t:"Marketing",sb:"Creative",cs:"Internal Database",cs_other:null,pk:null},
-  {key:"REC-568",type:"position",kind:"op",st:"Hired",s:"Graphic Designer",sd:"2026-07-03",ed:null,cr:"2026-06-29",fcd:"2026-08-21",hd:"2026-08-21",fcd_c:"2026-08-04",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,pr:"High",h:1,t:"Marketing",sb:"Creative",cs:"Robota.ua",cs_other:null,pk:null},
   {key:"REC-567",type:"position",kind:"op",st:"Hired",s:" Copywriter",sd:"2026-06-29",ed:null,cr:"2026-06-24",fcd:"2026-08-18",hd:"2026-08-19",fcd_c:"2026-07-31",sn:"Middle",rec:"Alina Muravchyk",src:null,pr:"High",h:1,t:"Content",sb:"Workout Content",cs:"Dou",cs_other:null,pk:null},
   {key:"REC-565",type:"position",kind:"ra",st:"Done",s:"Supplements Industry Consultant",sd:"2026-06-22",ed:null,cr:"2026-06-22",fcd:"2026-06-30",hd:null,fcd_c:"2026-06-24",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:2,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:null},
   {key:"REC-564",type:"position",kind:"ra",st:"Done",s:"Beauty Consultant",sd:"2026-06-23",ed:null,cr:"2026-06-22",fcd:"2026-08-04",hd:null,fcd_c:null,sn:"Expert",rec:"Kateryna Yaremenko",src:null,pr:"High",h:1,t:"E-commerce",sb:"Supply",cs:"LinkedIn Sourced",cs_other:null,pk:null},
