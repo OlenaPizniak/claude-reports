@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 26 серпня 2026, оновлено 11:10 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 26 серпня 2026, оновлено 11:55 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1173,6 +1173,7 @@ const SD={
   "REC-252":"2026-03-23",
   "REC-251":"2026-03-23",
   "REC-250":"2026-02-13",
+  "REC-245":"2026-07-02",
   "REC-243":"2026-03-11",
   "REC-242":"2026-04-08",
   "REC-241":"2026-02-05",
@@ -1335,6 +1336,7 @@ const SN={
   "REC-252":"Junior",
   "REC-251":"Junior",
   "REC-250":"Junior",
+  "REC-245":"Expert",
   "REC-243":"Middle",
   "REC-242":"Junior",
   "REC-241":"Middle",
@@ -1505,6 +1507,7 @@ const HW=[
   {key:"REC-252",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-06",hd:"2026-05-06",sd:"2026-03-23",ed:null,fcd_c:"2026-04-14",h:2,t:"Marketing",sb:"Creative",pk:"REC-249"},
   {key:"REC-251",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-04",hd:"2026-05-05",sd:"2026-03-23",ed:null,fcd_c:"2026-04-07",h:2,t:"Marketing",sb:"Creative",pk:"REC-249"},
   {key:"REC-250",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-04-29",hd:"2026-04-29",sd:"2026-02-13",ed:null,fcd_c:"2026-04-01",h:2,t:"Marketing",sb:"Creative",pk:"REC-249"},
+  {key:"REC-245",s:"TaiChi Instructor ",type:"position",kind:"ra",st:"Done",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,fcd:null,hd:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null},
   {key:"REC-243",s:"AI Creative Designer",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,fcd:"2026-05-06",hd:"2026-04-29",sd:"2026-03-11",ed:null,fcd_c:"2026-04-26",h:1,t:"Brand Design",sb:"Brand"},
   {key:"REC-242",s:"Junior Creative Specialist",type:"position",kind:"op",st:"Hired",pr:"Low",sn:"Junior",rec:"Alina Muravchyk",src:null,fcd:"2026-06-23",hd:"2026-06-23",sd:"2026-04-08",ed:null,fcd_c:"2026-06-01",h:1,t:"Marketing",sb:"Creative"},
   {key:"REC-241",s:"Legal Counsel",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Yelyzaveta Yakovlieva",src:null,fcd:"2026-04-20",hd:"2026-04-21",sd:"2026-02-05",ed:null,fcd_c:"2026-03-23",h:1,t:"Legal",sb:"Legal"},
@@ -1733,6 +1736,7 @@ const RECR={
   "REC-252":"Mariia Salabai",
   "REC-251":"Mariia Salabai",
   "REC-250":"Mariia Salabai",
+  "REC-245":"Polina Serdiuk",
   "REC-243":"Polina Serdiuk",
   "REC-242":"Alina Muravchyk",
   "REC-241":"Yelyzaveta Yakovlieva",
@@ -4234,6 +4238,7 @@ const CV=[
   {key:"REC-252",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-03-23",ed:null,cr:"2026-04-21",fcd:"2026-05-06",hd:"2026-05-06",fcd_c:"2026-04-14",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",pr:"High",h:2,t:"Marketing",sb:"Creative",cs:"Robota.ua",cs_other:null,pk:"REC-249"},
   {key:"REC-251",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-03-23",ed:null,cr:"2026-04-21",fcd:"2026-05-04",hd:"2026-05-05",fcd_c:"2026-04-07",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",pr:"High",h:2,t:"Marketing",sb:"Creative",cs:"Work.ua",cs_other:null,pk:"REC-249"},
   {key:"REC-250",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-02-13",ed:null,cr:"2026-04-21",fcd:"2026-04-29",hd:"2026-04-29",fcd_c:"2026-04-01",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",pr:"High",h:2,t:"Marketing",sb:"Creative",cs:"Work.ua",cs_other:null,pk:"REC-249"},
+  {key:"REC-245",type:"position",kind:"ra",st:"Done",s:"TaiChi Instructor ",sd:"2026-07-02",ed:null,cr:"2026-04-16",fcd:null,hd:null,fcd_c:null,sn:"Expert",rec:"Polina Serdiuk",src:null,pr:"High",h:1,t:"Content",sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-243",type:"position",kind:"op",st:"Hired",s:"AI Creative Designer",sd:"2026-03-11",ed:null,cr:"2026-04-14",fcd:"2026-05-06",hd:"2026-04-29",fcd_c:"2026-04-26",sn:"Middle",rec:"Polina Serdiuk",src:null,pr:"Medium",h:1,t:"Brand Design",sb:"Brand",cs:"Internal Referral",cs_other:null,pk:null},
   {key:"REC-242",type:"position",kind:"op",st:"Hired",s:"Junior Creative Specialist",sd:"2026-04-08",ed:null,cr:"2026-04-09",fcd:"2026-06-23",hd:"2026-06-23",fcd_c:"2026-06-01",sn:"Junior",rec:"Alina Muravchyk",src:null,pr:"Low",h:1,t:"Marketing",sb:"Creative",cs:"Happy Monday",cs_other:null,pk:null},
   {key:"REC-241",type:"position",kind:"op",st:"Hired",s:"Legal Counsel",sd:"2026-02-05",ed:null,cr:"2026-04-08",fcd:"2026-04-20",hd:"2026-04-21",fcd_c:"2026-03-23",sn:"Middle",rec:"Yelyzaveta Yakovlieva",src:null,pr:"High",h:1,t:"Legal",sb:"Legal",cs:"Dou",cs_other:null,pk:null},
@@ -4667,7 +4672,7 @@ const RA=[
   {key:"REC-274",s:"Running coach for 5K, 10K & 21K training plans.",st:"In progress",pr:"Medium",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-08-20",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-272",s:"Mindful Walking Expert",st:"In progress",pr:"Medium",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-11",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:"Yes",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Certificates - Test Task/Call"}],attrs:{localId:"71b7e1bc78b9"}}]}},
   {key:"REC-271",s:"Pilates Instructor (Reformer)",st:"Canceled",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-245",s:"TaiChi Instructor ",st:"In progress",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-245",s:"TaiChi Instructor ",st:"Done",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-184",s:"Gym Trainer - female",st:"Done",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",ed:null,fcd_c:"2026-05-26",h:1,t:"Content",sb:"Workout Content",cr:"2026-04-02",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-141",s:"Calisthenics Expert (male)",st:"Done",pr:"Medium",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",ed:null,fcd_c:null,h:2,t:"Content",sb:"Workout Content",cr:"2026-03-27",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
 ];
