@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 27 серпня 2026, оновлено 04:00 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 27 серпня 2026, оновлено 12:28 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-641":"2026-08-27",
   "REC-639":"2026-08-25",
   "REC-634":null,
   "REC-631":"2026-08-18",
@@ -1230,6 +1231,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-641":"Junior",
   "REC-639":"Middle",
   "REC-634":"Middle",
   "REC-631":"Middle",
@@ -1387,6 +1389,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
   {key:"REC-639",s:"Post-Production Producer",st:"In progress",pr:"Medium",so:"Alla Yefimchuk",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-08-25"},
   {key:"REC-634",s:"Supply Chain Operations Specialist",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Replacement",es:"Staff",t:"E-commerce",sb:"Supply",cr:"2026-08-20"},
   {key:"REC-631",s:"Product Analyst",st:"In progress",pr:"High",so:"Yurii Tatunchak",re:null,h:1,r:"Replacement",es:"Staff",t:"Analytics",sb:"Product",cr:"2026-08-18"},
@@ -1507,7 +1510,7 @@ const HW=[
   {key:"REC-252",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-06",hd:"2026-05-06",sd:"2026-03-23",ed:null,fcd_c:"2026-04-14",h:2,t:"Marketing",sb:"Creative",pk:"REC-249"},
   {key:"REC-251",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-05-04",hd:"2026-05-05",sd:"2026-03-23",ed:null,fcd_c:"2026-04-07",h:2,t:"Marketing",sb:"Creative",pk:"REC-249"},
   {key:"REC-250",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"High",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",fcd:"2026-04-29",hd:"2026-04-29",sd:"2026-02-13",ed:null,fcd_c:"2026-04-01",h:2,t:"Marketing",sb:"Creative",pk:"REC-249"},
-  {key:"REC-245",s:"TaiChi Instructor ",type:"position",kind:"ra",st:"Done",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,fcd:null,hd:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null},
+  {key:"REC-245",s:"TaiChi Instructor ",type:"position",kind:"ra",st:"Done",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,fcd:"2026-08-27",hd:null,sd:"2026-07-02",ed:null,fcd_c:"2026-07-15",h:1,t:"Content",sb:null},
   {key:"REC-243",s:"AI Creative Designer",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,fcd:"2026-05-06",hd:"2026-04-29",sd:"2026-03-11",ed:null,fcd_c:"2026-04-26",h:1,t:"Brand Design",sb:"Brand"},
   {key:"REC-242",s:"Junior Creative Specialist",type:"position",kind:"op",st:"Hired",pr:"Low",sn:"Junior",rec:"Alina Muravchyk",src:null,fcd:"2026-06-23",hd:"2026-06-23",sd:"2026-04-08",ed:null,fcd_c:"2026-06-01",h:1,t:"Marketing",sb:"Creative"},
   {key:"REC-241",s:"Legal Counsel",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Yelyzaveta Yakovlieva",src:null,fcd:"2026-04-20",hd:"2026-04-21",sd:"2026-02-05",ed:null,fcd_c:"2026-03-23",h:1,t:"Legal",sb:"Legal"},
@@ -1564,7 +1567,8 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
-  {key:"REC-639",s:"Post-Production Producer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-08-25",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-08-25"},
+  {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-08-27",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
+  {key:"REC-639",s:"Post-Production Producer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-08-25",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-08-25"},
   {key:"REC-634",s:"Supply Chain Operations Specialist",st:"Plan",pr:"Medium",sn:"Middle",rec:null,src:null,sd:null,h:1,es:"Staff",t:"E-commerce",sb:"Supply",cr:"2026-08-20"},
   {key:"REC-631",s:"Product Analyst",st:"In progress",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-18",h:1,es:"Staff",t:"Analytics",sb:"Product",cr:"2026-08-18"},
   {key:"REC-630",s:" Business Analyst",st:"In progress",pr:"Medium",sn:"Senior",rec:"Nadiia Brusova",src:"Anastasiia Melnyk",sd:"2026-08-17",h:1,es:"Staff",t:"Product",sb:"Business Analysts",cr:"2026-08-17"},
@@ -1627,6 +1631,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-641":"Polina Serdiuk",
   "REC-639":"Polina Serdiuk",
   "REC-631":"Yaroslava Bondarchuk",
   "REC-630":"Nadiia Brusova",
@@ -1786,6 +1791,7 @@ const RECR={
 };
 // Sourcer lookup (customfield_23510) — fresh from Jira
 const SRCR={
+  "REC-639":"Anastasiia Melnyk",
   "REC-630":"Anastasiia Melnyk",
   "REC-628":"Kateryna Yaremenko",
   "REC-626":"Anastasiia Melnyk",
@@ -1832,6 +1838,7 @@ const SRCR={
 
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
+  {key:"REC-642",s:"Контактування Creative Marketing спеціалістів (ex-Genesis)",st:"ToDo",pr:"Medium",asgn:"Alina Muravchyk",sd:"2026-08-27"},
   {key:"REC-635",s:"Accessibility Consulting Experts Search",st:"In progress",pr:"Medium",asgn:"Anastasiia Shapovalenko",sd:"2026-08-20"},
   {key:"REC-632",s:"Моніторинг кріейтів лідів з генезійських коомпаній",st:"In progress",pr:"Medium",asgn:"Kateryna Yaremenko",sd:null},
   {key:"REC-618",s:"Актуалізація даних у Confluence",st:"In progress",pr:"Low",asgn:"Anastasiia Melnyk",sd:"2026-08-04"},
@@ -4238,7 +4245,7 @@ const CV=[
   {key:"REC-252",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-03-23",ed:null,cr:"2026-04-21",fcd:"2026-05-06",hd:"2026-05-06",fcd_c:"2026-04-14",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",pr:"High",h:2,t:"Marketing",sb:"Creative",cs:"Robota.ua",cs_other:null,pk:"REC-249"},
   {key:"REC-251",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-03-23",ed:null,cr:"2026-04-21",fcd:"2026-05-04",hd:"2026-05-05",fcd_c:"2026-04-07",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",pr:"High",h:2,t:"Marketing",sb:"Creative",cs:"Work.ua",cs_other:null,pk:"REC-249"},
   {key:"REC-250",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-02-13",ed:null,cr:"2026-04-21",fcd:"2026-04-29",hd:"2026-04-29",fcd_c:"2026-04-01",sn:"Junior",rec:"Mariia Salabai",src:"Kateryna Yaremenko",pr:"High",h:2,t:"Marketing",sb:"Creative",cs:"Work.ua",cs_other:null,pk:"REC-249"},
-  {key:"REC-245",type:"position",kind:"ra",st:"Done",s:"TaiChi Instructor ",sd:"2026-07-02",ed:null,cr:"2026-04-16",fcd:null,hd:null,fcd_c:null,sn:"Expert",rec:"Polina Serdiuk",src:null,pr:"High",h:1,t:"Content",sb:null,cs:null,cs_other:null,pk:null},
+  {key:"REC-245",type:"position",kind:"ra",st:"Done",s:"TaiChi Instructor ",sd:"2026-07-02",ed:null,cr:"2026-04-16",fcd:"2026-08-27",hd:null,fcd_c:"2026-07-15",sn:"Expert",rec:"Polina Serdiuk",src:null,pr:"High",h:1,t:"Content",sb:null,cs:"LinkedIn Sourced",cs_other:null,pk:null},
   {key:"REC-243",type:"position",kind:"op",st:"Hired",s:"AI Creative Designer",sd:"2026-03-11",ed:null,cr:"2026-04-14",fcd:"2026-05-06",hd:"2026-04-29",fcd_c:"2026-04-26",sn:"Middle",rec:"Polina Serdiuk",src:null,pr:"Medium",h:1,t:"Brand Design",sb:"Brand",cs:"Internal Referral",cs_other:null,pk:null},
   {key:"REC-242",type:"position",kind:"op",st:"Hired",s:"Junior Creative Specialist",sd:"2026-04-08",ed:null,cr:"2026-04-09",fcd:"2026-06-23",hd:"2026-06-23",fcd_c:"2026-06-01",sn:"Junior",rec:"Alina Muravchyk",src:null,pr:"Low",h:1,t:"Marketing",sb:"Creative",cs:"Happy Monday",cs_other:null,pk:null},
   {key:"REC-241",type:"position",kind:"op",st:"Hired",s:"Legal Counsel",sd:"2026-02-05",ed:null,cr:"2026-04-08",fcd:"2026-04-20",hd:"2026-04-21",fcd_c:"2026-03-23",sn:"Middle",rec:"Yelyzaveta Yakovlieva",src:null,pr:"High",h:1,t:"Legal",sb:"Legal",cs:"Dou",cs_other:null,pk:null},
@@ -4648,8 +4655,9 @@ CV.push(...HIST_CV);
 // Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track
 // Schema: see SKILL.md "Recruitment Assignment structure" section
 const RA=[
+  {key:"REC-640",s:"Wellness Consultant",st:"In progress",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-19",ed:null,fcd_c:null,h:1,t:"Content",sb:"Workout Content",cr:"2026-08-27",cf_cooperation:"Project-based",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Фітнес сертифікація - NASM CPT + "}],attrs:{localId:"f1fc89ea2332"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"ecfe3ba0d8f7"},content:[{type:"paragraph",content:[{type:"text",text:"Визнана сертифікація за методом mindfulness: MBSR, MBCT або еквівалентна акредитована програма. "}],attrs:{localId:"b3c72d03d7a9"}}]},{type:"listItem",attrs:{localId:"1f46e351f335"},content:[{type:"paragraph",content:[{type:"text",text:"Приклади сертифікацій (оскільки визнаних міжнародних організацій, по типу NASM, в цих сферах немає, наводимо без привʼязки до конкретних організацій):"}],attrs:{localId:"16cedee1ef44"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"c342d04c1bd1"},content:[{type:"paragraph",content:[{type:"text",text:"Best:"}],attrs:{localId:"6a1d288721e5"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"dc3c55ab8806"},content:[{type:"paragraph",content:[{type:"text",text:"Mindfulness-Based Stress Reduction Certificate"}],attrs:{localId:"fb87a27a3c1e"}}]},{type:"listItem",attrs:{localId:"b718129ad230"},content:[{type:"paragraph",content:[{type:"text",text:"Mindfulness Coach Certification"}],attrs:{localId:"d8c219f045d3"}}]},{type:"listItem",attrs:{localId:"410362c6999d"},content:[{type:"paragraph",content:[{type:"text",text:"Meditation Instructor Certification"}],attrs:{localId:"e3c239484986"}}]}],attrs:{localId:"75420b8beb91"}}]},{type:"listItem",attrs:{localId:"7467ae1e7357"},content:[{type:"paragraph",content:[{type:"text",text:"Good:"}],attrs:{localId:"d600b7f8c295"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"3720ae479c65"},content:[{type:"paragraph",content:[{type:"text",text:"Breathwork Facilitator/Practitioner Certification"}],attrs:{localId:"c74798afb5cc"}}]},{type:"listItem",attrs:{localId:"e91935f62415"},content:[{type:"paragraph",content:[{type:"text",text:"Somatic Experiencing/Practitioner Certification"}],attrs:{localId:"6c6879b11113"}}]}],attrs:{localId:"f928b3b59858"}}]}],attrs:{localId:"a7a29e41710e"}}]}],attrs:{localId:"cc3cb7a4bd3f"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"Yes",cf_nda:"Yes",cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-638",s:"WeChat shopping expert",st:"In progress",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-08-25",ed:null,fcd_c:null,h:1,t:"Marketing",sb:null,cr:"2026-08-25",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-636",s:"SKIMS & Vuori — Wholesale/B2B Consultants",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-24",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-08-24",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"inlineCard",attrs:{url:"https://docs.google.com/document/d/12b_CkYMKf5sctsOewi7uhM_dJCP7IZqCFe3z6iCCaLk/edit?tab=t.0",localId:"c0710596c9a5"}},{type:"text",text:" "},{type:"hardBreak"},{type:"inlineCard",attrs:{url:"https://docs.google.com/spreadsheets/d/1w5iQtwYmL50DF7Ye0AvSg8i-XPwqt7bsRQHnTDrv-0s/edit?usp=sharing",localId:"4b02f9a340d7"}},{type:"text",text:"  - кандидати"}],attrs:{localId:"c64bda90c19a"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-636",s:"Wholesale/B2B Consultants",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-24",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-08-24",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"inlineCard",attrs:{url:"https://docs.google.com/document/d/12b_CkYMKf5sctsOewi7uhM_dJCP7IZqCFe3z6iCCaLk/edit?tab=t.0",localId:"c0710596c9a5"}},{type:"text",text:" "},{type:"hardBreak"},{type:"inlineCard",attrs:{url:"https://docs.google.com/spreadsheets/d/1w5iQtwYmL50DF7Ye0AvSg8i-XPwqt7bsRQHnTDrv-0s/edit?usp=sharing",localId:"4b02f9a340d7"}},{type:"text",text:"  - кандидати"}],attrs:{localId:"c64bda90c19a"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-629",s:"Google Ads Specialist (E-commerce) Consultant",st:"In progress",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-08-14",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"PPC",cr:"2026-08-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-627",s:"Consultant for BetterMe Franchise",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-14",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-08-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-601",s:"Marketing Expert (Gymshark, Oner Active/DFYNE, Fashion Nova)",st:"In progress",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-07-23",ed:null,fcd_c:null,h:2,t:"Marketing",sb:"User Acquisition",cr:"2026-07-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
@@ -4669,9 +4677,9 @@ const RA=[
   {key:"REC-283",s:"Asian Pilates Instructor ",st:"Canceled",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-282",s:"Power Yoga Instructor ",st:"Canceled",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-04-23",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-274",s:"Running coach for 5K, 10K & 21K training plans.",st:"In progress",pr:"Medium",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-08-20",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-272",s:"Mindful Walking Expert",st:"In progress",pr:"Medium",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-11",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:"Yes",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Certificates - Test Task/Call"}],attrs:{localId:"71b7e1bc78b9"}}]}},
+  {key:"REC-272",s:"Mindful Walking Expert",st:"Canceled",pr:"Medium",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-11",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:"Yes",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Certificates - Test Task/Call"}],attrs:{localId:"71b7e1bc78b9"}}]}},
   {key:"REC-271",s:"Pilates Instructor (Reformer)",st:"Canceled",pr:"Low",sn:"Expert",rec:"Victoria Kotenko",src:null,sd:"2026-04-23",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-245",s:"TaiChi Instructor ",st:"Done",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",ed:null,fcd_c:null,h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-245",s:"TaiChi Instructor ",st:"Done",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-07-02",ed:null,fcd_c:"2026-07-15",h:1,t:"Content",sb:null,cr:"2026-04-16",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-184",s:"Gym Trainer - female",st:"Done",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-04-02",ed:null,fcd_c:"2026-05-26",h:1,t:"Content",sb:"Workout Content",cr:"2026-04-02",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-141",s:"Calisthenics Expert (male)",st:"Done",pr:"Medium",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-03-05",ed:null,fcd_c:null,h:2,t:"Content",sb:"Workout Content",cr:"2026-03-27",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
 ];
