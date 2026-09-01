@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 1 вересня 2026, оновлено 09:44 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 1 вересня 2026, оновлено 12:58 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1102,7 +1102,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
-  "REC-633":null,
+  "REC-633":"2026-08-14",
   "REC-622":"2026-08-05",
   "REC-621":"2026-08-05",
   "REC-615":"2026-07-03",
@@ -1440,7 +1440,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
-  {key:"REC-633",s:"AI Content & Growth Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-08-14",hd:"2026-08-20",sd:null,ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"SMM team"},
+  {key:"REC-633",s:"AI Content & Growth Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-08-17",hd:"2026-08-20",sd:"2026-08-14",ed:null,fcd_c:"2026-08-14",h:1,t:"Brand Communications",sb:"SMM team"},
   {key:"REC-622",s:"AI Creative Designer ",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-08-25",hd:"2026-08-25",sd:"2026-08-05",ed:null,fcd_c:"2026-08-10",h:3,t:"Marketing",sb:"Creative",pk:"REC-620"},
   {key:"REC-621",s:"AI Creative Designer ",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-08-12",hd:"2026-08-12",sd:"2026-08-05",ed:null,fcd_c:"2026-07-22",h:3,t:"Marketing",sb:"Creative",pk:"REC-620"},
   {key:"REC-615",s:"Graphic Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-08-21",hd:"2026-08-25",sd:"2026-07-03",ed:null,fcd_c:"2026-08-04",h:1,t:"Marketing",sb:"Creative",pk:"REC-614"},
@@ -4177,7 +4177,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
-  {key:"REC-633",type:"position",kind:"op",st:"Hired",s:"AI Content & Growth Specialist",sd:null,ed:null,cr:"2026-08-20",fcd:"2026-08-14",hd:"2026-08-20",fcd_c:null,sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"SMM team",cs:"Other",cs_other:null,pk:null},
+  {key:"REC-633",type:"position",kind:"op",st:"Hired",s:"AI Content & Growth Specialist",sd:"2026-08-14",ed:null,cr:"2026-08-20",fcd:"2026-08-17",hd:"2026-08-20",fcd_c:"2026-08-14",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"SMM team",cs:"Other",cs_other:null,pk:null},
   {key:"REC-622",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer ",sd:"2026-08-05",ed:null,cr:"2026-08-05",fcd:"2026-08-25",hd:"2026-08-25",fcd_c:"2026-08-10",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:3,t:"Marketing",sb:"Creative",cs:"Internal Referral",cs_other:null,pk:"REC-620"},
   {key:"REC-621",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer ",sd:"2026-08-05",ed:null,cr:"2026-08-05",fcd:"2026-08-12",hd:"2026-08-12",fcd_c:"2026-07-22",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:3,t:"Marketing",sb:"Creative",cs:"Dou",cs_other:null,pk:"REC-620"},
   {key:"REC-615",type:"subtask",kind:"op_sub",st:"Hired",s:"Graphic Designer",sd:"2026-07-03",ed:null,cr:"2026-08-03",fcd:"2026-08-21",hd:"2026-08-25",fcd_c:"2026-08-04",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:1,t:"Marketing",sb:"Creative",cs:"Robota.ua",cs_other:null,pk:"REC-614"},
