@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 3 вересня 2026, оновлено 09:24 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 3 вересня 2026, оновлено 12:38 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-651":"2026-09-03",
   "REC-650":null,
   "REC-643":"2026-08-28",
   "REC-641":"2026-08-27",
@@ -1054,7 +1055,7 @@ const SD={
   "REC-628":"2026-08-14",
   "REC-626":"2026-08-10",
   "REC-620":"2026-09-01",
-  "REC-619":null,
+  "REC-619":"2026-09-03",
   "REC-614":"2026-08-03",
   "REC-607":"2026-07-28",
   "REC-603":"2026-07-29",
@@ -1238,6 +1239,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-651":"Middle",
   "REC-650":"Junior",
   "REC-643":"Middle",
   "REC-641":"Junior",
@@ -1248,7 +1250,7 @@ const SN={
   "REC-628":"Senior",
   "REC-626":"Senior",
   "REC-620":"Junior",
-  "REC-619":"Senior",
+  "REC-619":"Middle",
   "REC-614":"Middle",
   "REC-607":"Junior",
   "REC-603":"Middle",
@@ -1403,6 +1405,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
   {key:"REC-650",s:"DevOps Engineer",st:"Plan",pr:"Medium",so:"Ihor Kot",re:null,h:1,r:"Replacement",es:null,t:"Engineering",sb:"DevOps",cr:"2026-09-02"},
   {key:"REC-643",s:"E-commerce Stylist",st:"In progress",pr:"Medium",so:"Yuliia Petrenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-08-28"},
   {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
@@ -1413,7 +1416,7 @@ const OP=[
   {key:"REC-628",s:"Google Ads Specialist (E-commerce)",st:"In progress",pr:"High",so:"Rustam Kurbanov",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-08-14"},
   {key:"REC-626",s:"AI Engineer ",st:"In progress",pr:"High",so:"Vitalii Malakhovskyi",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:null,cr:"2026-08-10"},
   {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",so:"Maksym Kovalenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
-  {key:"REC-619",s:"DevOps Engineer",st:"Plan",pr:"Medium",so:"Daryna Varycheva",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"Backend Core",cr:"2026-08-04"},
+  {key:"REC-619",s:"DevOps Engineer",st:"In progress",pr:"High",so:"Daryna Varycheva",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"Backend Core",cr:"2026-08-04"},
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"Medium",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",so:"Maksym Kovalenko",re:null,h:4,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-603",s:"Fashion Operations Manager",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content",cr:"2026-07-29"},
@@ -1585,6 +1588,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-09-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
   {key:"REC-650",s:"DevOps Engineer",st:"Plan",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:null,h:1,es:null,t:"Engineering",sb:"DevOps",cr:"2026-09-02"},
   {key:"REC-643",s:"E-commerce Stylist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-08-28",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-08-28"},
   {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-08-27",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
@@ -1595,7 +1599,7 @@ const WP=[
   {key:"REC-628",s:"Google Ads Specialist (E-commerce)",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-08-14",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-08-14"},
   {key:"REC-626",s:"AI Engineer ",st:"In progress",pr:"High",sn:"Senior",rec:"Alina Muravchyk",src:"Anastasiia Melnyk",sd:"2026-08-10",h:1,es:"Staff",t:"Engineering",sb:null,cr:"2026-08-10"},
   {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-01",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
-  {key:"REC-619",s:"DevOps Engineer",st:"Plan",pr:"Medium",sn:"Senior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:null,h:1,es:"Staff",t:"Engineering",sb:"Backend Core",cr:"2026-08-04"},
+  {key:"REC-619",s:"DevOps Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-03",h:1,es:"Staff",t:"Engineering",sb:"Backend Core",cr:"2026-08-04"},
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Low",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-07-28",h:4,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-603",s:"Fashion Operations Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-07-29",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-07-29"},
@@ -1653,6 +1657,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-651":"Mariia Salabai",
   "REC-650":"Polina Serdiuk",
   "REC-643":"Mariia Salabai",
   "REC-641":"Polina Serdiuk",
