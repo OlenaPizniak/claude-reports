@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 8 вересня 2026, оновлено 14:40 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 8 вересня 2026, оновлено 17:24 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1091,6 +1091,7 @@ const SD={
   "REC-191":"2026-04-02",
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
+  "REC-657":null,
   "REC-649":"2026-09-01",
   "REC-648":"2026-09-01",
   "REC-647":"2026-09-01",
@@ -1286,6 +1287,7 @@ const SN={
   "REC-191":"Middle",
   "REC-182":"Middle",
   "REC-177":"Middle",
+  "REC-657":"Middle",
   "REC-649":"Junior",
   "REC-648":"Junior",
   "REC-647":"Junior",
@@ -1405,7 +1407,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
-  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
+  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
   {key:"REC-650",s:"DevOps Engineer",st:"In progress",pr:"Medium",so:"Ihor Kot",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering",sb:"DevOps",cr:"2026-09-02"},
   {key:"REC-643",s:"E-commerce Stylist",st:"In progress",pr:"Medium",so:"Yuliia Petrenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-08-28"},
   {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
@@ -1588,7 +1590,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
-  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-09-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
+  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-09-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
   {key:"REC-650",s:"DevOps Engineer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-03",h:1,es:"Staff",t:"Engineering",sb:"DevOps",cr:"2026-09-02"},
   {key:"REC-643",s:"E-commerce Stylist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-08-28",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-08-28"},
   {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-08-27",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
@@ -1638,6 +1640,7 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-657",pk:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",sd:null,rec:"Mariia Salabai",src:null},
   {key:"REC-649",pk:"REC-620",s:"AI Creative Designer",st:"In progress",sd:"2026-09-01",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-648",pk:"REC-620",s:"AI Creative Designer",st:"In progress",sd:"2026-09-01",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-647",pk:"REC-620",s:"AI Creative Designer",st:"In progress",sd:"2026-09-01",rec:"Anastasiia Shapovalenko",src:null},
@@ -1694,6 +1697,7 @@ const RECR={
   "REC-191":"Yaroslava Bondarchuk",
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
+  "REC-657":"Mariia Salabai",
   "REC-649":"Anastasiia Shapovalenko",
   "REC-648":"Anastasiia Shapovalenko",
   "REC-647":"Anastasiia Shapovalenko",
