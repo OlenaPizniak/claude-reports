@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 9 вересня 2026, оновлено 17:26 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 9 вересня 2026, оновлено 19:52 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1106,6 +1106,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-658":"2026-09-09",
   "REC-633":"2026-08-14",
   "REC-631":"2026-08-18",
   "REC-628":"2026-08-14",
@@ -1301,6 +1302,7 @@ const SN={
   "REC-330":"Middle",
   "REC-216":"Junior",
   "REC-212":"Middle",
+  "REC-658":"Junior",
   "REC-633":"Junior",
   "REC-631":"Middle",
   "REC-628":"Senior",
@@ -1456,6 +1458,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-658",s:"Business Account Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-09-09",ed:null,fcd_c:"2026-08-28",h:1,t:"Brand Communications",sb:"E-mail Marketing"},
   {key:"REC-633",s:"AI Content & Growth Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-08-17",hd:"2026-08-20",sd:"2026-08-14",ed:null,fcd_c:"2026-08-14",h:1,t:"Brand Communications",sb:"SMM team"},
   {key:"REC-631",s:"Product Analyst",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-08-18",ed:null,fcd_c:"2026-08-20",h:1,t:"Analytics",sb:"Product"},
   {key:"REC-628",s:"Google Ads Specialist (E-commerce)",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",fcd:"2026-09-08",hd:"2026-09-08",sd:"2026-08-14",ed:null,fcd_c:"2026-08-20",h:1,t:"Marketing",sb:"PPC"},
@@ -1710,6 +1713,7 @@ const RECR={
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
+  "REC-658":"Anastasiia Hodyna",
   "REC-633":"Anastasiia Hodyna",
   "REC-631":"Yaroslava Bondarchuk",
   "REC-628":"Darina Lavrenko",
@@ -4213,6 +4217,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-658",type:"position",kind:"op",st:"Hired",s:"Business Account Specialist",sd:"2026-09-09",ed:null,cr:"2026-09-09",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-28",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"E-mail Marketing",cs:"Support Team",cs_other:null,pk:null},
   {key:"REC-633",type:"position",kind:"op",st:"Hired",s:"AI Content & Growth Specialist",sd:"2026-08-14",ed:null,cr:"2026-08-20",fcd:"2026-08-17",hd:"2026-08-20",fcd_c:"2026-08-14",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"SMM team",cs:"Other",cs_other:null,pk:null},
   {key:"REC-631",type:"position",kind:"op",st:"Hired",s:"Product Analyst",sd:"2026-08-18",ed:null,cr:"2026-08-18",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-20",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"Analytics",sb:"Product",cs:"Other",cs_other:"Genesis Lay-off platform",pk:null},
   {key:"REC-628",type:"position",kind:"op",st:"Hired",s:"Google Ads Specialist (E-commerce)",sd:"2026-08-14",ed:null,cr:"2026-08-14",fcd:"2026-09-08",hd:"2026-09-08",fcd_c:"2026-08-20",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",pr:"High",h:1,t:"Marketing",sb:"PPC",cs:"Internal Referral",cs_other:null,pk:null},
