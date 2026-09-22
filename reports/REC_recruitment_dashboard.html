@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 22 вересня 2026, оновлено 08:18 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 22 вересня 2026, оновлено 12:51 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-668":"2026-09-22",
   "REC-667":"2026-09-18",
   "REC-662":"2026-09-14",
   "REC-660":"2026-09-10",
@@ -1110,6 +1111,7 @@ const SD={
   "REC-212":"2026-03-25",
   "REC-658":"2026-09-09",
   "REC-642":"2026-08-27",
+  "REC-638":"2026-08-25",
   "REC-633":"2026-08-14",
   "REC-631":"2026-08-18",
   "REC-630":"2026-08-17",
@@ -1251,6 +1253,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-668":"Junior",
   "REC-667":"Middle",
   "REC-662":"Senior",
   "REC-660":"Middle",
@@ -1315,6 +1318,7 @@ const SN={
   "REC-216":"Junior",
   "REC-212":"Middle",
   "REC-658":"Junior",
+  "REC-638":"Expert",
   "REC-633":"Junior",
   "REC-631":"Middle",
   "REC-630":"Senior",
@@ -1427,6 +1431,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-668",s:"Influencer Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Muzychuk",re:null,h:1,r:"Extention",es:"Staff",t:"Brand Communications",sb:"Influence Marketing",cr:"2026-09-22"},
   {key:"REC-667",s:"Reporting Specialist",st:"In progress",pr:"Medium",so:"Julia Korneewa",re:null,h:1,r:"Replacement",es:"Staff",t:"Finance",sb:"Finance",cr:"2026-09-18"},
   {key:"REC-662",s:"User Acquisition Manager (AppLovin)",st:"In progress",pr:"High",so:"Victoria Repa",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-09-14"},
   {key:"REC-660",s:"Product Analyst",st:"In progress",pr:"Medium",so:"Yurii Tatunchak",re:null,h:1,r:"Replacement",es:"Staff",t:"Analytics",sb:"Mobile Analysts",cr:"2026-09-10"},
@@ -1438,7 +1443,7 @@ const OP=[
   {key:"REC-634",s:"Supply Chain Operations Specialist",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Replacement",es:"Staff",t:"E-Commerce",sb:"Supply",cr:"2026-08-20"},
   {key:"REC-626",s:"AI Engineer ",st:"In progress",pr:"High",so:"Vitalii Malakhovskyi",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering (Mobile)",sb:null,cr:"2026-08-10"},
   {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",so:"Maksym Kovalenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
-  {key:"REC-619",s:"DevOps Engineer",st:"In progress",pr:"High",so:"Ihor Kot",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering (Mobile)",sb:"DevOps",cr:"2026-08-04"},
+  {key:"REC-619",s:"DevOps Engineer",st:"In progress",pr:"High",so:"Ihor Kot",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering (Mobile)",sb:"BE Core Platform",cr:"2026-08-04"},
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"Low",so:"Masha Kolomiiets",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Medium",so:"Maksym Kovalenko",re:null,h:6,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-594",s:"Employee Experience Specialist",st:"Canceled",pr:"Low",so:"Anna Malaniuk",re:null,h:1,r:"Replacement",es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
@@ -1478,6 +1483,7 @@ const OP=[
 const HW=[
   {key:"REC-658",s:"Business Account Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-09-09",ed:null,fcd_c:"2026-08-28",h:1,t:"Brand Communications",sb:"E-mail Marketing"},
   {key:"REC-642",s:"Контактування Creative Marketing спеціалістів (ex-Genesis)",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-08-27",ed:null,fcd_c:null,h:1,t:null,sb:null},
+  {key:"REC-638",s:"WeChat shopping expert",type:"position",kind:"ra",st:"Done",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",fcd:"2026-09-22",hd:null,sd:"2026-08-25",ed:null,fcd_c:null,h:1,t:"Marketing",sb:null},
   {key:"REC-633",s:"AI Content & Growth Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-08-17",hd:"2026-08-20",sd:"2026-08-14",ed:null,fcd_c:"2026-08-14",h:1,t:"Brand Communications",sb:"SMM team"},
   {key:"REC-631",s:"Product Analyst",type:"position",kind:"op",st:"Hired",pr:"High",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-08-18",ed:null,fcd_c:"2026-08-20",h:1,t:"Analytics",sb:"Product"},
   {key:"REC-630",s:" Business Analyst",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Senior",rec:"Nadiia Brusova",src:"Anastasiia Melnyk",fcd:"2026-09-10",hd:"2026-09-10",sd:"2026-08-17",ed:null,fcd_c:"2026-08-21",h:1,t:"Product (Mobile)",sb:"Business Analysts"},
@@ -1619,6 +1625,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-668",s:"Influencer Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-09-22",h:1,es:"Staff",t:"Brand Communications",sb:"Influence Marketing",cr:"2026-09-22"},
   {key:"REC-667",s:"Reporting Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Nadiia Brusova",src:null,sd:"2026-09-18",h:1,es:"Staff",t:"Finance",sb:"Finance",cr:"2026-09-18"},
   {key:"REC-662",s:"User Acquisition Manager (AppLovin)",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-09-14",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-09-14"},
   {key:"REC-660",s:"Product Analyst",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-10",h:1,es:"Staff",t:"Analytics",sb:"Mobile Analysts",cr:"2026-09-10"},
@@ -1630,7 +1637,7 @@ const WP=[
   {key:"REC-634",s:"Supply Chain Operations Specialist",st:"Plan",pr:"Medium",sn:"Middle",rec:null,src:null,sd:null,h:1,es:"Staff",t:"E-Commerce",sb:"Supply",cr:"2026-08-20"},
   {key:"REC-626",s:"AI Engineer ",st:"In progress",pr:"High",sn:"Senior",rec:"Alina Muravchyk",src:"Anastasiia Melnyk",sd:"2026-08-10",h:1,es:"Staff",t:"Engineering (Mobile)",sb:null,cr:"2026-08-10"},
   {key:"REC-620",s:"AI Creative Designer ",st:"In progress",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-01",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-05"},
-  {key:"REC-619",s:"DevOps Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-03",h:1,es:"Staff",t:"Engineering (Mobile)",sb:"DevOps",cr:"2026-08-04"},
+  {key:"REC-619",s:"DevOps Engineer",st:"In progress",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-03",h:1,es:"Staff",t:"Engineering (Mobile)",sb:"BE Core Platform",cr:"2026-08-04"},
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"Low",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-09-16",h:6,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-594",s:"Employee Experience Specialist",st:"Canceled",pr:"Low",sn:"Junior",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-07-10",h:1,es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
@@ -1689,6 +1696,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-668":"Polina Serdiuk",
   "REC-667":"Nadiia Brusova",
   "REC-662":"Darina Lavrenko",
   "REC-660":"Anastasiia Shapovalenko",
@@ -1878,6 +1886,7 @@ const SRCR={
   "REC-315":"Mariia Salabai",
   "REC-193":"Alina Muravchyk",
   "REC-177":"Anastasiia Melnyk",
+  "REC-638":"Kateryna Yaremenko",
   "REC-630":"Anastasiia Melnyk",
   "REC-628":"Kateryna Yaremenko",
   "REC-606":"Anastasiia Melnyk",
@@ -4255,6 +4264,7 @@ function rWorkloadOverview(){
 const CV=[
   {key:"REC-658",type:"position",kind:"op",st:"Hired",s:"Business Account Specialist",sd:"2026-09-09",ed:null,cr:"2026-09-09",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-28",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"E-mail Marketing",cs:"Support Team",cs_other:null,pk:null},
   {key:"REC-642",type:"position",kind:"task",st:"Done",s:"Контактування Creative Marketing спеціалістів (ex-Genesis)",sd:"2026-08-27",ed:null,cr:"2026-08-27",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
+  {key:"REC-638",type:"position",kind:"ra",st:"Done",s:"WeChat shopping expert",sd:"2026-08-25",ed:null,cr:"2026-08-25",fcd:"2026-09-22",hd:null,fcd_c:null,sn:"Expert",rec:null,src:"Kateryna Yaremenko",pr:"High",h:1,t:"Marketing",sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-633",type:"position",kind:"op",st:"Hired",s:"AI Content & Growth Specialist",sd:"2026-08-14",ed:null,cr:"2026-08-20",fcd:"2026-08-17",hd:"2026-08-20",fcd_c:"2026-08-14",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"SMM team",cs:"Other",cs_other:null,pk:null},
   {key:"REC-631",type:"position",kind:"op",st:"Hired",s:"Product Analyst",sd:"2026-08-18",ed:null,cr:"2026-08-18",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-20",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,pr:"High",h:1,t:"Analytics",sb:"Product",cs:"Other",cs_other:"Genesis Lay-off platform",pk:null},
   {key:"REC-630",type:"position",kind:"op",st:"Hired",s:" Business Analyst",sd:"2026-08-17",ed:null,cr:"2026-08-17",fcd:"2026-09-10",hd:"2026-09-10",fcd_c:"2026-08-21",sn:"Senior",rec:"Nadiia Brusova",src:"Anastasiia Melnyk",pr:"Medium",h:1,t:"Product (Mobile)",sb:"Business Analysts",cs:"Career Portal",cs_other:null,pk:null},
@@ -4751,7 +4761,7 @@ CV.push(...HIST_CV);
 const RA=[
   {key:"REC-659",s:"Dermatologist",st:"In progress",pr:"High",sn:"Expert",rec:"Mariia Salabai",src:null,sd:"2026-09-10",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-09-10",cf_cooperation:"Project-based",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Дерматолог = MD з чинною ліцензією",marks:[{type:"strong"}]},{type:"text",text:" (ліцензія в США). Роль — тільки ревʼю/апрув "},{type:"text",text:"неперсоналізованого",marks:[{type:"strong"}]},{type:"text",text:" контенту: догляд по профілях типів шкіри, правило відбору товарів, бан-лист хвороб, гайд використання (детальніше в Розділі 2)."},{type:"hardBreak"},{type:"hardBreak"},{type:"text",text:"https://app.notion.com/p/Skin-Care-App-For-WEB-4e18cfc6224483b68d6b019bdf69ba4b",marks:[{type:"link",attrs:{href:"https://app.notion.com/p/Skin-Care-App-For-WEB-4e18cfc6224483b68d6b019bdf69ba4b"}}]},{type:"text",text:" - доступ тільки в Ярослави і Насті Години"}],attrs:{localId:"5070e3023fc3"}}]},cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-640",s:"Wellness Consultant",st:"Canceled",pr:"Low",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-08-19",ed:null,fcd_c:null,h:1,t:"Content",sb:"Workout Content",cr:"2026-08-27",cf_cooperation:"Project-based",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Фітнес сертифікація - NASM CPT + "}],attrs:{localId:"f1fc89ea2332"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"ecfe3ba0d8f7"},content:[{type:"paragraph",content:[{type:"text",text:"Визнана сертифікація за методом mindfulness: MBSR, MBCT або еквівалентна акредитована програма. "}],attrs:{localId:"b3c72d03d7a9"}}]},{type:"listItem",attrs:{localId:"1f46e351f335"},content:[{type:"paragraph",content:[{type:"text",text:"Приклади сертифікацій (оскільки визнаних міжнародних організацій, по типу NASM, в цих сферах немає, наводимо без привʼязки до конкретних організацій):"}],attrs:{localId:"16cedee1ef44"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"c342d04c1bd1"},content:[{type:"paragraph",content:[{type:"text",text:"Best:"}],attrs:{localId:"6a1d288721e5"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"dc3c55ab8806"},content:[{type:"paragraph",content:[{type:"text",text:"Mindfulness-Based Stress Reduction Certificate"}],attrs:{localId:"fb87a27a3c1e"}}]},{type:"listItem",attrs:{localId:"b718129ad230"},content:[{type:"paragraph",content:[{type:"text",text:"Mindfulness Coach Certification"}],attrs:{localId:"d8c219f045d3"}}]},{type:"listItem",attrs:{localId:"410362c6999d"},content:[{type:"paragraph",content:[{type:"text",text:"Meditation Instructor Certification"}],attrs:{localId:"e3c239484986"}}]}],attrs:{localId:"75420b8beb91"}}]},{type:"listItem",attrs:{localId:"7467ae1e7357"},content:[{type:"paragraph",content:[{type:"text",text:"Good:"}],attrs:{localId:"d600b7f8c295"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"3720ae479c65"},content:[{type:"paragraph",content:[{type:"text",text:"Breathwork Facilitator/Practitioner Certification"}],attrs:{localId:"c74798afb5cc"}}]},{type:"listItem",attrs:{localId:"e91935f62415"},content:[{type:"paragraph",content:[{type:"text",text:"Somatic Experiencing/Practitioner Certification"}],attrs:{localId:"6c6879b11113"}}]}],attrs:{localId:"f928b3b59858"}}]}],attrs:{localId:"a7a29e41710e"}}]}],attrs:{localId:"cc3cb7a4bd3f"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"Yes",cf_nda:"Yes",cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
-  {key:"REC-638",s:"WeChat shopping expert",st:"In progress",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-08-25",ed:null,fcd_c:null,h:1,t:"Marketing",sb:null,cr:"2026-08-25",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-638",s:"WeChat shopping expert",st:"Done",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-08-25",ed:null,fcd_c:null,h:1,t:"Marketing",sb:null,cr:"2026-08-25",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-636",s:"Wholesale/B2B Consultants",st:"In progress",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-08-24",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-08-24",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"inlineCard",attrs:{url:"https://docs.google.com/document/d/12b_CkYMKf5sctsOewi7uhM_dJCP7IZqCFe3z6iCCaLk/edit?tab=t.0",localId:"c0710596c9a5"}},{type:"text",text:" "},{type:"hardBreak"},{type:"inlineCard",attrs:{url:"https://docs.google.com/spreadsheets/d/1w5iQtwYmL50DF7Ye0AvSg8i-XPwqt7bsRQHnTDrv-0s/edit?usp=sharing",localId:"4b02f9a340d7"}},{type:"text",text:"  - кандидати"}],attrs:{localId:"c64bda90c19a"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-629",s:"Google Ads Specialist (E-commerce) Consultant",st:"In progress",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-08-14",ed:null,fcd_c:null,h:1,t:"Marketing",sb:"PPC",cr:"2026-08-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-627",s:"Consultant for BetterMe Franchise",st:"In progress",pr:"High",sn:"Expert",rec:"Polina Serdiuk",src:null,sd:"2026-08-14",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-08-14",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
