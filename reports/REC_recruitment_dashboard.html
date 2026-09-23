@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 23 вересня 2026, оновлено 15:03 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 23 вересня 2026, оновлено 19:47 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1095,7 +1095,6 @@ const SD={
   "REC-665":"2026-09-16",
   "REC-664":"2026-09-16",
   "REC-663":"2026-07-28",
-  "REC-657":null,
   "REC-649":"2026-09-01",
   "REC-648":"2026-09-01",
   "REC-647":"2026-09-01",
@@ -1110,6 +1109,7 @@ const SD={
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
   "REC-658":"2026-09-09",
+  "REC-657":"2026-07-21",
   "REC-642":"2026-08-27",
   "REC-638":"2026-08-25",
   "REC-633":"2026-08-14",
@@ -1304,7 +1304,6 @@ const SN={
   "REC-665":"Junior",
   "REC-664":"Junior",
   "REC-663":"Junior",
-  "REC-657":"Middle",
   "REC-649":"Junior",
   "REC-648":"Junior",
   "REC-647":"Junior",
@@ -1318,6 +1317,7 @@ const SN={
   "REC-216":"Junior",
   "REC-212":"Middle",
   "REC-658":"Junior",
+  "REC-657":"Middle",
   "REC-638":"Expert",
   "REC-633":"Junior",
   "REC-631":"Middle",
@@ -1435,7 +1435,7 @@ const OP=[
   {key:"REC-667",s:"Reporting Specialist",st:"In progress",pr:"Medium",so:"Julia Korneewa",re:null,h:1,r:"Replacement",es:"Staff",t:"Finance",sb:"Finance",cr:"2026-09-18"},
   {key:"REC-662",s:"User Acquisition Manager (AppLovin)",st:"In progress",pr:"High",so:"Victoria Repa",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-09-14"},
   {key:"REC-660",s:"Product Analyst",st:"In progress",pr:"Medium",so:"Yurii Tatunchak",re:null,h:1,r:"Replacement",es:"Staff",t:"Analytics",sb:"Mobile Analysts",cr:"2026-09-10"},
-  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:2,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
+  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",so:"Kate Tsykalo",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
   {key:"REC-650",s:"DevOps Engineer",st:"Canceled",pr:"Medium",so:"Ihor Kot",re:null,h:1,r:"Replacement",es:"Staff",t:"Engineering (Mobile)",sb:"DevOps",cr:"2026-09-02"},
   {key:"REC-643",s:"E-commerce Stylist",st:"In progress",pr:"Medium",so:"Yuliia Petrenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-08-28"},
   {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
@@ -1482,6 +1482,7 @@ const OP=[
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
   {key:"REC-658",s:"Business Account Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-09-09",ed:null,fcd_c:"2026-08-28",h:1,t:"Brand Communications",sb:"E-mail Marketing"},
+  {key:"REC-657",s:"Motion Designer/Video Editor",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,fcd:"2026-09-23",hd:"2026-09-23",sd:"2026-07-21",ed:null,fcd_c:"2026-08-27",h:2,t:"Marketing",sb:"Creative",pk:"REC-651"},
   {key:"REC-642",s:"Контактування Creative Marketing спеціалістів (ex-Genesis)",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-08-27",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-638",s:"WeChat shopping expert",type:"position",kind:"ra",st:"Done",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",fcd:"2026-09-22",hd:null,sd:"2026-08-25",ed:null,fcd_c:null,h:1,t:"Marketing",sb:null},
   {key:"REC-633",s:"AI Content & Growth Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-08-17",hd:"2026-08-20",sd:"2026-08-14",ed:null,fcd_c:"2026-08-14",h:1,t:"Brand Communications",sb:"SMM team"},
@@ -1629,7 +1630,7 @@ const WP=[
   {key:"REC-667",s:"Reporting Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Nadiia Brusova",src:null,sd:"2026-09-18",h:1,es:"Staff",t:"Finance",sb:"Finance",cr:"2026-09-18"},
   {key:"REC-662",s:"User Acquisition Manager (AppLovin)",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-09-14",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-09-14"},
   {key:"REC-660",s:"Product Analyst",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-10",h:1,es:"Staff",t:"Analytics",sb:"Mobile Analysts",cr:"2026-09-10"},
-  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-09-03",h:2,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
+  {key:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-09-03",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-09-03"},
   {key:"REC-650",s:"DevOps Engineer",st:"Canceled",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-03",h:1,es:"Staff",t:"Engineering (Mobile)",sb:"DevOps",cr:"2026-09-02"},
   {key:"REC-643",s:"E-commerce Stylist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-08-28",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-08-28"},
   {key:"REC-641",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-08-27",h:1,es:"Non-staff",t:"Content",sb:"Content",cr:"2026-08-27"},
@@ -1679,7 +1680,6 @@ const ST=[
   {key:"REC-665",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-09-16",rec:"Mariia Salabai",src:null},
   {key:"REC-664",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-09-16",rec:"Mariia Salabai",src:null},
   {key:"REC-663",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-07-28",rec:"Mariia Salabai",src:null},
-  {key:"REC-657",pk:"REC-651",s:"Motion Designer/Video Editor",st:"In progress",sd:null,rec:"Mariia Salabai",src:null},
   {key:"REC-649",pk:"REC-620",s:"AI Creative Designer",st:"In progress",sd:"2026-09-01",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-648",pk:"REC-620",s:"AI Creative Designer",st:"In progress",sd:"2026-09-01",rec:"Anastasiia Shapovalenko",src:null},
   {key:"REC-647",pk:"REC-620",s:"AI Creative Designer",st:"In progress",sd:"2026-09-01",rec:"Anastasiia Shapovalenko",src:null},
@@ -1738,7 +1738,6 @@ const RECR={
   "REC-665":"Mariia Salabai",
   "REC-664":"Mariia Salabai",
   "REC-663":"Mariia Salabai",
-  "REC-657":"Mariia Salabai",
   "REC-649":"Anastasiia Shapovalenko",
   "REC-648":"Anastasiia Shapovalenko",
   "REC-647":"Anastasiia Shapovalenko",
@@ -1752,6 +1751,7 @@ const RECR={
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
   "REC-658":"Anastasiia Hodyna",
+  "REC-657":"Mariia Salabai",
   "REC-633":"Anastasiia Hodyna",
   "REC-631":"Yaroslava Bondarchuk",
   "REC-630":"Nadiia Brusova",
@@ -4263,6 +4263,7 @@ function rWorkloadOverview(){
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
   {key:"REC-658",type:"position",kind:"op",st:"Hired",s:"Business Account Specialist",sd:"2026-09-09",ed:null,cr:"2026-09-09",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-28",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"E-mail Marketing",cs:"Support Team",cs_other:null,pk:null},
+  {key:"REC-657",type:"subtask",kind:"op_sub",st:"Hired",s:"Motion Designer/Video Editor",sd:"2026-07-21",ed:null,cr:"2026-09-08",fcd:"2026-09-23",hd:"2026-09-23",fcd_c:"2026-08-27",sn:"Middle",rec:"Mariia Salabai",src:null,pr:"Medium",h:2,t:"Marketing",sb:"Creative",cs:"Djinni",cs_other:null,pk:"REC-651"},
   {key:"REC-642",type:"position",kind:"task",st:"Done",s:"Контактування Creative Marketing спеціалістів (ex-Genesis)",sd:"2026-08-27",ed:null,cr:"2026-08-27",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-638",type:"position",kind:"ra",st:"Done",s:"WeChat shopping expert",sd:"2026-08-25",ed:null,cr:"2026-08-25",fcd:"2026-09-22",hd:null,fcd_c:null,sn:"Expert",rec:null,src:"Kateryna Yaremenko",pr:"High",h:1,t:"Marketing",sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-633",type:"position",kind:"op",st:"Hired",s:"AI Content & Growth Specialist",sd:"2026-08-14",ed:null,cr:"2026-08-20",fcd:"2026-08-17",hd:"2026-08-20",fcd_c:"2026-08-14",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"SMM team",cs:"Other",cs_other:null,pk:null},
