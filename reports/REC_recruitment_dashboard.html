@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 29 вересня 2026, оновлено 11:58 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 29 вересня 2026, оновлено 18:41 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-670":"2026-09-29",
   "REC-669":"2026-09-28",
   "REC-668":"2026-09-22",
   "REC-667":"2026-09-18",
@@ -1108,6 +1109,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-661":"2026-09-08",
   "REC-658":"2026-09-09",
   "REC-657":"2026-07-21",
   "REC-644":"2026-08-05",
@@ -1254,6 +1256,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-670":"Middle",
   "REC-669":"Junior",
   "REC-668":"Junior",
   "REC-667":"Middle",
@@ -1433,6 +1436,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-670",s:"AI Creator (Post-Production Team)",st:"In progress",pr:"Medium",so:null,re:null,h:1,r:"Extention",es:null,t:"Content",sb:"Content Production",cr:"2026-09-29"},
   {key:"REC-669",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"User Acquisition",cr:"2026-09-28"},
   {key:"REC-668",s:"Influencer Marketing Specialist",st:"In progress",pr:"Medium",so:"Kateryna Muzychuk",re:null,h:1,r:"Extention",es:"Staff",t:"Brand Communications",sb:"Influence Marketing",cr:"2026-09-22"},
   {key:"REC-667",s:"Reporting Specialist",st:"In progress",pr:"Medium",so:"Julia Korneewa",re:null,h:1,r:"Replacement",es:"Staff",t:"Finance",sb:"Finance",cr:"2026-09-18"},
@@ -1484,6 +1488,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-661",s:"AI Creator - Content Production Team",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-09-08",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-658",s:"Business Account Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-09-09",ed:null,fcd_c:"2026-08-28",h:1,t:"Brand Communications",sb:"E-mail Marketing"},
   {key:"REC-657",s:"Motion Designer/Video Editor",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,fcd:"2026-09-23",hd:"2026-09-23",sd:"2026-07-21",ed:null,fcd_c:"2026-08-27",h:2,t:"Marketing",sb:"Creative",pk:"REC-651"},
   {key:"REC-644",s:"AI Creative Designer",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,fcd:"2026-09-28",hd:"2026-09-28",sd:"2026-08-05",ed:null,fcd_c:"2026-09-03",h:1,t:"Marketing",sb:"Creative",pk:"REC-620"},
@@ -1630,6 +1635,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-670",s:"AI Creator (Post-Production Team)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-29",h:1,es:null,t:"Content",sb:"Content Production",cr:"2026-09-29"},
   {key:"REC-669",s:"Junior Digital Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-09-28",h:1,es:"Non-staff",t:"Marketing",sb:"User Acquisition",cr:"2026-09-28"},
   {key:"REC-668",s:"Influencer Marketing Specialist",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:null,sd:"2026-09-22",h:1,es:"Staff",t:"Brand Communications",sb:"Influence Marketing",cr:"2026-09-22"},
   {key:"REC-667",s:"Reporting Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Nadiia Brusova",src:null,sd:"2026-09-18",h:1,es:"Staff",t:"Finance",sb:"Finance",cr:"2026-09-18"},
@@ -1700,6 +1706,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-670":"Anastasiia Shapovalenko",
   "REC-669":"Polina Serdiuk",
   "REC-668":"Polina Serdiuk",
   "REC-667":"Nadiia Brusova",
@@ -1932,7 +1939,6 @@ const SRCR={
 
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
-  {key:"REC-661",s:"AI Creator - Content Production Team",st:"In progress",pr:"Medium",asgn:"Anastasiia Shapovalenko",sd:"2026-09-08"},
   {key:"REC-656",s:"Моніторинг відгуків на позицію Legal Counsel",st:"In progress",pr:"Low",asgn:"Mariia Salabai",sd:"2026-09-07"},
   {key:"REC-635",s:"Accessibility Consulting Experts Search",st:"In progress",pr:"Medium",asgn:"Anastasiia Shapovalenko",sd:"2026-08-20"},
   {key:"REC-632",s:"Моніторинг кріейтів лідів з генезійських коомпаній",st:"In progress",pr:"Medium",asgn:"Kateryna Yaremenko",sd:null},
@@ -4267,6 +4273,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-661",type:"position",kind:"task",st:"Done",s:"AI Creator - Content Production Team",sd:"2026-09-08",ed:null,cr:"2026-09-10",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-658",type:"position",kind:"op",st:"Hired",s:"Business Account Specialist",sd:"2026-09-09",ed:null,cr:"2026-09-09",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-28",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"E-mail Marketing",cs:"Support Team",cs_other:null,pk:null},
   {key:"REC-657",type:"subtask",kind:"op_sub",st:"Hired",s:"Motion Designer/Video Editor",sd:"2026-07-21",ed:null,cr:"2026-09-08",fcd:"2026-09-23",hd:"2026-09-23",fcd_c:"2026-08-27",sn:"Middle",rec:"Mariia Salabai",src:null,pr:"Medium",h:2,t:"Marketing",sb:"Creative",cs:"Djinni",cs_other:null,pk:"REC-651"},
   {key:"REC-644",type:"subtask",kind:"op_sub",st:"Hired",s:"AI Creative Designer",sd:"2026-08-05",ed:null,cr:"2026-09-02",fcd:"2026-09-28",hd:"2026-09-28",fcd_c:"2026-09-03",sn:"Junior",rec:"Anastasiia Shapovalenko",src:null,pr:"Medium",h:1,t:"Marketing",sb:"Creative",cs:"Instagram",cs_other:null,pk:"REC-620"},
