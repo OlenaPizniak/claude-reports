@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 1 жовтня 2026, оновлено 11:45 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 1 жовтня 2026, оновлено 12:21 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1109,6 +1109,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-674":"2026-08-10",
   "REC-661":"2026-09-08",
   "REC-658":"2026-09-09",
   "REC-657":"2026-07-21",
@@ -1322,6 +1323,7 @@ const SN={
   "REC-330":"Middle",
   "REC-216":"Junior",
   "REC-212":"Middle",
+  "REC-674":"Senior",
   "REC-658":"Junior",
   "REC-657":"Middle",
   "REC-644":"Junior",
@@ -1492,6 +1494,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-674",s:"Android Engineer",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Senior",rec:"Nadiia Brusova",src:null,fcd:"2026-09-01",hd:"2026-10-01",sd:"2026-08-10",ed:null,fcd_c:"2026-08-10",h:1,t:"Engineering (Mobile)",sb:"Workouts Android"},
   {key:"REC-661",s:"AI Creator - Content Production Team",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-09-08",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-658",s:"Business Account Specialist",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-09-09",hd:"2026-09-09",sd:"2026-09-09",ed:null,fcd_c:"2026-08-28",h:1,t:"Brand Communications",sb:"E-mail Marketing"},
   {key:"REC-657",s:"Motion Designer/Video Editor",type:"subtask",kind:"op_sub",st:"Hired",pr:"Medium",sn:"Middle",rec:"Mariia Salabai",src:null,fcd:"2026-09-23",hd:"2026-09-23",sd:"2026-07-21",ed:null,fcd_c:"2026-08-27",h:2,t:"Marketing",sb:"Creative",pk:"REC-651"},
@@ -1767,6 +1770,7 @@ const RECR={
   "REC-330":"Mariia Salabai",
   "REC-216":"Alina Muravchyk",
   "REC-212":"Mariia Salabai",
+  "REC-674":"Nadiia Brusova",
   "REC-658":"Anastasiia Hodyna",
   "REC-657":"Mariia Salabai",
   "REC-644":"Anastasiia Shapovalenko",
@@ -4282,6 +4286,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-674",type:"position",kind:"op",st:"Hired",s:"Android Engineer",sd:"2026-08-10",ed:null,cr:"2026-10-01",fcd:"2026-09-01",hd:"2026-10-01",fcd_c:"2026-08-10",sn:"Senior",rec:"Nadiia Brusova",src:null,pr:"Medium",h:1,t:"Engineering (Mobile)",sb:"Workouts Android",cs:"Internal Referral",cs_other:null,pk:null},
   {key:"REC-661",type:"position",kind:"task",st:"Done",s:"AI Creator - Content Production Team",sd:"2026-09-08",ed:null,cr:"2026-09-10",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-658",type:"position",kind:"op",st:"Hired",s:"Business Account Specialist",sd:"2026-09-09",ed:null,cr:"2026-09-09",fcd:"2026-09-09",hd:"2026-09-09",fcd_c:"2026-08-28",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Medium",h:1,t:"Brand Communications",sb:"E-mail Marketing",cs:"Support Team",cs_other:null,pk:null},
   {key:"REC-657",type:"subtask",kind:"op_sub",st:"Hired",s:"Motion Designer/Video Editor",sd:"2026-07-21",ed:null,cr:"2026-09-08",fcd:"2026-09-23",hd:"2026-09-23",fcd_c:"2026-08-27",sn:"Middle",rec:"Mariia Salabai",src:null,pr:"Medium",h:2,t:"Marketing",sb:"Creative",cs:"Djinni",cs_other:null,pk:"REC-651"},
