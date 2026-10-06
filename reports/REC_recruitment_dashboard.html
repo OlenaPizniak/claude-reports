@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 6 жовтня 2026, оновлено 06:17 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 6 жовтня 2026, оновлено 13:06 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1044,6 +1044,7 @@ function dpChips(fromId, toId, kind){
 // <<<AUTO_DATA_START>>> — managed by scripts/update_rec_dashboard.py
 // Start dates from Jira (customfield_11223) for all Open Positions
 const SD={
+  "REC-679":"2026-10-06",
   "REC-673":"2026-10-01",
   "REC-671":"2026-09-30",
   "REC-670":"2026-09-29",
@@ -1263,6 +1264,7 @@ const SD={
 };
 // Seniority from Jira (customfield_22876) for all Open Positions
 const SN={
+  "REC-679":"Junior",
   "REC-673":"Middle",
   "REC-671":"Junior",
   "REC-670":"Middle",
@@ -1450,6 +1452,7 @@ const SN={
   "REC-16":"Junior"
 };
 const OP=[
+  {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",so:"Anastasiia Shliakhova",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
   {key:"REC-673",s:"Digital Marketing Specialist (TikTok Ads)",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Replacement",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-01"},
   {key:"REC-671",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Content",sb:null,cr:"2026-09-30"},
   {key:"REC-670",s:"AI Creator (Post-Production Team)",st:"In progress",pr:"Medium",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-09-29"},
@@ -1656,6 +1659,7 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
+  {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-10-06",h:1,es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
   {key:"REC-673",s:"Digital Marketing Specialist (TikTok Ads)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-10-01",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-01"},
   {key:"REC-671",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-30",h:1,es:"Non-staff",t:"Content",sb:null,cr:"2026-09-30"},
   {key:"REC-670",s:"AI Creator (Post-Production Team)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-29",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-09-29"},
@@ -1726,6 +1730,7 @@ const ST=[
 ];
 // Recruiter lookup (customfield_13935) — fresh from Jira
 const RECR={
+  "REC-679":"Yaroslava Bondarchuk",
   "REC-673":"Polina Serdiuk",
   "REC-671":"Polina Serdiuk",
   "REC-670":"Anastasiia Shapovalenko",
