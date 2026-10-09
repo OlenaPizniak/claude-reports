@@ -2,11 +2,14 @@ name: Update REC Dashboard from Jira
 
 on:
   schedule:
-    # Twice an hour, at :07 and :37, to mitigate GitHub Actions scheduled-workflow drops.
-    # If one fires, the second commits-no-op (skipping when no data changed).
-    - cron: '7 * * * *'
-    - cron: '37 * * * *'
-  workflow_dispatch: {}   # allow manual trigger from Actions tab
+    # Робочі дні, кожні 2 години 09:00–19:00 за Києвом (як домовились 09.10.2026).
+    # GitHub cron — у UTC і не знає про літній/зимовий час, тож запускаємось щогодини
+    # у вікні, що покриває обидва зсуви (UTC+3 → 06–16, UTC+2 → 07–17), а джоба `gate`
+    # пропускає все, крім потрібних київських годин. :07 і :37 — запас на випадок,
+    # коли GitHub пропускає запуск; другий у ту саму годину лише no-op (дані не змінились).
+    - cron: '7 6-17 * * 1-5'
+    - cron: '37 6-17 * * 1-5'
+  workflow_dispatch: {}   # ручний запуск з вкладки Actions — завжди, без перевірки години
 
 permissions:
   contents: write   # needed to commit & push refreshed HTML
@@ -16,7 +19,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - id: check
+        run: |
+          H=$(TZ=Europe/Kyiv date +%-H)
+          D=$(TZ=Europe/Kyiv date +%u)   # 1 = пн … 7 = нд
+          if [ "${{ github.event_name }}" != "schedule" ]; then RUN=true
+          elif [ "$D" -le 5 ] && case " 9 11 13 15 17 19 " in *" $H "*) true;; *) false;; esac; then RUN=true
+          else RUN=false; fi
+          echo "Kyiv: day=$D hour=$H → run=$RUN"
+          echo "run=$RUN" >> "$GITHUB_OUTPUT"
+
   update:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
