@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 13 жовтня 2026, оновлено 17:31 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 14 жовтня 2026, оновлено 15:17 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1095,6 +1095,7 @@ const SD={
   "REC-191":"2026-04-02",
   "REC-182":"2026-03-05",
   "REC-177":"2026-03-27",
+  "REC-686":null,
   "REC-666":"2026-09-16",
   "REC-665":"2026-09-16",
   "REC-664":"2026-09-16",
@@ -1321,6 +1322,7 @@ const SN={
   "REC-191":"Middle",
   "REC-182":"Middle",
   "REC-177":"Middle",
+  "REC-686":"Junior",
   "REC-666":"Junior",
   "REC-665":"Junior",
   "REC-664":"Junior",
@@ -1465,7 +1467,7 @@ const OP=[
   {key:"REC-685",s:"Post-Production Producer",st:"In progress",pr:"High",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-13"},
   {key:"REC-684",s:"Digital Marketing Specialist (Meta Ads)",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-13"},
   {key:"REC-683",s:"AI Content Producer",st:"In progress",pr:"Medium",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-12"},
-  {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",so:"Anastasiia Shliakhova",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
+  {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",so:"Anastasiia Shliakhova",re:null,h:2,r:"Replacement",es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
   {key:"REC-673",s:"Digital Marketing Specialist (TikTok Ads)",st:"Canceled",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Replacement",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-01"},
   {key:"REC-671",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Content",sb:null,cr:"2026-09-30"},
   {key:"REC-670",s:"AI Creator (Post-Production Team)",st:"Canceled",pr:"Medium",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-09-29"},
@@ -1677,10 +1679,10 @@ const HW=[
 ];
 // Week positions with full fields (Recruiter=customfield_13935, Sourcer=customfield_23510, StartDate=customfield_11223)
 const WP=[
-  {key:"REC-685",s:"Post-Production Producer",st:"In progress",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-10-13",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-13"},
+  {key:"REC-685",s:"Post-Production Producer",st:"In progress",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-10-13",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-13"},
   {key:"REC-684",s:"Digital Marketing Specialist (Meta Ads)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-10-13",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-13"},
   {key:"REC-683",s:"AI Content Producer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-10-12",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-12"},
-  {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-10-06",h:1,es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
+  {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-10-06",h:2,es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
   {key:"REC-673",s:"Digital Marketing Specialist (TikTok Ads)",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-10-01",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-01"},
   {key:"REC-671",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-30",h:1,es:"Non-staff",t:"Content",sb:null,cr:"2026-09-30"},
   {key:"REC-670",s:"AI Creator (Post-Production Team)",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-09-29",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-09-29"},
@@ -1731,6 +1733,7 @@ const WP=[
 ];
 // Vacancy sub-tasks — full list, fresh from Jira (statusCategory != Done)
 const ST=[
+  {key:"REC-686",pk:"REC-679",s:"Creator Specialist",st:"In progress",sd:null,rec:"Yaroslava Bondarchuk",src:null},
   {key:"REC-666",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-09-16",rec:"Mariia Salabai",src:null},
   {key:"REC-665",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-09-16",rec:"Mariia Salabai",src:null},
   {key:"REC-664",pk:"REC-607",s:"2D Motion Designer",st:"In progress",sd:"2026-09-16",rec:"Mariia Salabai",src:null},
@@ -1790,6 +1793,7 @@ const RECR={
   "REC-191":"Yaroslava Bondarchuk",
   "REC-182":"Polina Serdiuk",
   "REC-177":"Anastasiia Shapovalenko",
+  "REC-686":"Yaroslava Bondarchuk",
   "REC-666":"Mariia Salabai",
   "REC-665":"Mariia Salabai",
   "REC-664":"Mariia Salabai",
@@ -1940,6 +1944,7 @@ const RECR={
 };
 // Sourcer lookup (customfield_23510) — fresh from Jira
 const SRCR={
+  "REC-685":"Anastasiia Melnyk",
   "REC-671":"Anastasiia Melnyk",
   "REC-650":"Anastasiia Melnyk",
   "REC-626":"Anastasiia Melnyk",
