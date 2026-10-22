@@ -456,7 +456,7 @@ tr[class^="st-"]:last-child td { border-bottom: none; }
   </div>
   <div class="header-meta">
     <span class="header-dot"></span>
-    <!--<<<AUTO_DATE_START>>>-->Дані: 21 жовтня 2026, оновлено 15:14 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
+    <!--<<<AUTO_DATE_START>>>-->Дані: 22 жовтня 2026, оновлено 15:17 (Kyiv)<!--<<<AUTO_DATE_END>>>--> &nbsp;·&nbsp; Проєкт REC
     <button id="rec-refresh-btn" onclick="recTriggerRefresh()" title="Запустити оновлення з Jira (відкриє GitHub Actions)"
             style="margin-left:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:18px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all .15s ease"
             onmouseover="this.style.background='rgba(255,255,255,0.28)'"
@@ -1110,6 +1110,7 @@ const SD={
   "REC-330":"2026-05-12",
   "REC-216":"2026-04-03",
   "REC-212":"2026-03-25",
+  "REC-692":"2026-10-01",
   "REC-687":"2026-10-22",
   "REC-682":"2026-09-24",
   "REC-681":"2026-10-06",
@@ -1481,7 +1482,7 @@ const OP=[
   {key:"REC-693",s:"Legal Counsel",st:"In progress",pr:"High",so:"Anastasiia Yefimenko",re:null,h:1,r:"Replacement",es:"Staff",t:"Legal",sb:"Legal",cr:"2026-10-21"},
   {key:"REC-685",s:"Post-Production Producer",st:"In progress",pr:"High",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-13"},
   {key:"REC-684",s:"Digital Marketing Specialist (Meta Ads)",st:"In progress",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-13"},
-  {key:"REC-683",s:"AI Content Producer",st:"In progress",pr:"Medium",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-12"},
+  {key:"REC-683",s:"AI Content Producer",st:"In progress",pr:"High",so:"Tetiana Shneider",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-12"},
   {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",so:"Anastasiia Shliakhova",re:null,h:2,r:"Replacement",es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
   {key:"REC-673",s:"Digital Marketing Specialist (TikTok Ads)",st:"Canceled",pr:"Medium",so:"Kateryna Hrabynska",re:null,h:1,r:"Replacement",es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-01"},
   {key:"REC-671",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",so:"Olha Pyrozhenko",re:null,h:1,r:"Replacement",es:"Non-staff",t:"Content",sb:null,cr:"2026-09-30"},
@@ -1499,9 +1500,9 @@ const OP=[
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"Low",so:"Masha Kolomiiets",re:null,h:0,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Medium",so:"Maksym Kovalenko",re:null,h:7,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-594",s:"Employee Experience Specialist",st:"Canceled",pr:"Low",so:"Anna Malaniuk",re:null,h:1,r:"Replacement",es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
-  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Medium",so:"Oleksandr Honcharuk",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
+  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Low",so:"Oleksandr Honcharuk",re:null,h:1,r:"Extention",es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",so:"Yaroslav Omelianenko",re:null,h:1,r:"Extention",es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
-  {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
+  {key:"REC-566",s:"Content Operations Specialist",st:"In progress",pr:"Medium",so:"Viktoriia Dumych (Monastyrska)",re:null,h:1,r:"Extention",es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"Canceled",pr:"Medium",so:"Constantine Chernenko",re:null,h:1,r:"Extention",es:"Staff",t:"Engineering (Mobile)",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",es:null,t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-340",s:"Content Researcher",st:"Plan",pr:"Medium",so:null,re:null,h:1,r:"Extention",es:null,t:"Content",sb:null,cr:"2026-05-13"},
@@ -1532,6 +1533,7 @@ const OP=[
 ];
 // Hired vacancies/sub-tasks (status=Hired) from Jira
 const HW=[
+  {key:"REC-692",s:"Referral Bonus - Research",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-10-01",ed:null,fcd_c:null,h:1,t:null,sb:null},
   {key:"REC-687",s:"Affiliate manager",type:"position",kind:"op",st:"Hired",pr:"Low",sn:"Junior",rec:"Anastasiia Hodyna",src:null,fcd:"2026-10-13",hd:"2026-10-14",sd:"2026-10-22",ed:null,fcd_c:"2026-10-08",h:1,t:"Brand Communications",sb:"Brand Communications"},
   {key:"REC-682",s:"Data Analyst",type:"position",kind:"op",st:"Hired",pr:"Medium",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,fcd:"2026-10-02",hd:"2026-10-09",sd:"2026-09-24",ed:null,fcd_c:"2026-09-24",h:1,t:"Analytics",sb:"Marketing Analysts"},
   {key:"REC-681",s:"Salary Research, Junior SMM (USA)",type:"position",kind:"task",st:"Done",pr:"Medium",sn:null,rec:null,src:null,fcd:null,hd:null,sd:"2026-10-06",ed:null,fcd_c:null,h:1,t:null,sb:null},
@@ -1704,7 +1706,7 @@ const WP=[
   {key:"REC-693",s:"Legal Counsel",st:"In progress",pr:"High",sn:"Middle",rec:"Mariia Salabai",src:null,sd:"2026-10-21",h:1,es:"Staff",t:"Legal",sb:"Legal",cr:"2026-10-21"},
   {key:"REC-685",s:"Post-Production Producer",st:"In progress",pr:"High",sn:"Middle",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-10-13",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-13"},
   {key:"REC-684",s:"Digital Marketing Specialist (Meta Ads)",st:"In progress",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-10-13",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-13"},
-  {key:"REC-683",s:"AI Content Producer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Kateryna Yaremenko",sd:"2026-10-12",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-12"},
+  {key:"REC-683",s:"AI Content Producer",st:"In progress",pr:"High",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Kateryna Yaremenko",sd:"2026-10-12",h:1,es:"Non-staff",t:"Content",sb:"Content Production",cr:"2026-10-12"},
   {key:"REC-679",s:"Creator Specialist",st:"In progress",pr:"High",sn:"Junior",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-10-06",h:2,es:"Non-staff",t:"Content",sb:"Creator Management",cr:"2026-10-06"},
   {key:"REC-673",s:"Digital Marketing Specialist (TikTok Ads)",st:"Canceled",pr:"Medium",sn:"Middle",rec:"Polina Serdiuk",src:null,sd:"2026-10-01",h:1,es:"Staff",t:"Marketing",sb:"User Acquisition",cr:"2026-10-01"},
   {key:"REC-671",s:"Fashion Content Assistant",st:"In progress",pr:"Medium",sn:"Junior",rec:"Polina Serdiuk",src:"Anastasiia Melnyk",sd:"2026-09-30",h:1,es:"Non-staff",t:"Content",sb:null,cr:"2026-09-30"},
@@ -1722,9 +1724,9 @@ const WP=[
   {key:"REC-614",s:"Graphic Designer",st:"In progress",pr:"Low",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-08-03",h:0,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-08-03"},
   {key:"REC-607",s:"2D Motion Designer",st:"In progress",pr:"Medium",sn:"Junior",rec:"Mariia Salabai",src:null,sd:"2026-10-15",h:7,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-30"},
   {key:"REC-594",s:"Employee Experience Specialist",st:"Canceled",pr:"Low",sn:"Junior",rec:"Yaroslava Bondarchuk",src:"Anastasiia Melnyk",sd:"2026-07-10",h:1,es:"Staff",t:"Employee Experience",sb:"People Engagement",cr:"2026-07-10"},
-  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-10-14",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
+  {key:"REC-593",s:"AI Creative Designer",st:"In progress",pr:"Low",sn:"Middle",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-10-14",h:1,es:"Non-staff",t:"Marketing",sb:"Creative",cr:"2026-07-09"},
   {key:"REC-578",s:"Google Ads Demand Gen Specialist",st:"In progress",pr:"High",sn:"Senior",rec:"Darina Lavrenko",src:"Kateryna Yaremenko",sd:"2026-06-30",h:1,es:"Staff",t:"Marketing",sb:"PPC",cr:"2026-07-01"},
-  {key:"REC-566",s:"Content Project Manager",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-07-31",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
+  {key:"REC-566",s:"Content Operations Specialist",st:"In progress",pr:"Medium",sn:"Middle",rec:"Alina Muravchyk",src:null,sd:"2026-07-31",h:1,es:"Non-staff",t:"Content",sb:"Workout Content",cr:"2026-06-24"},
   {key:"REC-543",s:"Full Stack Engineer (PHP+JavaScript+AI)",st:"Canceled",pr:"Medium",sn:"Senior",rec:"Alina Muravchyk",src:null,sd:"2026-05-26",h:1,es:"Staff",t:"Engineering (Mobile)",sb:"Workouts iOS",cr:"2026-05-26"},
   {key:"REC-341",s:"Creative Writer",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,es:null,t:"Content",sb:null,cr:"2026-05-13"},
   {key:"REC-340",s:"Content Researcher",st:"Plan",pr:"Medium",sn:"Junior",rec:null,src:null,sd:null,h:1,es:null,t:"Content",sb:null,cr:"2026-05-13"},
@@ -2028,7 +2030,7 @@ const SRCR={
 
 // Task issues (issuetype=Task, not Done) — fresh from Jira
 const TASKS=[
-  {key:"REC-692",s:"Referral Bonus - Research",st:"In progress",pr:"Medium",asgn:"Yaroslava Bondarchuk",sd:"2026-10-01"},
+  {key:"REC-695",s:"Переглянути умови співпраці з Djinni",st:"In progress",pr:"Medium",asgn:"Yaroslava Bondarchuk",sd:null},
   {key:"REC-635",s:"Accessibility Consulting Experts Search",st:"In progress",pr:"Medium",asgn:"Anastasiia Shapovalenko",sd:"2026-08-20"},
   {key:"REC-632",s:"Моніторинг кріейтів лідів з генезійських коомпаній",st:"In progress",pr:"Medium",asgn:"Kateryna Yaremenko",sd:null},
   {key:"REC-618",s:"Актуалізація даних у Confluence",st:"In progress",pr:"Low",asgn:"Anastasiia Melnyk",sd:"2026-08-04"},
@@ -4361,6 +4363,7 @@ function rWorkloadOverview(){
 // Fields: sd (Start date), fcd (Factual close date), fcd_c (First contact date),
 //         sn (Seniority), t (Department), sb (Sub-team), cs (Candidate Source)
 const CV=[
+  {key:"REC-692",type:"position",kind:"task",st:"Done",s:"Referral Bonus - Research",sd:"2026-10-01",ed:null,cr:"2026-10-16",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
   {key:"REC-687",type:"position",kind:"op",st:"Hired",s:"Affiliate manager",sd:"2026-10-22",ed:null,cr:"2026-10-14",fcd:"2026-10-13",hd:"2026-10-14",fcd_c:"2026-10-08",sn:"Junior",rec:"Anastasiia Hodyna",src:null,pr:"Low",h:1,t:"Brand Communications",sb:"Brand Communications",cs:"Internal Referral",cs_other:null,pk:null},
   {key:"REC-682",type:"position",kind:"op",st:"Hired",s:"Data Analyst",sd:"2026-09-24",ed:null,cr:"2026-10-09",fcd:"2026-10-02",hd:"2026-10-09",fcd_c:"2026-09-24",sn:"Middle",rec:"Yaroslava Bondarchuk",src:null,pr:"Medium",h:1,t:"Analytics",sb:"Marketing Analysts",cs:"Other",cs_other:"PlayMe",pk:null},
   {key:"REC-681",type:"position",kind:"task",st:"Done",s:"Salary Research, Junior SMM (USA)",sd:"2026-10-06",ed:null,cr:"2026-10-06",fcd:null,hd:null,fcd_c:null,sn:null,rec:null,src:null,pr:"Medium",h:1,t:null,sb:null,cs:null,cs_other:null,pk:null},
@@ -4883,7 +4886,8 @@ CV.push(...HIST_CV);
 // Recruitment Assignments (issuetype=Recruitment Assignment, not Hired) — consultant track
 // Schema: see SKILL.md "Recruitment Assignment structure" section
 const RA=[
-  {key:"REC-694",s:"Content Writer",st:"Plan",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-10-21",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-10-21",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
+  {key:"REC-696",s:"Scientific Advisor Search (Hardware stream)\n",st:"In progress",pr:"Medium",sn:"Expert",rec:"Anastasiia Shapovalenko",src:null,sd:"2026-10-13",ed:null,fcd_c:null,h:1,t:"Product (Mobile)",sb:null,cr:"2026-10-22",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:"Yes",cf_marketing:null,cf_budget:null,cf_payment:"Hourly",cf_stages:null},
+  {key:"REC-694",s:"Content Writer",st:"In progress",pr:"Medium",sn:"Middle",rec:"Anastasiia Shapovalenko",src:"Anastasiia Melnyk",sd:"2026-10-21",ed:null,fcd_c:null,h:10,t:"Content",sb:"Content",cr:"2026-10-21",cf_cooperation:"Freelance",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-680",s:"Sephora Partnership Consultant",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-10-07",ed:null,fcd_c:null,h:1,t:"Brand Communications",sb:"Brand Communications",cr:"2026-10-06",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"inlineCard",attrs:{url:"https://docs.google.com/document/d/1b_M0lS3kkWkgB1O5kzgNxH2FH39BZp3d_6G-mP9dZDU/edit?tab=t.0",localId:"3641562e75a0"}},{type:"text",text:" "},{type:"hardBreak"},{type:"inlineCard",attrs:{url:"https://docs.google.com/document/d/1VwgL5WDUG9XaiEe28d4-ZSt9T46SjYS7/edit",localId:"5e45148f42b7"}},{type:"text",text:"  - питання"}],attrs:{localId:"62c8d5aa2797"}},{type:"bulletList",content:[{type:"listItem",attrs:{localId:"88be5326c5dd"},content:[{type:"paragraph",content:[{type:"text",text:"Позиції: Brand Partnerships / Partnerships Manager, Experiential Marketing Manager, Brand Marketing Manager, PR & Communications / Brand Communications Manager, Events / Experiences Manager, Business Development / Strategic Partnerships та хеди цих напрямків"}],attrs:{localId:"9a3544028573"}}]},{type:"listItem",attrs:{localId:"ae64e1d8efe2"},content:[{type:"paragraph",content:[{type:"text",text:"Бренди: Tarte, e.l.f., Refy, Tacha, Sol de Janeiro, Rare Beauty, Drunk Elephant, Glow Recipe, Fenty Beauty"}],attrs:{localId:"0da8738ea7ab"}}]}],attrs:{localId:"d9f84076b218"}}]},cf_nice_req:null,cf_duration:null,cf_legal:"No",cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-672",s:"Amazon Expert",st:"In progress",pr:"High",sn:"Expert",rec:null,src:"Kateryna Yaremenko",sd:"2026-09-30",ed:null,fcd_c:null,h:1,t:"Marketing",sb:null,cr:"2026-09-30",cf_cooperation:"Consulting call(s)",cf_cooperation_other:null,cf_core_req:null,cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
   {key:"REC-659",s:"Dermatologist",st:"In progress",pr:"High",sn:"Expert",rec:"Yaroslava Bondarchuk",src:null,sd:"2026-09-10",ed:null,fcd_c:null,h:1,t:"Content",sb:"Content",cr:"2026-09-10",cf_cooperation:"Project-based",cf_cooperation_other:null,cf_core_req:{type:"doc",version:1,content:[{type:"paragraph",content:[{type:"text",text:"Дерматолог = MD з чинною ліцензією",marks:[{type:"strong"}]},{type:"text",text:" (ліцензія в США). Роль — тільки ревʼю/апрув "},{type:"text",text:"неперсоналізованого",marks:[{type:"strong"}]},{type:"text",text:" контенту: догляд по профілях типів шкіри, правило відбору товарів, бан-лист хвороб, гайд використання (детальніше в Розділі 2)."},{type:"hardBreak"},{type:"hardBreak"},{type:"text",text:"https://app.notion.com/p/Skin-Care-App-For-WEB-4e18cfc6224483b68d6b019bdf69ba4b",marks:[{type:"link",attrs:{href:"https://app.notion.com/p/Skin-Care-App-For-WEB-4e18cfc6224483b68d6b019bdf69ba4b"}}]},{type:"text",text:" - доступ тільки в Ярослави і Насті Години"}],attrs:{localId:"5070e3023fc3"}}]},cf_nice_req:null,cf_duration:null,cf_legal:null,cf_nda:null,cf_marketing:null,cf_budget:null,cf_payment:null,cf_stages:null},
